@@ -40,7 +40,7 @@ Acompanhe as últimas notícias!
 
         <div class="col s12">
           <div class="input-field col s3">
-            <label style="margin-bottom: 15px;">Role</label>
+            <label style="margin-bottom: 15px;">Perfil</label>
             <div class="select-wrapper" style="margin-top: 30px;">
               <select class="error validate" required="">
                 <option value="">Selecione1</option>
@@ -53,11 +53,13 @@ Acompanhe as últimas notícias!
         <div class="col s12">
           <div class="input-field col s3">
             <input id="cpf" type="text">
-            <label for="cpf">CPF</label>
+            <label for="cpf">
+              <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
           </div>
           <div class="input-field col s5">
             <input id="last_name" type="text">
-            <label for="last_name">Nome</label>
+            <label for="last_name">
+              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
           </div>
           <div class="input-field col s4">
             <input id="last_name" type="date">
@@ -65,30 +67,69 @@ Acompanhe as últimas notícias!
           </div>
         </div>
 
-
+<!--LINHA 2-->
         <div class="col s12">
-          <div class="input-field col s3">
-            <input id="icon_telephone" type="tel" class="validate">
-            <label for="icon_telephone">
-            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
-          </div>
           
-        </div>
-        <div class="col s12">
-          <div class="input-field col s12">
-            <input id="last_name" type="text">
-            <label for="last_name">Last Name</label>
+          <div class="input-field col s8">
+            <input id="email" type="email" class="validate">
+            <label for="email">
+            <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
           </div>
-        </div>
-        <div class="col s12">
-          <div class="input-field col s12">
-            <input id="last_name" type="text">
-            <label for="last_name">Last Name</label>
-          </div>
+            <div class="input-field col s2">
+              <input id="icon_tel1" type="tel" class="validate">
+              <label for="icon_tel1">
+              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+            </div>
+            <div class="input-field col s2">
+              <input id="icon_tel2" type="tel" class="validate">
+              <label for="icon_tel2">
+              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+            </div>
         </div>
         
-      </form>
+
+
+        <!--LINHA 3-->   
+        <div class="col s12">
+          <div class="input-field col s3">
+            <input id="zipcode" type="text" class="validate">
+            <label for="zipcode">
+            <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+          </div>
+          <div class="input-field col s5">
+            <input id="addres" type="text" class="validate">
+            <label for="addres">Logradouro </label>
+          </div>
+          <div class="input-field col s2">
+            <input id="state" type="text" class="validate">
+            <label for="state">Estado </label>
+          </div>
+
+
+
+          
+          <div class="input-field col s2">
+            <div class="select-wrapper" >
+              <select class="error validate" required="">
+                <option value="">Selecione1</option>
+                <option value="">Selecione</option>
+            </select>
+            </div>
+          </div>  
+        </div>
+        
+  <div class="col s12 ">
+  <div class="col s12 mb-2">
+
+    <button class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
+      <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
+    </button>
   </div>
+</div>
+      </form>
+      
+  </div>
+
 </div>
 
 {% endblock %}
