@@ -9,4 +9,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+    path('manage/cadastre/user/', views.cadastreUserViews, name='cadastreUser'),
+
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

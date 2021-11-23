@@ -27,6 +27,10 @@ def csrf_failure(request, reason=""):
     raise PermissionDenied()
 
 
-@login_required
+#@login_required
 def home(request):
     return render(request, 'pages/home.html')
+
+#CADASTRAR USUARIO
+def cadastreUserViews(request):
+    return render(request, 'manage/cadastre/cadastreUser.html')
