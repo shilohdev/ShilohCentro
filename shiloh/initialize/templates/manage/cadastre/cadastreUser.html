@@ -66,7 +66,7 @@ Acompanhe as últimas notícias!
              <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
           </div>
           <div class="input-field col s2">
-             <input id="tel1" type="tel" class="">
+             <input id="tel1" type="tel" class="validate">
              <label for="tel1">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
           </div>
@@ -78,7 +78,7 @@ Acompanhe as últimas notícias!
        </div>
        <div class="col s12">
           <div class="input-field col s3">
-             <input id="zipcode" type="text" class="validate">
+             <input id="zipcode" type="text" class="validate" maxlength="9" onblur="pesquisacep(this.value)">
              <label for="zipcode">
              <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
           </div>
@@ -96,18 +96,18 @@ Acompanhe as últimas notícias!
              <input id="complement" type="text" class="validate">
              <label for="complement">Complemento</label>
           </div>
-          <div class="input-field col s7">
-             <input id="district" type="text" class="validate">
-             <label for="district">Bairro</label>
-          </div>
+          <div class="input-field col s5">
+            <input id="district" type="text" class="validate">
+            <label for="district">Bairro</label>
+         </div>
           <div class="input-field col s2">
-             <div class="select-wrapper" >
-                <select id="uf" class="error validate" required="">
-                   <option value="">Selecione1</option>
-                   <option value="">Selecione</option>
-                </select>
-             </div>
-          </div>
+            <input id="city" type="text" class="validate">
+            <label for="city">Cidade</label>
+         </div>
+         <div class="input-field col s2">
+            <input id="uf" type="text" class="validate" maxlength="2">
+            <label for="uf">UF</label>
+         </div>
        </div>
 
        <div class="input-field col s12" style="display: none;">
@@ -145,7 +145,10 @@ function SelectShow() {
 }
       
 
-      
+   $("#cpf").mask("000.000.000-00");
+   $("#tel1").mask("(00) 00000-0000");
+   $("#tel2").mask("(00) 00000-0000");
+   $("#zipcode").mask("00000-000");
 
 
   function CadastreUser(){
@@ -162,6 +165,7 @@ function SelectShow() {
       var number = $("#number").val();
       var complement = $("#complement").val();
       var district = $("#district").val();
+      var city = $("#city").val();
       var uf = $("#uf").val();
 
       console.log(tp_perfil);
@@ -181,6 +185,7 @@ function SelectShow() {
          "number": $('#number').val(),
          "complement": $('#complement').val(),
          "district": $('#district').val(),
+         "city": $('#city').val(),
          "uf": $('#uf').val(),
          };
 
@@ -198,7 +203,8 @@ function SelectShow() {
             var addres = $("#addres").val("");
             var number = $("#number").val("");
             var complement = $("#complement").val("");
-            var district = $("#district").val("");
+            var district = $("#distric t").val("");
+            var city = $("#city").val("");   
             var uf = $("#uf").val("");
 
       }
@@ -208,7 +214,54 @@ function SelectShow() {
 };
 
 
-//DICT
+// CEP 
+function pesquisacep(valor) {
+   var cep = valor.replace(/\D/g, '');
+
+   if (cep != "") {
+      var validacep = /^[0-9]{8}$/;
+      if(validacep.test(cep)) {
+         var end_addres = $("#addres").val("...");
+         var end_district = $("#district").val("...");
+         var end_city = $("#city").val("...");
+         var end_state = $("#uf").val("...");
+         var script = document.createElement('script');
+
+         script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=bsccep';
+         document.body.appendChild(script);
+      } 
+      else {
+         limocamp();
+         alert("Formato de CEP inválido.");
+      }
+   }
+   else {
+      limocamp();
+   }
+   };
+
+function bsccep(val) {
+   if (!("erro" in val)) {
+      var end_addres = $("#addres").val(val.logradouro);
+      var end_district = $("#district").val(val.bairro);
+      var end_city = $("#city").val(val.localidade);
+      var end_state = $("#uf").val(val.uf);
+   } 
+   else {
+      limocamp();
+      alert("CEP não encontrado no CORREIOS. Entre no site: https://www.correios.com.br/ e pesquise um cep válido.");
+   }
+}
+
+function limocamp() {
+var end_zipcode = $("#zipcode").val("");
+var end_addres = $("#addres").val("");
+var end_number = $("#number").val("");
+var end_district = $("#district").val("");
+var end_city = $("#city").val("");
+var end_state = $("#uf").val("");
+}
+
    
 </script>
 {% endblock %}

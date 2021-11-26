@@ -70,12 +70,13 @@ def CadastreUser(request):
     number = request.POST.get("number")
     complement = request.POST.get("complement")
     district = request.POST.get("district")
+    city = request.POST.get("city")
     uf = request.POST.get("uf")
 
     with connections['auth_permissions'].cursor() as cursor:
         #CADASTRAR PERFIL
-        param =(cpf, name, date_nasc, email, tel1, tel2, zipcode, addres, number, complement, district, uf,)
-        query = "INSERT INTO `auth_users`.`users` (`id`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `uf`, `cr`, `obs`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '');"
+        param =(cpf, name, date_nasc, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf,)
+        query = "INSERT INTO `auth_users`.`users` (`id`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `cr`, `obs`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '');"
         cursor.execute(query, param)
     
     print(query)
