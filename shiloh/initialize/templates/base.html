@@ -1,6 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
-
+    <form method="POST" action="">{% csrf_token %}</form>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,99 +10,104 @@
     <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template, eCommerce dashboard, analytic dashboard">
     <meta name="author" content="ThemeSelect">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="apple-touch-icon" href="/app-assets/images/favicon/apple-touch-icon-152x152.png">
-    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="{% static '/app-assets/images/favicon/apple-touch-icon-152x152.png' %}">
+    <link rel="shortcut icon" href="{% static 'app-assets/ico/iconlogo.png' %}" type="image/x-icon"> <!--ICONE SUPERIOR-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- BEGIN: VENDOR CSS-->
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/animate-css/animate.css">
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/chartist-js/chartist.min.css">
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/chartist-js/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/vendors.min.css' %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/animate-css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/chartist-js/chartist.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/chartist-js/chartist-plugin-tooltip.css' %}">
     <!-- END: VENDOR CSS-->
     <!-- BEGIN: Page Level CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/vertical-modern-menu-template/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/vertical-modern-menu-template/style.min.css">
-    <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/dashboard-modern.css">
-    <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/intro.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/css/pages/dashboard-modern.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/css/pages/intro.min.css' %}">
     <!-- END: Page Level CSS-->
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="/app-assets/css/custom/custom.css">
+    <link rel="stylesheet" type="text/css" href="{% static '/app-assets/css/custom/custom.css' %}">
     <!-- END: Custom CSS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    
 </head>
 <!-- END: Head-->
 
 <body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu preload-transitions 2-columns   " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
 
-    <!-- BEGIN: Header-->
-    <header class="page-topbar" id="header">
-        <div class="navbar navbar-fixed">
-            <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark #ffebee red lighten-5 no-shadow">
-                <div class="nav-wrapper">
-                    <ul class="navbar-list right">
-                        <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">5</small></i></a></li>
-                    </ul>
-                    <!-- translation-button-->
-                    <ul class="dropdown-content" id="translation-dropdown">
-                        <li class="dropdown-item"><a class="grey-text text-darken-1" href="#!" data-language="en"><i class="flag-icon flag-icon-gb"></i> English</a></li>
-                        <li class="dropdown-item"><a class="grey-text text-darken-1" href="#!" data-language="fr"><i class="flag-icon flag-icon-fr"></i> French</a></li>
-                        <li class="dropdown-item"><a class="grey-text text-darken-1" href="#!" data-language="pt"><i class="flag-icon flag-icon-pt"></i> Portuguese</a></li>
-                        <li class="dropdown-item"><a class="grey-text text-darken-1" href="#!" data-language="de"><i class="flag-icon flag-icon-de"></i> German</a></li>
-                    </ul>
-                    <!-- notifications-dropdown-->
-                    <ul class="dropdown-content" id="notifications-dropdown">
-                        <li>
-                            <h6>NOTIFICATIONS<span class="new badge">5</span></h6>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a class="black-text" href="#!"><span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span> A new order has been placed!</a>
-                            <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
-                        </li>
-                        <li><a class="black-text" href="#!"><span class="material-icons icon-bg-circle red small">stars</span> Completed the task</a>
-                            <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
-                        </li>
-                        <li><a class="black-text" href="#!"><span class="material-icons icon-bg-circle teal small">settings</span> Settings updated</a>
-                            <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">4 days ago</time>
-                        </li>
-                        <li><a class="black-text" href="#!"><span class="material-icons icon-bg-circle deep-orange small">today</span> Director meeting started</a>
-                            <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">6 days ago</time>
-                        </li>
-                        <li><a class="black-text" href="#!"><span class="material-icons icon-bg-circle amber small">trending_up</span> Generate monthly report</a>
-                            <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">1 week ago</time>
-                        </li>
-                    </ul>
-                    <!-- profile-dropdown-->
-                    <ul class="dropdown-content" id="profile-dropdown">
-                        <li><a class="grey-text text-darken-1" href="user-profile-page.html"><i class="material-icons">person_outline</i> Profile</a></li>
-                        <li><a class="grey-text text-darken-1" href="app-chat.html"><i class="material-icons">chat_bubble_outline</i> Chat</a></li>
-                        <li><a class="grey-text text-darken-1" href="page-faq.html"><i class="material-icons">help_outline</i> Help</a></li>
-                        <li class="divider"></li>
-                        <li><a class="grey-text text-darken-1" href="user-lock-screen.html"><i class="material-icons">lock_outline</i> Lock</a></li>
-                        <li><a class="grey-text text-darken-1" href="user-login.html"><i class="material-icons">keyboard_tab</i> Logout</a></li>
-                    </ul>
-                </div>
-                <nav class="display-none search-sm">
-                    <div class="nav-wrapper">
-                        <form id="navbarForm">
-                            <div class="input-field search-input-sm">
-                                <input class="search-box-sm mb-0" type="search" required="" id="search" placeholder="Explore Materialize" data-search="template-list">
-                                <label class="label-icon" for="search"><i class="material-icons search-sm-icon">search</i></label><i class="material-icons search-sm-close">close</i>
-                                <ul class="search-list collection search-list-sm display-none"></ul>
-                            </div>
-                        </form>
-                    </div>
-                </nav>
-            </nav>
+   
+<!--HEAD -->
+
+<header class="page-topbar" id="header">
+    <div class="navbar navbar-fixed"> 
+      <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark #ffebee red lighten-5 no-shadow">
+        <div class="nav-wrapper">
+          <div class="header-search-wrapper hide-on-med-and-down"><i class="material-icons" >search</i>
+            <input style="background-color: #5818482a;" class="header-search-input z-depth-2" type="text" name="Search" data-search="template-list">
+            <ul class="search-list collection display-none ps"><div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></ul>
+          </div>
+          <ul class="navbar-list right">
+              <!--NOTIFICAÇÃO-->
+            <li class="hide-on-large-only search-input-wrapper"><a class="waves-effect waves-block waves-light search-button" href="javascript:void(0);"><i class="material-icons">search</i></a></li>
+            <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons" style="color: #911001;">notifications_none<small class="notification-badge">5</small></i></a><ul class="dropdown-content" id="notifications-dropdown" tabindex="0">
+            <li tabindex="0">
+              <h6>NOTIFICATIONS<span class="new badge">5</span></h6>
+            </li>
+            <li class="divider" tabindex="0"></li>
+            <li tabindex="0"><a class="black-text" href="#!"><span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span> A new order has been placed!</a>
+              <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
+            </li>
+            <li tabindex="0"><a class="black-text" href="#!"><span class="material-icons icon-bg-circle red small">stars</span> Completed the task</a>
+              <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
+            </li>
+            <li tabindex="0"><a class="black-text" href="#!"><span class="material-icons icon-bg-circle teal small">settings</span> Settings updated</a>
+              <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">4 days ago</time>
+            </li>
+            <li tabindex="0"><a class="black-text" href="#!"><span class="material-icons icon-bg-circle deep-orange small">today</span> Director meeting started</a>
+              <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">6 days ago</time>
+            </li>
+            <li tabindex="0"><a class="black-text" href="#!"><span class="material-icons icon-bg-circle amber small">trending_up</span> Generate monthly report</a>
+              <time class="media-meta grey-text darken-2" datetime="2015-06-12T20:50:48+08:00">1 week ago</time>
+            </li>
+          </ul></li>
+          <!--MEU PERFIL-->
+            <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar"><i></i></span></a><ul class="dropdown-content" id="profile-dropdown" tabindex="0">
+            <li tabindex="0"><a class="grey-text text-darken-1" href="user-profile-page.html"><i class="material-icons">person_outline</i> Profile</a></li>
+            <li tabindex="0"><a class="grey-text text-darken-1" href="app-chat.html"><i class="material-icons">chat_bubble_outline</i> Chat</a></li>
+            <li tabindex="0"><a class="grey-text text-darken-1" href="page-faq.html"><i class="material-icons">help_outline</i> Help</a></li>
+            <li class="divider" tabindex="0"></li>
+            <li tabindex="0"><a class="grey-text text-darken-1" href="user-lock-screen.html"><i class="material-icons">lock_outline</i> Lock</a></li>
+            <li tabindex="0"><a class="grey-text text-darken-1" href="user-login.html"><i class="material-icons">keyboard_tab</i> Logout</a></li>
+          </ul></li>
+          </ul>
+          <!-- FIM DO MEU PERFIL-->
+          
         </div>
-    </header>
-    <!-- END: Header-->
+        <nav class="display-none search-sm">
+          <div class="nav-wrapper">
+            <form id="navbarForm">
+              <div class="input-field search-input-sm">
+                <input class="search-box-sm mb-0" type="search" required="" id="search" placeholder="Explore Materialize" data-search="template-list">
+                <label class="label-icon active" for="search"><i class="material-icons search-sm-icon">search</i></label><i class="material-icons search-sm-close">close</i>
+                <ul class="search-list collection search-list-sm display-none ps"><div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></ul>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </nav>
+    </div>
+  </header>S
+<!--FIM HEAD-->
+
     <ul class="display-none" id="default-search-main">
         <li class="auto-suggestion-title"><a class="collection-item" href="#">
                 <h6 class="search-title">FILES</h6>
             </a></li>
         <li class="auto-suggestion"><a class="collection-item" href="#">
                 <div class="display-flex">
-                    <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img src="/app-assets/images/icon/pdf-image.png" width="24" height="30" alt="sample image"></div>
+                    <div class="display-flex align-item-center flex-grow-1"> 
+                        <div class="avatar"><img src="{%static '/app-assets/images/icon/doc-image.png' %}" width="24" height="30" alt="sample image"></div>
                         <div class="member-info display-flex flex-column"><span class="black-text">Two new item submitted</span><small class="grey-text">Marketing Manager</small></div>
                     </div>
                     <div class="status"><small class="grey-text">17kb</small></div>
@@ -110,7 +116,7 @@
         <li class="auto-suggestion"><a class="collection-item" href="#">
                 <div class="display-flex">
                     <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img src="/app-assets/images/icon/doc-image.png" width="24" height="30" alt="sample image"></div>
+                        <div class="avatar"><img src="{%static '/app-assets/images/icon/doc-image.png' %}" width="24" height="30" alt="sample image"></div>
                         <div class="member-info display-flex flex-column"><span class="black-text">52 Doc file Generator</span><small class="grey-text">FontEnd Developer</small></div>
                     </div>
                     <div class="status"><small class="grey-text">550kb</small></div>
@@ -119,7 +125,7 @@
         <li class="auto-suggestion"><a class="collection-item" href="#">
                 <div class="display-flex">
                     <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img src="/app-assets/images/icon/xls-image.png" width="24" height="30" alt="sample image"></div>
+                        <div class="avatar"><img src="{%static '/app-assets/images/icon/xls-image.png' %}" width="24" height="30" alt="sample image"></div>
                         <div class="member-info display-flex flex-column"><span class="black-text">25 Xls File Uploaded</span><small class="grey-text">Digital Marketing Manager</small></div>
                     </div>
                     <div class="status"><small class="grey-text">20kb</small></div>
@@ -128,7 +134,7 @@
         <li class="auto-suggestion"><a class="collection-item" href="#">
                 <div class="display-flex">
                     <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img src="/app-assets/images/icon/jpg-image.png" width="24" height="30" alt="sample image"></div>
+                        <div class="avatar"><img src="{% static '/app-assets/images/icon/jpg-image.png' %}" width="24" height="30" alt="sample image"></div>
                         <div class="member-info display-flex flex-column"><span class="black-text">Anna Strong</span><small class="grey-text">Web Designer</small></div>
                     </div>
                     <div class="status"><small class="grey-text">37kb</small></div>
@@ -140,32 +146,8 @@
         <li class="auto-suggestion"><a class="collection-item" href="#">
                 <div class="display-flex">
                     <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img class="circle" src="/app-assets/images/avatar/avatar-7.png" width="30" alt="sample image"></div>
+                        <div class="avatar"><img class="circle" src="{% static '/app-assets/images/avatar/avatar-7.png' %}" width="30" alt="sample image"></div>
                         <div class="member-info display-flex flex-column"><span class="black-text">John Doe</span><small class="grey-text">UI designer</small></div>
-                    </div>
-                </div>
-            </a></li>
-        <li class="auto-suggestion"><a class="collection-item" href="#">
-                <div class="display-flex">
-                    <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img class="circle" src="/app-assets/images/avatar/avatar-8.png" width="30" alt="sample image"></div>
-                        <div class="member-info display-flex flex-column"><span class="black-text">Michal Clark</span><small class="grey-text">FontEnd Developer</small></div>
-                    </div>
-                </div>
-            </a></li>
-        <li class="auto-suggestion"><a class="collection-item" href="#">
-                <div class="display-flex">
-                    <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img class="circle" src="/app-assets/images/avatar/avatar-10.png" width="30" alt="sample image"></div>
-                        <div class="member-info display-flex flex-column"><span class="black-text">Milena Gibson</span><small class="grey-text">Digital Marketing</small></div>
-                    </div>
-                </div>
-            </a></li>
-        <li class="auto-suggestion"><a class="collection-item" href="#">
-                <div class="display-flex">
-                    <div class="display-flex align-item-center flex-grow-1">
-                        <div class="avatar"><img class="circle" src="/app-assets/images/avatar/avatar-12.png" width="30" alt="sample image"></div>
-                        <div class="member-info display-flex flex-column"><span class="black-text">Anna Strong</span><small class="grey-text">Web Designer</small></div>
                     </div>
                 </div>
             </a></li>
@@ -186,13 +168,16 @@
         <div class="brand-sidebar">
             <h1 class="logo-wrapper">
                 <a class="brand-logo darken-1" href="#">
-                    <img class="hide-on-med-and-down" src="" />
+                    <img class="hide-on-med-and-down" src="{% static 'app-assets/ico/iconlogo.png' %}" />
                     <img class="show-on-medium-and-down hide-on-med-and-up" src="" alt="materialize logo" />
-                    <span class="logo-text hide-on-med-and-down">Materialize</span>
+                    <img class="logo-text hide-on-med-and-down" src="{% static 'app-assets/ico/mlogo.png' %}">
                 </a>
                 <a class="navbar-toggler" href="#">
-                    <i class="material-icons">radio_button_checked</i>
-                </a></h1>
+                    <i class="material-icons" style="color: darksalmon;">radio_button_checked</i>
+                </a>
+            
+            </h1>
+                
         </div>  
         <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
               <!-- Titulo -->
@@ -200,24 +185,19 @@
                 <a class="navigation-header-text">Gestão </a>
                 <i class="navigation-header-icon material-icons">more_horiz</i>
             </li>
-            <li class="active bold">
-                <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)">
-                    <i class="material-icons">settings_input_svideo</i>
-                    <span class="menu-title" data-i18n="Cadastre">Cadastrar</span>
-                    <span class="badge badge pill orange float-right mr-10">3</span>
-                </a>
+            <li class="bold"><a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">person_add</i><span class="menu-title" data-i18n="Extra Components">Cadastrar</span></a>
                 <div class="collapsible-body">
-                    <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                        <li class="active">
-                            <a href="manage/cadastrar/usuario/">
-                                <i class="material-icons">radio_button_unchecked</i>
-                                <span data-i18n="User">Usuário</span>
-                            </a>
-                        </li>
-                    </ul>
+                  <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                    <li><a href="{% url 'cadastreUser' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Interno</span></a>
+                    </li>
+                    <li><a href="{% url 'cadastrePartnes' %}"><i class="material-icons" style="font-size: 15px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+                    </li>
+                  </ul>
                 </div>
-            </li>
-        </aside>
+              </li>
+    </aside>
+
+    
     <!-- FIM DO MENU-->
 
     <!-- BEGIN: Page Main-->
@@ -417,6 +397,29 @@
     <script src="/app-assets/js/scripts/dashboard-modern.js"></script>
     <script src="/app-assets/js/scripts/intro.min.js"></script>
     <!-- END PAGE LEVEL JS-->
+
+
 </body>
 
 </html>
+
+<script>
+
+function fetchRequest(url_f, type_f, dataType_f, data_post, sucess){
+    $.ajax({
+    url: url_f,
+    type: type_f,
+    dataType: dataType_f,
+    data: data_post,
+    success: function(return_FETCH) {
+        response = return_FETCH;
+        sucess(response);
+        alert();
+
+    },
+    error: function (request, status, error) {
+        alert("Não foi possível carregar a função.");
+    }
+    });
+}
+</script>

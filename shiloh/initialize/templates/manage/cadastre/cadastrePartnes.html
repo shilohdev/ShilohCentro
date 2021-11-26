@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Shiloh | Cadastrar Usuário{% endblock %}
+{% block title %}Página principal{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
 {% block title-page %}
-Cadastrar Usuário
+Página inicial
 {% endblock %}
 {% block description-page %}
 Acompanhe as últimas notícias!
 {% endblock %}
 {% block content %}
-<form method="POST" action="">{% csrf_token %}</form>
 
 <style type="text/css">
    .corfont{
@@ -24,24 +23,13 @@ Acompanhe as últimas notícias!
 <div class="container">
    <div class="card" >
       <div class="card-content" style="margin-top: -40px;">
-         <h5 class="corfont">CADASTRAR USUÁRIO</h5>
+         <h5 class="corfont">CADASTRAR PARCEIRO</h5>
       </div>
    </div>
 </div>
 <div class="container">
    <div class="card" >
-      <div class="input-field col s3" >
-          <label style="margin-bottom: 15px;">Perfil</label>
-          <div class="select-wrapper" style="margin-top: 30px;">
-            <select id="tp_perfil" onchange="SelectShow()" class="error validate" required="">
-                <option value="">Selecione</option>
-                {% for k in arr_SearchPerfil %}
-                <option value="{{ k.id }}">{{ k.descriptions }}</option>
-                {% endfor %}
-            </select>
-          </div>
-      </div>
-         <!-- Interno -->
+         <!-- Externo -->
       <div id="userint" class="row" >
         <div class="col s12">
           <div class="input-field col s3">
@@ -55,8 +43,8 @@ Acompanhe as últimas notícias!
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
           </div>
           <div class="input-field col s4">
-             <input id="date_nasc" type="date" class="validate">
-             <label for="date_nasc">Data de Nacimento</label>
+             <input id="crn" type="text" class="validate" >
+             <label for="crn">CRN</label>
           </div>
        </div>
        <div class="col s12">
@@ -66,7 +54,7 @@ Acompanhe as últimas notícias!
              <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
           </div>
           <div class="input-field col s2">
-             <input id="tel1" type="tel" class="">
+             <input id="tel1" type="tel" class="validate">
              <label for="tel1">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
           </div>
@@ -109,21 +97,19 @@ Acompanhe as últimas notícias!
              </div>
           </div>
        </div>
-
-       <div class="input-field col s12" style="display: none;">
        <div class="input-field col s12">
-
-         <input id="teste" type="text" class="validate">
-         <label for="teste">Bairro</label>
+         <div class="input-field col s12">
+            <input id="obs" type="text" class="validate">
+            <label for="obs">
+               <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
+         </div>
       </div>
-   </div>
-
         
 
          <!--BUTTON-->
          <div class="col s12 ">
             <div class="col s12 mb-2">
-               <button id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastreUser()">
+               <button onclick="CadastreUser()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                </button>
             </div>
@@ -132,28 +118,22 @@ Acompanhe as últimas notícias!
    </div>
 </div>
 
-<div class="input-field col m6 s12">
-   <input id="phone-demo" type="text" class="">
-   <label for="phone-demo" class="active">Phone</label> 
- </div>
-
 <script type="text/javascript">
 
-function SelectShow() {
-  var show = document.getElementById("tp_perfil").value;
-      alert(show)
-}
-      
-
-      
+  $('#tp_perfil').change(function(){
+      if($('#tp_perfil').val() == 'value') {
+          $('#userint').show(); 
+      } else {
+          $('#userint').hide(); 
+      }
+  });
 
 
   function CadastreUser(){
-
       var tp_perfil = $("#tp_perfil").val();
       var cpf = $("#cpf").val();
       var name = $("#name").val();
-      var date_nasc = $("#date_nasc").val();
+      var crn = $("#crn").val();
       var email = $("#email").val();
       var tel1 = $("#tel1").val();
       var tel2 = $("#tel2").val();
@@ -163,52 +143,10 @@ function SelectShow() {
       var complement = $("#complement").val();
       var district = $("#district").val();
       var uf = $("#uf").val();
+      var obs = $("#obs").val();
 
       console.log(tp_perfil);
+  }
 
-
-      var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
-
-         "tp_perfil": $('#tp_perfil').val(), 
-         "cpf": $('#cpf').val(), 
-         "name": $('#name').val(),
-         "date_nasc": $('#date_nasc').val(),
-         "email": $('#email').val(),
-         "tel1": $('#tel1').val(),
-         "tel2": $('#tel2').val(),
-         "zipcode": $('#zipcode').val(),
-         "addres": $('#addres').val(),
-         "number": $('#number').val(),
-         "complement": $('#complement').val(),
-         "district": $('#district').val(),
-         "uf": $('#uf').val(),
-         };
-
-      fetchRequest("{% url 'CadastreUser' %}", "POST", "JSON", btncadastrar, function(re){
-         alert(re["message"]);
-         if (re["response"] == "insert"){
-            var tp_perfil = $("#tp_perfil").val();
-            var cpf = $("#cpf").val("");
-            var name = $("#name").val("");
-            var date_nasc = $("#date_nasc").val("");
-            var email = $("#email").val("");
-            var tel1 = $("#tel1").val("");
-            var tel2 = $("#tel2").val("");
-            var zipcode = $("#zipcode").val("");
-            var addres = $("#addres").val("");
-            var number = $("#number").val("");
-            var complement = $("#complement").val("");
-            var district = $("#district").val("");
-            var uf = $("#uf").val("");
-
-      }
-   });
-  
-   
-};
-
-
-//DICT
-   
 </script>
 {% endblock %}

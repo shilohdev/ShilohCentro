@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from datetime import datetime
+from functions.auth_users.decorator import searchTPerfil, searchTPerfilExterno, CadastreUser
 import base64
 import json
 import time
@@ -27,7 +28,19 @@ def csrf_failure(request, reason=""):
     raise PermissionDenied()
 
 
-#@login_required
-def home(request):
-    return render(request, 'pages/home.html')
+#CADASTRAR USUARIO
+def cadastreUserViews(request):
+    searchPerfil = searchTPerfil(request)
+    return render(request, 'manage/cadastre/cadastreUser.html', {"arr_SearchPerfil": searchPerfil})
 
+    
+#CADASTRAR PARCEIROS
+def cadastrePartnesViews(request):
+    searchPerfilEx = searchTPerfilExterno(request)
+    return render(request, 'manage/cadastre/cadastrePartnes.html', {"arr_SearchPerfilEx": searchPerfilEx})
+
+
+#API CADASTRAR PARCEIROS
+def ApiCadastreUser(request):
+    array = CadastreUser(request)
+    return JsonResponse(array, safe=False, status=200)

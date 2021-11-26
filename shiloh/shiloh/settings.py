@@ -60,9 +60,9 @@ os.environ['DATABASE_PRD_PASSWORD'] = 'secretpassword'
 os.environ['DATABASE_PRD_PORT'] = '3306'
 
 # DB PRODUÇÃO
-os.environ['DATABASE_HOM_HOST'] = 'localhost'
+os.environ['DATABASE_HOM_HOST'] = 'auth_permissions'
 os.environ['DATABASE_HOM_USER'] = 'root'
-os.environ['DATABASE_HOM_PASSWORD'] = 'secretpassword'
+os.environ['DATABASE_HOM_PASSWORD'] = 'my-secret-pw'
 os.environ['DATABASE_HOM_PORT'] = '3306'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -291,3 +291,22 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
 ASGI_APPLICATION = "initialize.asgi.application"
+
+
+#DATABASE TESTE
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'auth_permissions': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'auth_permissions',
+        'USER': 'root',
+        'PASSWORD': 'my-secret-pw',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    },
+}
