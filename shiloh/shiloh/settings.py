@@ -308,5 +308,21 @@ DATABASES = {
         'PASSWORD': 'my-secret-pw',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+
+    },  'auth_users': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'auth_users',
+        'USER': 'root',
+        'PASSWORD': 'my-secret-pw',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        
+    },'customer_refer': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'customer_refer',
+        'USER': 'root',
+        'PASSWORD': 'my-secret-pw',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     },
 }

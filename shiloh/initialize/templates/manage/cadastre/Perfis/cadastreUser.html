@@ -33,8 +33,8 @@ Acompanhe as últimas notícias!
       <div class="input-field col s3" >
           <label style="margin-bottom: 15px;">Perfil</label>
           <div class="select-wrapper" style="margin-top: 30px;">
-            <select id="tp_perfil" onchange="SelectShow()" class="error validate" required="">
-                <option value="">Selecione</option>
+            <select name="select" id="tp_perfil" onchange="SelectShow()" class="error " required="">
+                <option value="SELECIONE">Selecione</option>
                 {% for k in arr_SearchPerfil %}
                 <option value="{{ k.id }}">{{ k.descriptions }}</option>
                 {% endfor %}
@@ -45,85 +45,77 @@ Acompanhe as últimas notícias!
       <div id="userint" class="row" >
         <div class="col s12">
           <div class="input-field col s3">
-             <input id="cpf" type="text" class="validate">
+             <input id="cpf" type="text" >
              <label for="cpf">
              <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
           </div>
           <div class="input-field col s5">
-             <input id="name" type="text" class="validate">
+             <input id="name" type="text" >
              <label for="name">
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
           </div>
           <div class="input-field col s4">
-             <input id="date_nasc" type="date" class="validate">
+             <input id="date_nasc" type="date" >
              <label for="date_nasc">Data de Nacimento</label>
           </div>
        </div>
        <div class="col s12">
           <div class="input-field col s8">
-             <input id="email" type="email" class="validate">
+             <input id="email" type="email" >
              <label for="email">
              <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
           </div>
           <div class="input-field col s2">
-             <input id="tel1" type="tel" class="validate">
+             <input id="tel1" type="tel" >
              <label for="tel1">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
           </div>
           <div class="input-field col s2">
-             <input id="tel2" type="tel" class="validate">
+             <input id="tel2" type="tel" >
              <label for="tel2">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
           </div>
        </div>
        <div class="col s12">
           <div class="input-field col s3">
-             <input id="zipcode" type="text" class="validate" maxlength="9" onblur="pesquisacep(this.value)">
+             <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
              <label for="zipcode">
              <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
           </div>
           <div class="input-field col s7">
-             <input id="addres" type="text" class="validate">
+             <input id="addres" type="text" >
              <label for="addres">Logradouro </label>
           </div>
           <div class="input-field col s2">
-             <input id="number" type="text" class="validate">
+             <input id="number" type="text" >
              <label for="number">Número </label>
           </div>
        </div> 
        <div class="col s12">
           <div class="input-field col s3">
-             <input id="complement" type="text" class="validate">
+             <input id="complement" type="text" >
              <label for="complement">Complemento</label>
           </div>
           <div class="input-field col s5">
-            <input id="district" type="text" class="validate">
+            <input id="district" type="text" >
             <label for="district">Bairro</label>
          </div>
           <div class="input-field col s2">
-            <input id="city" type="text" class="validate">
+            <input id="city" type="text" >
             <label for="city">Cidade</label>
          </div>
          <div class="input-field col s2">
-            <input id="uf" type="text" class="validate" maxlength="2">
+            <input id="uf" type="text"  maxlength="2">
             <label for="uf">UF</label>
          </div>
        </div>
-
-       <div class="input-field col s12" style="display: none;">
-       <div class="input-field col s12">
-
-         <input id="teste" type="text" class="validate">
-         <label for="teste">Bairro</label>
-      </div>
-   </div>
 
         
 
          <!--BUTTON-->
          <div class="col s12 ">
             <div class="col s12 mb-2">
-               <button id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastreUser()">
+               <button id="btn_cadastrar" disabled class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastreUser()">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                </button>
             </div>
@@ -132,18 +124,19 @@ Acompanhe as últimas notícias!
    </div>
 </div>
 
-<div class="input-field col m6 s12">
-   <input id="phone-demo" type="text" class="">
-   <label for="phone-demo" class="active">Phone</label> 
- </div>
 
 <script type="text/javascript">
 
 function SelectShow() {
   var show = document.getElementById("tp_perfil").value;
-      alert(show)
-}
+      $("#btn_cadastrar").attr("disabled", true);   
       
+      if(show == 'SELECIONE'){
+         alert("Por favor, preencha um tipo de perfil válido")
+        }else{
+      $("#btn_cadastrar").attr("disabled", false);
+        }
+}
 
    $("#cpf").mask("000.000.000-00");
    $("#tel1").mask("(00) 00000-0000");
@@ -168,11 +161,52 @@ function SelectShow() {
       var city = $("#city").val();
       var uf = $("#uf").val();
 
-      console.log(tp_perfil);
+ 
 
-
+   //VALIDAÇÃO DE CAMPO NULL  
+   if(document.getElementById("cpf").value == ''){
+         alert('Por favor, preencha o campo CPF')
+         txt = 'cpf';
+         return false;
+      } else if(document.getElementById("name").value == ''){
+      alert('Por favor, preencha o campo Nome')
+         txt = 'name';
+         return false;
+      } else if(document.getElementById("date_nasc").value == ''){
+      alert('Por favor, preencha o campo Data de Nascimento')
+         txt = 'date_nasc';
+         return false;
+      }else if(document.getElementById("email").value == ''){
+      alert('Por favor, preencha o campo E-mail')
+         txt = 'email';
+         return false;
+      }else if(document.getElementById("tel1").value == ''){
+      alert('Por favor, preencha o campo Telefone 1')
+         txt = 'tel1'; 
+         return false;
+      } else if(document.getElementById("zipcode").value == ''){
+      alert('Por favor, preencha o campo CEP')
+         txt = 'zipcode';
+         return false;
+      }else if(document.getElementById("addres").value == ''){
+      alert('Por favor, preencha o campo Logradouro')
+         txt = 'addres';
+         return false;
+      }else if(document.getElementById("number").value == ''){
+      alert('Por favor, preencha o campo Número')
+         txt = 'number';
+         return false;
+      }else if(document.getElementById("district").value == ''){
+      alert('Por favor, preencha o campo Bairro')
+         txt = 'district';
+         return false;
+      }else if(document.getElementById("uf").value == ''){
+      alert('Por favor, preencha o campo UF')
+         txt = 'uf';
+         return false;
+      }
+      
       var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
-
          "tp_perfil": $('#tp_perfil').val(), 
          "cpf": $('#cpf').val(), 
          "name": $('#name').val(),
@@ -189,28 +223,13 @@ function SelectShow() {
          "uf": $('#uf').val(),
          };
 
-      fetchRequest("{% url 'CadastreUser' %}", "POST", "JSON", btncadastrar, function(re){
-         alert(re["message"]);
-         if (re["response"] == "insert"){
-            var tp_perfil = $("#tp_perfil").val();
-            var cpf = $("#cpf").val("");
-            var name = $("#name").val("");
-            var date_nasc = $("#date_nasc").val("");
-            var email = $("#email").val("");
-            var tel1 = $("#tel1").val("");
-            var tel2 = $("#tel2").val("");
-            var zipcode = $("#zipcode").val("");
-            var addres = $("#addres").val("");
-            var number = $("#number").val("");
-            var complement = $("#complement").val("");
-            var district = $("#distric t").val("");
-            var city = $("#city").val("");   
-            var uf = $("#uf").val("");
-
-      }
+      fetchRequest("{% url 'ApiCadastreUser' %}", "POST", "JSON", btncadastrar, function(re){
+         if(re["response"] == "true"){
+            alert(re["message"]);
+            
+            location.reload();
+      }   
    });
-  
-   
 };
 
 
@@ -262,6 +281,9 @@ var end_city = $("#city").val("");
 var end_state = $("#uf").val("");
 }
 
-   
+
+
+
+
 </script>
 {% endblock %}

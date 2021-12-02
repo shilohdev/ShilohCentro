@@ -177,9 +177,9 @@
                     <img class="show-on-medium-and-down hide-on-med-and-up" src="" alt="materialize logo" />
                     <img class="logo-text hide-on-med-and-down" src="{% static 'app-assets/ico/mlogo.png' %}">
                 </a>
-                <a class="navbar-toggler" href="#">
+                <!--<a class="navbar-toggler" href="#">
                     <i class="material-icons" style="color: darksalmon;">radio_button_checked</i>
-                </a>
+                </a>-->
             
             </h1>
                 
@@ -196,6 +196,10 @@
                     <li><a href="{% url 'cadastreUser' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Interno</span></a>
                     </li>
                     <li><a href="{% url 'cadastrePartnes' %}"><i class="material-icons" style="font-size: 15px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+                    </li>
+                    <li><a href="{% url 'cadastreIndication' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+                    </li>
+                    <li><a href="{% url 'cadastreConvenio' %}"><i class="material-icons" style="font-size: 15px;">assignment</i><span data-i18n="Sweetalert">Convênio</span></a>
                     </li>
                   </ul>
                 </div>
@@ -420,7 +424,6 @@ function fetchRequest(url_f, type_f, dataType_f, data_post, sucess){
     success: function(return_FETCH) {
         response = return_FETCH;
         sucess(response);
-        alert();
 
     },
     error: function (request, status, error) {
