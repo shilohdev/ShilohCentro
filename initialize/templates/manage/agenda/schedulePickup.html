@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Página principal{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+{% block content %}
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+</style>
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card" >
+      <div class="card-content" style="margin-top: -40px;">
+         <h5 class="corfont">AGENDAR COLETA</h5>
+      </div>
+   </div>
+</div>
+
+<!--CARD PSCIENTE-->
+<div class="card-content" style="margin-top: 50px;">
+   <div class="container ">
+      <ul class="collapsible expandable " >
+         <li class="active" >
+            <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
+               <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
+            </div>
+            <div id="card_ag" class="row" >
+               <div class="col s12"  style="margin-top: 10px;">
+                  <div class="input-field col s3">
+                     <input id="date_age" type="date" >
+                     <label for="date_age">Data Agendamento</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="hr_age" type="text" placeholder="00:00">
+                     <label for="hr_age">
+                     <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
+                  </div>
+                  <div class="input-field col s3" >
+                     <div class="select-wrapper">
+                        <select name="select" id="tp_service" onchange="SelectShow()" class="error " required="">
+                           <option value="selecione">Tipo de Serviço</option>
+                           {% for k in arr_SearchService%} aqui
+                           <option value="{{ k.id }}">{{ k.tipo_servico }}</option>
+                           {% endfor %}                        </select>
+                     </div>
+                  </div>
+                  <div class="input-field col s3" >
+                     <div class="select-wrapper">
+                        <select name="select" id="tp_exame" onchange="SelectShow()" class="error " required="">
+                           <option value="selecione">Tipo Exame</option>
+                           {% for k in arr_SearchExame%}
+                           <option value="{{ k.id }}">{{ k.tipo_exame }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="input-field col s12" >
+                  <div class="input-field col s3" >
+                     <div class="select-wrapper">
+                        <select name="select" id="convenio" onchange="SelectShow()" class="error " required="">
+                           <option value="selecione">Convênio</option>
+                           {% for k in arr_SelectConvenio%}
+                           <option value="{{ k.id }}">{{ k.nome_conv }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+                  <div class="input-field col s3" >
+                     <div class="select-wrapper">
+                        <select name="select" id="nurse" onchange="SelectShow()" class="error " required="">
+                           <option value="selecione">Enfermeiro(a)</option>
+                           {% for k in arr_SearchNurse%}
+                           <option value="{{ k.id }}">{{ k.nome }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+                  <div class="input-field col s3" >
+                     <div class="select-wrapper">
+                        <select name="select" id="driver" onchange="SelectShow()" class="error " required="">
+                           <option value="selecione">Motorista</option>
+                           {% for k in arr_SearchDriver%}
+                           <option value="{{ k.id }}">{{ k.nome }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <!--CARD 2-->
+         <li class="active"  style="margin-top: 30px;">
+            <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
+               <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
+            </div>
+            <div id="userint" class="row" >
+               <div class="col s12"  style="margin-top: 10px;">
+                  <div class="input-field col s6">
+                     <span>Nome do Paciente:</span>
+                     <select id="namePaciente" class="select2 browser-default">
+                        <option value="">Selecione:</option>
+                        {% for k in arr_SearchPacienteSe %}
+                           <option data-tel1="{{ k.tel1 }}" data-tel2="{{ k.tel2 }}" data-cep="{{ k.cep }}" data-rua="{{ k.rua }}" data-numero="{{ k.numero }}" data-complemento="{{ k.complemento }}" data-bairro="{{ k.bairro }}" data-cidade="{{ k.cidade }}" data-uf="{{ k.uf }}" data-nome_med="{{ k.nome_med }}" data-nome_ate="{{ k.nome_ate }}" data-nome_commerce="{{ k.nome_commerce }}" value="{{ k.id_p }}"> {{ k.nome_p }} - {{ k.cpf_p }} </option>
+                        {% endfor %}
+                     </select>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="tel1" type="tel">
+                     <label for="tel1">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="tel2" type="tel">
+                     <label for="tel2">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input disabled id="doctor" type="text">
+                     <label for="doctor" >
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico</label>
+                  </div>
+                  <div class="input-field col s3" >
+                     <input disabled id="attendance" type="text">
+                     <label for="attendance">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento</label>
+                  </div>
+                  <div class="input-field col s3" >
+                     <input disabled id="commerce" type="text">
+                     <label for="commerce">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial</label>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <!--CARD 3-->
+         <li class="active" style="margin-top: 30px;" >
+            <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
+               <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ENDEREÇO</labe>
+            </div>
+            <div id="userint" class="row" >
+               <div class="col s12"  style="margin-top: 10px;">
+                  <div class="input-field col s3">
+                     <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
+                     <label for="zipcode">
+                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                  </div>
+                  <div class="input-field col s7">
+                     <input id="addres" type="text" >
+                     <label for="addres">Logradouro </label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="number" type="text" >
+                     <label for="number">Número </label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="complement" type="text" >
+                     <label for="complement">Complemento</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="district" type="text" >
+                     <label for="district">Bairro</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="city" type="text" >
+                     <label for="city">Cidade</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="uf" type="text"  maxlength="2">
+                     <label for="uf">UF</label>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <!--
+<li class="active" style="margin-top: 30px;" >
+            <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
+               <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS FINANCEIROS</labe>
+            </div>
+            <div class="row" >
+               <div class="col s12"  style="margin-top: 10px;">
+                  <div class="input-field col s3">
+                     <input id="cust_alv" type="tel" placeholder="R$">
+                     <label for="cust_alv"> 
+                     <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Custo Alvaro</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="val_w_lab" type="tel" placeholder="R$">
+                     <label for="val_w_lab">
+                     <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor WorkLab</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="val_pago" type="tel" placeholder="R$">
+                     <label for="val_pago">
+                     <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor Pago</label>
+                  </div>
+
+               </div>
+            </div>
+         </li>
+         -->
+         
+         <li class="active" style="margin-top: 30px;" >
+            <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
+               <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+            </div>
+            <div class="row" >
+               <div class="col s12"  style="margin-top: 10px;">
+                  <div class="input-field col s12">
+                     <input id="obs" type="text">
+                     <label for="obs">
+                     <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                  </div>
+               </div>
+            </div>
+         </li>
+      </ul>
+   </div>
+   <!--BUTTON-->
+   <div class="col s12 ">
+      <div class="col s12 mb-2" >
+         <button disabled="disabled" onclick="CadastreIndication()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px;">
+         <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Agendar</spanpx>
+         </button>
+      </div>
+   </div>
+</div>
+<script type="text/javascript">
+
+   function SelectShow() {
+     var show = document.getElementById("tp_service").value;
+         $("#btn_cadastrar").attr("disabled", true);   
+         
+         if(show == 'selecione'){
+            alert("Não se esqueça de preencher todos os campos!")
+         }else{
+         $("#btn_cadastrar").attr("disabled", false);
+           }
+   }
+
+         $("#hr_age").mask("00:00");
+         $("#cpf").mask("000.000.000-00");
+         $("#tel1").mask("(00) 00000-0000");
+         $("#tel2").mask("(00) 00000-0000");
+         $("#zipcode").mask("00000-000");
+   
+   
+        function CadastreIndication(){
+      
+            var date_age = $("#date_age").val();
+            var hr_age = $("#hr_age").val();
+            var tp_service = $("#tp_service").val();
+            var tp_exame = $("#tp_exame").val();
+            var convenio = $("#convenio").val();
+            var nurse = $("#nurse").val();
+            var driver = $("#driver").val();
+            var name = $("#namePaciente").val();
+            var tel1 = $("#tel1").val();
+            var tel2 = $("#tel2").val();
+            var doctor = $("#doctor").val();
+            var attendance = $("#attendance").val();
+            var commerce = $("#commerce").val();
+            var zipcode = $("#zipcode").val();
+            var addres = $("#addres").val();
+            var number = $("#number").val();
+            var complement = $("#complement").val();
+            var district = $("#district").val();
+            var city = $("#city").val();
+            var uf = $("#uf").val();
+            var cust_alv = $("#cust_alv").val();
+            var val_w_lab = $("#val_w_lab").val();
+            var val_pago = $("#val_pago").val();
+            var obs = $("#obs").val();
+      
+         //VALIDAÇÃO DE CAMPO NULL  
+         if(document.getElementById("date_age").value == ''){
+               alert('Por favor, preencha o campo Data de Agendamento')
+               txt = 'date_age';
+               return false;
+            }else if(document.getElementById("hr_age").value == ''){
+               alert('Por favor, preencha o campo Horario')
+               txt = 'hr_age';
+               return false;
+            }else if(document.getElementById("tp_service").value == ''){
+               alert('Por favor, preencha o campo Tipo de Serviço')
+               txt = 'tp_service';
+               return false;
+            }else if(document.getElementById("tp_exame").value == ''){
+               alert('Por favor, preencha o campo Tipo Exame')
+               txt = 'tp_exame';
+               return false;
+            }else if(document.getElementById("convenio").value == ''){
+               alert('Por favor, preencha o campo Convenio')
+               txt = 'convenio';
+               return false;
+            }else if(document.getElementById("nurse").value == ''){
+               alert('Por favor, preencha o campo Enfermeiro(a)')
+               txt = 'nurse';
+               return false;
+            }else if(document.getElementById("driver").value == ''){
+               alert('Por favor, preencha o campo Motorista')
+               txt = 'driver';
+               return false;
+            }else if(document.getElementById("namePaciente").value == ''){
+               alert('Por favor, preencha o campo Nome')
+               txt = 'namePaciente';
+               return false;
+            }
+
+            var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
+               "date_age": $('#date_age').val(), 
+               "hr_age": $('#hr_age').val(), 
+               "tp_service": $('#tp_service').val(), 
+               "tp_exame": $('#tp_exame').val(), 
+               "convenio": $('#convenio').val(), 
+               "nurse": $('#nurse').val(), 
+               "driver": $('#driver').val(), 
+               "name": $('#namePaciente').val(), 
+               "tel1": $('#tel1').val(),
+               "tel2": $('#tel2').val(),
+               "doctor": $('#doctor').val(),
+               "attendance": $('#attendance').val(),
+               "commerce": $('#commerce').val(),
+               "zipcode": $('#zipcode').val(),
+               "addres": $('#addres').val(),
+               "number": $('#number').val(),
+               "complement": $('#complement').val(),
+               "district": $('#district').val(),
+               "city": $('#city').val(),
+               "uf": $('#uf').val(),
+               "cust_alv": $('#cust_alv').val(),
+               "val_w_lab": $('#val_w_lab').val(),
+               "val_pago": $('#val_pago').val(),
+               "obs": $('#obs').val(),
+               };
+      
+         fetchRequest("{% url 'ApiSchedulePickup' %}", "POST", "JSON", btncadastrar, function(re){
+               if(re["response"] == "true"){
+                  alert(re["message"]);
+                  $("#btn_cadastrar").attr("disabled", true);
+                  location.reload();
+            }
+         });
+      };
+      
+   
+      
+   // CEP 
+   function pesquisacep(valor) {
+      var cep = valor.replace(/\D/g, '');
+   
+      if (cep != "") {
+         var validacep = /^[0-9]{8}$/;
+         if(validacep.test(cep)) {
+            var end_addres = $("#addres").val("...");
+            var end_district = $("#district").val("...");
+            var end_city = $("#city").val("...");
+            var end_state = $("#uf").val("...");
+            var script = document.createElement('script');
+   
+            script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=bsccep';
+            document.body.appendChild(script);
+         } 
+         else {
+            limocamp();
+            alert("Formato de CEP inválido.");
+         }
+      }
+      else {
+         limocamp();
+      }
+      };
+   
+   function bsccep(val) {
+      if (!("erro" in val)) {
+         var end_addres = $("#addres").val(val.logradouro);
+         var end_district = $("#district").val(val.bairro);
+         var end_city = $("#city").val(val.localidade);
+         var end_state = $("#uf").val(val.uf);
+      } 
+      else {
+         limocamp();
+         alert("CEP não encontrado no CORREIOS. Entre no site: https://www.correios.com.br/ e pesquise um cep válido.");
+      }
+   }
+   
+   function limocamp() {
+   var end_zipcode = $("#zipcode").val("");
+   var end_addres = $("#addres").val("");
+   var end_number = $("#number").val("");
+   var end_district = $("#district").val("");
+   var end_city = $("#city").val("");
+   var end_state = $("#uf").val("");
+   }
+   
+
+//QUANDO SELECIONA O LEAD, PREENCHE AS INFORMAÇÕES NOS CAMPOS
+$("#namePaciente").change(function(){
+   var object = $("#namePaciente option:selected");
+
+   var dictUpdate = { // idd key dict
+      "tel1": object.data("tel1"),
+      "tel2": object.data("tel2"),
+      "doctor": object.data("nome_med"),
+      "attendance": object.data("nome_ate"),
+      "commerce": object.data("nome_commerce"),
+      "zipcode": object.data("cep"),
+      "addres": object.data("rua"),
+      "number": object.data("numero"),
+      "complement": object.data("complemento"),
+      "district": object.data("bairro"),
+      "city": object.data("cidade"),
+      "uf": object.data("uf"),
+   }
+   $.map(dictUpdate, function(n, i){
+      $("#"+i).val(n);
+      $("#"+i).closest("div").find("label").attr("class", "active");
+   });
+});
+
+
+      $("#cust_alv").mask("#,##0.00", {reverse: true});
+      $("#val_w_lab").mask("#,##0.00", {reverse: true});
+      $("#val_pago").mask("#,##0.00", {reverse: true});
+
+
+   
+   $(".select2").select2({
+    dropdownAutoWidth: true,
+    width: '100%'
+
+});   
+
+
+    
+   
+</script>
+{% endblock %}

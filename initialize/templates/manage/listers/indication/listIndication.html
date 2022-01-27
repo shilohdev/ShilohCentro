@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Página principal{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
+</style>
+
+<!-- INICIO DO MODAL -->
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content">
+
+
+      <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+         <div class="container">
+            <div class="card">
+               <div class="card-content" style="margin-top: -40px; background-color: #581848;">
+                  <h5 class="corfont" style="color: white;">ATUALIZAR PACIENTE</h5>
+               </div>
+            </div>
+         </div>
+         <div class="container" id="modalint">
+            <div class="card" >
+               <div class="col s12">
+                  <div class="input-field col s3" >
+                     <label style="margin-bottom: 15px;">Convenio</label>
+                     <div class="select-wrapper" style="margin-top: 30px;">
+                       <select name="select" id="tp_conv" onchange="SelectShow()" class="error " required="">
+                           <option value="SELECIONE">Selecione</option>
+                           {% for k in arr_SearchConvenio %}
+                           <option value="{{ k.id }}">{{ k.nome_conv }}</option>
+                           {% endfor %}
+                       </select>
+                     </div>
+                 </div>
+                  <div class="input-field col s5" style="margin-top: 44px;">
+                     <input disabled id="doctor_resp" type="text" >
+                     <label for="doctor_resp">Médico </label>
+                  </div>
+                  <div class="input-field col s4"  style="margin-top: 44px;">
+                     <input disabled id="responsable_at" type="text" >
+                     <label for="responsable_at">Atendente </label>
+                  </div>
+               </div> 
+                  <!-- Interno -->
+               <div class="row" >
+                 <div class="col s12">
+                   <div class="input-field col s3">
+                      <input id="cpf" type="text" >
+                      <label for="cpf">
+                      <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
+                   </div>
+                   <div class="input-field col s5">
+                      <input id="name" type="text" style="text-transform: uppercase">
+                      <label for="name">
+                      <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
+                   </div>
+                   <div class="input-field col s4">
+                      <input id="date_nasc" type="date" >
+                      <label for="date_nasc">Data de Nacimento</label>
+                   </div>
+                </div>
+                <div class="col s12">
+                   <div class="input-field col s8">
+                      <input id="email" type="email" >
+                      <label for="email">
+                      <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                   </div>
+                   <div class="input-field col s2">
+                      <input id="tel1" type="tel" >
+                      <label for="tel1">
+                      <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                   </div>
+                   <div class="input-field col s2">
+                      <input id="tel2" type="tel" >
+                      <label for="tel2">
+                      <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                   </div>
+                </div>
+                <div class="col s12">
+                   <div class="input-field col s3">
+                      <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
+                      <label for="zipcode">
+                      <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                   </div>
+                   <div class="input-field col s7">
+                      <input id="addres" type="text" >
+                      <label for="addres">Logradouro </label>
+                   </div>
+                   <div class="input-field col s2">
+                      <input id="number" type="text" >
+                      <label for="number">Número </label>
+                   </div>
+                </div> 
+                <div class="col s12">
+                   <div class="input-field col s3">
+                      <input id="complement" type="text" >
+                      <label for="complement">Complemento</label>
+                   </div>
+                   <div class="input-field col s5">
+                     <input id="district" type="text" >
+                     <label for="district">Bairro</label>
+                  </div>
+                   <div class="input-field col s2">
+                     <input id="city" type="text" >
+                     <label for="city">Cidade</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="uf" type="text"  maxlength="2">
+                     <label for="uf">UF</label>
+                  </div>
+                </div>
+         
+                 
+         
+               </div>
+            </div>
+         </div>
+         
+         
+   </div>
+   </div>
+   <div class="modal-footer">
+      <!--BUTTON-->
+      <div class="col s12 ">
+         <div class="col s8"></div>
+         
+       <div class="col s2">
+          <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+
+       </div>
+       <div class="col s2">
+          <button onclick="changeUserModal(this)" id="btn_atualizar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
+          <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Atualizar</spanpx>
+          </button>
+       </div>
+
+    </div>
+</div>
+</div>
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<!--FIM DO MODAL-->
+
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card" >
+      <div class="card-content" style="margin-top: -93px;">
+         <h5 class="corfont">CONSULTAR PACIENTES</h5>
+      </div>
+   </div>
+</div>
+<div class="container"> 
+   <div class="card" >
+         <!-- Externo -->
+      <div id="userint" class="row" >
+        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col s4">
+               <input id="cpf" type="text" onkeyup="searchPatients(this)">
+               <label for="cpf">
+                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+            </div>
+
+         <!--BUTTON-->
+         <div class="col s12 ">
+            
+         </div>
+   <!-- COMEÇO DA TABLE -->
+         <div class="col s12">
+            <table id="page-length-option" class="bordered">
+              <thead style="background-color: #581848; color: white; font-size: 15px" >
+                <tr>
+                  <th data-field="id" >Nome de Usuário</th>
+                  <th data-field="id" style="text-align: center; width: 130px;">Médico</th>
+                  <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                </tr>
+              </thead>
+              <tbody id="tb_append">
+                 {% for k in arr_SearchIndication %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                <tr id="tr_{{ k.id }}">
+                  <td>{{ k.nome }}</td>
+                  <td style="text-align: center;">{{ k.medico_resp }}</td>
+                  <td style="text-align: center;">
+                     <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
+                           <i class="material-icons right">edit</i>
+                        </button>
+                     </a><button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
+                        <i class="material-icons right">remove_red_eye</i>
+                      </button>
+                  </td>
+                </tr>
+                {% endfor %} <!-- FIM DO ARRAY -->
+              </tbody>
+            </table>
+          </div>
+          <!-- FIM DA TABLE -->
+      </div>
+      
+   </div>
+
+   
+</div>
+
+<script type="text/javascript">
+
+function searchPatients(object){
+   var e = $(object).val().toUpperCase();
+    if(e == ""){
+        $('#tb_append > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append > tr').each(function() {
+           var trs = $(this).find("td");
+           var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if(check == true){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
+
+
+
+$(document).ready(function() {
+$('.modal').modal();
+$('.modal').css({
+   "width":"80%",
+});
+});//CONFIG MODAL
+
+function PesquisarFilter() {
+
+   var tp_category = $("#tp_category").val();
+
+   console.log(tp_category)
+
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "tp_category": tp_category,   
+   };    
+   fetchRequest("{% url 'ApiListPartnes' %}", "POST", "JSON", formpost, function(re) {
+      var dados = re["message"];
+         console.log(dados);
+         $("#tb_append").html("");
+      for (k in dados) {
+         var key = dados[k];
+         console.log(k);
+         console.log(key);
+         var append = '<tr> <td>'+ key["nome"] +'</td> <td style="text-align: center;">'+ key["categoria"] +'</td> <td style="text-align: center">'+ key["status"] +'</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="'+ key["id"] +'" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button> </a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
+
+          $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
+         
+
+      }
+      if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
+            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro encontrado</td>'
+            $("#tb_append").append(appende); 
+            }
+      console.log(teste)
+   });
+}
+
+
+function viewUserModal(object){//FUNCTION DO ONCLICK
+var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+$("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+
+var formpost = {
+   "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+   "id_user": id_user //DICT COM O VALOR DO ID
+};
+      
+fetchRequest("{% url 'ApiViewDataPatientsModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+   if(re["response"] == false){ 
+      alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+   } else { //SE FOR VERDADDEIRA, PROSSEGUE
+      var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+      var dictKeys = {// nome id / nome do grupo/ nome do value
+         "tp_conv": key["med"]["conv"],
+         "doctor_resp": key["med"]["name_doctor"],
+         "responsable_at": key["med"]["name_responsable"],
+
+         "name": key["personal"]["name"],
+         "cpf": key["personal"]["cpfcnpj"],
+         "date_nasc": key["personal"]["birthday"],
+
+         "email": key["contacts"]["email"],
+         "tel1": key["contacts"]["phone"],
+         "tel2": key["contacts"]["phone_aux"],
+
+         "zipcode": key["address"]["zipcode"],
+         "addres": key["address"]["street"],
+         "number": key["address"]["street_number"],
+         "complement": key["address"]["complement"],
+         "district": key["address"]["district"],
+         "city": key["address"]["city"],
+         "uf": key["address"]["state"],
+      
+      }
+      
+      $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+         $(`#${i}`).val(n);
+         var findLabel = $(`#${i}`).closest("div");
+         $(findLabel).find("label").attr("class", "active");
+         if(i == "tp_conv"){
+               var valueObject = $("#tp_conv option:selected").text();
+               $("input[class='select-dropdown dropdown-trigger']").val(valueObject);
+               $('li[class="selected"]').attr("class", "");
+               var findObject = $(`span:contains(${valueObject})`).closest("li");
+               $(findObject).attr("class", "selected");
+            }
+      });
+      $("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
+   }
+});
+}
+
+
+function changeStatusUser(object){
+var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+var formpost = {
+   "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+   "id_user": id_user //DICT COM O VALOR DO ID
+};
+
+fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+   if(re["response"] == false){ 
+      alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+   } else { //SE FOR VERDADEIRA, PROSSEGUE
+      var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+      $(`#tr_${id_user} > td`).eq(2).text(key["status"]);
+      $(`#btn_status_${id_user}`).css("background-color", key["btn_status"]
+      )
+   }
+});
+}
+
+
+function changeUserModal(object){
+   $("#btn_atualizar").attr("disabled", true);   
+
+   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user //DICT COM O VALOR DO ID
+   };
+
+   $("#modalint input, #modalint select").each(function(){
+      formpost[$(this).attr("id")] = $(this).val();
+   });
+
+   fetchRequest("{% url 'ApiChangePatientsModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+      if(re["response"] == false){ 
+         alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         alert(re["message"]);
+         location.reload();
+
+      }  
+   });
+
+}
+</script>
+{% endblock %}

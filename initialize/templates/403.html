@@ -1,0 +1,93 @@
+{% load static %}
+<html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="description" content="Materialize is a modern responsive CSS framework based on Material Design by Google. ">
+    <title>Home - Materialize</title>
+    <!-- Favicons-->
+    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+    <!--  Android 5 Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- CSS-->
+    <link href="{% static 'documentation/css/prism.css' %}" rel="stylesheet">
+    <link href="{% static 'documentation/css/ghpages-materialize.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- if !isDemo-->
+    <!--   script.-->
+    <!--     window.liveSettings = {-->
+    <!--       api_key: "a0b49b34b93844c38eaee15690d86413",-->
+    <!--       picker: "bottom-right",-->
+    <!--       detectlang: true,-->
+    <!--       dynamic: true,-->
+    <!--       autocollect: true-->
+    <!--     };-->
+    <!--   script(src='//cdn.transifex.com/live.js')-->
+  </head>
+  <body>
+    
+    <div><div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <div class="row center">
+      <div class="col s12 m10 offset-m1">
+        <h1 class="header">Shiloh Centro</h1>
+      </div>
+      <div class="col s12 m8 offset-m2">
+        <h4 class="light">Permissão negada!</h4>
+        <p>Você não possui permissões para acessar este conteúdo.</p>
+      </div>
+    </div>
+    <div class="row center">
+      <a href="google.com.br" id="upgrade-button" class="btn-large waves-effect waves-light">Website</a>
+      <a href="{% url 'home' %}" id="download-button" class="btn-large waves-effect waves-light">Voltar</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+
+    <div class="row">
+      <div class="col s12 m10 offset-m1">
+
+        
+        
+      </div>
+    </div>
+  </div>
+    </div></div>;
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>if (!window.jQuery) { document.write('<script src="bin/jquery-3.2.1.min.js"><\/script>'); }
+    </script>
+    <script src="{% static 'documentation/docs/js/jquery.timeago.min.js' %}"></script>
+    <script src="{% static 'documentation/docs/js/prism.js' %}"></script>
+    <script src="{% static 'documentation/docs/js/lunr.min.js' %}"></script>
+    <script src="{% static 'documentation/docs/js/search.js' %}"></script>
+    <script src="{% static 'documentation/bin/materialize.js' %}"></script>
+    <script src="{% static 'documentation/docs/js/init.js' %}"></script>
+    <!-- Twitter Button -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    <!-- Google Plus Button-->
+    <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
+
+    <!--  Google Analytics  -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-56218128-1', 'auto');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+    </script>
+
+  
+<div class="sidenav-overlay" style="display: none; opacity: 0;"></div><div class="drag-target"></div><iframe scrolling="no" frameborder="0" allowtransparency="true" src="https://platform.twitter.com/widgets/widget_iframe.21f942bb866c2823339b839747a0c50c.html?origin=https%3A%2F%2Fpixinvent.com" title="Twitter settings iframe" style="display: none;"></iframe><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" title="Twitter analytics iframe"></iframe></body></html>

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Página principal{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
+</style>
+
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card" >
+      <div class="card-content" style="margin-top: -93px;">
+         <h5 class="corfont">CONSULTAR INDICAÇÕES</h5>
+      </div>
+   </div>
+</div>
+<div class="container"> 
+   <div class="card" >
+         <!-- Externo -->
+      <div id="userint" class="row" >
+        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col s4">
+                <input id="bscinput" type="text" onkeyup="searchLead(this)">
+                <label for="bscinput">
+                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>
+                </div>
+
+   <!-- COMEÇO DA TABLE -->
+         <div class="col s12">
+            <table id="page-length-option" class="bordered">
+              <thead style="background-color: #581848; color: white; font-size: 15px" >
+                <tr>
+                  <th data-field="id" >Nome</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
+                </tr>
+              </thead>
+              <tbody id="tb_append">
+                 {% for k in arr_SearchLeads %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                <tr>
+                  <td>{{ k.nome }}</td>
+                  <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
+                  <td style="text-align: center;">{{ k.medico_resp }}</td>
+                </tr>
+                {% endfor %} <!-- FIM DO ARRAY -->
+              </tbody>
+            </table>
+          </div>
+          <!-- FIM DA TABLE -->
+      </div>
+      
+   </div>
+
+   
+</div>
+
+<script type="text/javascript">
+function searchLead(object){
+   var e = $(object).val().toUpperCase();
+    if(e == ""){
+        $('#tb_append > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append > tr').each(function() {
+           var trs = $(this).find("td");
+           var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if(check == true){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
+
+</script>
+{% endblock %}
