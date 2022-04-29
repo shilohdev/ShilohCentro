@@ -11,7 +11,7 @@ register = template.Library()
 
 @register.simple_tag
 def define(val=None):
-  return val
+    return val
 
 
 @register.filter
@@ -29,24 +29,18 @@ def convertTitle(self):
 
 
 @register.filter
-def getPermissionUser(self):
-    user = self
-    with connections['authdb'].cursor() as cursor:
-        #PERMISSÕES
-        cursor.execute("SELECT name, email, phone, phone_aux, avatar FROM auth_users.users WHERE login LIKE %s LIMIT 1", (user,))
+def allDataUser(self):
+    arr_response = []
+    user = str(self)
+    if user in ["", None]:
+        return None
+
+    with connections['auth_users'].cursor() as cursor:
+        query = f"SELECT p_i.id, p_i.id_description FROM auth_permissions.auth_permissions_allow p INNER JOIN auth_users.users u ON u.id = p.id_user INNER JOIN auth_permissions.permissions_id p_i ON p_i.id = p.id_permission WHERE u.login LIKE '{user}'"
+        cursor.execute(query)
         dados = cursor.fetchall()
         if dados:
-            for name, email, phone, phone_aux, avatar in dados:
-                return {
-                    "personal": {
-                        "name": name,
-                        "photo": avatar
-                    },
-                    "contacts": {
-                        "email": email,
-                        "phone": phone,
-                        "phone_aux": phone_aux
-                    }
-                }
-
-    return False
+            for p_id, p_id_d in dados:
+                arr_response.append(p_id_d)
+    
+    return arr_response

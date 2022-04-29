@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Shiloh | Listar Usuários Internos{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -23,7 +23,7 @@ Acompanhe as últimas notícias!
 
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
-   <div class="modal-content">
+   <div class="modal-content" id="modal2">
 
 
       <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
@@ -48,7 +48,7 @@ Acompanhe as últimas notícias!
                    </div>
                </div>
                   <!-- Interno -->
-               <div class="row" >
+               <div id="userint" class="row" >
                  <div class="col s12">
                    <div class="input-field col s3">
                       <input id="cpf" type="text" >
@@ -56,7 +56,7 @@ Acompanhe as últimas notícias!
                       <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
                    </div>
                    <div class="input-field col s5">
-                      <input id="name" type="text" style="text-transform: uppercase">
+                      <input id="name" type="text">
                       <label for="name">
                       <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
                    </div>
@@ -115,121 +115,18 @@ Acompanhe as últimas notícias!
                      <label for="uf">UF</label>
                   </div>
                 </div>
-         
-                 
-         
                </div>
             </div>
          </div>
          
-         
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>  
 <script type="text/javascript">
 
-function SelectShow() {
-   var show = document.getElementById("tp_perfil").value;
-      $("#btn_cadastrar").attr("disabled", true);   
-      
-      if(show == 'SELECIONE'){
-         alert("Por favor, preencha um tipo de perfil válido")
-         }else{
-      $("#btn_cadastrar").attr("disabled", false);
-         }
-}
 
-   $("#cpf").mask("000.000.000-00");
-   $("#tel1").mask("(00) 00000-0000");
-   $("#tel2").mask("(00) 00000-0000");
-   $("#zipcode").mask("00000-000");
-
-
-   function CadastreUser(){
-      $("#btn_cadastrar").attr("disabled", true);   
-      
-      var tp_perfil = $("#tp_perfil").val();
-      var cpf = $("#cpf").val();
-      var name = $("#name").val();
-      var date_nasc = $("#date_nasc").val();
-      var email = $("#email").val();
-      var tel1 = $("#tel1").val();
-      var tel2 = $("#tel2").val();
-      var zipcode = $("#zipcode").val();
-      var addres = $("#addres").val();
-      var number = $("#number").val();
-      var complement = $("#complement").val();
-      var district = $("#district").val();
-      var city = $("#city").val();
-      var uf = $("#uf").val();
-
-   
-
-   //VALIDAÇÃO DE CAMPO NULL  
-   if(document.getElementById("cpf").value == ''){
-         alert('Por favor, preencha o campo CPF')
-         txt = 'cpf';
-         return false;
-      } else if(document.getElementById("name").value == ''){
-      alert('Por favor, preencha o campo Nome')
-         txt = 'name';
-         return false;
-      } else if(document.getElementById("date_nasc").value == ''){
-      alert('Por favor, preencha o campo Data de Nascimento')
-         txt = 'date_nasc';
-         return false;
-      }else if(document.getElementById("email").value == ''){
-      alert('Por favor, preencha o campo E-mail')
-         txt = 'email';
-         return false;
-      }else if(document.getElementById("tel1").value == ''){
-      alert('Por favor, preencha o campo Telefone 1')
-         txt = 'tel1'; 
-         return false;
-      } else if(document.getElementById("zipcode").value == ''){
-      alert('Por favor, preencha o campo CEP')
-         txt = 'zipcode';
-         return false;
-      }else if(document.getElementById("addres").value == ''){
-      alert('Por favor, preencha o campo Logradouro')
-         txt = 'addres';
-         return false;
-      }else if(document.getElementById("number").value == ''){
-      alert('Por favor, preencha o campo Número')
-         txt = 'number';
-         return false;
-      }else if(document.getElementById("district").value == ''){
-      alert('Por favor, preencha o campo Bairro')
-         txt = 'district';
-         return false;
-      }else if(document.getElementById("uf").value == ''){
-      alert('Por favor, preencha o campo UF')
-         txt = 'uf';
-         return false;
-      }
-      
-      var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
-         "id_user": $("#btn_cadastrar").data("id_user"),
-         "tp_perfil": $('#tp_perfil').val(),
-         "cpf": $('#cpf').val(), 
-         "name": $('#name').val(),
-         "date_nasc": $('#date_nasc').val(),
-         "email": $('#email').val(),
-         "tel1": $('#tel1').val(),
-         "tel2": $('#tel2').val(),
-         "zipcode": $('#zipcode').val(),
-         "addres": $('#addres').val(),
-         "number": $('#number').val(),
-         "complement": $('#complement').val(),
-         "district": $('#district').val(),
-         "city": $('#city').val(),
-         "uf": $('#uf').val(),
-         };
-
-      fetchRequest("{% url 'ApiCadastreUser' %}", "POST", "JSON", btncadastrar, function(re){
-         if(re["response"] == "true"){
-            alert(re["message"]);
-      }
-   });
-
-};
+   $("#cpf").mask("999.999.999-99");  
+   $("#tel1").mask("(99) 99999-9999");
+   $("#tel2").mask("(99) 99999-9999");
+      $("#zipcode").mask("99999-999");
 
 
 // CEP 
@@ -322,7 +219,7 @@ var end_state = $("#uf").val("");
 <div class="container">
    <div class="card" >
          <!-- Externo -->
-      <div id="userint" class="row" >
+      <div  class="row" >
         <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
             <div class="input-field col s4" >
                 <div class="select-wrapper">
@@ -348,11 +245,12 @@ var end_state = $("#uf").val("");
          </div>
    <!-- COMEÇO DA TABLE -->
          <div class="col s12">
-            <table id="page-length-option" class="bordered" style="margin-top: 40px;">
+            <table id="page-length-option" class="bordered" style="margin-top: 40px; overflow-x: auto">
               <thead style="background-color: #581848; color: white; font-size: 15px" >
                 <tr>
-                  <th data-field="id" >Nome de Usuário</th>
+                  <th data-field="id" >Nome do Usuário</th>
                   <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
+                  <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
                   <th data-field="id" style="text-align: center; width: 130px;">Status</th>
                   <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                 </tr>
@@ -362,9 +260,11 @@ var end_state = $("#uf").val("");
                 <tr id="tr_{{ k.id }}">
                   <td>{{ k.nome }}</td>
                   <td style="text-align: center;">{{ k.descriptions }}</td>
+                  <td style="text-align: center;">{{ k.unity }}</td>
                   <td style="text-align: center;">{{ k.status }}</td>
                   <td style="text-align: center;">
-                     <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                     <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
                         <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
                            <i class="material-icons right">edit</i>
                         </button>
@@ -408,13 +308,13 @@ console.log(Stp_perfil)
          var key = dados[k];
          console.log(k);
          console.log(key);
-         var append = '<tr id="tr_'+key["id"]+'"> <td> '+ key["nome"] +' </td> <td style="text-align: center;"> '+ key["descriptions"] +' </td> <td style="text-align: center;"> '+ key["status"] +' </td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" > <button onclick=\"viewUserModal(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button></a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
+         var append = '<tr id="tr_'+key["id"]+'"> <td> '+ key["nome"] +' </td> <td style="text-align: center;"> '+ key["descriptions"] +' </td> <td style="text-align: center;"> '+ key["unity"] +' </td> <td style="text-align: center;"> '+ key["status"] +' </td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" > <button onclick=\"viewUserModal(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button></a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
          $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
          
 
       }
       if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro encontrado</td>'
+            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append").append(appende); 
             }
       console.log(teste)
@@ -428,20 +328,23 @@ console.log(Stp_perfil)
 
 function viewUserModal(object){//FUNCTION DO ONCLICK
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-   $("#btn_cadastrar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
    };
-         
+   $("#modal2").hide();
+     $(object).prop("disabled", true);
+
    fetchRequest("{% url 'ApiViewDataUserModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
          alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         $("#modal2").show();
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
          var dictKeys = {
             "tp_perfil": key["perfil"],
+            "unity": key["unit"],
             "cpf": key["personal"]["cpfcnpj"],
             "name": key["personal"]["name"],
             "date_nasc": key["personal"]["birthday"],
@@ -470,7 +373,6 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
             }
          });
 
-         $("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
          $("#btn_atualizar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
       }
    });

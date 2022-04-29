@@ -53,17 +53,19 @@ os.environ['DEFAULT_FROM_EMAIL'] = 'informativo@shiloh.com.br'
 # DB ENVIRONMENT - PRD = PRODUÇÃO || HOM = HOMOLOGAÇÃO
 os.environ['DATABASE_ENVIRONMENT'] = 'PRD'
 
-# DB HOMOLOGAÇÃO
-os.environ['DATABASE_PRD_HOST'] = 'localhost'
+# DB PRODUÇÃO
+os.environ['DATABASE_PRD_HOST'] = '34.94.95.255'
 os.environ['DATABASE_PRD_USER'] = 'root'
-os.environ['DATABASE_PRD_PASSWORD'] = 'my-secret-pw'
+os.environ['DATABASE_PRD_PASSWORD'] = '104da04a0895b21318d2b2d3600ce2c61231'
 os.environ['DATABASE_PRD_PORT'] = '3306'
 
-# DB PRODUÇÃO
+
+# DB HOMOLOGAÇÃO
 os.environ['DATABASE_HOM_HOST'] = 'localhost'
 os.environ['DATABASE_HOM_USER'] = 'root'
 os.environ['DATABASE_HOM_PASSWORD'] = 'my-secret-pw'
 os.environ['DATABASE_HOM_PORT'] = '3306'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -303,3 +305,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
 
 ASGI_APPLICATION = "initialize.asgi.application"
+
+# BASE DOCS
+BASE_DIR_DOCS = str(BASE_DIR).replace("\\", "/") + "/docs"
+#SHORT_PLATAFORM = "http://127.0.0.1:8000"
+SHORT_PLATAFORM = "https://shilohcentro.com.br"
+LISTPATHTYPE = {
+    "1": "Comprovante de Pagamento",
+    "2": "Nota Fiscal",
+    "3": "Guia Médica",
+    "4": "Outros",
+    "5": "Carterinha Convênio",
+    "6": "Documento Pessoal",
+}

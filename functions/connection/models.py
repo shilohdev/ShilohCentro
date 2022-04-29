@@ -1,12 +1,12 @@
 from django.db import connections
 from django.db import models
 from functions.general.decorator import dealStrignify
-from functions.connection.db import DB
+from functions.connection.db import DB, DBAdmins
 
 
 class Exams(DB):
     id = models.AutoField("ID", primary_key=True, auto_created=True)
-    id_paciente_f = models.IntegerField(null=True, blank=True, default=None)
+    id_agendamento_f = models.IntegerField(null=True, blank=True, default=None)
     data_inc_proc_f = models.DateField("Data Inicio Processo", null=True, blank=True, default=None)
     status_exame_f = models.CharField("Status Exame", max_length=25, null=True, blank=True, default='')
     resp_inicio_p_f = models.CharField("Responsavel Inicio", max_length=25, null=True, blank=True, default='')
@@ -16,8 +16,6 @@ class Exams(DB):
     porcentagem_paga_f = models.CharField("Porcentagem Paga", max_length=25, null=True, blank=True, default='')
     data_repasse = models.DateField("Data Repasse", null=True, blank=True, default=None)
     nf_f = models.CharField("Nota Fiscal", max_length=25, null=True, blank=True, default='')
-    anx_f = models.CharField("Anexo Arquivos", max_length=25, null=True, blank=True, default='')
-    data_aquivo_f = models.DateField("Data Arquivo", null=True, blank=True, default=None)
     data_final_f = models.DateField("Data Final", null=True, blank=True, default=None)
     data_registro_f = models.DateField("Data Registro", null=True, blank=True, default=None)
     resp_final_p_f = models.CharField("Responsavel Final", max_length=25, null=True, blank=True, default='')
@@ -26,7 +24,7 @@ class Exams(DB):
         db_table = "completed_exams"
         indexes = [
             models.Index(fields=[
-                "id_paciente_f",
+                "id_agendamento_f",
             ])
         ]
 
@@ -41,6 +39,24 @@ class Users(DB):
         indexes = [
             models.Index(fields=[
                 "cpf",
+            ])
+        ]
+
+
+class RegisterActions(DBAdmins):
+    id_register = models.AutoField("ID", primary_key=True, auto_created=True)
+    id_pagina = models.IntegerField(null=True, blank=True, default=None)
+    id_agendamento = models.IntegerField(null=True, blank=True, default=None)
+    tp_operacao = models.CharField(max_length=45, null=True, blank=True, default='')
+    nome_user = models.CharField(max_length=45, null=True, blank=True, default='')
+    descricao = models.CharField(max_length=45, null=True, blank=True, default='')
+    data_operacao = models.DateTimeField(null=True, blank=True, default=None)
+    
+    class Meta:
+        db_table = "register_actions"
+        indexes = [
+            models.Index(fields=[
+                "id_agendamento",
             ])
         ]
 

@@ -1,6 +1,8 @@
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from functions.general.models import Struct
+
 
 #FILTRO DO MES
 def dealStrignify(self):
@@ -54,3 +56,24 @@ def checkDayMonth(e):
         dt_end = str(last_day_of_month(l_month).strftime("%Y-%m-%d"))
 
     return {"dt_start": dt_start, "dt_end": dt_end}
+
+
+def BodyDecode(dataKeys):
+    dKey = {}
+    for key in dataKeys.GET.keys():
+        dKey[key] = dataKeys.GET.get(key)
+
+    return Struct(**dKey)
+
+
+def fetchQueryUnity(column, perfil, unityY=None):
+    if str(perfil) == "2"  or "1" or "5":
+        return f"{column} IS NOT NULL"
+
+    return f"{column} = {unityY}"
+
+
+def fetchQueryUnityFinance(column, perfil, unityY=None):
+    if str(perfil) == "5" or "2":
+        return f"{column} IS NOT NULL"
+    return f"{column} = {unityY}"

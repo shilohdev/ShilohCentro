@@ -1,6 +1,6 @@
    {% extends 'base.html' %}
    {% load static %}
-   {% block title %}Página principal{% endblock %}
+   {% block title %}Shiloh | Listar Parceiros{% endblock %}
    {% block icon-page %}
    metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
    {% endblock %}
@@ -83,7 +83,7 @@
    <script src="https://demo.dashboardpack.com/architectui-html-pro/assets/scripts/main.d810cf0ae7f39f28f336.js"></script>
    <!-- INICIO DO MODAL -->
    <div id="modal1" class="scroll-area-md modal modal-fixed-footer" style="width: 85%; height: 90%;">
-      <div class="modal-content scrollbar-container ps--active-y">
+      <div class="modal-content scrollbar-container ps--active-y" id="modal2">
          <!--CORPO DO MODAL-->
          <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
             <div class="container">
@@ -177,10 +177,11 @@
                            <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
                         </div>
                      </div>
-                
                   </div>
                </div>
             </div>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
             <script type="text/javascript">
                function SelectShow() {
                var show = document.getElementById("categoria").value;
@@ -193,9 +194,9 @@
                      }
                }
                
-                     $("#tel1").mask("(00) 00000-0000");
-                     $("#tel2").mask("(00) 00000-0000");
-                     $("#zipcode").mask("00000-000");
+                     $("#tel1").mask("(99) 99999-9999");
+                     $("#tel2").mask("(99) 99999-9999");
+                        $("#zipcode").mask("99999-999");
                   
                   
                   // CEP 
@@ -298,39 +299,41 @@
                 <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
             </div>
             <!-- COMEÇO DA TABLE -->
-            <div class="col s12">
-               <table class="bordered" style="margin-top: 30px;">
-                  <thead style="background-color: #581848; color: white; font-size: 15px" >
-                     <tr>
-                        <th data-field="id">Nome de Usuário</th>
-                        <th data-field="id" style="text-align: center; width: 200px;">Comercial</th>
-                        <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
-                        <th data-field="id" style="text-align: center; width: 130px;">Status</th>
-                        <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                     </tr>
-                  </thead>
-                  <tbody id="tb_append">
-                     {% for k in arr_SearchPartiners %}
-                     <tr id="tr_{{ k.id }}">
-                        <td>{{ k.nome }} [{{ k.rn }}]</td>
-                        <td style="text-align: center;">{{ k.resp_comercial }}</td>
-                        <td style="text-align: center;">{{ k.categoria }}</td>
-                        <td style="text-align: center;">{{ k.status }}</td>
-                        <td style="text-align: center;">
-                           <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                              <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                 <i class="material-icons right">edit</i>
-                              </button>
-                           </a>
-                           <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
-                             <i class="material-icons right">check</i>
+            <div class="col s12 scroll">
+               <table id="page-length-option" class="bordered" style="margin-top: 20px; overflow-x: auto">
+                 <thead style="background-color: #581848; color: white; font-size: 15px" >
+                   <tr>
+                     <th data-field="id" >Nome do Usuário</th>
+                     <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
+                     <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
+                     <th data-field="id" style="text-align: center; width: 250px;">Unidade</th>
+                     <th data-field="id" style="text-align: center; width: 130px;">Status</th>
+                     <!-- <th data-field="name" style="text-align: center; width: 130px;">Ação</th>-->
+                   </tr>
+                 </thead>
+                 <tbody id="tb_append">
+                    {% for k in arr_SearchPartiners %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                   <tr id="tr_{{ k.id }}">
+                     <td>{{ k.nome }} [{{ k.rn }}]</td>
+                     <td style="text-align: center;">{{ k.categoria }}</td>
+                     <td style="text-align: center;">{{ k.resp_comercial }}</td>
+                     <td style="text-align: center;">{{ k.unity }}</td>
+                     <td style="text-align: center;">{{ k.status }}</td>
+                     <!--<td style="text-align: center;">
+                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                           <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
+                              <i class="material-icons right">edit</i>
                            </button>
-                        </td>
-                     </tr>
-                     {% endfor %}
-                  </tbody>
+                        </a>
+                         <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
+                           <i class="material-icons right">check</i>
+                         </button>-->
+                     </td>
+                   </tr>
+                   {% endfor %} <!-- FIM DO ARRAY -->
+                 </tbody>
                </table>
-            </div>
+             </div>
             <!-- FIM DA TABLE -->
          </div>
       </div>
@@ -364,17 +367,16 @@ function PesquisarFilter() {
             var key = dados[k];
             console.log(k);
             console.log(key);
-            var append = '<tr> <td>'+ key["nome"] +'</td> <td style="text-align: center;">'+ key["categoria"] +'</td> <td style="text-align: center">'+ key["status"] +'</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="'+ key["id"] +'" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button> </a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
+            var append = '<tr> <td>'+ key["nome"] +'</td> <td style="text-align: center;">'+ key["categoria"] +'</td> <td style="text-align: center;">'+ key["unity"] +'</td> <td style="text-align: center">'+ key["status"] +'</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="'+ key["id"] +'" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button> </a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
 
              $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
             
  
          }
          if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-               var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro encontrado</td>'
+               var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
                $("#tb_append").append(appende); 
                }
-         console.log(teste)
       });
    }
 
@@ -389,11 +391,14 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
    };
-         
+   
+   $("#modal2").hide();
+      $(object).prop("disabled", true);      
    fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
          alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         $("#modal2").show();
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
          var dictKeys = {
             "name": key["personal"]["name"],

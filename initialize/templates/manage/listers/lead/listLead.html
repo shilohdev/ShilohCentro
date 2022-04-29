@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Shiloh | Listar Leads{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -18,18 +18,17 @@ Acompanhe as últimas notícias!
    color: #641108;
    font-weight: bold;
    }
-
 </style>
 
 
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-<div class="container">
-   <div class="card" >
-      <div class="card-content" style="margin-top: -93px;">
-         <h5 class="corfont">CONSULTAR INDICAÇÕES</h5>
+   <div class="container">
+      <div class="card" >
+         <div class="card-content" style="margin-top: -40px;">
+            <h5 class="corfont">CONSULTAR INDICAÇÕES</h5>
+         </div>
       </div>
    </div>
-</div>
 <div class="container"> 
    <div class="card" >
          <!-- Externo -->
@@ -42,13 +41,14 @@ Acompanhe as últimas notícias!
                 </div>
 
    <!-- COMEÇO DA TABLE -->
-         <div class="col s12">
-            <table id="page-length-option" class="bordered">
+         <div class="col s12 scroll">
+            <table id="page-length-option" class="bordered" style="overflow-x: auto">
               <thead style="background-color: #581848; color: white; font-size: 15px" >
                 <tr>
                   <th data-field="id" >Nome</th>
                   <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
                   <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
+                  <th data-field="id" style="text-align: center; width: 200px;">Unidade:</th>
                 </tr>
               </thead>
               <tbody id="tb_append">
@@ -57,6 +57,7 @@ Acompanhe as últimas notícias!
                   <td>{{ k.nome }}</td>
                   <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
                   <td style="text-align: center;">{{ k.medico_resp }}</td>
+                  <td style="text-align: center;">{{ k.unit }}</td>
                 </tr>
                 {% endfor %} <!-- FIM DO ARRAY -->
               </tbody>

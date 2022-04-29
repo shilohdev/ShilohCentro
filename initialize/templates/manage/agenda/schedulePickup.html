@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Agendamento de Coletas{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -8,9 +8,12 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 Página inicial
 {% endblock %}
 {% block description-page %}
-Acompanhe as últimas notícias!
+Realize um agendamento
 {% endblock %}
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/form-select2.min.css">
 
 <style type="text/css">
    .corfont{
@@ -30,7 +33,7 @@ Acompanhe as últimas notícias!
 
 <!--CARD PSCIENTE-->
 <div class="card-content" style="margin-top: 50px;">
-   <div class="container ">
+   <div id="userint" class="container">
       <ul class="collapsible expandable " >
          <li class="active" >
             <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
@@ -39,7 +42,7 @@ Acompanhe as últimas notícias!
             <div id="card_ag" class="row" >
                <div class="col s12"  style="margin-top: 10px;">
                   <div class="input-field col s3">
-                     <input id="date_age" type="date" >
+                     <input id="date_age" type="date" data-required='true'>
                      <label for="date_age">Data Agendamento</label>
                   </div>
                   <div class="input-field col s3">
@@ -49,17 +52,17 @@ Acompanhe as últimas notícias!
                   </div>
                   <div class="input-field col s3" >
                      <div class="select-wrapper">
-                        <select name="select" id="tp_service" onchange="SelectShow()" class="error " required="">
-                           <option value="selecione">Tipo de Serviço</option>
-                           {% for k in arr_SearchService%} aqui
+                        <select name="select" id="tp_service" onchange="SelectShow()" class="error " data-required='true'>
+                           <option value="">Tipo de Serviço</option>
+                           {% for k in arr_SearchService%}
                            <option value="{{ k.id }}">{{ k.tipo_servico }}</option>
                            {% endfor %}                        </select>
                      </div>
                   </div>
                   <div class="input-field col s3" >
                      <div class="select-wrapper">
-                        <select name="select" id="tp_exame" onchange="SelectShow()" class="error " required="">
-                           <option value="selecione">Tipo Exame</option>
+                        <select name="select" id="tp_exame" onchange="SelectShow()" class="error " data-required='true'>
+                           <option value="">Tipo Exame</option>
                            {% for k in arr_SearchExame%}
                            <option value="{{ k.id }}">{{ k.tipo_exame }}</option>
                            {% endfor %}
@@ -69,9 +72,9 @@ Acompanhe as últimas notícias!
                </div>
                <div class="input-field col s12" >
                   <div class="input-field col s3" >
-                     <div class="select-wrapper">
-                        <select name="select" id="convenio" onchange="SelectShow()" class="error " required="">
-                           <option value="selecione">Convênio</option>
+                     <div class="select-wrapper" >
+                        <select name="select" id="convenio" onchange="SelectShow()" class="error " data-required='true'>
+                           <option value="">Convênio</option>
                            {% for k in arr_SelectConvenio%}
                            <option value="{{ k.id }}">{{ k.nome_conv }}</option>
                            {% endfor %}
@@ -80,8 +83,8 @@ Acompanhe as últimas notícias!
                   </div>
                   <div class="input-field col s3" >
                      <div class="select-wrapper">
-                        <select name="select" id="nurse" onchange="SelectShow()" class="error " required="">
-                           <option value="selecione">Enfermeiro(a)</option>
+                        <select name="select" id="nurse" onchange="SelectShow()" class="error" data-required='true'>
+                           <option value="">Enfermeiro(a)</option>
                            {% for k in arr_SearchNurse%}
                            <option value="{{ k.id }}">{{ k.nome }}</option>
                            {% endfor %}
@@ -90,8 +93,8 @@ Acompanhe as últimas notícias!
                   </div>
                   <div class="input-field col s3" >
                      <div class="select-wrapper">
-                        <select name="select" id="driver" onchange="SelectShow()" class="error " required="">
-                           <option value="selecione">Motorista</option>
+                        <select name="select" id="driver" onchange="SelectShow()" class="error " data-required='true'>
+                           <option value="">Motorista</option>
                            {% for k in arr_SearchDriver%}
                            <option value="{{ k.id }}">{{ k.nome }}</option>
                            {% endfor %}
@@ -106,43 +109,46 @@ Acompanhe as últimas notícias!
             <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
                <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
             </div>
-            <div id="userint" class="row" >
+            <div class="row" >
                <div class="col s12"  style="margin-top: 10px;">
                   <div class="input-field col s6">
                      <span>Nome do Paciente:</span>
-                     <select id="namePaciente" class="select2 browser-default">
-                        <option value="">Selecione:</option>
+                     <select id="namePaciente" class="select2 browser-default" data-required='true'>
+                        <option value="">Selecione:</option> 
                         {% for k in arr_SearchPacienteSe %}
                            <option data-tel1="{{ k.tel1 }}" data-tel2="{{ k.tel2 }}" data-cep="{{ k.cep }}" data-rua="{{ k.rua }}" data-numero="{{ k.numero }}" data-complemento="{{ k.complemento }}" data-bairro="{{ k.bairro }}" data-cidade="{{ k.cidade }}" data-uf="{{ k.uf }}" data-nome_med="{{ k.nome_med }}" data-nome_ate="{{ k.nome_ate }}" data-nome_commerce="{{ k.nome_commerce }}" value="{{ k.id_p }}"> {{ k.nome_p }} - {{ k.cpf_p }} </option>
                         {% endfor %}
                      </select>
                   </div>
                   <div class="input-field col s3">
-                     <input id="tel1" type="tel">
+                     <input id="tel1" type="tel" data-required='true'>
                      <label for="tel1">
                      <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
                   </div>
-                  <div class="input-field col s3">
+                  <div class="input-field col s3" >
                      <input id="tel2" type="tel">
                      <label for="tel2">
                      <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
                   </div>
-                  <div class="input-field col s3">
-                     <input disabled id="doctor" type="text">
-                     <label for="doctor" >
-                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico</label>
-                  </div>
-                  <div class="input-field col s3" >
-                     <input disabled id="attendance" type="text">
-                     <label for="attendance">
-                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento</label>
-                  </div>
-                  <div class="input-field col s3" >
-                     <input disabled id="commerce" type="text">
-                     <label for="commerce">
-                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial</label>
-                  </div>
+                 
                </div>
+                  <div class="col s12">
+                     <div class="input-field col s3">
+                        <input disabled id="doctor" type="text">
+                        <label for="doctor">
+                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico</label>
+                     </div>
+                     <div class="input-field col s3" style="display: none;" >
+                        <input disabled id="attendance" type="text">
+                        <label for="attendance">
+                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento</label>
+                     </div>
+                     <div class="input-field col s3" >
+                        <input disabled id="commerce" type="text">
+                        <label for="commerce">
+                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial</label>
+                     </div>
+                  </div>
             </div>
          </li>
          <!--CARD 3-->
@@ -150,7 +156,7 @@ Acompanhe as últimas notícias!
             <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #c434a07e; color: white;" >
                <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ENDEREÇO</labe>
             </div>
-            <div id="userint" class="row" >
+            <div class="row" >
                <div class="col s12"  style="margin-top: 10px;">
                   <div class="input-field col s3">
                      <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
@@ -238,29 +244,28 @@ Acompanhe as últimas notícias!
          </button>
       </div>
    </div>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
 <script type="text/javascript">
 
    function SelectShow() {
      var show = document.getElementById("tp_service").value;
          $("#btn_cadastrar").attr("disabled", true);   
          
-         if(show == 'selecione'){
+         if(show == ''){
             alert("Não se esqueça de preencher todos os campos!")
          }else{
          $("#btn_cadastrar").attr("disabled", false);
            }
    }
 
-         $("#hr_age").mask("00:00");
-         $("#cpf").mask("000.000.000-00");
-         $("#tel1").mask("(00) 00000-0000");
-         $("#tel2").mask("(00) 00000-0000");
-         $("#zipcode").mask("00000-000");
+         $("#hr_age").mask("99:99");
+         $("#cpf").mask("999.999.999-99");
+         $("#tel1").mask("(99) 99999-9999");
+         $("#tel2").mask("(99) 99999-9999");
+         $("#zipcode").mask("99999-999");
    
    
         function CadastreIndication(){
-      
             var date_age = $("#date_age").val();
             var hr_age = $("#hr_age").val();
             var tp_service = $("#tp_service").val();
@@ -286,40 +291,20 @@ Acompanhe as últimas notícias!
             var val_pago = $("#val_pago").val();
             var obs = $("#obs").val();
       
-         //VALIDAÇÃO DE CAMPO NULL  
-         if(document.getElementById("date_age").value == ''){
-               alert('Por favor, preencha o campo Data de Agendamento')
-               txt = 'date_age';
-               return false;
-            }else if(document.getElementById("hr_age").value == ''){
-               alert('Por favor, preencha o campo Horario')
-               txt = 'hr_age';
-               return false;
-            }else if(document.getElementById("tp_service").value == ''){
-               alert('Por favor, preencha o campo Tipo de Serviço')
-               txt = 'tp_service';
-               return false;
-            }else if(document.getElementById("tp_exame").value == ''){
-               alert('Por favor, preencha o campo Tipo Exame')
-               txt = 'tp_exame';
-               return false;
-            }else if(document.getElementById("convenio").value == ''){
-               alert('Por favor, preencha o campo Convenio')
-               txt = 'convenio';
-               return false;
-            }else if(document.getElementById("nurse").value == ''){
-               alert('Por favor, preencha o campo Enfermeiro(a)')
-               txt = 'nurse';
-               return false;
-            }else if(document.getElementById("driver").value == ''){
-               alert('Por favor, preencha o campo Motorista')
-               txt = 'driver';
-               return false;
-            }else if(document.getElementById("namePaciente").value == ''){
-               alert('Por favor, preencha o campo Nome')
-               txt = 'namePaciente';
+                  //VALIDAÇÃO DE CAMPO NULL
+            var i = 0;
+            $("#userint input[data-required='true'], #userint select[data-required='true']").each(function(){
+               if( $(this).val() === "" ){
+                  alert("Preencha os campos obrigatórios.");
+                  $(this).val().focus();
+                  i = 1;
+                  return false;
+               }
+            });
+            if(i == 1){
                return false;
             }
+            
 
             var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
                "date_age": $('#date_age').val(), 

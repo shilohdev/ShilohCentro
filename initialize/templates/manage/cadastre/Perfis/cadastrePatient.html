@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Shiloh | Cadastrar Paciente{% endblock %}
+{% block title %} Shiloh | Cadastrar Paciente{% endblock %}
 
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
@@ -17,6 +17,11 @@ Acompanhe as últimas notícias!
 {% endblock %}
 
 {% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/form-select2.min.css">
+
 <style type="text/css">
    .corfont{
    color: #641108;
@@ -38,19 +43,19 @@ Acompanhe as últimas notícias!
          <div class="input-field col s12" style="margin-top: 10px;">
             <div class="input-field col s3">
                <span>ID, Nome ou CPF:</span>
-               <select id="select_leads" class="select2 browser-default" >
+               <select id="select_leads" class="select2 browser-default" data-required="true">
                   <option value="">Selecione:</option>
                   {% for k in arr_SearchPatients %}
                      <option  data-conv_medico="{{ k.conv_medico }}" data-medico_resp="{{ k.medico_resp }}" data-cpf="{{ k.cpf }}" data-name="{{ k.nome }}" data-phone="{{ k.phone }}" data-phone_aux="{{ k.phone_aux }}" data-email="{{ k.email }}" value="{{ k.id }}">[{{ k.id }}] - {{ k.nome }} - {{ k.cpf }}</option>
                   {% endfor %}
                </select>
             </div>
-            <div id="resp" class="input-field col s5" style="display: none;">
+            <div id="resp" class="input-field col s5" style="display: none; margin-top: 19px;">
                <input readonly="readonly" style="color: black;"  id="medico_resp" type="text" data-required="true">
                <label for="medico_resp">
                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Indicação de:</label>
             </div>
-            <div id="conv" class="input-field col s4" style="display: none;"> 
+            <div id="conv" class="input-field col s4" style="display: none; margin-top: 19px;"> 
                <select id="conv_medico" class="error " required="">
                   <option value="">Selecione</option>
                   {% for k in arr_SearchConvenio %}
@@ -65,17 +70,17 @@ Acompanhe as últimas notícias!
       <div id="userint" class="row" >
         <div class="col s12">
           <div class="input-field col s3">
-             <input id="cpf" type="text" data-required="true">
+             <input id="cpf" type="text">
              <label for="cpf">
              <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
           </div>
           <div class="input-field col s5">
-             <input id="name" type="text" style="text-transform: uppercase" data-required="true">
+             <input id="name" type="text" data-required="true">
              <label for="name">
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
           </div>
           <div class="input-field col s4">
-             <input id="date_nasc" type="date" data-required="true" >
+             <input id="date_nasc" type="date" data-required="true">
              <label for="date_nasc">Data de Nacimento</label>
           </div>
        </div>
@@ -115,7 +120,7 @@ Acompanhe as últimas notícias!
           <div class="input-field col s3">
              <input id="complement" type="text" >
              <label for="complement">Complemento</label>
-          </div>
+          </div> 
           <div class="input-field col s5">
             <input id="district" type="text" data-required="true">
             <label for="district">Bairro</label>
@@ -127,6 +132,29 @@ Acompanhe as últimas notícias!
          <div class="input-field col s2">
             <input id="uf" type="text"  maxlength="2" data-required="true">
             <label for="uf">UF</label>
+         </div>
+       </div>
+       <div class="col s12">
+         <div class="input-field col s12">
+            <input id="obs" type="text" >
+            <label for="obs"> 
+            <i class="material-icons" style="font-size: 15px">edit</i>&nbsp;Observação</label>
+         </div>
+       </div>
+       <div class="col s12">
+         <div class="col s12" style="margin-top: 15px;">
+            <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:</label>
+         </div>
+         <div class="input-field col s3">
+
+            <input id="login" type="text" >
+            <label for="login"> 
+            <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+         </div>
+         <div class="input-field col s5">
+            <input id="senha" type="text" >
+            <label for="senha"> 
+            <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
          </div>
        </div>
 
@@ -144,13 +172,15 @@ Acompanhe as últimas notícias!
    </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
 <script type="text/javascript">
-   $("#cpf").mask("000.000.000-00");
-   $("#tel1").mask("(00) 00000-0000");
-   $("#tel2").mask("(00) 00000-0000");
-   $("#zipcode").mask("00000-000");
+   $("#cpf").mask("999.999.999-99");   
+   $("#tel1").mask("(99) 99999-9999");
+   $("#tel2").mask("(99) 99999-9999");
+      $("#zipcode").mask("99999-999");
 
-  function CadastreUser(){
+
+function CadastreUser(){
       var select_leads = $("#select_leads").val();
       var medico_resp = $("#medico_resp").val();
       var conv_medico = $("#conv_medico").val();
@@ -167,22 +197,51 @@ Acompanhe as últimas notícias!
       var district = $("#district").val();
       var city = $("#city").val();
       var uf = $("#uf").val();
+      var obs = $("#obs").val();
+      var login = $("#login").val();
+      var senha = $("#senha").val();
 
+      var teste = document.getElementById("date_nasc").value.split("-")[0];
+      var data = new Date();
+      var anoatual = data.getFullYear()
+      var Calc = (anoatual - teste)
 
-   //VALIDAÇÃO DE CAMPO NULL
-   var i = 0;
-   $("#userint input[data-required='true']").each(function(){
-      if($(this).val() == ""){
-         alert("Preencha os campos obrigatórios.");
-         $(this).focus();
-         i = 1;
-         return false;
+      console.log(Calc)
+      console.log(anoatual)
+      console.log(teste)
+      
+      if (Calc >= 10 ){
+         $("#cpf").attr("class", "data-required='true'");
+         alert("CPF obrigatório acima de 10 anos.")
+         var i = 0;
+         $("#userint input[data-required='true']").each(function(){        
+            if($(this).val() == ""){            
+               alert("Preencha os campos obrigatórios.");            
+               $(this).focus();            
+               i = 1;
+               return false;
+            }
+         });
+         if(i == 1){
+            return false;
+         }
+      } 
+      else{
+         var i = 0;
+         $("#userint input[data-required='true']").each(function(){
+            if($(this).val() == ""){
+               alert("Preencha os campos obrigatórios.");
+               $(this).focus();
+               i = 1;
+               return false;
+            }
+         });
+         if(i == 1){
+            return false;
+         }
       }
-   });
-   if(i == 1){
-      return false;
-   }
-
+   //VALIDAÇÃO DE CAMPO NULL
+  
       var btncadastrar = {
          "csrfmiddlewaretoken": $($('{% csrf_token %}').clone()).val(), //PEGA TODOS OS VALORES E JÁ FAZ O DICT AO MESMO TEMPO
          "cpf": $('#cpf').val(), 
@@ -201,12 +260,16 @@ Acompanhe as últimas notícias!
          "medico_resp": $('#medico_resp').val(),
          "select_leads": $('#select_leads').val(),
          "conv_medico": $('#conv_medico').val(),
+         "obs": $('#obs').val(),
+         "login": $('#login').val(),
+         "senha": $('#senha').val(),
          };
+
+         $("#btn_cadastrar").attr("disabled", true);
 
       fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function(re){
          if(re["response"] == "true"){
             alert(re["message"]);
-            $("#btn_cadastrar").attr("disabled", true);
             location.reload();
       }   
    });

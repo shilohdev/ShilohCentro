@@ -1,0 +1,523 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Fechamento do Comercial{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %} 
+{% block title-page %}
+Fechamento do Comercial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+{% block content %}
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+   @media only screen and (max-width: 800ypx){
+    .tfoot {
+        display: block;
+    }
+   }
+    
+
+</style>
+<!-- INICIO DO MODAL -->
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content" id="modal2">
+       <div class="card-content">
+        <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_comercial" type="text" >
+        <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
+       </div>
+       <!--PAGO-->
+      <div class="container col s8" style="margin-top:20px">
+        <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+            <div class="collapsible-header col s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO</labe>
+            </div>
+            <thead>
+                <tr role="row">
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Médico</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
+                </tr>
+            </thead>
+            <tbody id="pago">
+            </tbody>
+            <tfoot id="Count"></tfoot>
+        </table>
+      </div>
+
+        <!--EM ANÁLISE-->
+        <div class="container col s8" style="margin-top:80px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >EM ANÁLISE</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Médico</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    </tr>
+                </thead>
+                <tbody id="analise">
+                </tbody>
+            </table>
+        </div>
+
+
+        <!--AGUARDANDO PAGAMENTO-->
+        <div class="container col s8" style="margin-top:80px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style="  height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >NÃO ATINGIDO</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Médico</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    </tr>
+                </thead>
+                <tbody id="tb_aguardandopag"></tbody>
+            </table>
+        </div>
+
+        
+        <!--GLOSA-->
+        <div class="container col s8" style="margin-top:80px"> 
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >GLOSA E NÃO ATINGIDO</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="glosa">
+                </tbody>
+            </table>
+        </div>
+
+<!-- inicio
+
+         <div class="container col s8" style="margin-top:80px"> 
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style=" height: 40px; background-color: #d0c200bf; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >SEM RETORNO</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                    </tr>
+                </thead>
+                <tbody id="glosa">
+                </tbody>
+            </table>
+        </div>
+
+         *** SEM Agendamento
+         
+        <div class="container col s8" style="margin-top:80px"> 
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style=" height: 40px; background-color: #d0c200bf; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >SEM AGENDAMENTO</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                    </tr>
+                </thead>
+                <tbody id="glosa">
+                </tbody>
+            </table>
+        </div>
+ fim -->
+       
+    
+
+        <div class="col s11 mt-2 ml-4">
+            <button id="btn_pay" data-id_user="" onclick="PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
+                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
+            </span></button>
+        </div>
+
+   </div>
+
+   <div class="modal-footer">
+       <!--BUTTON-->
+       <div class="col s12 ">
+           <div class="col s10"></div>
+           <div class="col s2">
+               <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+
+           </div>
+       </div>
+   </div>
+</div>
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+   <!--FIM DO MODAL-->
+
+
+   <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+       <div class="container">
+           <div class="card">
+               <div class="card-content" style="margin-top: -93px;">
+                   <h5 class="corfont">FECHAMENTO DO COMERCIAL</h5>
+               </div>
+           </div>
+       </div>
+       <div class="container">
+           <div class="card">
+               <!-- Externo -->
+               <div id="userint" class="row">
+                   <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+                       <div class="input-field col s4">
+                         <input  id="cpf" type="text" onkeyup="searchPatients(this)">
+                           <label for="cpf">
+                               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+                       </div>
+
+                       <div class="input-field col s2">
+                           <select name="select" id="mes_search" class="error">
+                               <option value="">Selecione um mês</option>
+                               <option value="1">Janeiro</option>
+                               <option value="2">Fevereiro</option>
+                               <option value="3">Março</option>
+                               <option value="4">Abril</option>
+                               <option value="5">Maio</option>
+                               <option value="6">Junho</option>
+                               <option value="7">Julho</option>
+                               <option value="8">Agosto</option>
+                               <option value="9">Setembro</option>
+                               <option value="10">Outubro</option>
+                               <option value="11">Novembro</option>
+                               <option value="12">Dezembro</option>
+                           </select>
+                       </div>
+                       <div class="col s2">&nbsp;
+                           <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                           </button>
+                       </div>
+                       <!-- COMEÇO DA TABLE -->
+                       <div class="col s12 scroll">
+                           <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                               <thead style="background-color: #581848; color: white; font-size: 15px">
+                                   <tr>
+                                       <th data-field="id" style="text-align: center;">Nome</th>
+                                       <th data-field="id" style="text-align: center;">Status</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                                       <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                                   </tr>
+                               </thead>
+                               <tbody id="tb_append2">
+                                {% for k in arr_SearchClosingCommercial %}
+                                   <tr id="tr_{{ k.id }}">
+                                       <td style="text-align: center;">{{ k.nome }} </td>
+                                       <td style="text-align: center;">{{ k.status}}</td>
+                                       <td style="text-align: center;">{{ k.valor}}</td>
+                                       <td style="text-align: center;">
+                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                                                <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                            </a>
+                                       </td>
+                                   </tr>
+                                   {% endfor %}
+                               </tbody>
+                           </table>
+                       </div>
+                       <!-- FIM DA TABLE -->
+                   </div>
+               </div>
+           </div>
+      </div>
+   </div>
+</div>
+
+
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+<script type = "text/javascript" >
+
+//FUNCTION BUSCAR
+function searchPatients(object) {
+    var e = $(object).val().toUpperCase();
+    if (e == "") {
+        $('#tb_append2 > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append2 > tr').each(function() {
+            var trs = $(this).find("td");
+            var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if (check == true) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
+
+//CONFIG MODAL
+$(document).ready(function() {
+    $('.modal').modal();
+    $('.modal').css({
+        "width": "80%",
+    });
+});
+
+
+function searchMonth() {
+    var month = $("#mes_search").val();
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "month": month //DICT COM O VALOR DO ID
+    };
+    console.log(month)
+    fetchRequest("{% url 'SearchMonthClosingCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+        var dados = re["message"];
+        $("#tb_append2").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+         <tr id="tr_${n.id}">
+                     <td style="text-align: center;">${n.nome} </td>
+                     <td style="text-align: center;">${n.status}</td>
+                     <td style="text-align: center;">${n.valor}</td>s
+                     <td style="text-align: center;">
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick="viewAgenModal(this)">
+                            <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                        </a>
+                     </td>
+                  </tr>
+                  `;
+            $("#tb_append2").append(a);
+        });
+    });
+}
+
+$("#pesq_agenda").click(function() {
+    searchMonth();
+});
+
+
+
+
+
+function viewAgenModal(object){
+    var id_user = $(object).data("id_user"); 
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user ,
+    };
+    console.log(id_user)
+    $("#modal2").hide();
+    $(object).prop("disabled", true);
+    fetchRequest("{% url 'paymentDetailsCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+        if (re["response"] == false) {
+			alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+		} else {
+        $("#modal2").show();
+        var dados = re["message2"];
+        $("#tb_aguardandopag").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}" role="row" class="odd">
+                    <td>${n.paciente}</td>
+                    <td>${n.agendamento}</td>
+                    <td>${n.medicoAA}</td>
+                </tr>
+            `;
+            $("#tb_aguardandopag").append(a);
+        });
+        
+        var dados = re["message"];
+        $("#glosa").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}" role="row" class="odd">
+                    <td>${n.pacienteG}</td>
+                    <td>${n.agendamentoG}</td>
+                    <td>${n.medicoG}</td>
+                    <td>${n.status}</td>
+                </tr>
+            `;
+            $("#glosa").append(a);
+        });
+
+
+        var dados = re["messageAnalise"];
+        $("#analise").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}" role="row" class="odd">
+                    <td>${n.pacienteA}</td>
+                    <td>${n.agendamentoA}</td>
+                    <td>${n.medicoA}</td>
+                </tr>
+            `;
+            $("#analise").append(a);
+        });
+
+
+        var dados = re["messagePago"];
+        $("#Count").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}" role="row" class="odd">
+                    <td>${n.pacienteP}</td>
+                    <td>${n.medicoP}</td>
+                    <td>${n.dataColetaP}</td>
+                    <td>${n.dataRepasseP}</td>
+                    <td>${n.valor_uniP}</td>
+                </tr>
+            `;
+            $("#pago" ).append(a);
+        });
+
+
+    
+        var dados = re["messageCount"];
+        $("#Count").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}">
+                    <th rowspan="1" colspan="1"> TOTAL: </th>
+                    <th rowspan="1" colspan="1"></th>
+                    <th rowspan="1" colspan="1"></th>
+                    <th rowspan="1" colspan="1"></th>
+                    <th rowspan="1" colspan="1">${n.valor}</th>
+                </tr>
+            `;
+            $("#Count" ).append(a);
+        });
+
+    
+    }
+
+    });
+}
+
+//FINALIZAR PROCESSO
+function PartnersPago(object) {
+    var id_user = $(object).data("id_user");
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user, //DICT COM O VALOR DO ID
+        
+    };
+    console.log(formpost)
+    fetchRequest("{% url 'payCommercial' %}", "POST", "JSON", formpost, function(re) {
+        if (re["response"] == "true") {
+            alert(re["message"]);
+            $("#btn_end").attr("disabled", true);
+            location.reload();
+        }
+    });
+}
+
+
+
+
+function SearchInfo(object) { //FUNCTION DO ONCLICK
+    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+    //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+    //$("#btn_start").data("id_user", id_user);
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user //DICT COM O VALOR DO ID
+    };
+
+    fetchRequest("{% url 'SearchInfoCommercial' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+        if (re["response"] == false) {
+            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+        } else { //SE FOR VERDADDEIRA, PROSSEGUE
+            $("#modal2").show();
+            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+            var dictKeys = { // nome id / nome do grupo/ nome do value
+                "btn_pay": key["teste"]["btn_pay"],
+                "nome_comercial": key["teste"]["nome_comercial"],
+                "status_pagamento": key["teste"]["status_pagamento"],
+
+            }
+            console.log(dictKeys)
+            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+                $(`#${i}`).val(n);
+                var findLabel = $(`#${i}`).closest("div");
+                $(findLabel).find("label").attr("class", "active");
+            });
+            
+            $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
+
+
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+function SearchInfo(object) { //FUNCTION DO ONCLICK
+    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+    //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+    //$("#btn_start").data("id_user", id_user);
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user //DICT COM O VALOR DO ID
+    };
+
+    fetchRequest("{% url 'SearchInfoCommercial' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+        if (re["response"] == false) {
+            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+        } else { //SE FOR VERDADDEIRA, PROSSEGUE
+            $("#modal2").show();
+            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+            var dictKeys = { // nome id / nome do grupo/ nome do value
+                "btn_pay": key["teste"]["btn_pay"],
+                "nome_comercial": key["teste"]["nome_comercial"],
+                "status_pagamento": key["teste"]["status_pagamento"],
+
+            }
+            console.log(dictKeys)
+            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+                $(`#${i}`).val(n);
+                var findLabel = $(`#${i}`).closest("div");
+                $(findLabel).find("label").attr("class", "active");
+            });
+            
+            $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
+
+
+        }
+    });
+
+}
+
+
+
+
+
+</script>
+{% endblock %}      

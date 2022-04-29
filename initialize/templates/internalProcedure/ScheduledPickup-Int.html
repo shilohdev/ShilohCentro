@@ -1,0 +1,563 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Coletas Agendadas Todas Unidades{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial 
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+{% block content %}
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+</style>
+<!-- INICIO DO MODAL -->
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content" id="modal2">
+      <div class="card-content" style="margin-top: 50px;">
+         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
+         <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="motivo_S" type="text" >
+         <div class="container ">
+            <ul class="collapsible expandable " >
+               <li class="active" >
+                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
+                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
+                  </div>
+                  <div id="card_ag" class="row" >
+                     <div class="col s12"  style="margin-top: 10px;">
+                        <div class="input-field col s3">
+                           <input id="date_age" type="date" >
+                           <label for="date_age">Data Agendamento</label>
+                        </div>
+                        <div class="input-field col s3">
+                           <input id="hr_age" type="text" placeholder="00:00">
+                           <label for="hr_age">
+                           <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
+                        </div>
+                        <div class="input-field col s3">
+                           <input readonly="readonly" style="color: black;" id="tp_service" type="tel"/>
+                           <label for="tp_service" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a>
+                           </label>
+                        </div>
+                        <div class="input-field col s3" >
+                           <input readonly="readonly" style="color: black;" id="tp_exame" type="tel" id>
+                           <label for="tp_exame" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                     </div>
+                     <div class="input-field col s12" >
+                        <div class="input-field col s3" >
+                           <input readonly="readonly" style="color: black;" id="tp_conv" type="tel" id>
+                           <label for="tp_conv" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                        <div class="input-field col s3" >
+                           <input readonly="readonly" style="color: black;" id="nurse" type="tel" id>
+                           <label for="nurse" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <!--CARD 2-->
+               <li class="active"  style="margin-top: 30px;">
+                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
+                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
+                  </div>
+                  <div id="userint" class="row" >
+                     <div class="col s12"  style="margin-top: 10px;">
+                        <div class="input-field col s4">
+                           <input readonly="readonly" id="namePaciente" type="tel" id style="color: black;">
+                           <label for="namePaciente" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                        <div class="input-field col s4">
+                           <input id="tel1" type="tel" id>
+                           <label for="tel1">
+                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                        </div>
+                     </div>
+                     <div class="col s12"  style="margin-top: 10px;">
+                        <div class="input-field col s4">
+                           <input readonly="readonly" id="perfil" type="tel" id style="color: black;">
+                           <label for="perfil" class="active">
+                           <i class="material-icons" style="font-size: 15px">phone</i>Perfil <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                        <div class="input-field col s4">
+                           <input readonly="readonly" id="unity" type="tel" id>
+                           <label for="unity">
+                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Unidade</label>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li class="active" style="margin-top: 30px;" >
+                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
+                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                  </div>
+                  <div class="row" >
+                     <div class="col s12"  style="margin-top: 10px;">
+                        <div class="input-field col s12">
+                           <input id="obs" type="text">
+                           <label for="obs">
+                           <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li id="divMotivo" class="active" style="margin-top: 30px; display: none;" >
+                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
+                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">MOTIVO</labe>
+                  </div>
+                  <div class="row" >
+                     <div class="col s12"  style="margin-top: 10px;">
+                        <div class="input-field col s12">
+                           <input id="mStatus" type="text" data-required='true'>
+                           <label for="mStatus">
+                           <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Motivo:</label>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+            </ul>
+         </div>
+         <!--BUTTON-->
+         <div class="col s12 ">
+            <div class="col s2" >
+            </div>
+            <div class="col s2 mt-2 mb-3" >
+               <button id="btn_conc" onclick="StatusConc(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Concluir</spanpx>
+               </button>
+            </div>
+            <div class="col s2 mt-2 mb-3 " >
+               <button id="btn_reag"  onclick="ReagendarAge(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #ddc34eda;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Reagendar</spanpx>
+               </button>
+            </div>
+            <div class="col s2 mt-2 mb-3 " >
+               <button id="btn_frust"  onclick="StatusFrust(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #e97a1fda;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Frustrar</spanpx>
+               </button>
+            </div>
+            <div class="col s2 mt-2 mb-3 " >
+               <button id="btn_canc" onclick="StatusCanc(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #c74d4d;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cancelar</spanpx>
+               </button>
+            </div>
+            <div class="col s3" >
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <!--BUTTON-->
+      <div class="col s12 ">
+         <div class="col s8"></div>
+         <div class="col s4">
+            <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<!--FIM DO MODAL-->
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card" >
+      <div class="card-content" style="margin-top: -40px;">
+         <h5 class="corfont">CONSULTAR AGENDAMENTOS INTERNOS</h5>
+      </div>
+   </div>
+</div>
+<div class="container">
+   <div class="card" id="search_agenda">
+      <div id="userint" class="row">
+         <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col s4">
+               <input id="cpf" type="text" onkeyup="searchPatients(this)">
+               <label for="cpf">
+               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+            </div>
+            <div class="input-field col s2">
+               <select name="select" id="mes_search" class="error">
+                  <option value="">Selecione um mês</option>
+                  <option value="01">Janeiro</option>
+                  <option value="02">Fevereiro</option>
+                  <option value="03">Março</option>
+                  <option value="04">Abril</option>
+                  <option value="05">Maio</option>
+                  <option value="06">Junho</option>
+                  <option value="07">Julho</option>
+                  <option value="08">Agosto</option>
+                  <option value="09">Setembro</option>
+                  <option value="10">Outubro</option>
+                  <option value="11">Novembro</option>
+                  <option value="12">Dezembro</option>
+               </select>
+            </div>
+            <div class="col s2">&nbsp;
+               <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+               </button>
+            </div>
+            <!-- COMEÇO DA TABLE -->
+            <div class="row container container">
+               <!-- COMEÇO DA TABLE -->
+               <div class="col s12" style="margin-bottom: 50px; overflow-x: auto">
+                  <table class=" bordered">
+                     <thead style="background-color: #581848; color: white; font-size: 15px" >
+                        <tr>
+                           <th data-field="namet">Paciente</th>
+                           <th data-field="perfilt">Perfil</th>
+                           <th data-field="telt">Telefone</th>
+                           <th data-field="schedulingt">Agendamento</th>
+                           <th data-field="unityt">Unidade</th>
+                           <th data-field="status">Status</th>
+                           <th data-field="actiont">Ação</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tb_append">
+                        {% for k in arr_SearchScheduledPickupInt%}
+                        <tr>
+                           <td>{{ k.nome}}</td>
+                           <td>{{ k.perfil}}</td>
+                           <td>{{ k.tel}}</td>
+                           <td>{{ k.data_age}}</td>
+                           <td>{{ k.unity}}</td>
+                           <td>{{ k.status}}</td>
+                           <td>
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
+                              <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                              </a>
+                              <!--
+                                 <a onclick="remove(this)" class="modal-trigger">
+                                 <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
+                                 </a>
+                                 -->
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+               <!-- FIM DA TABLE -->
+            </div>
+            <!-- FIM DA TABLE -->
+         </div>
+      </div>
+   </div>
+</div>
+
+<script type = "text/javascript" >
+    //FUNCTION BUSCAR
+    function searchPatients(object) {
+        var e = $(object).val().toUpperCase();
+        if (e == "") {
+            $('#tb_append > tr').each(function() {
+                $(this).show();
+            });
+        } else {
+            $('#tb_append > tr').each(function() {
+                var trs = $(this).find("td");
+                var tr1 = $(trs[0]).text().toUpperCase();
+                var check = (tr1.indexOf(e) != -1);
+                if (check == true) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    }
+
+
+//CONFIG MODAL
+$(document).ready(function() {
+    $('.modal').modal();
+    $('.modal').css({
+        "width": "80%",
+    });
+});
+
+
+$(document).ready(function() {
+    $('.modal').modal();
+});
+$(document).ready(function() {
+    $('.modal').modal();
+});
+
+//MAP 
+function viewAgenModal(object) {
+    var id_user = $(object).data("id_user");
+    console.log(id_user)
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user
+    };
+    $("#modal2").hide();
+    $(object).prop("disabled", true);
+    fetchRequest("{% url 'ApiScheduledPickupModalInt' %}", "POST", "JSON", formpost, function(re) {
+        if (re["response"] == false) {
+            alert("Nenhum dado encontrado.");
+        } else {
+            $("#modal2").show();
+            var key = re["message"];
+            var dictKeys = {
+                "statusM": key["obs"]["statusM"],
+                "motivo_S": key["obs"]["motivo_status"],
+                "date_age": key["agendamento"]["data_agendamento"],
+                "hr_age": key["agendamento"]["hr_agendamento"],
+                "tp_service": key["agendamento"]["tipo_servico"],
+                "tp_exame": key["agendamento"]["tipo_exame"],
+                "tp_conv": key["agendamento"]["convenio"],
+                "nurse": key["agendamento"]["nurse"],
+                "id": key["agendamento"]["id"],
+                "tel1": key["pessoal"]["phone1"],
+                "namePaciente": key["pessoal"]["paciente"],
+                "obs": key["obs"]["obs"],
+                "color_s": key["obs"]["color"],
+                "unity": key["obs"]["unidade"],
+                "perfil": key["obs"]["perfil"],
+
+            }
+            console.log(dictKeys)
+            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+                $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
+                var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
+                $(findLabel).find("label").attr("class", "active"); //serve para encontrar dentro do closest div uma label e atribuir o módulo attr(atributo, valor)
+            });
+
+            //$("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
+            $("#btn_conc").data("id", key["agendamento"]["id"]); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
+            $("#btn_reag").data("id", key["agendamento"]["id"]); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
+            $("#btn_frust").data("id", key["agendamento"]["id"]); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
+            $("#btn_canc").data("id", key["agendamento"]["id"]); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
+            $("#statusM").css({
+                "color": key["obs"]["color"],
+                "font-size": "30px",
+                "border-bottom": "none",
+
+            }); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
+
+
+            ///verifica se está concluído para desabilitar os botoes
+            if ($("#statusM").val() != "Pendente") {
+                $("#btn_end").hide();
+                $("#btn_conc").attr("disabled", true);
+                $("#btn_reag").attr("disabled", true);
+                $("#btn_canc").attr("disabled", true);
+                $("#btn_frust").attr("disabled", true);
+
+            } else {
+                $("#btn_end").show();
+                $("#btn_conc").attr("disabled", false);
+                $("#btn_reag").attr("disabled", false);
+                $("#btn_canc").attr("disabled", false);
+                $("#btn_frust").attr("disabled", false);
+            }
+        }
+
+    });
+
+}
+
+
+//FUNCTION CONCLUIR
+function StatusConc(e) {
+    var id = $(e).data("id");
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id": id,
+    }
+    fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+
+        //"true" -> STRING
+        //true -> BOOLEAN
+        if (re["response"] == "true") {
+            alert("Agendamento Concluído com sucesso!"); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            location.reload();
+
+        }
+    });
+}
+
+//FUNCTION FRUSTAR
+function StatusFrust(e) {
+    $("#divMotivo").show();
+    //VALIDAÇÃO DE CAMPO NULL
+    var i = 0;
+
+    $("#divMotivo input[data-required='true']").each(function() {
+        if ($(this).val() == "") {
+            alert("Preencha o obrigatório.");
+            $(this).focus();
+            i = 1;
+            return false;
+        }
+    });
+    if (i == 1) {
+        return false;
+    }
+
+
+    var id = $(e).data("id");
+    var motivo_status = $("#mStatus").val();
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id": id,
+        "motivo_status": motivo_status,
+    }
+    fetchRequest("{% url 'ApiStatusAgendaFrustrado' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+
+        //"true" -> STRING
+        //true -> BOOLEAN
+        if (re["response"] == "true") {
+            alert("Agendamento Frustrado com sucesso!"); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            location.reload();
+
+        }
+    });
+
+}
+
+//FUNCTION CANCELAR
+function StatusCanc(e) {
+    $("#divMotivo").show();
+    //VALIDAÇÃO DE CAMPO NULL
+    var i = 0;
+
+    $("#divMotivo input[data-required='true']").each(function() {
+        if ($(this).val() == "") {
+            alert("Preencha o obrigatório.");
+            $(this).focus();
+            i = 1;
+            return false;
+        }
+    });
+    if (i == 1) {
+        return false;
+    }
+
+
+    var id = $(e).data("id");
+    var motivo_status = $("#mStatus").val();
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id": id,
+        "motivo_status": motivo_status,
+
+    }
+    fetchRequest("{% url 'ApiStatusAgendaCancel' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+
+        //"true" -> STRING
+        //true -> BOOLEAN
+        if (re["response"] == "true") {
+            alert("Agendamento Cancelado com sucesso!"); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            location.reload();
+
+        }
+    });
+}
+
+
+
+//FUNCTION REAGENDAR
+function ReagendarAge(e) {
+
+    $("#divMotivo").show();
+    //VALIDAÇÃO DE CAMPO NULL
+    var i = 0;
+
+    $("#divMotivo input[data-required='true']").each(function() {
+        if ($(this).val() == "") {
+            alert("Preencha o obrigatório.");
+            $(this).focus();
+            i = 1;
+            return false;
+        }
+    });
+    if (i == 1) {
+        return false;
+    }
+    
+   var id = $(e).data("id");
+   var data_agendar = $("#date_age").val();
+   var hr_age = $("#hr_age").val();
+   var tel1 = $("#tel1").val();
+   var obs = $("#obs").val();
+   var motivo_status = $("#mStatus").val();
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id": id,
+        "data_agendar": data_agendar,
+        "hr_age": hr_age,
+        "tel1": tel1,
+        "obs": obs,
+        "motivo_status": motivo_status,
+    }
+    console.log(formpost)
+
+    fetchRequest("{% url 'ApiReagendarAgendaConc' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+        //"true" -> STRING
+        //true -> BOOLEAN
+        if (re["response"] == "true") {
+            alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            location.reload();
+
+        }
+    });
+}
+
+
+function searchMonth() {
+    var month = $("#mes_search").val();
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "month": month //DICT COM O VALOR DO ID
+    };
+    console.log(month)
+    fetchRequest("{% url 'ScheduledMonthIntViews' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+        var dados = re["message"];
+        $("#tb_append").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+            <tr id="tr_${n.id}">
+                        <td>${n.paciente}</td>
+                        <td style="text-align: center;">${n.perfil}</td>
+                        <td style="text-align: center;">${n.tel}</td>
+                        <td style="text-align: center;">${n.data_age}</td>
+                        <td style="text-align: center;">${n.unity}</td>
+                        <td style="text-align: center;">${n.status}</td>
+                        <td style="text-align: center;">
+                           <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">
+                              <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
+                                 <i class="material-icons right">edit</i>
+                              </button>
+                           </a>
+                        </td>
+                     </tr>
+                     `;
+            $("#tb_append").append(a);
+        });
+    });
+}
+
+$("#pesq_agenda").click(function() {
+    searchMonth();
+});
+
+</script>
+{% endblock %}

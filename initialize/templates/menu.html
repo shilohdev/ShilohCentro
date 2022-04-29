@@ -1,0 +1,215 @@
+<!-- {% extends 'base.html' %} 
+{% load static %}--> 
+
+
+{% block contentmenu %}
+
+<ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+    <!-- Titulo -->
+    <li class="navigation-header">
+        <a class="navigation-header-text">GESTÃO</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <li class="bold" data-permission="register" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">person_add</i><span class="menu-title" data-i18n="Extra Components">Cadastrar</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="list_users" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastreUser' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
+                </li>
+                <li data-permission="register_partners" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastrePartnes' %}"><i class="material-icons" style="font-size: 15px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+                </li>
+                <li data-permission="register_indication" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastreIndication' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+                </li>
+                <li data-permission="cadastre_patients" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastrePatient' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Sweetalert">Paciente</span></a>
+                </li>
+                <li data-permission="register_convenio" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastreConvenio' %}"><i class="material-icons" style="font-size: 15px;">assignment</i><span data-i18n="Sweetalert">Convênio</span></a>
+                </li>
+                <li data-permission="cadastre_unit" data-chapter="view" style="display: none">
+                    <a href="{% url 'cadastreUnit' %}"><i class="material-icons" style="font-size: 15px;">control_point</i><span data-i18n="Sweetalert">Unidade</span></a>
+                </li>
+                <li data-permission="register_lead" data-chapter="view" style="display: none">
+                    <a href="{% url 'CadatsreLeadViews' %}"><i class="material-icons" style="font-size: 15px;">add</i><span data-i18n="Sweetalert">Lead</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="bold" data-permission="list" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">list</i><span class="menu-title" data-i18n="Extra Components">Listar</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="list_users" data-chapter="view" style="display: none">
+                    <a href="{% url 'listUsers' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
+                </li>
+                <li data-permission="list_patients" data-chapter="view" style="display: none">
+                    <a href="{% url 'listIndication' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
+                </li>
+                <li data-permission="list_partners" data-chapter="view" style="display: none">
+                    <a href="{% url 'listPartnes' %}"><i class="material-icons" style="font-size: 15px;">supervisor_account</i><span data-i18n="Range Slider">Parceiros</span></a>
+                </li>
+                <li data-permission="list_indication" data-chapter="view" style="display: none">
+                    <a href="{% url 'listLeads' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Range Slider">Indicações</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="bold" data-permission="settings" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">settings</i><span class="menu-title" data-i18n="Extra Components">Configurações</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="insert_permission" data-chapter="view" style="display: none">
+                    <a href="{% url 'setPermission' %}"><i class="material-icons" style="font-size: 15px;">tune</i><span data-i18n="Sweetalert">Permissão</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <!-- Titulo -->
+    <li class="navigation-header" data-permission="scheduled" data-chapter="main" style="display: none">
+        <a class="navigation-header-text">Atendimento </a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <li class="bold" data-permission="scheduled" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">view_agenda</i><span class="menu-title" data-i18n="Extra Components">Agenda</span></a>
+        <div class="collapsible-body"> 
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="agendar_coleta" data-chapter="view" style="display: none">
+                    <a href="{% url 'schedulePickup' %}"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Agendar Coleta</span></a>
+                </li>
+                <li data-permission="consult_agenda" data-chapter="view" style="display: none">
+                    <a href="{% url 'ScheduledPickup' %}"><i class="material-icons" style="font-size: 15px;">view_comfy</i><span data-i18n="Range Slider">Coletas Agendadas</span></a>
+                </li>
+                <li data-permission="collection_route" data-chapter="view" style="display: none">
+                    <a href="{% url 'CollectionRouteViews' %}"><i class="material-icons" style="font-size: 15px;">location_on</i><span data-i18n="Range Slider">Rota</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <!-- Titulo AQUI --> 
+    <li class="navigation-header" data-permission="agend_reverse" data-chapter="main" style="display: none">
+        <a class="navigation-header-text">FINANCEIRO</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <li class="bold" data-permission="agend_reverse" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">content_paste</i><span class="menu-title" data-i18n="Extra Components">Reemsolsos</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="agend_concluidos" data-chapter="view" style="display: none">
+                    <a href="{% url 'FinancialExamsViews' %}"><i class="material-icons" style="font-size: 15px;">playlist_add_check</i><span data-i18n="Range Slider">Solicitações</span></a>
+                </li>
+                <li data-permission="not_reached" data-chapter="view" style="display: none">
+                    <a href="{% url 'refundNotReachedViews' %}"><i class="material-icons" style="font-size: 15px;">clear</i><span data-i18n="Range Slider">Não Atingidos</span></a>
+                </li>
+                <li data-permission="glosses" data-chapter="view" style="display: none">
+                    <a href="{% url 'refundGlossesViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_down</i><span data-i18n="Range Slider">Glosados</span></a>
+                </li>
+                <li data-permission="reverse_finished" data-chapter="view" style="display: none">
+                    <a href="{% url 'RefundCompletedViews' %}"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="bold" data-permission="closure" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">attach_money</i><span class="menu-title" data-i18n="Extra Components">Pagamentos</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="fechamento_parceiro" data-chapter="view" style="display: none">
+                    <a href="{% url 'ClosingPartners' %}"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Fechamento Parceiros</span></a>
+                </li>
+                <li data-permission="fechamento_comercial" data-chapter="view" style="display: none">
+                    <a href="{% url 'ClosingCommercial' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Comercial</span></a>
+                </li>
+                <li data-permission="fechamento_interno" data-chapter="view" style="display: none">
+                    <a href="{% url 'closingInt' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Interno</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li data-permission="meus_registros" data-chapter="main" style="display: none" class="navigation-header">
+        <a class="navigation-header-text">MEUS REGISTROS</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <ul data-permission="meus_registros" data-chapter="main" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
+        <li data-chapter="view" data-permission="meus_registros_pacientes" style="display: none">
+            <a href="{% url 'ListerPatientsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
+        </li>
+        <li data-chapter="view" data-permission="meus_registros_parceiros" style="display: none">
+            <a href="{% url 'ListerPartnersUnitViews' %}"><i class="material-icons" style="font-size: 18px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+        </li>
+        <li data-chapter="view" data-permission="meus_registros_indicacao" style="display: none">
+            <a href="{% url 'ListerIndicationsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+        </li>
+        <li data-permission="meu_fechamento" data-chapter="view" style="display: none">
+            <a href="{% url 'ClosingFinanceUnit' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Financeiro</span></a>
+        </li>
+    </ul>
+    <li data-chapter="main" data-permission="leads_all" style="display: none" class="navigation-header">
+        <a class="navigation-header-text">LEADS</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <ul data-chapter="view" data-permission="leads_all" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
+        <li>
+            <a href="{% url 'LeadsViews' %}"><i class="material-icons" style="font-size: 15px;">view_headline</i><span data-i18n="Range Slider">Leads</span></a>
+        </li>
+    </ul>
+
+    <li class="navigation-header" data-permission="internal_procedure" data-chapter="main" style="display: none">
+        <a class="navigation-header-text">PROCEDIMENTO INTERNO</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <ul data-chapter="view" data-permission="schedule_collection_int" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
+        <li>
+            <a href="{% url 'schedulePickupInt' %}"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Agendar Coleta</span></a>
+        </li>
+
+        <li data-permission="scheduled_collection_int" data-chapter="view" style="display: none">
+            <a href="{% url 'ScheduledPickupInt' %}"><i class="material-icons" style="font-size: 15px;">view_comfy</i><span data-i18n="Range Slider">Coletas Agendadas</span></a>
+        </li>
+        <li data-permission="refund_int" data-chapter="view" style="display: none">
+            <a href="{% url 'SolicitationsRetfund' %}"><i class="material-icons" style="font-size: 15px;">playlist_add_check</i><span data-i18n="Range Slider">Reembolso</span></a>
+        </li>
+        <li data-permission="reverse_finished_int" data-chapter="view" style="display: none">
+            <a href="{% url 'RefundCompletedInterno' %}"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
+        </li>
+    </ul>
+
+</ul> 
+<div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 578px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 192px;"></div></div></ul>
+<div class="navigation-background"></div><a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="#" data-target="slide-out"><i class="material-icons">menu</i></a>
+
+<script type="text/javascript">
+var permissions = {{ infoUser|safe }};
+let dictPages = { 
+    "register": ["register_user", "register_partners", "register_indication", "cadastre_patients", "register_convenio", "register_lead"],
+    "list": ["list_users", "list_partners", "list_patients", "list_indication" ],
+    "settings": ["insert_permission"],
+    "scheduled": ["agendar_coleta", "consult_agenda", "collection_route"],
+    "agend_reverse": ["agend_concluidos", "reverse_finished", "not_reached", "glosses"],//FINANCEIRO
+    "closure": ["fechamento_parceiro", "fechamento_comercial", "fechamento_interno"],
+    "view_agenda_all": ["consult_agenda_all"],
+    "leads_all": ["leads_all"],
+    "meus_registros": ["meus_registros_pacientes", "meus_registros_parceiros", "meus_registros_indicacao", "meu_fechamento"],
+    "internal_procedure": ["schedule_collection_int", "scheduled_collection_int", "refund_int","reverse_finished_int" ], //PROCEDIMENTO INTERNO 
+
+
+}
+
+for(key in dictPages){
+    var main = key;
+    var pages = dictPages[key];
+    for(n in pages){
+        var permission_id = pages[n];
+        if((permissions.indexOf(permission_id) != -1) == true){
+            $(`[data-chapter="main"][data-permission="${key}"]`).show();
+        }
+    }
+}
+for(key in permissions){
+    var permission_id = permissions[key];
+    $(`[data-chapter="view"][data-permission="${permission_id}"]`).show();
+}
+</script>
+{% endblock %}

@@ -104,7 +104,7 @@ select{
 	z-index:9999
 }
 .bg-opacity-8{
-	background-color:rgba(255,255,255,.8)
+	background-color:rgba(255, 255, 255, 0.8)
 }
 [type=reset],[type=submit],button,html [type=button]{
 	cursor:pointer;
@@ -5176,11 +5176,7 @@ a.button-collapse.top-nav{
 tr.group,tr.group:hover{
 	background-color:#ddd!important
 }
-@media only screen and (max-width:1024px){
-	tfoot{
-		display:none
-}
-}
+
 .flat-text,.flat-text-header{
 	display:block;
 	width:80%;

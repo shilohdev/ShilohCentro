@@ -4,9 +4,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-urlpatterns = [
+urlpatterns = [ 
     #CADASTRAR USUARIO
     path('manage/cadastrar/usuarios/', views.cadastreUserViews, name='cadastreUser'),
+    
+    #API ATUALIZAR USUARIO INTERNO
+    path('API/manage/cadastrar/usuarios/', views.ApiUpdatePerfil, name='ApiUpdatePerfil'),
 
     #CADASTRAR PARCEIROS
     path('manage/cadastrar/parceiros/', views.cadastrePartnesViews, name='cadastrePartnes'),
@@ -14,7 +17,7 @@ urlpatterns = [
     #API CADASTRAR USER 
     path('api/manage/cadastrar/user/', views.ApiCadastreUser, name='ApiCadastreUser'),
 
-    #CADASTRAR PARCEIROS
+    #API CADASTRAR PARCEIROS
     path('api/manage/cadastrar/parceiros/', views.ApiCadastrePartners, name='ApiCadastrePartnes'),
 
     #CADASTRAR INDICAÇÃO
@@ -57,8 +60,7 @@ urlpatterns = [
 
     #API CONSULTAR COLETA
     path('api/consultar/coletas/paciente', views.ApiScheduledPickupViews, name='ApiScheduledPickup'),
-    path('api/consultar/coletas/modal', views.ApiScheduledPickupModalViews, name='ApiScheduledPickupModal'),#API MODAL AGENDAMENTP
-
+    path('api/consultar/coletas/modal', views.ApiScheduledPickupModalViews, name='ApiScheduledPickupModal'),#API MODAL AGENDAMENTO
 
     #LISTAR USUARIOS
     path('listar/usuarios/', views.listUsersViews, name='listUsers'),
@@ -74,27 +76,102 @@ urlpatterns = [
     path('api/listar/parceiros/', views.ApiListPartnesViews, name='ApiListPartnes'),
     path('api/modal/parceiros/', views.ApiViewDataPartnersModal, name='ApiViewDataPartnersModal'),
 
-
+ 
     #LISTAR PACIENTES
     path('listar/indicacao/', views.listIndicationViews, name='listIndication'),
     path('api/modal/pacientes/', views.ApiViewDataPatientsModal, name='ApiViewDataPatientsModal'),
     path('api/modal/pacientes/update', views.ApiChangePatientsModal, name='ApiChangePatientsModal'), #UPDATE PACIENTE
+    path('api/modal/pacientes/files', views.FetchPatientsFiles.as_view(), name='FetchPatientsFiles'), #FILE PACIENTE
     
-    #LISTAR LEAD
+    #LISTAR TODOS OS LEADS
     path('listar/leads/', views.listLeadsViews, name='listLeads'),
-
 
 #FINANCEIRO EXAMES
     #AGENDAMENTOS CONCLUIDOS
-    path('financeiro/exames/process-int/', views.FinancialExamsViews, name='FinancialExamsViews'), #FINANCEIRO EXAMES
+    path('financeiro/exames/process/', views.FinancialExamsViews, name='FinancialExamsViews'), #FINANCEIRO EXAMES
+    path('api/financeiro/exames/process/files/remove/', views.ModalExamsFinanceFileRemove, name='ModalExamsFinanceFileRemove'), #FINANCEIRO EXAMES
     path('Api/financeiro/exames/start/process/', views.ApiStartProcess, name='ApiStartProcess'), #FINANCEIRO
     path('api/consultar/exames/modal', views.SearchModalExams, name='SearchModalExams'),#API MODAL AGENDAMENTO
     path('api/consultar/exames/modal/finances', views.SearchModalExamsFinances, name='SearchModalExamsFinances'),#API MODAL FINANCEIRO
     path('api/salvar/alteracoes/modal/finances', views.SaveEditionsFinances, name='SaveEditionsFinances'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('api/finalizar/exames/modal/', views.ApiFinalizeProcess, name='ApiFinalizeProcess'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
-    #FINALIZADOS
-    path('financeiro/exames/exames/process-fin/', views.RefundCompletedViews, name='RefundCompletedViews'),#EXAMES FINALIADOS
-    path('financeiro/search/exames/finish/', views.SearchMonthExamsConcl, name='SearchMonthExamsConcl'),#EXAMES FINALIADOS
+    path('financeiro/search/exames/solicitacoes/', views.SearchMonthExamsRefund, name='SearchMonthExamsRefund'),#EXAMES FINALIZADOS
+    #PAGAMENTOS PAREIROS
+    path('financeiro/fechamento/parceiros/', views.ClosingPartnersViews, name='ClosingPartners'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/parceiros/detalhes', views.paymentDetails, name='paymentDetails'),
+    path('financeiro/fechamento/parceiros/pay', views.payPartnersV, name='payPartnersV'),
+    path('financeiro/modal/parceiros/status', views.SearchInfoM, name='SearchInfoM'),
+    #PAGAMENTOS COMERCIAL
+    path('financeiro/modal/comercial/', views.ClosingCommercialViews, name='ClosingCommercial'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/comercial/filter', views.SearchMonthClosingCommercial, name='SearchMonthClosingCommercial'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/comercial/detalhes', views.paymentDetailsCommercial, name='paymentDetailsCommercial'),
+    path('financeiro/modal/comercial/status/', views.SearchInfoCommercial, name='SearchInfoCommercial'),
+    path('financeiro/fechamento/parceiros/detalhes', views.payCommercial, name='payCommercial'),
 
+
+
+    #FINALIZADOS
+    path('financeiro/exames/exames/process-fin/', views.RefundCompletedViews, name='RefundCompletedViews'),#EXAMES FINALIZADOS
+    path('financeiro/search/exames/finish/', views.SearchMonthExamsConcl, name='SearchMonthExamsConcl'),#EXAMES FINALIZADOS
+    #path('api/historico/actions/', views.HistoricoViews, name='HistoricoViews'),#API HISTÓRICO
+    #NÃO ATINGIDO
+    path('financeiro/reembolso/nao/atingido/', views.refundNotReachedViews, name='refundNotReachedViews'),
+    #GLOSADO
+    path('financeiro/reembolso/glosado/', views.refundGlossesViews, name='refundGlossesViews'),
+
+    #INDIVIDUAL, MEUS REGISTROS
+    path('listar/pacientes/meus-registros/', views.ListerPatientsUnitViews, name='ListerPatientsUnitViews'),#PACIENTES
+    path('listar/parceiros/meus-registros/', views.ListerPartnersUnitViews, name='ListerPartnersUnitViews'),#PARCEIROS
+    path('listar/indicacoes/meus-registros/', views.ListerIndicationsUnitViews, name='ListerIndicationsUnitViews'),#INDICAÇÕES
+    path('meu/fechamento/financeiro/', views.ClosingFinanceUnit, name='ClosingFinanceUnit'),#INDICAÇÕES
+
+    #LISTAR LEADS
+    path('listar/leads/all-leads/', views.LeadsViews, name='LeadsViews'),#INDICAÇÕES
+    
+    #CADASTRAR LEAD (INTERNO)
+    path('cadastrar/leads/interno/', views.CadatsreLeadViews, name='CadatsreLeadViews'),#INDICAÇÕES CADASTRADAS PELO ATENDIMENTO
+    path('api/cadastrar/leads/interno/', views.ApiCadatsreLeadViews, name='ApiCadatsreLeadViews'),
+
+
+    #CADASTRAR UNIDADE
+    path('manage/cadastrar/unidade/', views.cadastreUnitViews, name='cadastreUnit'),
+
+    #API CADASTRAR CONVENIO
+    path('api/cadastre/unidade', views.ApiCadastreUnit, name='ApiCadastreUnit'),
+    path('api/unit/status/change/', views.ApiChangeStatusUnit, name='ApiChangeStatusUnit'),
+
+    #SALVAR ANEXO PACIENTES - listar paciente
+    path('api/salvar/doc/paciente', views.SaveEditionsPatient, name='SaveEditionsPatient'),
+
+#PROCEDIMENTO INERTNO 
+    #AGENDAR COLETA 
+    path('agendaar/coleta/interna/', views.schedulePickupIntViews, name='schedulePickupInt'),#EXAMES FINALIZADOS
+    #API AGENDAR COLETA
+    path('api/agendar/coleta/paciente/interna/', views.ApiSchedulePickupIntViews, name='ApiSchedulePickupInt'),
+    #CONSULTAR COLETAS AGENDADAS
+    path('consultar/coletas/internas/', views.ScheduledPickupIntViews, name='ScheduledPickupInt'),#RENDER PAGE
+    path('consultar/coletas/internas/int', views.ScheduledMonthIntViews, name='ScheduledMonthIntViews'),#FILTRO MES 
+    path('api/status/agenda/int', views.ApiStatusAgendaConcInt, name='ApiStatusAgendaConcInt'),#CONCLUIR
+    path('api/consultar/coletas/modal/interno/', views.ApiScheduledPickupModalIntViews, name='ApiScheduledPickupModalInt'),#API MODAL AGENDAMENTO
+    path('financeiro/search/exames/solicitacoes/interno/', views.SearchMonthExamsSolicitationViews, name='SearchMonthExamsSolicitationViews'),#EXAMES FINALIZADOS
+
+    #FINANCEIRO INTERNO
+    #AGENDAMENTOS CONCLUIDOS
+    path('financeiro/solicitacoes/interna/', views.SolicitationsRetfund, name='SolicitationsRetfund'), #FINANCEIRO EXAMES
+    path('financeiro/exames/exames/filter/', views.SearchMonthFInalizadosInt, name='SearchMonthFInalizadosInt'),#EXAMES FINALIZADOS
+
+    #FINALIZADOS
+    path('financeiro/exames/exames/process-fin/interno/', views.RefundCompletedInternoViews, name='RefundCompletedInterno'),#EXAMES FINALIZADOS
+    path('financeiro/exames/exames/filter/', views.SearchMonthFInalizadosInt, name='SearchMonthFInalizadosInt'),#EXAMES FINALIZADOS
+
+
+
+#ENFERMEIROS
+    path('rota/agendamentos/coletas/', views.CollectionRouteViews, name='CollectionRouteViews'),#EXAMES FINALIZADOS
+    path('api/status/agenda/route', views.ApiIniciarColeta, name='ApiIniciarColeta'),#CONCLUIR
+    path('api/salvar/anexo/', views.SaveAnexo, name='SaveAnexo'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
+    path('fechamento/finacneiro/interno/', views.closingInt, name='closingInt'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
+    path('financeiro/fechamento/interno/filter', views.SearchClosingIntFilter, name='SearchClosingIntFilter'),#EXAMES FINALIZADOS
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

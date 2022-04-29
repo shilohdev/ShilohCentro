@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Shiloh | Coletas Agendadas Todas Unidades{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -21,7 +21,7 @@ Acompanhe as últimas notícias!
 
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
-   <div class="modal-content">
+   <div class="modal-content" id="modal2">
       <div class="card-content" style="margin-top: 50px;">
          <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
          <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="motivo_S" type="text" >
@@ -66,10 +66,13 @@ Acompanhe as últimas notícias!
                            <label for="nurse" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
-                        <div class="input-field col s3" >
-                           <input readonly="readonly" style="color: black;" id="driver" type="tel" id>
-                           <label for="driver" class="active">
-                           <i class="material-icons" style="font-size: 15px">phone</i>Motorista <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                     <div class="input-field col s3" >
+                        <select class="error" name="select" id="driver" required="true" data-required='true'>
+                              <option value="">Status do Processo</option>
+                              {% for k in arr_SearchDriver %}
+                              <option value="{{ k.id }}">{{ k.nome }}</option>
+                              {% endfor %}
+                           </select>
                         </div>
                      </div>
                   </div>
@@ -206,32 +209,25 @@ Acompanhe as últimas notícias!
             </ul>
          </div>
          <!--BUTTON-->
-         <div class="col s12 ">
             <div class="col s2" >
             </div>
-            <div class="col s2 mt-2 mb-3" >
-               <button id="btn_conc" onclick="StatusConc(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Concluir</spanpx>
+            <div class="col s8 mt-2 mb-2">
+               <button id="btn_conc" onclick="StatusConc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #76c076da;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Concluir</span>
+               </button>
+               <button id="btn_reag"  onclick="ReagendarAge(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style=" margin-top: 10px; background-color: #ddc34eda;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Reagendar</span>
+               </button>
+               <button id="btn_frust"  onclick="StatusFrust(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #e97a1fda;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Frustrar</span>
+               </button>
+               <button id="btn_canc" onclick="StatusCanc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #c74d4d;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cancelar</span>
                </button>
             </div>
-            <div class="col s2 mt-2 mb-3 " >
-               <button id="btn_reag"  onclick="ReagendarAge(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #ddc34eda;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Reagendar</spanpx>
-               </button>
+            <div class="col s2" >
             </div>
-            <div class="col s2 mt-2 mb-3 " >
-               <button id="btn_frust"  onclick="StatusFrust(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #e97a1fda;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Frustrar</spanpx>
-               </button>
-            </div>
-            <div class="col s2 mt-2 mb-3 " >
-               <button id="btn_canc" onclick="StatusCanc(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #c74d4d;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cancelar</spanpx>
-               </button>
-            </div>
-            <div class="col s3" >
-            </div>
-         </div>
+
       </div>
    </div>
    <div class="modal-footer">
@@ -258,20 +254,10 @@ Acompanhe as últimas notícias!
    <div class="card" id="search_agenda">
       <div id="userint" class="row container " >
          <div class="col s12"  style="margin-top: 30px">
-            <div class="input-field col s4">
+            <div class="input-field col s6">
                <input id="search_nome" type="text" data-show="search" data-modal_config="search_name">
                <label for="search_nome">
-               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Pacianete</label>
-            </div>
-            <div class="input-field col s2" >
-               <div class="select-wrapper">
-                  <select name="select" id="search_doctor" class="error" required="" data-show="search" data-modal_config="search_doctor">
-                     <option value="">Médico</option>
-                     {% for k in arr_SearchDoctor%}
-                     <option value="{{ k.nome }}">{{ k.nome }}</option>
-                     {% endfor %}
-                  </select>
-               </div>
+               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
             </div>
             <div class="input-field col s2" >
                <div class="select-wrapper">
@@ -310,24 +296,10 @@ Acompanhe as últimas notícias!
                </div>
             </div>
             <div class="input-field col s2" >
-               <div class="select-wrapper">
-                  <select name="select" id="search_service" class="error" required="" data-show="search" data-modal_config="search_service">
-                     <option value="">Serviço</option>
-                     {% for k in arr_SearchService%}
-                     <option value="{{ k.id }}">{{ k.tipo_servico }}</option>
-                     {% endfor %}
-                  </select>
-               </div>
+               <div class="select-wrapper"></div>
             </div>
             <div class="input-field col s2" >
-               <div class="select-wrapper">
-                  <select name="select" id="search_tp_exame" class="error " required="" data-show="search" data-modal_config="search_type_exam">
-                     <option value="">Tipo Exame</option>
-                     {% for k in arr_SearchExame%}
-                     <option value="{{ k.id }}">{{ k.tipo_exame }}</option>
-                     {% endfor %}
-                  </select>
-               </div>
+               <div class="select-wrapper"></div>
             </div>
             <div class="col s6" >&nbsp;
                <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
@@ -338,17 +310,45 @@ Acompanhe as últimas notícias!
       </div>
       <div class="row container container">
          <!-- COMEÇO DA TABLE -->
-         <div class="col s12" style="margin-bottom: 50px;">
-            <table class="bordered">
+         <div class="col s12" style="margin-bottom: 50px; overflow-x: auto">
+            <table class=" bordered">
+             <!-- <div class="col s10">
+               <div class="col s3">
+                  {% for k in arr_CountAgendamentsConlcuidos%}
+                     Concluídos: <b>{{ k.qtd_concl}}</b>
+                  {% endfor %}
+               </div>
+
+               <div class="col s2">
+                  {% for k in arr_CountAgendamentsCancelados%}
+                        Cancelados: <b>{{ k.qtd_canc }}  </b> 
+                  {% endfor %}
+               </div>
+               <div class="col s2">
+                  {% for k in arr_CountAgendamentsFrustrados%}
+                     Frustrados:  <b>{{ k.qtd_frust }}</b>
+                  {% endfor %}
+               </div>
+
+               <div class="col s2">
+                  {% for k in arr_CountAgendaments%}
+                     Pendentes:  <b>{{ k.qtd_geral }}</b>
+                  {% endfor %}
+               </div>
+               <div class="col s2">
+                  {% for k in arr_CountAgendamentsAtrasados%}
+                     Atrasados:  <b>{{ k.qtd_atr }}</b>
+                  {% endfor %}
+               </div>-->
+              </div>
                <thead style="background-color: #581848; color: white; font-size: 15px" >
                   <tr>
                      <th data-field="namet">Paciente</th>
                      <th data-field="telt">Telefone</th>
-                     <th data-field="servicet">Serviço</th>
-                     <th data-field="examt">Exame</th>
                      <th data-field="nurset">Enfermeiro</th>
-                     <th data-field="doctort">Médico</th>
+                     <th data-field="doctort">Horário</th>
                      <th data-field="schedulingt">Agendamento</th>
+                     <th data-field="examt">Unidade</th>
                      <th data-field="status">Status</th>
                      <th data-field="actiont">Ação</th>
                   </tr>
@@ -358,11 +358,10 @@ Acompanhe as últimas notícias!
                   <tr>
                      <td>{{ k.paciente}}</td>
                      <td>{{ k.phone}}</td>
-                     <td>{{ k.service}}</td>
-                     <td>{{ k.exame}}</td>
                      <td>{{ k.nurse}}</td>
-                     <td>{{ k.doctor}}</td>
+                     <td>{{ k.hr_age}}</td>
                      <td>{{ k.date_age}}</td>
+                     <td>{{ k.unity}}</td>
                      <td>{{ k.status}}</td>
                      <td>
                         <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
@@ -383,7 +382,6 @@ Acompanhe as últimas notícias!
       </div>
    </div>
 </div>
-
 
 <script type = "text/javascript" >
 
@@ -507,7 +505,7 @@ function filterAgenda() {
          console.log(dados);
          for(k in dados){
                var key = dados[k];
-               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["tel"] + '</td> <td>' + key["servico"] + '</td> <td>' + key["exame"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["medico"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
+               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["tel"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
                $("#tb_append").append(append);
          }
       }
@@ -522,13 +520,9 @@ $("#pesq_agenda").click(function () {// Aqui inclui um evento para quando clicar
 $(document).ready(function () {
 	$('.modal').modal();
 });
-$('#modal1').modal('open');
-
 $(document).ready(function () {
 	$('.modal').modal();
 });
-$('#modal2').modal('open');
-
 
 //MAP 
 function viewAgenModal(object) { //FUNCTION DO ONCLICK
@@ -541,11 +535,14 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 		"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
 		"id_user": id_user //DICT COM O VALOR DO ID
 	};
+   $("#modal2").hide();
+     $(object).prop("disabled", true);
 	fetchRequest("{% url 'ApiScheduledPickupModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
 		if (re["response"] == false) {
 			alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
 		} else { //SE FOR VERDADEIRA, PROSSEGUE
-			var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+			$("#modal2").show();
+         var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
 			var dictKeys = { // nome id // nome do value
             "statusM": key["obs"]["statusM"],
             "motivo_S": key["obs"]["motivo_status"],
@@ -576,11 +573,18 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"color_s": key["obs"]["color"],
             
 			}
-
+         console.log(dictKeys)
 			$.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
-				$(`#${i}`).val(n);
-				var findLabel = $(`#${i}`).closest("div");
-				$(findLabel).find("label").attr("class", "active");
+            $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
+            var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
+            $(findLabel).find("label").attr("class", "active");//serve para encontrar dentro do closest div uma label e atribuir o módulo attr(atributo, valor)
+            if(i == "driver"){//GAMBIARRA PARA INPUTAR O SELECT
+               var valueObject = $("#driver option:selected").text();
+               $("input[class='select-dropdown dropdown-trigger']").val(valueObject);
+               $('li[class="selected"]').attr("class", "");
+               var findObject = $(`span:contains(${valueObject})`).closest("li");
+               $(findObject).attr("class", "selected");
+            }
 			});
          
 			//$("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
@@ -590,9 +594,25 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          $("#btn_canc").data("id", key["agendamento"]["id"]); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
          $("#statusM").css({
             "color": key["obs"]["color"], "font-size": "30px", "border-bottom": "none",
+
          }); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
 
+         
+         ///verifica se está concluído para desabilitar os botoes
+         if ($("#statusM").val() != "Pendente") {
+            $("#btn_end").hide();
+            $("#btn_conc").attr("disabled", true);
+            $("#btn_reag").attr("disabled", true);
+            $("#btn_canc").attr("disabled", true);
+            $("#btn_frust").attr("disabled", true);
 
+         }else{
+            $("#btn_end").show();
+            $("#btn_conc").attr("disabled", false);
+            $("#btn_reag").attr("disabled", false);
+            $("#btn_canc").attr("disabled", false);
+            $("#btn_frust").attr("disabled", false);
+         }
 		}
 
 	});
@@ -735,6 +755,7 @@ function ReagendarAge(e){
    var cust_alv = $("#cust_alv").val();
    var obs = $("#obs").val();
    var motivo_status = $("#mStatus").val();
+   var driver = $("#driver").val();
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -753,9 +774,10 @@ function ReagendarAge(e){
       "cust_alv": cust_alv,
       "obs": obs,
       "motivo_status": motivo_status,
+      "driver": driver,
 }
 console.log(formpost)
-
+ 
    fetchRequest("{% url 'ApiReagendarAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       //"true" -> STRING
       //true -> BOOLEAN

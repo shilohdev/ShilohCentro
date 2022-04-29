@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Fechamento do Comercial{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %} 
+{% block title-page %}
+Fechamento do Comercial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+{% block content %}
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+   @media only screen and (max-width: 800ypx){
+    .tfoot {
+        display: block;
+    }
+   }
+</style>
+
+
+   <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+       <div class="container">
+           <div class="card">
+               <div class="card-content" style="margin-top: -93px;">
+                   <h5 class="corfont"> MEU FINANCEIRO</h5>
+               </div>
+           </div>
+       </div>
+       <div class="container">
+           <div class="card">
+               <!-- Externo -->
+                
+               <div id="userint" class="row">
+                <!--  
+                <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+                       <div class="col s12">
+                            <div class="input-field col m2 s6" style="padding-left: 0;">
+                                <input  id="data1" type="date">
+                                <label for="data1">
+                                    <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Pagamento de</label>
+                            </div>
+   
+                            <div class="input-field col  m2 s6"  style="padding-left: 0;">
+                            <input  id="data2" type="date">
+                                <label for="data2">
+                                    <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Até</label>
+                            </div>
+                            <div class="col m3 s12">&nbsp;
+                                <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                                    <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                                </button>
+                            </div>
+                       </div>
+                    </div>
+-->
+                    <div class="container col s11" style="margin-left: 15px;  margin-top: 30px">
+                        <!--PAGO-->
+                        <div class="collapsible-header col m9 s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
+                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO</labe>
+                        </div>
+                        <div class="container col m8 s12 scroll">
+                           
+                            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">Paciente</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
+                                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pago">
+                                 {% for k in arr_SearchClosingUnit %}
+                                 <tr>
+                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.paciente }}</td>
+                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.dataColeta }}</td>
+                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.dataRepasse }}</td>
+                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exame }}</td>
+                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.valor_uni }}</td>
+                                 </tr>
+                              {% endfor %}
+                                </tbody>
+                                <tfoot id="Count">
+                                    {% for k in arr_SearchClosingUnitResultPG %}
+                                    <tr id="">
+                                        <th rowspan="1" colspan="1"> TOTAL: {{ k.contagem }} </th>
+                                        <th rowspan="1" colspan="1"></th>
+                                        <th rowspan="1" colspan="1"></th>
+                                        <th rowspan="1" colspan="1"></th>
+                                        <th rowspan="1" colspan="1">{{ k.valor }}</th>
+                                    </tr>
+                                    {% endfor %}
+                                  </tfoot>
+                            </table>
+                        </div>   
+
+                    </div>
+
+                    <div class="container col s11" style="margin-left: 15px; margin-top: 30px">
+                        <!--EM ANÁLISE-->
+                        <div class="collapsible-header col m9 s12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
+                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >EM ANÁLISE</labe>
+                        </div>
+                        <div class="container col m8 s12 scroll">
+                           
+                           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                              <thead>
+                                  <tr role="row">
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">Paciente</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="analise">
+                               {% for k in arr_SearchClosingUnitAN %}
+                               <tr>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.pacienteA }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.agendamentoA }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exameA }}</td>
+                                </tr>
+                            {% endfor %}
+                              </tbody>
+                              <tfoot id="Count"></tfoot>
+                          </table>
+                        </div>   
+
+                    </div>
+
+                    <div class="container col s11" style="margin-left: 15px; margin-top: 30px">
+                        <!--EM ANÁLISE-->
+                        <div class="collapsible-header col m9 s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >GLOSA E NÃO ATINGIDO</labe>
+                        </div>
+                        <div class="container col m8 s12 scroll">
+                           
+                           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                              <thead>
+                                  <tr role="row">
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">Paciente</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Status</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="glosa">
+                               {% for k in arr_SearchClosingUnitGNA %}
+                               <tr>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.pacienteG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.agendamentoG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exameG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.statusG }}</td>
+                               </tr>
+                            {% endfor %}
+                              </tbody>
+                          </table>
+                        </div>
+                    </div>
+
+                    <div class="container col s11" style="margin-left: 15px; margin-top: 30px">
+                        <!--AGENDADO-->
+                        <div class="collapsible-header col m9 s12" style=" height: 40px; background-color: #e9a52a; color: white;" tabindex="0">
+                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >AGENDADO</labe>
+                        </div>
+                        <div class="container col m8 s12 scroll">
+                           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                              <thead>
+                                  <tr role="row">
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">Paciente</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Agendamento</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
+                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Status</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="agendado">
+                               {% for k in arr_SearchClosingUnitAG %}
+                               <tr>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.pacienteAG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.agendamentoAG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exameAG }}</td>
+                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.statusAG }}</td>
+                                </tr>
+                            {% endfor %}
+                              </tbody>
+                              <tfoot id="Count"></tfoot>
+                          </table>
+                        </div>
+                    </div>
+               </div>
+           </div>
+      </div>
+
+
+
+    
+
+{% for k in arr_SearchClosingUnit %}
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+<script type = "text/javascript" >
+   
+
+   if ((response.message).length == 0){
+      var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+         $("#pago").append(appende); 
+      }
+  
+
+//FUNCTION BUSCAR
+function searchPatients(object) {
+    var e = $(object).val().toUpperCase();
+    if (e == "") {
+        $('#tb_append2 > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append2 > tr').each(function() {
+            var trs = $(this).find("td");
+            var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if (check == true) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
+/*
+function searchMonth() {
+    var data1 = $("#data1").val();
+    var data2 = $("#data2").val();
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "data1": data1, //DICT COM O VALOR DO ID
+        "data2": data2 //DICT COM O VALOR DO ID
+    };
+    console.log(month)
+    fetchRequest(" # ", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+        var dados = re["message"];
+        console.log(dados)
+        var restable = !dados.length;
+        console.log(teste)
+        if  (restable === true){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
+            $("#pago").html("");
+            var appende = ' <tr> <td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+               $("#pago").append(appende); 
+               }
+        else{
+             $("#pago").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.id}">
+                            <td style="text-align: center;">${n.nome} </td>
+                            <td style="text-align: center;">${n.status}</td>
+                            <td style="text-align: center;">${n.valor}</td>s
+                            <td style="text-align: center;">
+                                <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick="viewAgenModal(this)">
+                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                </a>
+                            </td>
+                        </tr>
+                        `;
+                    $("#tb_append2").append(a);
+                });          
+              
+        }
+    });
+}
+
+$("#pesq_agenda").click(function() {
+    searchMonth();
+});
+
+*/
+
+</script>
+{% endfor %}
+
+{% endblock %}      

@@ -16,10 +16,46 @@ Shiloh Centro | Home
 Acompanhe as últimas notícias!
 {% endblock %}
 
-{% block content %}
+{% block content %} 
 
 
 <!--colocar o que terá na pagina inicial-->
 
+<div class="slider">
+    <ul class="slides">
+      <li>
+        <img src="{% static 'app-assets/images/exam.png' %}"> <!-- random image -->
+        <div class="caption center-align" >
+          <h3 style="color:white;" ></h3>
+          <h5 class="light grey-text text-lighten-3"></h5>
+        </div>
+      </li>
+      <li>
+        <img src="{% static 'app-assets/images/examn.png' %}"> <!-- random image -->
+        <div class="caption left-align">
+        <h3></h3>
+        <h5 class="light grey-text text-lighten-3"></h5>
+        </div>
+      </li>
+      <li>
+        <img src="{% static 'app-assets/images/1.png' %}"> <!-- random image -->
+        <div class="caption right-align">
+          <h3></h3>
+          <h5 class="light grey-text text-lighten-3"></h5>
+        </div>
+      </li>
+      <li>
+       <img src="{% static 'app-assets/images/4.png' %}"> <!-- random image -->
+        <div class="caption center-align">
+          <h3></h3>
+          <h5 class="light grey-text text-lighten-3"></h5>
+        </div>
+      </li>
+    </ul>
+  </div>
 
+
+<script>
+    
+</script>
 {% endblock %}

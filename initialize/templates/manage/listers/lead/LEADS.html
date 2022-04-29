@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Leads{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
+</style>
+
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card">
+      <div class="card-content" style="margin-top: -40px;">
+         <h5 class="corfont">LEADS</h5>
+      </div>
+   </div>
+</div>
+<div class="container"> 
+   <div class="card" >
+         <!-- Externo -->
+      <div id="userint" class="row" >
+        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col s4">
+                <input id="bscinput" type="text" onkeyup="searchLead(this)">
+                <label for="bscinput">
+                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>    
+            </div>
+
+   <!-- COMEÇO DA TABLE -->
+         <div class="col s12 ">
+            <div class="col s6"></div>
+            <div class="col s6">
+               <div class="col">
+                  {% for k in arr_SearchCountLeadsDay %}
+                  Pendente Dia: {{ k.qtd_day }}
+                  {% endfor %}
+               </div>
+               <div class="col 4">
+                  {% for k in arr_SearchCountLeadsMes %}
+                  Pendente Mês: {{ k.qtd_mes }}
+                  {% endfor %}
+               </div>
+               <div class="col 4">
+                  {% for k in arr_SearchCountLeadsAll %}
+                  Todos Pendentes: {{ k.qtd_geral }}
+                  {% endfor %}
+               </div>
+               
+            </div>
+            <table id="page-length-option" class="bordered" style="overflow-x: auto">
+              <thead style="background-color: #581848; color: white; font-size: 15px" >
+                <tr>
+                  <th data-field="id" >Nome</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Telefone</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
+                  <th data-field="id" style="text-align: center; width: 100px;">Entrar em contato</th>
+                </tr>
+              </thead>
+              <tbody id="tb_append">
+                 {% for k in arr_SearchLeadsAll %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                <tr>
+                  <td>{{ k.nome }}</td>
+                  <td style="text-align: center;">{{ k.telefone }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
+                  <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
+                  <td style="text-align: center;">{{ k.medico_resp }}</td>
+                  <i class="fab fa-whatsapp"></i>
+                  <td style="text-align: center;">
+                  <a Target="_blank" href="https://api.whatsapp.com/send?phone=55{{ k.telefone }}&text=Olá, Tudo bem? 😃
+                  Sou a {{ k.nomeU }} do Shiloh Lab, a Dra. {{ k.medico_resp }} nos indicou para realizar os seus exames laboratoriais.">
+                     <span class=" "><img src="/app-assets/app-assets/ico/wpp.png" width="30" alt="avatar" style="margin-top: 10px;"></span>
+                 </a>
+                  </td>
+                </tr>
+                {% endfor %} <!-- FIM DO ARRAY -->
+              </tbody>
+            </table>
+          </div>
+          <!-- FIM DA TABLE -->
+      </div>
+      
+   </div>
+
+   
+</div>
+
+<script type="text/javascript">
+function searchLead(object){
+   var e = $(object).val().toUpperCase();
+    if(e == ""){
+        $('#tb_append > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append > tr').each(function() {
+           var trs = $(this).find("td");
+           var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if(check == true){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
+
+</script>
+{% endblock %}

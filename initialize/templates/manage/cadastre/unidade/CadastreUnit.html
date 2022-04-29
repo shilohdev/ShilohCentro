@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Cadastrar Nova Unidade{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
+   .btn2 {
+      margin-left: 5px;
+      width: 15px;
+      padding: 1;
+      padding-right: 8px;
+      background-color: #76c076da;
+   }
+
+   .btn3 {
+      margin-left: 5px;
+      width: 15px;
+      padding: 1;
+      padding-right: 8px;
+      background-color: #7f6bc5da;
+   }
+</style>
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="container">
+   <div class="card" >
+      <div class="card-content" style="margin-top: -40px;">
+         <h5 class="corfont">CADASTRAR NOVA UNIDADE</h5>
+      </div>
+   </div>
+</div>
+<div class="container">
+   <div class="card" >
+         <!-- Externo -->
+      <div id="userint" class="row" >
+        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+          <div class="input-field col s9">
+             <input id="newunit" type="text" >
+             <label for="newunit">
+             <i class="material-icons" style="font-size: 15px">assignment</i>&nbsp;Nome da Unidade</label>
+          </div>
+          <div class="input-field col s3">
+            <div class="col s12 mb-2">
+               <button onclick="CadastreUnit()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
+               </button>
+            </div>
+          </div>
+
+         <!--BUTTON-->
+         <div class="col s12 ">
+            
+         </div>
+   <!-- COMEÇO DA TABLE -->
+         <div class="col s12">
+            <table class="bordered" style="margin-top: 40px; overflow-x: auto">
+              <thead style="background-color: #581848; color: white; font-size: 15px" >
+                <tr>
+                  <th data-field="id" >Nome da Unidade</th>
+                  <th data-field="name" style="width: 80px;">Ação</th>
+                </tr>
+              </thead>
+              <tbody id="tb_append">
+                 {% for k in arr_SearchUnidade %}
+                <tr>
+                  <td>{{ k.nome }}</td>
+                  <td>
+                      <button id="btn_status_{{ k.id }}" onclick="changeStatusUnit(this)" data-id_unit="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
+                        <i class="material-icons right">check</i>
+                      </button>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- FIM DA TABLE -->
+      </div>
+      
+   </div>
+
+   
+</div>
+
+
+<script>
+
+function CadastreUnit(){
+   if(document.getElementById("newunit").value == ''){
+      alert('Por favor, preencha o Nome do Convênio')
+         txt = 'newunit';
+         return false;
+      }
+
+   var newunit = $("#newunit").val();
+
+   var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
+            "newunit": newunit, 
+      };
+
+      fetchRequest("{% url 'ApiCadastreUnit' %}", "POST", "JSON", btncadastrar, function(re){
+         if(re["response"] == "true"){
+            var addRow = '<tr> <td>' + newunit + '</td> <td> <button id="btn_status_{{ k.id }}" onclick="changeStatusUnit(this)" data-id_unit="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};"> <i class="material-icons right">check</i> </button> </td>'
+               $("#tb_append").append(addRow);
+            }
+            alert(re["message"]);
+
+      });
+      var limpa = $("#newunit").val("");
+}
+
+
+function changeStatusUnit(object){
+   var id_unit = $(object).data("id_unit"); //objeto usuario que compoe um data-id_unit
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_unit": id_unit //DICT COM O VALOR DO ID
+   };
+         
+   fetchRequest("{% url 'ApiChangeStatusUnit' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+      if(re["response"] == false){ 
+         alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+         $(`#btn_status_${id_unit}`).css("background-color", key["btn_status"]
+         )
+         
+      }
+   });
+}
+</script>
+{% endblock %}

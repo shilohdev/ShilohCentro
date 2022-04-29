@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Shiloh | Cadastrar Parceiros{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -31,7 +31,7 @@ Acompanhe as últimas notícias!
    <div class="card" >
          <!-- Externo -->
       <div id="userint" class="row" >
-        <div class="col s12"  style="margin-top: 30px;">
+        <div class="col s12"  style="margin-top: 0px;">
           <div class="input-field col s5">
              <input id="name" type="text" >
              <label for="name">
@@ -42,7 +42,7 @@ Acompanhe as últimas notícias!
             <label for="rn">
             <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NC</label>
          </div>
-         <div class="input-field col s3" >
+         <div class="input-field col s4" >
             <div class="select-wrapper">
               <select name="select" id="categoria" onchange="SelectShow()" class="error " data-required='true'>
                   <option value="SELECIONE">Categoria</option>
@@ -111,8 +111,55 @@ Acompanhe as últimas notícias!
                <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
          </div>
       </div>
-        
-
+      <!--FINANCEIRO-->
+         <div class="col s12">
+               <div class="active">
+                  <div class="collapsible-header col s4" style="height: 40px; background-color: #c434a07e; color: white;" tabindex="0">
+                     <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
+                  </div>
+               </div>
+         </div>
+         <div id="financeiro">
+            <div class="col s12" >
+               <div class="col s6">
+                  <div class="input-field col s3">
+                     <label>
+                     <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
+                     <span>Valor Padrão:</span>
+                     </label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input readonly="readonly" type="text" id="val_p_fixo" class="inpd" style="color:black;">
+                  </div>
+               </div>
+            </div>
+            <div class="col s12">
+               <div class="col s6">
+                  <div class="input-field col s3">
+                     <label>
+                     <input type="checkbox" id="val_p_check" class="checkgroup" onclick="porcentagem()">
+                     <span>Porcentagem:</span>
+                     </label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input type="text" id="val_p" class="inpd" onchange="porcentagem()">
+                  </div>
+               </div>
+            </div>
+            <div class="col s12">
+               <div class="col s6">
+                  <div class="input-field col s3">
+                     <label>
+                     <input type="checkbox" id="val_fixo_check" class="checkgroup" onclick="fixo()" >
+                     <span>Valor Fixo:</span>
+                     </label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input type="text" id="val_fixo" class="inpd" onchange="fixo()">
+                  </div>
+               </div>
+            </div>
+         </div>
          <!--BUTTON-->
          <div class="col s12 ">
             <div class="col s12 mb-2">
@@ -122,13 +169,19 @@ Acompanhe as últimas notícias!
             </div>
          </div>
       </div>
+   
    </div>
 </div>
 
 
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type="text/javascript">
+
+
+
+
 
 function SelectShow() {
   var show = document.getElementById("categoria").value;
@@ -141,34 +194,22 @@ function SelectShow() {
         }
 }
 
-      $("#tel1").mask("(00) 00000-0000");
-      $("#tel2").mask("(00) 00000-0000");
-      $("#zipcode").mask("00000-000");
+      $("#tel1").mask("(99) 99999-9999");
+      $("#tel2").mask("(99) 99999-9999");
+      $("#zipcode").mask("99999-999");
+      $("#val_fixo").mask('#.##0,00', {
+         reverse: true
+      });
+      $("#val_p").mask('99%', {
+         reverse: true
+      });
    
    
-     function CadastrePartners(){
-         var categoria = $("#categoria").val();
-         var name = $("#name").val();
-         var email = $("#email").val();
-         var tel1 = $("#tel1").val();
-         var tel2 = $("#tel2").val();
-         var zipcode = $("#zipcode").val();
-         var addres = $("#addres").val();
-         var number = $("#number").val();
-         var complement = $("#complement").val();
-         var district = $("#district").val();
-         var city = $("#city").val();
-         var uf = $("#uf").val();
-         var rn = $("#rn").val();
-         var categoria = $("#categoria").val();
-         var obs = $("#obs").val();
-   
-    
-   
+   function CadastrePartners(){
+
       //VALIDAÇÃO DE CAMPO NULL  
-      //VALIDAÇÃO DE CAMPO NULL
    var i = 0;
-   $("#userint input[data-required='true']").each(function(){
+      $("#userint input[data-required='true']").each(function(){
       if($(this).val() == ""){
          alert("Preencha os campos obrigatórios.");
          $(this).focus();
@@ -179,8 +220,9 @@ function SelectShow() {
    if(i == 1){
       return false;
    }
-
-         
+   var val_p_fixo = $("#val_p_fixo").val();
+   var checkbox_porcentagem = $("#val_p").val();
+   var checkbox_fixo = $("#val_fixo").val();
          var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "categoria": $('#categoria').val(), 
             "name": $('#name').val(),
@@ -197,8 +239,12 @@ function SelectShow() {
             "rn": $('#rn').val(),
             "categoria": $('#categoria').val(),
             "obs": $('#obs').val(),
+            "padrao": val_p_fixo,
+            "porcentagem": checkbox_porcentagem,
+            "fixo": checkbox_fixo,
             };
-   
+            console.log(btncadastrar)
+
          fetchRequest("{% url 'ApiCadastrePartnes' %}", "POST", "JSON", btncadastrar, function(re){
             if(re["response"] == "true"){
                alert(re["message"]);
@@ -207,7 +253,48 @@ function SelectShow() {
          }   
       });
    };
-   
+
+   function padrao(){
+   var checkbox_padrao = $("#val_p_fixo").val();
+
+   if($("#val_p_fixo_check").is(":checked")){
+      $("#val_p, #val_fixo").attr("disabled", true)
+      $("#val_p_check, #val_fixo_check").attr('disabled',true);
+      $("#val_p_fixo").val("R$ 400,00");    
+
+   }
+   else{
+      $("#val_p, #val_fixo").attr("disabled", false)
+      $("#val_p_check, #val_fixo_check").attr('disabled',false);
+      $("#val_p, #val_fixo,  #val_p_fixo").val("");    
+   }
+}
+
+   function porcentagem(){
+   var checkbox_porcentagem = $("#val_p").val();
+
+   if($("#val_p_check").is(":checked")){
+      $("#val_fixo").attr("disabled", true)
+      $("#val_p_fixo_check, #val_fixo_check").attr('disabled',true);
+   }else{
+      $("#val_fixo").attr("disabled", false)
+      $("#val_p_fixo_check, #val_fixo_check").attr('disabled',false);
+      $("#val_p, #val_fixo").val("");
+   }
+}
+
+   function fixo(){
+   var checkbox_fixo = $("#val_fixo").val();
+
+   if($("#val_fixo_check").is(":checked")){
+      $("#val_p ").attr('disabled',true);
+      $("#val_p_fixo_check, #val_p_check").attr("disabled", true)
+   }else{
+      $("#val_p ").attr('disabled',false);
+      $("#val_p_fixo_check, #val_p_check").attr("disabled", false)
+      $("#val_p, #val_fixo").val("");
+   }
+}
    
    // CEP 
    function pesquisacep(valor) {
@@ -256,11 +343,11 @@ function SelectShow() {
    var end_city = $("#city").val("");
    var end_state = $("#uf").val("");
    }
+
+
    
-   
-   
-   
-   
+      
+
    </script>
 
 {% endblock %}

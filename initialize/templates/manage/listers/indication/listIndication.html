@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Página principal{% endblock %}
+{% block title %}Shiloh | Consultar Pacientes{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -23,9 +23,7 @@ Acompanhe as últimas notícias!
 
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
-   <div class="modal-content">
-
-
+   <div class="modal-content" id="modal2">
       <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
          <div class="container">
             <div class="card">
@@ -66,7 +64,7 @@ Acompanhe as últimas notícias!
                       <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
                    </div>
                    <div class="input-field col s5">
-                      <input id="name" type="text" style="text-transform: uppercase">
+                      <input id="name" type="text">
                       <label for="name">
                       <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
                    </div>
@@ -125,14 +123,32 @@ Acompanhe as últimas notícias!
                      <label for="uf">UF</label>
                   </div>
                 </div>
+                <div class="col s12">
+                  <div class="col s12" style="margin-top: 15px;">
+                     <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:</label>
+                  </div>
+                  <div class="input-field col s3">
          
-                 
-         
+                     <input id="login" type="text" >
+                     <label for="login"> 
+                     <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="senha" type="text" >
+                     <label for="senha"> 
+                     <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                  </div>
+                </div>
+                <div class="col s12">
+                  <div class="input-field col s12">
+                     <input id="obs" type="text" >
+                     <label for="obs"> 
+                     <i class="material-icons" style="font-size: 15px">edit</i>&nbsp;Observação</label>
+                  </div>
+                </div>
                </div>
             </div>
          </div>
-         
-         
    </div>
    </div>
    <div class="modal-footer">
@@ -156,6 +172,92 @@ Acompanhe as últimas notícias!
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
 
+
+<!-- INICIO DO MODAL 2 -->
+<div id="modalH" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content" id="modal3">
+      <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+         <div class="container" id="modalint">
+            <div class="card">
+               <div class="row">
+                  <div class="container col s12" id="card_finance">
+                     <div class="active" style="margin-top: 15px;">
+                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ANEXOS</labe>
+                        </div>
+                        <div class="row" id="div_files">
+                           <div class="col s12">
+                                 <div class="col s4 mt-2 ml-3">
+                                    <input id="doc_anx" type="file">
+                                 </div>
+                                 <div class="input-field col s3">
+                                    <div class="select-wrapper">
+                                       <select name="select" id="tp_anx" class="error" required="true" data-show="search">
+                                          <option value="">Tipo do Anexo</option>
+                                          {% for k in arr_SearchTypeAnexo%}
+                                          <option value="{{ k.id }}">{{ k.tipo_anexo }}</option>
+                                          {% endfor %}
+                                       </select>
+                                    </div>
+                                 </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col s11 ml-4">
+                              <table class="bordered" style="margin-top: 20px">
+                                 <thead style="background-color: #581848; color: white; font-size: 15px">
+                                    <tr>
+                                       <th data-field="id"> Arquivos Anexados</th>
+                                       <th data-field="id"> Data e hora</th>
+                                       <th data-field="id"> Tipo</th>
+                                       <th data-field="name" style="width: 120px;">Ação</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody id="tb_append">
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="active" style="margin-top: 30px;">
+                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">HISTÓRICO</labe>
+                        </div>
+                        <div class="row">
+                           <div class="col s12" style="margin-top: 10px;">
+                                 <div id="activity" class="col s12 active" style="display: block;">
+                                    <div class="activity">
+                                       <ul id="historico" class="widget-timeline mb-0">
+                                          <td id="null" class="col s12 mb-8" colspan="5" style="text-align: center;">Nenhum Registro Encontrado</td>
+                                       </ul>
+                                    </div>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                 </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <!--BUTTON-->
+      <div class="col s12 ">
+         <div class="col s8"></div>
+       <div class="col s2">
+          <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+       </div>
+       <div class="col s2">
+          <button onclick="SlvAnx(this)" id="btn_salvar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
+          <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Salvar</spanpx>
+          </button>
+       </div>
+    </div>
+</div>
+</div>
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<!--FIM DO MODAL 2-->
 
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
 <div class="container">
@@ -181,12 +283,13 @@ Acompanhe as últimas notícias!
             
          </div>
    <!-- COMEÇO DA TABLE -->
-         <div class="col s12">
-            <table id="page-length-option" class="bordered">
+         <div class="col s12 scroll">
+            <table id="page-length-option" class="bordered" style="overflow-x: auto">
               <thead style="background-color: #581848; color: white; font-size: 15px" >
                 <tr>
-                  <th data-field="id" >Nome de Usuário</th>
-                  <th data-field="id" style="text-align: center; width: 130px;">Médico</th>
+                  <th data-field="id" >Nome</th>
+                  <th data-field="id" style="text-align: center; width: 300px;">Médico</th>
+                  <th data-field="id" style="text-align: center; width: 300px;">Unidade</th>
                   <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                 </tr>
               </thead>
@@ -195,14 +298,18 @@ Acompanhe as últimas notícias!
                 <tr id="tr_{{ k.id }}">
                   <td>{{ k.nome }}</td>
                   <td style="text-align: center;">{{ k.medico_resp }}</td>
+                  <td style="text-align: center;">{{ k.unity }}</td>
                   <td style="text-align: center;">
                      <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
                         <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
                            <i class="material-icons right">edit</i>
                         </button>
-                     </a><button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
-                        <i class="material-icons right">remove_red_eye</i>
-                      </button>
+                     </a>
+                     <a href="#modalH" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoricoModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
+                           <i class="material-icons right">remove_red_eye</i>
+                        </button>
+                     </a>
                   </td>
                 </tr>
                 {% endfor %} <!-- FIM DO ARRAY -->
@@ -218,7 +325,6 @@ Acompanhe as últimas notícias!
 </div>
 
 <script type="text/javascript">
-
 function searchPatients(object){
    var e = $(object).val().toUpperCase();
     if(e == ""){
@@ -246,14 +352,11 @@ $('.modal').modal();
 $('.modal').css({
    "width":"80%",
 });
-});//CONFIG MODAL
+});
 
 function PesquisarFilter() {
-
    var tp_category = $("#tp_category").val();
-
    console.log(tp_category)
-
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "tp_category": tp_category,   
@@ -273,7 +376,7 @@ function PesquisarFilter() {
 
       }
       if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro encontrado</td>'
+            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append").append(appende); 
             }
       console.log(teste)
@@ -281,19 +384,209 @@ function PesquisarFilter() {
 }
 
 
-function viewUserModal(object){//FUNCTION DO ONCLICK
-var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-$("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+class request {
+  constructor(token) {
+      this.token = token;
+  }
+  body(to, method, typeMethod, formdata, sucess){
+    $.ajax({
+        url: to+"?csrfmiddlewaretoken="+this.token,
+        type: method,
+        dataType: typeMethod,
+        data: JSON.stringify(formdata),
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  put(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "PUT",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  get(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "GET",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  post(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "POST",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  delete(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "DELETE",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+}
 
-var formpost = {
-   "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-   "id_user": id_user //DICT COM O VALOR DO ID
-};
-      
+function deleteFile(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
+   var path = $(object).data("path"); //objeto usuario que compoe um data-id_user
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "path": path //DICT COM O VALOR DO ID
+   };     
+
+   let r = new request($('{% csrf_token %}').val());
+   r.delete("{% url 'FetchPatientsFiles' %}", formpost, function(re) {
+      if(re["response"] == true){
+         alert(re["message"]);
+         $(object).closest("tr").remove();
+      } else {
+         alert(re["message"]);
+      }
+   });
+}
+
+function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
+   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   $("#btn_salvar").data("id_user", id_user); 
+   
+$("#modal3").hide();
+     $(object).prop("disabled", true);
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user //DICT COM O VALOR DO ID
+   };     
+
+   let r = new request($('{% csrf_token %}').val());
+   r.get("{% url 'FetchPatientsFiles' %}", formpost, function(re) {
+      if(re["response"] == true){
+         $("#modal3").show();
+         var dados = re["message"];
+         var docs = dados["docs"];
+         var ap = "";
+     
+               $.map(docs, function(n, i){
+            console.log(n, i);
+            ap += `
+               <tr> 
+                  <td>${n.name}</td>
+                  <td>${n.date_create.pt}</td>
+                  <td>${n.type_desc}</td>
+                  <td style="text-align: center;">
+                     <a style="width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;cursor: pointer;" download class="btn mb-1 waves-effect waves-light ativ" href="${n.url}" data-target="dropdown2">
+                        <i class="material-icons right">cloud_download</i>
+                     </a>
+                      <a onclick=\"deleteFile(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="${n.path}" class="btn mb-1 waves-effect waves-light ativ">
+                        <i class="material-icons right">delete</i>
+                     </a>
+                  </td>
+               </tr>
+            `;
+            
+
+         });
+            $("#tb_append").html(ap);
+         
+         
+
+         // SECTION HISTÓRICO
+         var history = dados["history"];
+         var ap2 = "";
+
+         $.map(history, function(n, i){
+         ap2 += `
+               <li class="timeline-items timeline-icon-green active">
+                  <div class="timeline-time">${n.date_register}</div>
+                  <h6 class="timeline-title">${n.type_operation}</h6>
+                  <p class="timeline-text">${n.description}</p>
+               </li>
+            `;
+
+         });
+         $("#historico").html(ap2);
+         if (ap2 != ''){
+            $("#null").hide();
+
+         }
+         
+       
+      } else {
+         alert(re["message"]);
+      }
+   });
+
+
+//function para exibir histórico
+ 
+}
+
+//VISUALIZA O APPEND
+function viewFile(object) {
+    var path = $(object).data("url");
+    var filename = $(object).data("id");
+    var a = document.createElement("a");
+    a.href = "/docs/" + path;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+}
+
+function viewUserModal(object){//FUNCTION DO ONCLICK
+   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   $("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+
+$("#modal2").hide();
+     $(object).prop("disabled", true);
+     var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user //DICT COM O VALOR DO ID
+   };
+
 fetchRequest("{% url 'ApiViewDataPatientsModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
    if(re["response"] == false){ 
       alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
    } else { //SE FOR VERDADDEIRA, PROSSEGUE
+      $("#modal2").show();
       var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
       var dictKeys = {// nome id / nome do grupo/ nome do value
          "tp_conv": key["med"]["conv"],
@@ -315,7 +608,10 @@ fetchRequest("{% url 'ApiViewDataPatientsModal' %}", "POST", "JSON", formpost, f
          "district": key["address"]["district"],
          "city": key["address"]["city"],
          "uf": key["address"]["state"],
-      
+
+         "obs": key["obs"]["obs"],
+         "login": key["obs"]["login"],
+         "senha": key["obs"]["senha"],
       }
       
       $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
@@ -337,7 +633,7 @@ fetchRequest("{% url 'ApiViewDataPatientsModal' %}", "POST", "JSON", formpost, f
 
 
 function changeStatusUser(object){
-var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+/*var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
 var formpost = {
    "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
    "id_user": id_user //DICT COM O VALOR DO ID
@@ -352,7 +648,8 @@ fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(r
       $(`#btn_status_${id_user}`).css("background-color", key["btn_status"]
       )
    }
-});
+});*/ 
+alert("Neste momento esta função ainda não está disponível. ⚠️ Em caso de dúvidas, entre em contato com o suporte.")
 }
 
 
@@ -380,5 +677,70 @@ function changeUserModal(object){
    });
 
 }
+
+
+function SlvAnx(object) {
+    var id_user = $(object).data("id_user");
+    var files = $("#doc_anx")[0].files[0];
+    if ($("#doc_anx").val() != "") {
+        if ($("#doc_anx").prop("files") != undefined) {
+            if ($("#tp_anx").val() == "") {
+                return alert("Preencha o tipo de anexo para salvar.");
+            } else {
+                files = document.querySelector("#doc_anx").files[0];
+            }
+        } else {
+            files = "";
+        }
+    } else {
+        files = "";
+    }
+
+   
+    //verificação para preencher o tipo do arquivo.
+
+    var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+    
+ 
+    var formpost2 = {
+        "id_user": id_user,
+    };
+
+    var formpost = [{
+            "name": "csrfmiddlewaretoken",
+            "value": $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        {
+            "name": "file",
+            "value": files
+        },
+        {
+            "name": "id_user",
+            "value": id_user
+        },
+        {
+            "name": "type_doc",
+            "value": $("#tp_anx").val()
+        },
+        {
+            "name": "data",
+            "value": JSON.stringify(formpost2)
+        },
+    ];
+
+    fetchRequestFiles("{% url 'SaveEditionsPatient' %}", "POST", "JSON", formpost, function(re) {
+        if (re["response"] == false) {
+            alert("Nenhum dado encontrado.");
+        } else {
+            $("#btn_salvar").attr("disabled", true);
+            alert(re["message"]);
+            location.reload();
+
+        }
+    });
+}
+
+
+
 </script>
 {% endblock %}

@@ -4,6 +4,7 @@ from enum import Enum
 
 class BancoDeDados(str, Enum):
     DB = 'auth_finances'
+    DBA = 'admins'
 
 
 class DbManager(models.Manager):
@@ -19,6 +20,14 @@ class DbManager(models.Manager):
 
 class DB(models.Model):
     use_db = BancoDeDados.DB.value
+    objects = DbManager()
+
+    class Meta:
+        abstract = True
+
+
+class DBAdmins(models.Model):
+    use_db = BancoDeDados.DBA.value
     objects = DbManager()
 
     class Meta:

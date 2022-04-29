@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Shiloh | Cadastrar Usuário{% endblock %}
+{% block title %}Shiloh | Conceder Permissões{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
@@ -11,6 +11,10 @@ Permissões
 Acompanhe as últimas notícias!
 {% endblock %}
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/form-select2.min.css">
+
 <style type="text/css">
     ::-webkit-input-placeholder {
         text-align: right;
@@ -113,16 +117,16 @@ Acompanhe as últimas notícias!
 <div class="container">
    <div class="card" >
       <div class="card-content" style="margin-top: -40px;">
-         <h5 class="corfont">Permissão</h5>
+         <h5 class="corfont">PERMISSÕES</h5>
       </div>
    </div>
-</div>
+</div> 
 <div class="container">
    <div class="card" >
-      <div class="input-field col s12" >
-          <label style="margin-bottom: 15px;">Parceiros</label>
+      <div class="input-field col s6" >
+          <label style="margin-bottom: 20px;">Nome</label></br>
           <div class="select-wrapper" style="margin-top: 30px;">
-            <select id="partners" class="error " required="">
+            <select id="partners" class="select2 browser-default">
                 <option value="">Selecione</option>
                 {% for k in searchUsers %}
                     <option value="{{ k.id }}" data-permissions="{{ k.permissions }}">{{ k.personal.name }}</option>
@@ -210,6 +214,8 @@ function SavePermissions(){
     };
     fetchRequest("{% url 'ApiSavePermissions' %}", "POST", "JSON", formpost, function(re){
         alert(re["message"]);
+        location.reload();
+
     });
 }
 
@@ -225,5 +231,13 @@ $("#partners").change(function(){
         }
     }
 });
+
+$(".select2").select2({
+    dropdownAutoWidth: true,
+    width: '100%'
+
+});
+ 
+
 </script>
 {% endblock %}
