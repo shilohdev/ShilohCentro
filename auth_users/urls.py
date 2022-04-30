@@ -182,4 +182,6 @@ urlpatterns = [
     #INFOLOG
     path('info/log/', views.LogUser, name='LogUser'),#EXAMES FINALIZADOS
 
+    path('user/create/', views.createUsers, name='createUsers'),#EXAMES FINALIZADOS
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

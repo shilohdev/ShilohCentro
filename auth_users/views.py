@@ -811,3 +811,50 @@ def ApiStatusNegative(request):
 def SearchStatusLeadFilter(request):
     array = SearchStatusLeadFilterFunction(request)
     return JsonResponse(array, safe=False, status=200)
+
+
+@csrf_exempt
+def createUsers(request):
+    e = 0
+    c = 0
+    with connections['auth_users'].cursor() as cursor:
+        
+        query = "SELECT perfil, cpf, nome, email, login, data_regis FROM auth_users.users"
+        cursor.execute(query)
+        dados = cursor.fetchall()
+        arr_response = [
+            {
+                "name": nome,
+                "email": email,
+                "username": login,
+                "password": str(datetime.strptime(str(data_regis), "%Y-%m-%d").strftime("%d%Y")) if str(perfil) == 7 else str(cpf)
+            } for perfil, cpf, nome, email, login, data_regis in dados
+        ]
+
+        for key in arr_response:
+            firstname = key.get('name', '')
+            id_user = key.get('username', None)
+            email = key.get('email', '')
+            id_pass = key.get('password', '')
+            lastname = ''
+
+            if User.objects.filter(username=id_user).exists():
+                user = User.objects.get(username=id_user)
+                user.first_name = firstname
+                user.last_name = ''
+                user.email = email
+
+                user.save()
+                e += 1
+            else:
+                user = User.objects.create_user(username=id_user, email=email, first_name=firstname, last_name=lastname, password=id_pass)
+                c += 1
+
+    array = {
+        "quantity_exists": e,
+        "quantity_create": c
+    }
+    return JsonResponse(
+        array,
+        safe=False, status=200
+    )
