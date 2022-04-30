@@ -33,47 +33,47 @@ Acompanhe as últimas notícias!
                   </div>
                   <div id="card_ag" class="row" >
                      <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="date_age" type="date" >
                            <label for="date_age">Data Agendamento</label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="hr_age" type="text" placeholder="00:00">
                            <label for="hr_age">
                            <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input readonly="readonly" style="color: black;" id="tp_service" type="tel"/>
                            <label for="tp_service" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a>
                         </label>
                            
                         </div>
-                        <div class="input-field col s3" >
+                        <div class="input-field col m3 s12" >
                            <input readonly="readonly" style="color: black;" id="tp_exame" type="tel" id>
                            <label for="tp_exame" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
                      </div>
                      <div class="input-field col s12" >
-                        <div class="input-field col s3" >
+                        <div class="input-field col m3 s12" >
                            <input readonly="readonly" style="color: black;" id="tp_conv" type="tel" id>
                            <label for="tp_conv" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
-                        <div class="input-field col s3" >
-                           <input readonly="readonly" style="color: black;" id="nurse" type="tel" id>
-                           <label for="nurse" class="active">
-                           <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
-                        </div>
-                     <div class="input-field col s3" >
-                        <select class="error" name="select" id="driver" required="true" data-required='true'>
-                              <option value="">Status do Processo</option>
-                              {% for k in arr_SearchDriver %}
-                              <option value="{{ k.id }}">{{ k.nome }}</option>
-                              {% endfor %}
-                           </select>
-                        </div>
+                        <div class="input-field col m3 s12" >
+                           <select class="error" name="select" id="nurse" required="true" data-required='true'>
+                                 <option value="">Motorista</option>
+                                 {% for k in arr_SearchNurse %}
+                                 <option value="{{ k.id }}">{{ k.nome }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
+                           <div class="input-field col m3 s12" >
+                              <input readonly="readonly" style="color: black;" id="driver" type="tel" id>
+                              <label for="driver" class="active">
+                              <i class="material-icons" style="font-size: 15px">phone</i>Motorista <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                           </div>
                      </div>
                   </div>
                </li>
@@ -84,27 +84,27 @@ Acompanhe as últimas notícias!
                   </div>
                   <div id="userint" class="row" >
                      <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s6">
+                        <div class="input-field col m6 s12">
                            <input readonly="readonly" id="namePaciente" type="tel" id style="color: black;">
                            <label for="namePaciente" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="tel1" type="tel" id>
                            <label for="tel1">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="tel2" type="tel" id>
                            <label for="tel2">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input readonly="readonly" style="color: black;" id="doctor" type="tel" id>
                            <label for="doctor" >
                            <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico  <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
-                        <div class="input-field col s3" >
+                        <div class="input-field col m3 s12" >
                            <input readonly="readonly" style="color: black;" id="attendance" type="tel" id>
                            <label for="attendance">
                            <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento  <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
@@ -119,34 +119,34 @@ Acompanhe as últimas notícias!
                   </div>
                   <div id="userint" class="row" >
                      <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
                            <label for="zipcode">
                            <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
                         </div>
-                        <div class="input-field col s7">
+                        <div class="input-field col m7 s12">
                            <input id="addres" type="text" >
                            <label for="addres">Logradouro </label>
                         </div>
-                        <div class="input-field col s2">
+                        <div class="input-field col m2 s12">
                            <input id="number" type="text" >
                            <label for="number">Número </label>
                         </div>
                      </div>
                      <div class="col s12">
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 s12">
                            <input id="complement" type="text" >
                            <label for="complement">Complemento</label>
                         </div>
-                        <div class="input-field col s5">
+                        <div class="input-field col m5 s12">
                            <input id="district" type="text" >
                            <label for="district">Bairro</label>
                         </div>
-                        <div class="input-field col s2">
+                        <div class="input-field col m2 s12">
                            <input id="city" type="text" >
                            <label for="city">Cidade</label>
                         </div>
-                        <div class="input-field col s2">
+                        <div class="input-field col m2 s12">
                            <input id="uf" type="text"  maxlength="2">
                            <label for="uf">UF</label>
                         </div>
@@ -184,7 +184,7 @@ Acompanhe as últimas notícias!
                   </div>
                   <div class="row" >
                      <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s12">
+                        <div class="input-field col m12 s12">
                            <input id="obs" type="text">
                            <label for="obs">
                            <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
@@ -193,12 +193,12 @@ Acompanhe as últimas notícias!
                   </div>
                </li>
                <li id="divMotivo" class="active" style="margin-top: 30px; display: none;" >
-                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
+                  <div class="collapsible-header col m12 s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
                      <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">MOTIVO</labe>
                   </div>
                   <div class="row" >
                      <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s12">
+                        <div class="input-field col m12 s12">
                            <input id="mStatus" type="text" data-required='true'>
                            <label for="mStatus">
                            <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Motivo:</label>
@@ -211,7 +211,7 @@ Acompanhe as últimas notícias!
          <!--BUTTON-->
             <div class="col s2" >
             </div>
-            <div class="col s8 mt-2 mb-2">
+            <div class="col m8 s12 mt-2 mb-2">
                <button id="btn_conc" onclick="StatusConc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #76c076da;">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Concluir</span>
                </button>
@@ -243,142 +243,142 @@ Acompanhe as últimas notícias!
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-<div class="container">
-   <div class="card" >
-      <div class="card-content" style="margin-top: -40px;">
-         <h5 class="corfont">CONSULTAR AGENDAMENTOS</h5>
+   <div class="container">
+      <div class="card" >
+         <div class="card-content" style="margin-top: -40px;">
+            <h5 class="corfont">CONSULTAR AGENDAMENTOS</h5>
+         </div>
       </div>
    </div>
-</div>
-<div class="container">
-   <div class="card" id="search_agenda">
-      <div id="userint" class="row container " >
-         <div class="col s12"  style="margin-top: 30px">
-            <div class="input-field col s6">
-               <input id="search_nome" type="text" data-show="search" data-modal_config="search_name">
-               <label for="search_nome">
-               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
-            </div>
-            <div class="input-field col s2" >
-               <div class="select-wrapper">
-                  <select name="select" id="search_nurse" class="error " required="" data-show="search" data-modal_config="search_nurse">
-                     <option value="">Enfermeiro</option>
-                     {% for k in arr_SearchNurse%}
-                     <option value="{{ k.id }}">{{ k.nome }}</option>
-                     {% endfor %}
-                  </select>
+   <div class="container">
+      <div class="card" id="search_agenda">
+         <div id="userint" class="row container" >
+            <div class="col s12"  style="margin-top: 30px">
+               <div class="input-field col m5 s12">
+                  <input id="search_nome" type="text" data-show="search" data-modal_config="search_name">
+                  <label for="search_nome">
+                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
                </div>
-            </div>
-            <div class="input-field col s4" style="margin-top: 0px">
-               <div class="row">
-                  <div class="input-field col s6">
+               <div class="input-field col m2 s12" >
+                  <div class="select-wrapper">
+                     <select name="select" id="search_nurse" class="error " required="" data-show="search" data-modal_config="search_nurse">
+                        <option value="">Enfermeiro</option>
+                        {% for k in arr_SearchNurse%}
+                        <option value="{{ k.id }}">{{ k.nome }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div>
+               <div class="input-field col m5 s12" style="margin-top: 0px">
+                  <div class="input-field col m6 s6">
                      <input id="search_date_start" type="date" data-show="search_to" data-modal_config="search_dt_agendamento_first">
                      <label for="date_start"><i class="material-icons" style="font-size: 15px"></i>&nbsp;Data Agendamento</label>
                   </div>
-                  <div class="input-field col s6">
+                  <div class="input-field col m6 s6">
                      <input id="search_date_end" type="date" data-show="search_end" data-modal_config="search_dt_agendamento_end">
                      <label for="date_end"><i class="material-icons" style="font-size: 15px"></i>&nbsp;Até</label>
                   </div>
                </div>
             </div>
          </div>
-      </div>
-      <div id="userint" class="row container " >
-         <div class="col s12"  style="margin-bottom: 30px; ">
-            <div class="input-field col s2" >
-               <div class="select-wrapper">
-                  <select name="select" id="search_status" class="error" required="" data-show="search" data-modal_config="search_status">
-                     <option value="">Status</option>
-                     {% for k in arr_SearchStatus%}
-                     <option value="{{ k.id }}">{{ k.status }}</option>
-                     {% endfor %}
-                  </select>
+         <div id="userint" class="row container " >
+            <div class="col s12"  style="margin-bottom: 30px; ">
+               <div class="input-field col m2 s12" >
+                  <div class="select-wrapper">
+                     <select name="select" id="search_status" class="error" required="" data-show="search" data-modal_config="search_status">
+                        <option value="">Status</option>
+                        {% for k in arr_SearchStatus%}
+                        <option value="{{ k.id }}">{{ k.status }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
                </div>
-            </div>
-            <div class="input-field col s2" >
-               <div class="select-wrapper"></div>
-            </div>
-            <div class="input-field col s2" >
-               <div class="select-wrapper"></div>
-            </div>
-            <div class="col s6" >&nbsp;
-               <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
-               </button>
+               <div class="input-field col s2" >
+                  <div class="select-wrapper"></div>
+               </div>
+               <div class="input-field col s2" >
+                  <div class="select-wrapper"></div>
+               </div>
+               <div class="col m6 s12" >&nbsp;
+                  <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                  <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
+                  </button>
+               </div>
             </div>
          </div>
-      </div>
-      <div class="row container container">
-         <!-- COMEÇO DA TABLE -->
-         <div class="col s12" style="margin-bottom: 50px; overflow-x: auto">
-            <table class=" bordered">
-             <!-- <div class="col s10">
-               <div class="col s3">
-                  {% for k in arr_CountAgendamentsConlcuidos%}
-                     Concluídos: <b>{{ k.qtd_concl}}</b>
-                  {% endfor %}
+         <div class="row">
+            <div class=" container">
+               <!-- COMEÇO DA TABLE -->
+               <div class=" row container col s12" style="margin-bottom: 50px; overflow-x: auto">
+                  <table class=" bordered">
+                  <!-- <div class="col s10">
+                     <div class="col s3">
+                        {% for k in arr_CountAgendamentsConlcuidos%}
+                           Concluídos: <b>{{ k.qtd_concl}}</b>
+                        {% endfor %}
+                     </div>
+      
+                     <div class="col s2">
+                        {% for k in arr_CountAgendamentsCancelados%}
+                              Cancelados: <b>{{ k.qtd_canc }}  </b> 
+                        {% endfor %}
+                     </div>
+                     <div class="col s2">
+                        {% for k in arr_CountAgendamentsFrustrados%}
+                           Frustrados:  <b>{{ k.qtd_frust }}</b>
+                        {% endfor %}
+                     </div>
+      
+                     <div class="col s2">
+                        {% for k in arr_CountAgendaments%}
+                           Pendentes:  <b>{{ k.qtd_geral }}</b>
+                        {% endfor %}
+                     </div>
+                     <div class="col s2">
+                        {% for k in arr_CountAgendamentsAtrasados%}
+                           Atrasados:  <b>{{ k.qtd_atr }}</b>
+                        {% endfor %}
+                     </div>-->
+                  </div>
+                     <thead style="background-color: #581848; color: white; font-size: 15px" >
+                        <tr>
+                           <th data-field="namet">Paciente</th>
+                           <th data-field="telt">Telefone</th>
+                           <th data-field="nurset">Enfermeiro</th>
+                           <th data-field="doctort">Horário</th>
+                           <th data-field="schedulingt">Agendamento</th>
+                           <th data-field="examt">Unidade</th>
+                           <th data-field="status">Status</th>
+                           <th data-field="actiont">Ação</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tb_append">
+                        {% for k in arr_SearchScheduledPickup%}
+                        <tr>
+                           <td>{{ k.paciente}}</td>
+                           <td>{{ k.phone}}</td>
+                           <td>{{ k.nurse}}</td>
+                           <td>{{ k.hr_age}}</td>
+                           <td>{{ k.date_age}}</td>
+                           <td>{{ k.unity}}</td>
+                           <td>{{ k.status}}</td>
+                           <td>
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
+                                 <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                              </a>
+                              <!--
+                                 <a onclick="remove(this)" class="modal-trigger">
+                              <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
+                              </a>
+                              -->
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
                </div>
-
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsCancelados%}
-                        Cancelados: <b>{{ k.qtd_canc }}  </b> 
-                  {% endfor %}
-               </div>
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsFrustrados%}
-                     Frustrados:  <b>{{ k.qtd_frust }}</b>
-                  {% endfor %}
-               </div>
-
-               <div class="col s2">
-                  {% for k in arr_CountAgendaments%}
-                     Pendentes:  <b>{{ k.qtd_geral }}</b>
-                  {% endfor %}
-               </div>
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsAtrasados%}
-                     Atrasados:  <b>{{ k.qtd_atr }}</b>
-                  {% endfor %}
-               </div>-->
-              </div>
-               <thead style="background-color: #581848; color: white; font-size: 15px" >
-                  <tr>
-                     <th data-field="namet">Paciente</th>
-                     <th data-field="telt">Telefone</th>
-                     <th data-field="nurset">Enfermeiro</th>
-                     <th data-field="doctort">Horário</th>
-                     <th data-field="schedulingt">Agendamento</th>
-                     <th data-field="examt">Unidade</th>
-                     <th data-field="status">Status</th>
-                     <th data-field="actiont">Ação</th>
-                  </tr>
-               </thead>
-               <tbody id="tb_append">
-                  {% for k in arr_SearchScheduledPickup%}
-                  <tr>
-                     <td>{{ k.paciente}}</td>
-                     <td>{{ k.phone}}</td>
-                     <td>{{ k.nurse}}</td>
-                     <td>{{ k.hr_age}}</td>
-                     <td>{{ k.date_age}}</td>
-                     <td>{{ k.unity}}</td>
-                     <td>{{ k.status}}</td>
-                     <td>
-                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
-                        <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                        </a>
-                        <!--
-                           <a onclick="remove(this)" class="modal-trigger">
-                        <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
-                        </a>
-                        -->
-                     </td>
-                  </tr>
-                  {% endfor %}
-               </tbody>
-            </table>
          </div>
-         <!-- FIM DA TABLE -->
+            <!-- FIM DA TABLE -->
       </div>
    </div>
 </div>
@@ -551,7 +551,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"tp_service": key["agendamento"]["tipo_servico"],
 				"tp_exame": key["agendamento"]["tipo_exame"],
 				"tp_conv": key["agendamento"]["convenio"],
-				"driver": key["agendamento"]["motorista"],
+				"driver": key["agendamento"]["motoristaNome"],
 				"doctor": key["agendamento"]["doctor"],
 				"nurse": key["agendamento"]["nurse"],
 				"id": key["agendamento"]["id"],
@@ -578,8 +578,8 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
             $(findLabel).find("label").attr("class", "active");//serve para encontrar dentro do closest div uma label e atribuir o módulo attr(atributo, valor)
-            if(i == "driver"){//GAMBIARRA PARA INPUTAR O SELECT
-               var valueObject = $("#driver option:selected").text();
+            if(i == "nurse"){//GAMBIARRA PARA INPUTAR O SELECT
+               var valueObject = $("#nurse option:selected").text();
                $("input[class='select-dropdown dropdown-trigger']").val(valueObject);
                $('li[class="selected"]').attr("class", "");
                var findObject = $(`span:contains(${valueObject})`).closest("li");
@@ -755,7 +755,7 @@ function ReagendarAge(e){
    var cust_alv = $("#cust_alv").val();
    var obs = $("#obs").val();
    var motivo_status = $("#mStatus").val();
-   var driver = $("#driver").val();
+   var nurse = $("#nurse").val();
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -774,7 +774,7 @@ function ReagendarAge(e){
       "cust_alv": cust_alv,
       "obs": obs,
       "motivo_status": motivo_status,
-      "driver": driver,
+      "nurse": nurse,
 }
 console.log(formpost)
  

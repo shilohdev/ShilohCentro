@@ -19,6 +19,14 @@ Acompanhe as últimas notícias!
    font-weight: bold;
    }
 
+
+
+@media screen and (min-width: 700px) {
+      .tam{
+      margin-top: -40px;
+      }
+}
+
 </style>
 
 <!-- INICIO DO MODAL -->
@@ -29,7 +37,7 @@ Acompanhe as últimas notícias!
       <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
          <div class="container">
             <div class="card">
-               <div class="card-content" style="margin-top: -40px; background-color: #581848;">
+               <div class="card-content" style="margin-top: -93px; background-color: #581848;">
                   <h5 class="corfont" style="color: white;">ATUALIZAR USUÁRIO</h5>
                </div>
             </div>
@@ -177,10 +185,6 @@ var end_city = $("#city").val("");
 var end_state = $("#uf").val("");
 }
 
-
-
-
-
 </script>
 
 
@@ -208,20 +212,20 @@ var end_state = $("#uf").val("");
 <!--FIM DO MODAL-->
 
 
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-<div class="container">
-   <div class="card" >
-      <div class="card-content" style="margin-top: -93px;">
-         <h5 class="corfont">CONSULTAR USUÁRIOS</h5>
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+   <div class="container">
+      <div class="card" >
+         <div class="card-content" style="margin-top: -40px;">
+            <h5 class="corfont">CONSULTAR USUÁRIOS</h5>
+         </div>
       </div>
    </div>
-</div>
 <div class="container">
    <div class="card" >
          <!-- Externo -->
       <div  class="row" >
-        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="input-field col s4" >
+        <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col m4 s12" >
                 <div class="select-wrapper">
                    <select name="select" id="tp_user" class="error " required="">
                       <option value="">Selecione</option>
@@ -231,8 +235,8 @@ var end_state = $("#uf").val("");
                    </select>
                 </div>
              </div>
-          <div class="input-field col s3">
-            <div class="col s12 mb-2">
+          <div class="input-field col m3 s12">
+            <div class="col s12 m12 mb-2">
                <button onclick="PesquisarFilter()" id="btn_pesquisar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
                </button>
@@ -244,7 +248,7 @@ var end_state = $("#uf").val("");
             
          </div>
    <!-- COMEÇO DA TABLE -->
-         <div class="col s12">
+         <div class="col s12 scroll">
             <table id="page-length-option" class="bordered" style="margin-top: 40px; overflow-x: auto">
               <thead style="background-color: #581848; color: white; font-size: 15px" >
                 <tr>
@@ -390,7 +394,7 @@ function changeStatusUser(object){
          alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
-         $(`#tr_${id_user} > td`).eq(2).text(key["status"]);
+         $(`#tr_${id_user} > td`).eq(3).text(key["status"]);
          $(`#btn_status_${id_user}`).css("background-color", key["btn_status"]
          )
       }
@@ -400,11 +404,17 @@ function changeStatusUser(object){
 
 function changeUserModal(object){
    $("#btn_atualizar").attr("disabled", true);   
+   var padrao = "R$ 400,00"
+   var porcentagem = 0
+   var fixo = 0
 
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "id_user": id_user //DICT COM O VALOR DO ID
+      "id_user": id_user, //DICT COM O VALOR DO ID
+      "padrao": padrao,
+      "porcentagem": porcentagem,
+      "fixo": fixo,
    };
 
    $("#modalint input, #modalint select").each(function(){ // PROCCURA O QUE ESTÁ PREENCHIDO E SELECIONADO E ATRAVER DO FORMPOST PEGA O VALOR E MANDA PARA O BACK

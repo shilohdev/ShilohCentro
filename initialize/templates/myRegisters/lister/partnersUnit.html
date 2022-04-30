@@ -526,9 +526,9 @@ function changeUserModal(object){
    $("#btn_atualizar").attr("disabled", true);   
 
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-   var padrao = $("#val_p_fixo").val().replace(",", ".").replace("R$", "").replace(".", ""); //objeto usuario que compoe um data-id_user
+   var padrao = $("#val_p_fixo").val().replace(",", ".").replace("R$", "")// .replace(".", ""); objeto usuario que compoe um data-id_user
    var porcentagem = $("#val_p").val().replace("%", ""); //objeto usuario que compoe um data-id_user
-   var fixo = $("#val_fixo").val().replace(",", "|").replace(".", "").replace("|", "."); //objeto usuario que compoe um data-id_user
+   var fixo = $("#val_fixo").val()//objeto usuario que compoe um data-id_user
 
    console.log(padrao)
    var formpost = {

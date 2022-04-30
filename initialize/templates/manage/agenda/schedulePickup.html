@@ -42,7 +42,7 @@ Realize um agendamento
             <div id="card_ag" class="row" >
                <div class="col s12"  style="margin-top: 10px;">
                   <div class="input-field col s3">
-                     <input id="date_age" type="date" data-required='true'>
+                     <input id="date_age" type="date" data-required='true' onChange="teste()">
                      <label for="date_age">Data Agendamento</label>
                   </div>
                   <div class="input-field col s3">
@@ -56,7 +56,8 @@ Realize um agendamento
                            <option value="">Tipo de Serviço</option>
                            {% for k in arr_SearchService%}
                            <option value="{{ k.id }}">{{ k.tipo_servico }}</option>
-                           {% endfor %}                        </select>
+                           {% endfor %}
+                        </select>
                      </div>
                   </div>
                   <div class="input-field col s3" >
@@ -71,15 +72,10 @@ Realize um agendamento
                   </div>
                </div>
                <div class="input-field col s12" >
-                  <div class="input-field col s3" >
-                     <div class="select-wrapper" >
-                        <select name="select" id="convenio" onchange="SelectShow()" class="error " data-required='true'>
-                           <option value="">Convênio</option>
-                           {% for k in arr_SelectConvenio%}
-                           <option value="{{ k.id }}">{{ k.nome_conv }}</option>
-                           {% endfor %}
-                        </select>
-                     </div>
+                  <div class="input-field col s3">
+                     <input readonly="readonly" style="color: black;" id="convenio" type="text" value="{{ k.convenio}}">
+                     <label for="convenio" class="active">
+                     <i class="material-icons" style="font-size: 15px"></i>&nbsp;Convênio</label>
                   </div>
                   <div class="input-field col s3" >
                      <div class="select-wrapper">
@@ -116,7 +112,7 @@ Realize um agendamento
                      <select id="namePaciente" class="select2 browser-default" data-required='true'>
                         <option value="">Selecione:</option> 
                         {% for k in arr_SearchPacienteSe %}
-                           <option data-tel1="{{ k.tel1 }}" data-tel2="{{ k.tel2 }}" data-cep="{{ k.cep }}" data-rua="{{ k.rua }}" data-numero="{{ k.numero }}" data-complemento="{{ k.complemento }}" data-bairro="{{ k.bairro }}" data-cidade="{{ k.cidade }}" data-uf="{{ k.uf }}" data-nome_med="{{ k.nome_med }}" data-nome_ate="{{ k.nome_ate }}" data-nome_commerce="{{ k.nome_commerce }}" value="{{ k.id_p }}"> {{ k.nome_p }} - {{ k.cpf_p }} </option>
+                           <option data-tel1="{{ k.tel1 }}" data-tel2="{{ k.tel2 }}" data-cep="{{ k.cep }}" data-rua="{{ k.rua }}" data-numero="{{ k.numero }}" data-complemento="{{ k.complemento }}" data-bairro="{{ k.bairro }}" data-cidade="{{ k.cidade }}" data-uf="{{ k.uf }}" data-nome_med="{{ k.nome_med }}" data-nome_ate="{{ k.nome_ate }}" data-nome_commerce="{{ k.nome_commerce }}" data-convenio="{{ k.convenio }}" value="{{ k.id_p }}"> {{ k.nome_p }} - {{ k.cpf_p }} </option>
                         {% endfor %}
                      </select>
                   </div>
@@ -263,7 +259,7 @@ Realize um agendamento
          $("#tel1").mask("(99) 99999-9999");
          $("#tel2").mask("(99) 99999-9999");
          $("#zipcode").mask("99999-999");
-   
+
    
         function CadastreIndication(){
             var date_age = $("#date_age").val();
@@ -290,11 +286,13 @@ Realize um agendamento
             var val_w_lab = $("#val_w_lab").val();
             var val_pago = $("#val_pago").val();
             var obs = $("#obs").val();
+
       
-                  //VALIDAÇÃO DE CAMPO NULL
+
+         //VALIDAÇÃO DE CAMPO NULL
             var i = 0;
             $("#userint input[data-required='true'], #userint select[data-required='true']").each(function(){
-               if( $(this).val() === "" ){
+               if( $(this).val() == "" ){
                   alert("Preencha os campos obrigatórios.");
                   $(this).val().focus();
                   i = 1;
@@ -410,6 +408,7 @@ $("#namePaciente").change(function(){
       "district": object.data("bairro"),
       "city": object.data("cidade"),
       "uf": object.data("uf"),
+      "convenio": object.data("convenio"),
    }
    $.map(dictUpdate, function(n, i){
       $("#"+i).val(n);
@@ -430,8 +429,14 @@ $("#namePaciente").change(function(){
 
 });   
 
+function teste(){
+   var date_age = $("#date_age").val().replace();
+   
+  
+   alert(hoje)
+}
 
-    
    
 </script>
 {% endblock %}
+

@@ -22,6 +22,55 @@ Acompanhe as últimas notícias!
 </style>
 
 
+  <!-- INICIO DO MODAL -->
+  <div id="lNegative" class="modal modal-fixed-footer" style="max-height:50%; max-width: 50%">
+    <div class="modal-content">
+      <h4>Status Negativo</h4>
+      
+      <div class="col s8" id="negativeStatus">
+         <p class="mb-1">
+            <label>
+              <input type="checkbox" class="checkgroup" id="SemConvenio" value="Não Atende Convênio">
+              <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Não Atende Convênio</font></font></span>
+            </label>
+          </p>
+          <p class="mb-1">
+            <label>
+              <input type="checkbox" class="checkgroup" id="Coletado" value="Coletado Em Outra Clínica">
+              <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Coletado Em Outra Clínica</font></font></span>
+            </label>
+          </p>
+          <p class="mb-1">
+            <label>
+              <input type="checkbox" class="checkgroup" id="SEmInteresse" value="Sem Interesse">
+              <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sem Interesse</font></font></span>
+            </label>
+          </p>
+          <p class="mb-1">
+            <label>
+              <input type="checkbox" class="checkgroup" id="SemContato" value="Sem Contato">
+              <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sem Contato</font></font></span>
+            </label>
+          </p>
+          <p class="mb-1">
+            <label>
+              <input type="checkbox" class="checkgroup" id="Duplicado" value="Duplicado">
+              <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Duplicado</font></font></span>
+            </label>
+          </p>
+      </div>
+   
+   </div>
+   <div class="modal-footer col s12">
+      <div class="col m5"></div>
+     <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect col m3 s12" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+     <a id="salvarSatus" data-id_lead="" onclick="NegativeStatus(this)" class="waves-effect waves dark btn next-step col m3 s12 ml-3" style="position: relative; font-size: 0.8rem; font-weight: 500;padding-bottom: 5px;"><span style="font-size: 16px">Salvar</span></a>
+  </div>
+  </div>
+ <!-- FIM DO MODAL -->
+  
+
+
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
 <div class="container">
    <div class="card">
@@ -35,14 +84,27 @@ Acompanhe as últimas notícias!
          <!-- Externo -->
       <div id="userint" class="row" >
         <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="input-field col s4">
+            <div class="input-field col m4 s12">
                 <input id="bscinput" type="text" onkeyup="searchLead(this)">
                 <label for="bscinput">
                 <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>    
             </div>
+            <div class="select-wrapper col m4 s12" style="margin-top: 15px;">
+               <select name="select" id="status" class="error">
+                   <option value="">Selecione</option>
+                   {% for k in arr_SearchStatusLead %} 
+                   <option value="{{ k.status }}">{{ k.status }}</option>
+                   {% endfor %}
+               </select>
+            </div>
+            <div class="col m3 s12">&nbsp;
+               <button id="pesq_lead" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                   <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+               </b>
+            </div>
 
    <!-- COMEÇO DA TABLE -->
-         <div class="col s12 ">
+         <div class="col s12 scroll">
             <div class="col s6"></div>
             <div class="col s6">
                <div class="col">
@@ -69,22 +131,31 @@ Acompanhe as últimas notícias!
                   <th data-field="id" style="text-align: center; width: 150px;">Telefone</th>
                   <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
                   <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
+                  <th data-field="id" style="text-align: center; width: 150px;">Status</th>
                   <th data-field="id" style="text-align: center; width: 100px;">Entrar em contato</th>
                 </tr>
               </thead>
               <tbody id="tb_append">
-                 {% for k in arr_SearchLeadsAll %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
-                <tr>
+                 {% for k in arr_SearchLeadsAll %} <!--ARRAY COM AS INFORMAÇÕES DA TABELA -->
+                <tr id="tr_{{ k.id }}">
                   <td>{{ k.nome }}</td>
                   <td style="text-align: center;">{{ k.telefone }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
                   <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
                   <td style="text-align: center;">{{ k.medico_resp }}</td>
+                  <td style="text-align: center;">{{ k.status }}</td>
                   <i class="fab fa-whatsapp"></i>
                   <td style="text-align: center;">
-                  <a Target="_blank" href="https://api.whatsapp.com/send?phone=55{{ k.telefone }}&text=Olá, Tudo bem? 😃
-                  Sou a {{ k.nomeU }} do Shiloh Lab, a Dra. {{ k.medico_resp }} nos indicou para realizar os seus exames laboratoriais.">
-                     <span class=" "><img src="/app-assets/app-assets/ico/wpp.png" width="30" alt="avatar" style="margin-top: 10px;"></span>
-                 </a>
+                     <div class="icon-preview col s6 m3" style="padding: 5px;">
+                        <a Target="_blank" href="https://api.whatsapp.com/send?phone=55{{ k.telefone }}&text=Olá, Tudo bem? 😃
+                        Sou a {{ k.nomeU }} do Shiloh Lab, a Dra. {{ k.medico_resp }} nos indicou para realizar os seus exames laboratoriais.">
+                           <span class=" "><img src="/app-assets/app-assets/ico/wpp.png" width="30" alt="avatar" style="margin-top: 10px; cursor: pointer;"></span>
+                        </a>
+                     </div>
+                     <div class="icon-preview col s6 m3" id="ass"> 
+                        <a class="modal-trigger" href="#lNegative" data-id_lead="{{ k.id }}" onclick="viewModal(this)">
+                           <i class="material-icons dp48" style="color: #c74d4d; margin-top: 18px; margin-left: 7px; cursor: pointer;">thumb_down</i>
+                        </a>
+                     </div>
                   </td>
                 </tr>
                 {% endfor %} <!-- FIM DO ARRAY -->
@@ -95,11 +166,88 @@ Acompanhe as últimas notícias!
       </div>
       
    </div>
-
-   
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+
+function searchStatusf() {
+    var statusL = $("#status").val();
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "statusL": statusL //DICT COM O VALOR DO ID
+    };
+    fetchRequest("{% url 'SearchStatusLeadFilter' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+        var dados = re["message"];
+        $("#tb_append").html("");
+//INICIO
+   var exibir=  $("#tb_append").html("");
+      for (k in dados) {
+         var key = dados[k];
+
+         var append = '<tr id="tr_'+key["id"]+'"> <td>'+key["nome"]+'</td> <td style="text-align: center;">'+key["telefone"]+'</td><td style="text-align: center;">'+key["data"]+'}</td><td style="text-align: center;">'+key["medico_resp"]+'</td> <td style="text-align: center;">'+key["status"]+'</td> <i class="fab fa-whatsapp"></i> <td style="text-align: center;"> <div class="icon-preview col s6 m3" style="padding: 5px;"> <a Target="_blank" href="https://api.whatsapp.com/send?phone=55'+key["telefone"]+'&text=Olá, Tudo bem? 😃 Sou a '+key["nomeU"]+' do Shiloh Lab, a Dra. '+key["medico_resp"]+' nos indicou para realizar os seus exames laboratoriais."> <span class=" "><img src="/app-assets/app-assets/ico/wpp.png" width="30" alt="avatar" style="margin-top: 10px; cursor: pointer;"></span> </a> </div> <div class="icon-preview col s6 m3"> <a class="modal-trigger" href="#lNegative" data-id_lead="'+key["id"]+'" onclick=\"viewModal(this)\"> <i class="material-icons dp48" style="color: #c74d4d; margin-top: 18px; margin-left: 7px; cursor: pointer;">thumb_down</i> </a> </div> </td> </tr>';
+
+         $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
+         
+      }
+      if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
+            var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+            $("#tb_append").append(appende); 
+            }
+
+         try {
+            var pacientess = key["status"];
+
+            if (pacientess == "Paciente") {
+               $("#ass").hide();
+               
+            } else {
+               $("#ass").show();
+
+            }
+      } catch (e) {
+         $("#ass").show();
+      }
+      console.log("teste:",pacientess)
+
+   });
+// FIM 
+   
+    
+}
+
+$("#pesq_lead").click(function() {
+   searchStatusf();
+});
+
+ $(document).ready(function(){
+    $('.modal').modal();
+   });
+
+   $(function(){
+      $('input.checkgroup').click(function(){
+         if($(this).is(":checked")){
+            $('input.checkgroup').attr('disabled',true);
+            $(this).removeAttr('disabled');
+         }else{
+            $('input.checkgroup').removeAttr('disabled');
+         }
+      })
+   })
+
 function searchLead(object){
    var e = $(object).val().toUpperCase();
     if(e == ""){
@@ -118,6 +266,35 @@ function searchLead(object){
             }
         });
     }
+}
+
+
+function NegativeStatus(object){
+   //alert("Neste momento esta função ainda não está disponível. ⚠️ Em caso de dúvidas, entre em contato com o suporte.")
+   var checkbox = $('#negativeStatus input[type="checkbox"]:checked').val()
+   var id_lead = $(object).data("id_lead"); 
+
+   var formpost = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "checkbox": checkbox,
+      "id_lead": id_lead,
+   }
+
+   fetchRequest("{% url 'ApiStatusNegative' %}", "POST", "JSON", formpost, function(re){
+            if(re["response"] == "true"){
+               alert(re["message"]);
+               location.reload();
+         }
+         var teste = $("#salvarSatus").data("id_lead", id_lead);
+      });
+}
+
+function viewModal(object){
+   var id_lead = $(object).data("id_lead"); 
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_lead": id_lead ,
+    };
+    $("#salvarSatus").data("id_lead", id_lead);
 }
 
 </script>

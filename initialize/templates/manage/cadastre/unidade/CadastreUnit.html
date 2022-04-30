@@ -48,26 +48,22 @@ Acompanhe as últimas notícias!
    <div class="card" >
          <!-- Externo -->
       <div id="userint" class="row" >
-        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
-          <div class="input-field col s9">
+        <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
+          <div class="input-field col m9 s12">
              <input id="newunit" type="text" >
              <label for="newunit">
              <i class="material-icons" style="font-size: 15px">assignment</i>&nbsp;Nome da Unidade</label>
           </div>
-          <div class="input-field col s3">
-            <div class="col s12 mb-2">
+          <div class="input-field col m3 s12">
+            <div class="col m12 s12 mb-2">
                <button onclick="CadastreUnit()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                </button>
             </div>
           </div>
 
-         <!--BUTTON-->
-         <div class="col s12 ">
-            
-         </div>
    <!-- COMEÇO DA TABLE -->
-         <div class="col s12">
+         <div class="col s12 m12">
             <table class="bordered" style="margin-top: 40px; overflow-x: auto">
               <thead style="background-color: #581848; color: white; font-size: 15px" >
                 <tr>
@@ -93,13 +89,10 @@ Acompanhe as últimas notícias!
       </div>
       
    </div>
-
-   
 </div>
 
 
 <script>
-
 function CadastreUnit(){
    if(document.getElementById("newunit").value == ''){
       alert('Por favor, preencha o Nome do Convênio')

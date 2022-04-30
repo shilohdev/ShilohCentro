@@ -385,7 +385,8 @@ Acompanhe as últimas notícias!
                                        <th data-field="id" style="text-align: center;">Data Coleta</th>
                                        <th data-field="id" style="text-align: center;">Inicio do Processo</th>
                                        <th data-field="id" style="text-align: center;">Fim do Processo</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Status Coleta</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Tipo do Exame</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
                                        <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
                                        <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                                    </tr>
@@ -397,7 +398,8 @@ Acompanhe as últimas notícias!
                                        <td style="text-align: center;">{{ k.coleta }}</td>
                                        <td style="text-align: center;">{{ k.inicioP }}</td>
                                        <td style="text-align: center;">{{ k.fimP }}</td>
-                                       <td style="text-align: center;">{{ k.status }}</td>
+                                       <td style="text-align: center;">{{ k.exame }}</td>
+                                       <td style="text-align: center;">{{ k.unidade }}</td>
                                        <td style="text-align: center;">{{ k.status_p }}</td>
                                        <td style="text-align: center;">
                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
@@ -686,7 +688,8 @@ function searchMonth() {
                      <td style="text-align: center;">${n.coleta}</td>
                      <td style="text-align: center;">${n.inicioP}</td>
                      <td style="text-align: center;">${n.fimP}</td>
-                     <td style="text-align: center;">${n.status}</td>
+                     <td style="text-align: center;">${n.exame}</td>
+                     <td style="text-align: center;">${n.unidade}</td>
                      <td style="text-align: center;">${n.status_p}</td>
                      <td style="text-align: center;">
                         <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">

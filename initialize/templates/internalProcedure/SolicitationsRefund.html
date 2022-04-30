@@ -17,6 +17,7 @@ Acompanhe as últimas notícias!
    font-weight: bold;
    }
 </style>
+
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
@@ -371,7 +372,6 @@ Acompanhe as últimas notícias!
                                        <td style="text-align: center;">{{ k.status_p }}</td>
                                        <td style="text-align: center;">
                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                               <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
                                                <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
                                                    <i class="material-icons right">edit</i>
                                                </button>
@@ -462,6 +462,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
         } else {
             $("#modal2").show();
             var key = re["message"];
+            var key2 = re["messages"];
             var dictKeys = {
                 "statusM": key["obs"]["statusM"],
                 "motivo_S": key["obs"]["motivo_status"],
@@ -488,12 +489,13 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
             $("#btn_start").data("id_user", id_user); //PEGA O ID DO PACIENTE
             $("#btn_end").data("id_user", id_user); //PEGA O ID DO PACIENTE
             $("#btn_salvar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
-        }
-           
+
+                 
             //Verifica se está pendente ou em andamento, para aparecer a div
+
             try {
-                var status_proccess = $("#statusProgresso").val();
-                if (status_proccess != "8") {
+                var finances_exam = key2["status"]
+                if (finances_exam != 8) {
                     $("#btn_start").hide();
                     $("#card_finance").show();
                     $("#btn_end").show();
@@ -504,11 +506,13 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 
                 }
             } catch (e) {
+                alert("teste")
                 $("#btn_start").show();
                 $("#card_finance").hide();
                 $("#btn_end").hide();
             }
-            console.log(status_proccess)
+
+        }
     });
 
     // MODAL FINANCEIRO
@@ -535,7 +539,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "cust_alv": key["dados"]["val_alvaro"],
                 "val_w_lab": key["dados"]["val_work"],
                 "val_pago": key["dados"]["val_pago"],
-                "date_repass": key["dados"]["date_repasse"],
+                "date_repass": key["dados"]["date_repass"],
                 "n_nf": key["dados"]["nf"],
                 "porcentagem": key["dados"]["por_paga"],
 
@@ -558,7 +562,8 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 
             //AQUI INICIA FUNCTION APPEND FILE
             var ap = "";
-            var filesResponse = JSON.parse(re["message"]["files"]);
+            var filesResponse = JSON.parse(re["message"]["filesInt"]);
+            console.log(filesResponse)
             $.map(filesResponse, function(n, i) {
                 ap += `
                   <tr>
@@ -606,6 +611,7 @@ function viewFile(object) {
     document.body.appendChild(a);
     a.click();
 }
+
 //RETIRA O FILE 
 function removeFile(object) {
     var id_patient = $(object).data("id_patient");
@@ -619,7 +625,7 @@ function removeFile(object) {
         "id_patient": id_patient
     };
 
-    fetchRequest("{% url 'ModalExamsFinanceFileRemove' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+    fetchRequest("{% url 'ModalExamsFinanceFileRemoveInt' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
         if (re["response"] == "true") {
             $(object).closest("tr").remove();
         }
@@ -627,6 +633,42 @@ function removeFile(object) {
         alert(re["message"]);
     });
 }
+
+function removeFileExists(object){
+   $(object).closest("tr").remove();
+   $("#doc_anx").val("");
+}
+
+function checkAnexo(){
+   var objectFile = $("#doc_anx");
+   var typeFile = $("#tp_anx");
+   console.log(objectFile.val());
+   if(objectFile.val() != "" && typeFile.val() != ""){
+      var nameFile = ($(objectFile)[0].files[0]).name;
+      var typeFile = $("#tp_anx option:selected").text();
+      var append = `
+      <tr> 
+         <td>${nameFile}</td>
+         <td>DATA</td>
+         <td>${typeFile}</td>
+         <td style="text-align: center;">
+               <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+               <i class="material-icons right">delete</i>
+            </a>
+         </td>
+      </tr>
+      `;
+
+      $("#tb_append").append(append);
+   }
+}
+
+$("#doc_anx, #tp_anx").change(function(){
+   checkAnexo();
+});
+
+
+
 
 
 //BTN ATUALIZAR - SALVAR

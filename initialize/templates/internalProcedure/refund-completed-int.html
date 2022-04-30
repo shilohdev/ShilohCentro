@@ -174,23 +174,6 @@ Acompanhe as últimas notícias!
                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
                            <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ANEXOS</labe>
                        </div>
-                       <div class="row" id="div_files">
-                           <div class="col s12">
-                               <div class="col s4 mt-2 ml-3">
-                                   <input id="doc_anx" type="file">
-                               </div>
-                               <div class="input-field col s3">
-                                   <div class="select-wrapper">
-                                       <select name="select" id="tp_anx" class="error" required="true" data-show="search">
-                                           <option value="">Tipo do Anexo</option>
-                                           {% for k in arr_SearchTypeAnexo%}
-                                           <option value="{{ k.id }}">{{ k.tipo_anexo }}</option>
-                                           {% endfor %}
-                                       </select>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
                        <div class="row">
                            <div class="col s11 ml-4">
                                <table class="bordered" style="margin-top: 20px;">
@@ -443,7 +426,6 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 $("#card_finance").hide();
                 $("#btn_end").hide();
             }
-            console.log(finances_exam)
     });
 
     // MODAL FINANCEIRO
@@ -469,11 +451,12 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "cust_alv": key["dados"]["val_alvaro"],
                 "val_w_lab": key["dados"]["val_work"],
                 "val_pago": key["dados"]["val_pago"],
-                "date_repass": key["dados"]["date_repasse"],
+                "date_repass": key["dados"]["date_repass"],
                 "n_nf": key["dados"]["nf"],
                 "porcentagem": key["dados"]["por_paga"],
 
             }
+            console.log(dictKeys)
             $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
@@ -492,7 +475,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 
             //AQUI INICIA FUNCTION APPEND FILE
             var ap = "";
-            var filesResponse = JSON.parse(re["message"]["files"]);
+            var filesResponse = JSON.parse(re["message"]["filesInt"]);
             $.map(filesResponse, function(n, i) {
                 ap += `
                   <tr>

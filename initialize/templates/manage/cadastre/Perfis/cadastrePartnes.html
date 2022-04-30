@@ -31,18 +31,18 @@ Acompanhe as últimas notícias!
    <div class="card" >
          <!-- Externo -->
       <div id="userint" class="row" >
-        <div class="col s12"  style="margin-top: 0px;">
-          <div class="input-field col s5">
-             <input id="name" type="text" >
+        <div class="col s12 s12"  style="margin-top: 0px;">
+          <div class="input-field col m6 s12">
+             <input id="name" type="text" class="upper">
              <label for="name">
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento</label>
           </div>
-          <div class="input-field col s3">
+          <div class="input-field col m2 s12">
             <input id="rn" type="text" >
             <label for="rn">
             <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NC</label>
          </div>
-         <div class="input-field col s4" >
+         <div class="input-field col m4 s12" >
             <div class="select-wrapper">
               <select name="select" id="categoria" onchange="SelectShow()" class="error " data-required='true'>
                   <option value="SELECIONE">Categoria</option>
@@ -54,115 +54,115 @@ Acompanhe as últimas notícias!
         </div>
        </div>
        <div class="col s12">
-          <div class="input-field col s8">
+          <div class="input-field col m8 s12" >
              <input id="email" type="email" data-required='true'>
              <label for="email">
              <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
           </div>
-          <div class="input-field col s2">
+          <div class="input-field col m2 s12">
              <input id="tel1" type="tel" data-required='true'>
              <label for="tel1">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
           </div>
-          <div class="input-field col s2">
+          <div class="input-field col m2 s12">
              <input id="tel2" type="tel">
              <label for="tel2">
              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
           </div>
        </div>
        <div class="col s12">
-          <div class="input-field col s3">
+          <div class="input-field col m3 s12">
              <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required='true'>
              <label for="zipcode">
              <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
           </div>
-          <div class="input-field col s7">
+          <div class="input-field col m7 s10">
              <input id="addres" type="text" data-required='true'>
              <label for="addres">Logradouro </label>
           </div>
-          <div class="input-field col s2">
+          <div class="input-field col m2 s2" >
              <input id="number" type="text" data-required='true'>
              <label for="number">Número </label>
           </div>
        </div> 
        <div class="col s12">
-         <div class="input-field col s3">
+         <div class="input-field col m3 s12">
             <input id="complement">
             <label for="complement">Complemento</label>
          </div>
-         <div class="input-field col s5">
+         <div class="input-field col m5 s6">
            <input id="district" type="text" data-required='true'>
            <label for="district">Bairro</label>
         </div>
-         <div class="input-field col s2">
+         <div class="input-field col m2 s3">
            <input id="city" type="text" data-required='true'>
            <label for="city">Cidade</label>
         </div>
-        <div class="input-field col s2">
+        <div class="input-field col m2 s3">
            <input id="uf" type="text"  maxlength="2" data-required='true'>
            <label for="uf">UF</label>
         </div>
 
        </div>
-       <div class="input-field col s12">
-         <div class="input-field col s12">
+       <div class="input-field col s12 m12">
+         <div class="input-field col s12 m12" >
             <input id="obs" type="text" >
             <label for="obs">
                <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
          </div>
       </div>
       <!--FINANCEIRO-->
-         <div class="col s12">
+         <div class="col s12 m12">
                <div class="active">
-                  <div class="collapsible-header col s4" style="height: 40px; background-color: #c434a07e; color: white;" tabindex="0">
+                  <div class="collapsible-header col m4 s6 " style="height: 40px; background-color: #c434a07e; color: white;" tabindex="0">
                      <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
                   </div>
                </div>
          </div>
          <div id="financeiro">
-            <div class="col s12" >
-               <div class="col s6">
-                  <div class="input-field col s3">
+            <div class="col s12 m12 " >
+               <div class="col m6 s12">
+                  <div class="input-field col s3   ">
                      <label>
                      <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
                      <span>Valor Padrão:</span>
                      </label>
                   </div>
-                  <div class="input-field col s5">
+                  <div class="input-field col m5 s12">
                      <input readonly="readonly" type="text" id="val_p_fixo" class="inpd" style="color:black;">
                   </div>
                </div>
             </div>
-            <div class="col s12">
-               <div class="col s6">
-                  <div class="input-field col s3">
+            <div class="col m12 s12">
+               <div class="col m6 s12">
+                  <div class="input-field col m3 s12">
                      <label>
                      <input type="checkbox" id="val_p_check" class="checkgroup" onclick="porcentagem()">
                      <span>Porcentagem:</span>
                      </label>
                   </div>
-                  <div class="input-field col s5">
+                  <div class="input-field col m5 s12">
                      <input type="text" id="val_p" class="inpd" onchange="porcentagem()">
                   </div>
                </div>
             </div>
-            <div class="col s12">
-               <div class="col s6">
-                  <div class="input-field col s3">
+            <div class="col m12 s12">
+               <div class="col m6 s12">
+                  <div class="input-field col m3 s12">
                      <label>
                      <input type="checkbox" id="val_fixo_check" class="checkgroup" onclick="fixo()" >
                      <span>Valor Fixo:</span>
                      </label>
                   </div>
-                  <div class="input-field col s5">
+                  <div class="input-field col m5 s12">
                      <input type="text" id="val_fixo" class="inpd" onchange="fixo()">
                   </div>
                </div>
             </div>
          </div>
          <!--BUTTON-->
-         <div class="col s12 ">
-            <div class="col s12 mb-2">
+         <div class="col s12 m12">
+            <div class="col s12 m12 mb-2">
                <button disabled onclick="CadastrePartners()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                </button>

@@ -35,24 +35,24 @@ Acompanhe as últimas notícias!
    <div class="card" >
          <!-- Externo -->
       <div id="userint" class="row" >
-        <div class="col s12"  style="margin-top: 30px;">
+        <div class="col s12 m12"  style="margin-top: 30px;">
           <div class="input-field col m3 s12">
-             <input id="cpf" type="text" data-required='true'>
+             <input id="cpf" type="text" >
              <label for="cpf">
              <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
           </div>
           <div class="input-field col m9 s12">
-             <input id="name" type="text" data-required='true'>
+             <input id="name" type="text" data-required='true' class="upper">
              <label for="name">
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
           </div>
             <div class="input-field col m8 s12">
-               <input id="email" type="email" data-required='true'>
+               <input id="email" type="email">
                <label for="email" >
                <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
             </div>
             <div class="input-field col m2 s12">
-               <input id="tel1" type="tel" maxlength="15">
+               <input id="tel1" type="tel" maxlength="15" data-required='true'>
                <label for="tel1">
                <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
             </div>
@@ -65,7 +65,7 @@ Acompanhe as últimas notícias!
           <div class="input-field col m3 s12" >
             <label style="margin-bottom: 15px;">Convênio</label>
             <div class="select-wrapper" style="margin-top: 30px;">
-              <select name="select" id="convenio" class="error " required="">
+              <select name="select" id="convenio">
                   <option value="">Selecione</option>
                {% for k in  arr_SelectConvenio %}
                   <option value="{{ k.id }}">{{ k.nome_conv }}</option>
@@ -102,7 +102,7 @@ Acompanhe as últimas notícias!
                   </label>
                 </p> 
                </div>
-               <div class="input-field col s" >
+               <div class="input-field col m2 s12" >
                   <p class="mb-1">
                      <label>
                        <input type="checkbox" class="checkgroup" id="especificorast" value="Combo e Rast">
@@ -115,7 +115,7 @@ Acompanhe as últimas notícias!
                        <span><font stylex="vertical-align: inherit;"><font style="vertical-align: inherit;">Combo Específico e Rast Específico</font></font></span>
                      </label>
                    </p> 
-                  </div>
+               </div>
                   
         </section>
        </div>
@@ -140,7 +140,7 @@ Acompanhe as últimas notícias!
                </button>
             </div>
          </div>
-  </div>
+      </div>
 
    
 
@@ -195,7 +195,7 @@ function SelectShow() {
          if(i == 1){
             return false;
          }
-
+ 
          var btncadastrar = {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "convenio": $('#convenio').val(), 

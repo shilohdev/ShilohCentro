@@ -54,11 +54,17 @@ os.environ['DEFAULT_FROM_EMAIL'] = 'informativo@shiloh.com.br'
 os.environ['DATABASE_ENVIRONMENT'] = 'PRD'
 
 # DB PRODUÇÃO
-os.environ['DATABASE_PRD_HOST'] = '34.94.95.255'
+#os.environ['DATABASE_PRD_HOST'] = '34.94.95.255'
+#os.environ['DATABASE_PRD_USER'] = 'root'
+#os.environ['DATABASE_PRD_PASSWORD'] = '104da04a0895b21318d2b2d3600ce2c61231'
+#os.environ['DATABASE_PRD_PORT'] = '3306'
+
+
+# DB PRODUÇÃO
+os.environ['DATABASE_PRD_HOST'] = '34.102.44.244'
 os.environ['DATABASE_PRD_USER'] = 'root'
 os.environ['DATABASE_PRD_PASSWORD'] = '104da04a0895b21318d2b2d3600ce2c61231'
 os.environ['DATABASE_PRD_PORT'] = '3306'
-
 
 # DB HOMOLOGAÇÃO
 os.environ['DATABASE_HOM_HOST'] = 'localhost'

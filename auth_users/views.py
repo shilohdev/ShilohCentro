@@ -18,13 +18,15 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from datetime import datetime
-from auth_users.decorator import IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import  ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_users.decorator import ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_finances.functions.exams.models import valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from functions.general.decorator import BodyDecode
 import base64
 import json
 import time
 from re import A
+
+
 def csrf_failure(request, reason=""):
     raise PermissionDenied()
 
@@ -405,6 +407,14 @@ def ModalExamsFinanceFileRemove(request):
     return JsonResponse(array, safe=False, status=200)
 
 
+
+# MODAL FINANCES > Remover anexo interno
+@login_required
+def ModalExamsFinanceFileRemoveInt(request):
+    array = ModalExamsFinanceFileRemoveFunctionInt(request)
+    return JsonResponse(array, safe=False, status=200)
+
+
 # API INCIAIR PROCESSO
 @login_required
 def ApiStartProcess(request):
@@ -473,7 +483,8 @@ def LeadsViews(request): #INDICAÇÕES
     CountLeadsAll = CountLeadsFunction(request)
     CountLeadsMes = CountLeadsMesFunction(request)
     CountLeadsDay = CountLeadsDayFunction(request)
-    return render(request, 'manage/listers/lead/LEADS.html', {"arr_SearchLeadsAll": SsearchLeadsAll, "arr_SearchCountLeadsAll": CountLeadsAll, "arr_SearchCountLeadsMes": CountLeadsMes, "arr_SearchCountLeadsDay": CountLeadsDay,})
+    SearchStatusLead = FunctionSearchStatusLead(request)
+    return render(request, 'manage/listers/lead/LEADS.html', {"arr_SearchLeadsAll": SsearchLeadsAll, "arr_SearchCountLeadsAll": CountLeadsAll, "arr_SearchCountLeadsMes": CountLeadsMes, "arr_SearchCountLeadsDay": CountLeadsDay,  "arr_SearchStatusLead": SearchStatusLead,})
 
     
 #CADASTRAR LEAD 
@@ -484,7 +495,7 @@ def CadatsreLeadViews(request): #INDICAÇÕES
     SsearchDoctorL =  searchDoctorLead(request)
     sSelect_conv =  SelectConvenio(request)
     return render(request, 'manage/cadastre/Perfis/cadastreLead.html', {"arr_SearchDoctorL": SsearchDoctorL, "arr_SelectConvenio": sSelect_conv})
-
+ 
 #API CADASTRAR LEAD
 @login_required
 def ApiCadatsreLeadViews(request):
@@ -652,7 +663,8 @@ def ClosingPartnersViews(request): #INDICAÇÕES
     if allowPage(request, "fechamento_parceiro") == False:
         return error(request)
     ClosingPartners = TableClosingPartners(request)
-    return render(request, 'finances/closure/ClosingPartners.html', {"arr_SearchClosingPartners": ClosingPartners,})
+    valTotalPartiners = valTotalPartinersF(request)
+    return render(request, 'finances/closure/ClosingPartners.html', {"arr_SearchClosingPartners": ClosingPartners, "arr_valTotalPartiners":valTotalPartiners,})
 
 @login_required
 def SearchMonthClosingPartners(request):
@@ -696,7 +708,7 @@ def ClosingCommercialViews(request): #INDICAÇÕES
 def SearchMonthClosingCommercial(request):
     array = FilterMonthClosingCommercial(request)
     return JsonResponse(array, safe=False, status=200)
-
+ 
 
 @login_required
 def paymentDetailsCommercial(request):
@@ -777,3 +789,25 @@ def ClosingFinanceUnit(request):
     "arr_SearchClosingUnitResultPG": ClosingUnitResultPG,})
 
 
+
+
+#Informações do Login
+@login_required
+def LogUser(request):
+    InfoLog = iInfoLog(request)
+    return render(request, 'templates/base.html', {"arr_SearchInfoLog": InfoLog,})
+
+
+
+#API SALVAR STATUS NEGATIVO LEAD
+@login_required
+def ApiStatusNegative(request):
+    array = StatusNegative(request)
+    return JsonResponse(array, safe=False, status=200)
+
+
+#API FILTRO DE STATUS SLEAD
+@login_required
+def SearchStatusLeadFilter(request):
+    array = SearchStatusLeadFilterFunction(request)
+    return JsonResponse(array, safe=False, status=200)

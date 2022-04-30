@@ -85,18 +85,22 @@ urlpatterns = [
     
     #LISTAR TODOS OS LEADS
     path('listar/leads/', views.listLeadsViews, name='listLeads'),
+    path('listar/leads/status', views.ApiStatusNegative, name='ApiStatusNegative'),
+ 
 
-#FINANCEIRO EXAMES
+    #FINANCEIRO EXAMES
     #AGENDAMENTOS CONCLUIDOS
     path('financeiro/exames/process/', views.FinancialExamsViews, name='FinancialExamsViews'), #FINANCEIRO EXAMES
     path('api/financeiro/exames/process/files/remove/', views.ModalExamsFinanceFileRemove, name='ModalExamsFinanceFileRemove'), #FINANCEIRO EXAMES
+    path('api/financeiro/exames/process/files/remove/int', views.ModalExamsFinanceFileRemoveInt, name='ModalExamsFinanceFileRemoveInt'), #FINANCEIRO EXAMES
+
     path('Api/financeiro/exames/start/process/', views.ApiStartProcess, name='ApiStartProcess'), #FINANCEIRO
     path('api/consultar/exames/modal', views.SearchModalExams, name='SearchModalExams'),#API MODAL AGENDAMENTO
     path('api/consultar/exames/modal/finances', views.SearchModalExamsFinances, name='SearchModalExamsFinances'),#API MODAL FINANCEIRO
     path('api/salvar/alteracoes/modal/finances', views.SaveEditionsFinances, name='SaveEditionsFinances'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('api/finalizar/exames/modal/', views.ApiFinalizeProcess, name='ApiFinalizeProcess'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('financeiro/search/exames/solicitacoes/', views.SearchMonthExamsRefund, name='SearchMonthExamsRefund'),#EXAMES FINALIZADOS
-    #PAGAMENTOS PAREIROS
+    #PAGAMENTOS PAREIROS 
     path('financeiro/fechamento/parceiros/', views.ClosingPartnersViews, name='ClosingPartners'),#EXAMES FINALIZADOS
     path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#EXAMES FINALIZADOS
     path('financeiro/fechamento/parceiros/detalhes', views.paymentDetails, name='paymentDetails'),
@@ -128,6 +132,8 @@ urlpatterns = [
 
     #LISTAR LEADS
     path('listar/leads/all-leads/', views.LeadsViews, name='LeadsViews'),#INDICAÇÕES
+    path('listar/leads/all-leads/filtro', views.SearchStatusLeadFilter, name='SearchStatusLeadFilter'),#EXAMES FINALIZADOS
+
     
     #CADASTRAR LEAD (INTERNO)
     path('cadastrar/leads/interno/', views.CadatsreLeadViews, name='CadatsreLeadViews'),#INDICAÇÕES CADASTRADAS PELO ATENDIMENTO
@@ -144,7 +150,7 @@ urlpatterns = [
     #SALVAR ANEXO PACIENTES - listar paciente
     path('api/salvar/doc/paciente', views.SaveEditionsPatient, name='SaveEditionsPatient'),
 
-#PROCEDIMENTO INERTNO 
+    #PROCEDIMENTO INERTNO 
     #AGENDAR COLETA 
     path('agendaar/coleta/interna/', views.schedulePickupIntViews, name='schedulePickupInt'),#EXAMES FINALIZADOS
     #API AGENDAR COLETA
@@ -166,12 +172,14 @@ urlpatterns = [
     path('financeiro/exames/exames/filter/', views.SearchMonthFInalizadosInt, name='SearchMonthFInalizadosInt'),#EXAMES FINALIZADOS
 
 
-
-#ENFERMEIROS
+    #ENFERMEIROS
     path('rota/agendamentos/coletas/', views.CollectionRouteViews, name='CollectionRouteViews'),#EXAMES FINALIZADOS
     path('api/status/agenda/route', views.ApiIniciarColeta, name='ApiIniciarColeta'),#CONCLUIR
     path('api/salvar/anexo/', views.SaveAnexo, name='SaveAnexo'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('fechamento/finacneiro/interno/', views.closingInt, name='closingInt'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('financeiro/fechamento/interno/filter', views.SearchClosingIntFilter, name='SearchClosingIntFilter'),#EXAMES FINALIZADOS
+
+    #INFOLOG
+    path('info/log/', views.LogUser, name='LogUser'),#EXAMES FINALIZADOS
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

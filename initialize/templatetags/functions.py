@@ -44,3 +44,20 @@ def allDataUser(self):
                 arr_response.append(p_id_d)
     
     return arr_response
+
+
+@register.filter
+def fetchUser(self):
+    user = self
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT id, substring_index(nome, ' ', 3) as NomeLog from auth_users.users WHERE login LIKE %s"
+    
+        cursor.execute(query, (user,))
+        dados = cursor.fetchall()
+        if dados:
+            for id, nome in dados:
+                return {
+                    #"id": id,
+                    "nome": nome
+                }
+    return {}

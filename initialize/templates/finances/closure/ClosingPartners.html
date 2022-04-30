@@ -93,7 +93,7 @@ Acompanhe as últimas notícias!
         <div class="container col s8" style="margin-top:80px"> 
             <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
                 <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
-                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >GLOSA</labe>
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA</labe>
                 </div>
                 <thead>
                     <tr role="row">
@@ -103,6 +103,25 @@ Acompanhe as últimas notícias!
                     </tr>
                 </thead>
                 <tbody id="glosa">
+                </tbody>
+            </table>
+        </div>
+
+
+         <!--OUTROS-->
+         <div class="container col s8" style="margin-top:80px"> 
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="outros">
                 </tbody>
             </table>
         </div>
@@ -143,13 +162,13 @@ Acompanhe as últimas notícias!
                <!-- Externo -->
                <div id="userint" class="row">
                    <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                       <div class="input-field col s4">
+                       <div class="input-field col s12 m4">
                          <input  id="cpf" type="text" onkeyup="searchPatients(this)">
                            <label for="cpf">
                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
                        </div>
 
-                       <div class="input-field col s2">
+                       <div class="input-field col s12 m2">
                            <select name="select" id="mes_search" class="error">
                                <option value="">Selecione um mês</option>
                                <option value="1">Janeiro</option>
@@ -166,11 +185,16 @@ Acompanhe as últimas notícias!
                                <option value="12">Dezembro</option>
                            </select>
                        </div>
-                       <div class="col s2">&nbsp;
+                       <div class="col s12 m2">&nbsp;
                            <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
                                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
                            </button>
                        </div>
+                       <div id="val1" class="col s12 m4" style="margin-top: 18px; text-align: center;">
+                        {% for k in arr_valTotalPartiners %}
+                            <label style="font-size: 30px; font-weight: bold;">{{ k.val }}</label>
+                        {% endfor %}
+                        </div>
                        <!-- COMEÇO DA TABLE -->
                        <div class="col s12 scroll">
                            <table id="page-length-option" class="bordered" style="overflow-x: auto">
@@ -213,6 +237,7 @@ Acompanhe as últimas notícias!
 
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
+
 
 //FUNCTION BUSCAR
 function searchPatients(object) {
@@ -270,6 +295,15 @@ function searchMonth() {
                   </tr>
                   `;
             $("#tb_append2").append(a);
+                
+            
+        });
+
+        var dados = re["messages"];
+        $("#val1").html("");
+        $.map(dados, function(n, i) {
+            var b = `<label style="font-size: 30px; font-weight: bold;">${n.val}</label>`;
+            $("#val1").append(b);
         });
     });
 }
@@ -339,7 +373,7 @@ function viewAgenModal(object){
 
 
         var dados = re["messagePago"];
-        $("#Count").html("");
+        $("#pago").html("");
         $.map(dados, function(n, i) {
             var a = `
                 <tr id="tr_${n.id}" role="row" class="odd">
@@ -350,8 +384,24 @@ function viewAgenModal(object){
                     <td>${n.valor_uniP}</td>
                 </tr>
             `;
-            $("#pago" ).append(a);
+            $("#pago").append(a);
         });
+
+
+
+        var dados = re["messageOutros"];
+        $("#outros").html("");
+        $.map(dados, function(n, i) {
+            var a = `
+                <tr id="tr_${n.idlead}" role="row" class="odd">
+                    <td>${n.pacienteO}</td>
+                    <td>${n.indicacaoO}</td>
+                    <td>${n.statusO}</td>
+                </tr>
+            `;
+            $("#outros").append(a);
+        });
+
 
 
     
@@ -418,6 +468,7 @@ function SearchInfo(object) { //FUNCTION DO ONCLICK
                 "btn_pay": key["teste"]["btn_pay"],
                 "nome_medico": key["teste"]["nome_medico"],
                 "status_pagamento": key["teste"]["status_pagamento"],
+                "valorTotal": key["teste"]["val"],
 
             }
             console.log(dictKeys)

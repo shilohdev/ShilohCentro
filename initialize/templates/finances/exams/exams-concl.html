@@ -202,7 +202,7 @@ Acompanhe as últimas notícias!
                                        </select>
                                    </div>
                                </div>
-                           </div>
+                           </div> 
                        </div>
                        <div class="row">
                            <div class="col s12" style="margin-top: 10px;">
@@ -232,8 +232,8 @@ Acompanhe as últimas notícias!
                        <div class="row">
                            <div class="col s12">
                                 <div class="input-field col s3">
-                                    <input style="color: black;" id="date_repass" type="date" data-required='true'>
-                                    <label for="date_repass">Data Repasse</label>
+                                    <input style="color: black;" id="data_r" type="date" data-required='true'>
+                                    <label for="data_r">Data Repasse</label>
                                 </div>
                                <div class="input-field col s3">
                                    <input id="n_nf" type="text" data-required='true'>
@@ -410,7 +410,8 @@ Acompanhe as últimas notícias!
                                    <tr>
                                        <th data-field="id">Paciente</th>
                                        <th data-field="id" style="text-align: center;">Data Coletado</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Status Coleta</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
                                        <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
                                        <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                                    </tr> 
@@ -420,7 +421,8 @@ Acompanhe as últimas notícias!
                                    <tr id="tr_{{ k.id }}">
                                         <td>{{ k.paciente }}</td>
                                         <td style="text-align: center;">{{ k.dataconc }}</td>
-                                        <td style="text-align: center;">{{ k.status }}</td>
+                                        <td style="text-align: center;">{{ k.exame }}</td>
+                                        <td style="text-align: center;">{{ k.unidade }}</td>
                                         <td style="text-align: center;">{{ k.status_p }}</td>
                                        <td style="text-align: center;">
                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
@@ -605,13 +607,11 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "val_pago": key["dados"]["val_pago"],
                 "porcentagem": key["dados"]["por_paga"],
 
-                "date_repass": key["dados"]["date_repass"],
+                "data_r": key["dados"]["date_repass"],
                 "n_nf": key["dados"]["nf"],
-                
-
             }
             console.log(dictKeys)
-            $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+            $.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
             $(findLabel).find("label").attr("class", "active");//serve para encontrar dentro do closest div uma label e atribuir o módulo attr(atributo, valor)
@@ -698,6 +698,47 @@ function removeFile(object) {
     });
 }
 
+
+$("#doc_anx").click(function(){
+   $("#doc_anx").val("");
+});
+
+function removeFileExists(object){
+   $(object).closest("tr").remove();
+   $("#doc_anx").val("");
+}
+
+function checkAnexo(){
+   var objectFile = $("#doc_anx");
+   var typeFile = $("#tp_anx");
+   console.log(objectFile.val());
+   if(objectFile.val() != "" && typeFile.val() != ""){
+      var nameFile = ($(objectFile)[0].files[0]).name;
+      var typeFile = $("#tp_anx option:selected").text();
+      var append = `
+      <tr> 
+         <td>${nameFile}</td>
+         <td>DATA</td>
+         <td>${typeFile}</td>
+         <td style="text-align: center;">
+               <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+               <i class="material-icons right">delete</i>
+            </a>
+         </td>
+      </tr>
+      `;
+
+      $("#tb_append").append(append);
+   }
+}
+
+$("#doc_anx, #tp_anx").change(function(){
+   checkAnexo();
+});
+
+
+
+
 //BTN ATUALIZAR - SALVAR
 function changeUserModal(object) {
     var id_user = $(object).data("id_user");
@@ -705,7 +746,7 @@ function changeUserModal(object) {
     var val_w_lab = $("#val_w_lab").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
     var val_pago = $("#val_pago").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
     var porcentagem = $("#porcentagem").val().replace("%", "");
-    var date_repass = $("#date_repass").val();
+    var date_repass = $("#data_r").val();
     var n_nf = $("#n_nf").val();
     var statusProgresso = $("#statusProgresso").val();
     var obsF = $("#obsF").val();
@@ -724,7 +765,6 @@ function changeUserModal(object) {
     } else {
         files = "";
     }
-
 
    
     //verificação para preencher o tipo do arquivo.
@@ -767,7 +807,7 @@ function changeUserModal(object) {
             "value": statusProgresso
         },
         {
-            "name": "cust_alv", //aqui
+            "name": "cust_alv",
             "value": cust_alv
         },
         {
@@ -859,7 +899,7 @@ function FinalizeProcess(object) {
     var doctor = $("#doctor").val();
     var namePaciente = $("#namePaciente").val();
     var resp_comercial = $("#resp_comercial").val();
-    var date_repass = $("#date_repass").val();
+    var date_repass = $("#data_r").val();
     var date_age = $("#date_age").val();
     var tp_exame = $("#tp_exame").val();
     console.log(date_age)
@@ -909,7 +949,8 @@ function searchMonth() {
          <tr id="tr_${n.id}">
             <td>${n.paciente}</td>
                      <td style="text-align: center;">${n.coleta}</td>
-                     <td style="text-align: center;">${n.status}</td>
+                     <td style="text-align: center;">${n.exame}</td>
+                     <td style="text-align: center;">${n.unidade}</td>
                      <td style="text-align: center;">${n.status_p}</td>
                      <td style="text-align: center;">
                         <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">
@@ -923,7 +964,7 @@ function searchMonth() {
             $("#tb_append2").append(a);
         });
         if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+            var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append2").append(appende); 
             }
     });

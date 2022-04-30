@@ -35,7 +35,7 @@ Acompanhe as últimas notícias!
       <div class="container col s8" style="margin-top:20px">
         <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
             <div class="collapsible-header col s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
-                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO</labe>
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO </labe>
             </div>
             <thead>
                 <tr role="row">
@@ -150,7 +150,7 @@ Acompanhe as últimas notícias!
     
 
         <div class="col s11 mt-2 ml-4">
-            <button id="btn_pay" data-id_user="" onclick="PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
+            <button id="btn_pay" data-id_user="" onclick="PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 20px; background-color: #76c076da;">
                 <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
             </span></button>
         </div>
@@ -330,7 +330,7 @@ function viewAgenModal(object){
     fetchRequest("{% url 'paymentDetailsCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         if (re["response"] == false) {
 			alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-		} else {
+		} else { 
         $("#modal2").show();
         var dados = re["message2"];
         $("#tb_aguardandopag").html("");
@@ -375,7 +375,7 @@ function viewAgenModal(object){
 
 
         var dados = re["messagePago"];
-        $("#Count").html("");
+        $("#pago").html("");
         $.map(dados, function(n, i) {
             var a = `
                 <tr id="tr_${n.id}" role="row" class="odd">

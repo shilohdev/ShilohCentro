@@ -507,15 +507,28 @@ $("#modal3").hide();
      
                $.map(docs, function(n, i){
             console.log(n, i);
-            ap += `
+           /* ap += `
                <tr> 
                   <td>${n.name}</td>
                   <td>${n.date_create.pt}</td>
                   <td>${n.type_desc}</td>
                   <td style="text-align: center;">
-                     <a style="width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;cursor: pointer;" download class="btn mb-1 waves-effect waves-light ativ" href="${n.url}" data-target="dropdown2">
+                     <a onclick=\"viewFile(this)\" style="width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;cursor: pointer;" download class="btn mb-1 waves-effect waves-light ativ" href="${n.url}" data-target="dropdown2">
                         <i class="material-icons right">cloud_download</i>
                      </a>
+                      <a onclick=\"deleteFile(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="${n.path}" class="btn mb-1 waves-effect waves-light ativ">
+                        <i class="material-icons right">delete</i>
+                     </a>
+                  </td>
+               </tr>
+            `;
+            */
+             ap += `
+               <tr> 
+                  <td>${n.name}</td>
+                  <td>${n.date_create.pt}</td>
+                  <td>${n.type_desc}</td>
+                  <td style="text-align: center;">
                       <a onclick=\"deleteFile(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="${n.path}" class="btn mb-1 waves-effect waves-light ativ">
                         <i class="material-icons right">delete</i>
                      </a>
@@ -652,6 +665,43 @@ fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(r
 alert("Neste momento esta função ainda não está disponível. ⚠️ Em caso de dúvidas, entre em contato com o suporte.")
 }
 
+
+$("#doc_anx").click(function(){
+   $("#doc_anx").val("");
+});
+
+function removeFileExists(object){
+   $(object).closest("tr").remove();
+   $("#doc_anx").val("");
+}
+
+function checkAnexo(){
+   var objectFile = $("#doc_anx");
+   var typeFile = $("#tp_anx");
+   console.log(objectFile.val());
+   if(objectFile.val() != "" && typeFile.val() != ""){
+      var nameFile = ($(objectFile)[0].files[0]).name;
+      var typeFile = $("#tp_anx option:selected").text();
+      var append = `
+      <tr> 
+         <td>${nameFile}</td>
+         <td>DATA</td>
+         <td>${typeFile}</td>
+         <td style="text-align: center;">
+               <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+               <i class="material-icons right">delete</i>
+            </a>
+         </td>
+      </tr>
+      `;
+
+      $("#tb_append").append(append);
+   }
+}
+
+$("#doc_anx, #tp_anx").change(function(){
+   checkAnexo();
+});
 
 function changeUserModal(object){
    $("#btn_atualizar").attr("disabled", true);   
