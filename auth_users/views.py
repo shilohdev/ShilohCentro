@@ -813,8 +813,7 @@ def SearchStatusLeadFilter(request):
     return JsonResponse(array, safe=False, status=200)
 
 
-@csrf_exempt
-def createUsers(request):
+def createUsers():
     e = 0
     c = 0
     with connections['auth_users'].cursor() as cursor:
@@ -832,6 +831,7 @@ def createUsers(request):
         ]
 
         for key in arr_response:
+            print(key)
             firstname = key.get('name', '')
             id_user = key.get('username', None)
             email = key.get('email', '')
@@ -854,7 +854,6 @@ def createUsers(request):
         "quantity_exists": e,
         "quantity_create": c
     }
-    return JsonResponse(
-        array,
-        safe=False, status=200
-    )
+    
+    print(array)
+    return True
