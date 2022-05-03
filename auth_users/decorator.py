@@ -1259,21 +1259,30 @@ def ApiCadastrePatienteFunction(request):
                 "message": "Lead não encontrado, tente novamente"
             }
 
-        cpf = formatcpfcnpj(cpf) 
+        cpf = formatcpfcnpj(cpf)
         tel1 = formatTEL(tel1)
         tel2 = formatTEL(tel2)
-        param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity,)
-        query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, param)
+       
+        queryExists = "SELECT id_p FROM customer_refer.patients WHERE cpf_p LIKE %s"
+        cursor.execute(queryExists, (cpf,))
+        dados = cursor.fetchall()
+        if dados:
+            return {"response": "true", "message": "Paciente já cadastrado em sistema!"}
 
-        query2= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = '1');"
-        cursor.execute(query2)
+        else:
+            param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity,)
+            query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(query, param)
 
-        #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
-        query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
-        cursor.execute(query, (lead,))
+            query2= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = '1');"
+            cursor.execute(query2)
+
+            #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
+            query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
+            cursor.execute(query, (lead,))
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
+
 
 
 #SELECT CONVENIO
@@ -2712,20 +2721,6 @@ def SearchModalScheduledInt(request):
             id,
         )
         print(params)
-        query = "SELECT data_inc_proc_f, status_exame_f, resp_inicio_p_f, data_final_f FROM auth_finances.completed_exams WHERE id_agendamento_f = %s"
-        cursor.execute(query, params)
-        dados = cursor.fetchall()
-        if dados:
-            for data_inc_proc_f, status_exame_f,  resp_inicio_p_f, data_final_f in dados:
-                array = {
-                    "status": str(status_exame_f) if status_exame_f else "",
-                    "date_proccess": {
-                    "start": data_inc_proc_f if data_inc_proc_f else "0000-00-00",
-                    "end": data_final_f if data_final_f else "0000-00-00",
-                        
-                    }
-                }
-       
         query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, e.nome, np.nome, a.tel1_p, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, uni.unit_s , a.perfil_int FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN auth_users.users np ON a.nome_p = np.id INNER JOIN admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE a.id = %s "
         cursor.execute(query, params)
         dados = cursor.fetchall()
@@ -2756,10 +2751,26 @@ def SearchModalScheduledInt(request):
                     },
                 }
     
+        query = "SELECT data_inc_proc_f, status_exame_f, resp_inicio_p_f, data_final_f FROM auth_finances.completed_exams WHERE id_agendamento_f = %s"
+        cursor.execute(query, params)
+        dados = cursor.fetchall()
+        arrays=[]
+        if dados:
+            for data_inc_proc_f, status_exame_f,  resp_inicio_p_f, data_final_f in dados:
+                array = {
+                    "status": str(status_exame_f) if status_exame_f else "",
+                    "date_proccess": {
+                    "start": data_inc_proc_f if data_inc_proc_f else "0000-00-00",
+                    "end": data_final_f if data_final_f else "0000-00-00",
+                        
+                    }
+                }
+                arrays.append(array)
+        
     return {
         "response": False if not dict_response else True,
         "message": dict_response,
-        "messages": array
+        "messages": arrays
     }
 
 #ATUALIZAR STATUS DO AGENDAMENTO CONCLUIDO - INTERNO

@@ -154,19 +154,36 @@ Acompanhe as últimas notícias!
                        </div>
                    </li>
                    <li class="active" style="margin-top: 30px;">
-                       <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
-                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                    <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                        <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                    </div>
+                    <div class="row">
+                         <div class="col s12">
+                         <div class="col s12" style="margin-top: 15px;">
+                            <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:
+                         </div>
+                         <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="login" type="text">
+                            <label for="login" class=""> 
+                            <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+                         </div>
+                         <div class="input-field col s5">
+                            <input readonly="readonly" style="color: black;" id="senha" type="text">
+                            <label for="senha" class="active"> 
+                            <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                         </div>
                        </div>
-                       <div class="row">
-                           <div class="col s12" style="margin-top: 10px;">
-                               <div class="input-field col s12">
-                                   <input readonly="readonly" style="color: black;" id="obs" type="text">
-                                   <label for="obs">
-                                       <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
-                               </div>
-                           </div>
-                       </div>
-                   </li>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin-top: 10px;">
+                            <div class="input-field col s12">
+                                <input readonly="readonly" style="color: black;" id="obs" type="text">
+                                <label for="obs">
+                                    <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                </ul>
            </div>
            <div class="row">
@@ -544,6 +561,8 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "uf": key["endereco"]["uf"],
                 "obs": key["obs"]["obs"],
                 "color_s": key["obs"]["color"],
+                "login": key["obs"]["login"],
+                "senha": key["obs"]["senhaC"],
 
             }
 
