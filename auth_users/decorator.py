@@ -292,7 +292,6 @@ def cadastreConv(request):
 
 
 def searchCategoria(request):
-    
     with connections['auth_permissions'].cursor() as cursor:
         #SELECT DO BANCO DIRETO PARA O SELECT HTML >>>> TIPO DE PERFFIL
         query = "SELECT * FROM auth_users.Category_pertners"
@@ -317,6 +316,7 @@ def error(request):
 #FUNCTIONS PERMISSOES
 def allowPage(request, idPermission):
     login_usuario = request.user.username
+   
     with connections['auth_permissions'].cursor() as cursor:
         query = "SELECT ap_allow.id FROM auth_permissions.auth_permissions_allow ap_allow INNER JOIN auth_users.users u ON u.id = ap_allow.id_user INNER JOIN auth_permissions.permissions_id p_i ON p_i.id = ap_allow.id_permission WHERE u.login = %s AND p_i.id_description = %s"
         params = (login_usuario, idPermission,)
@@ -324,7 +324,7 @@ def allowPage(request, idPermission):
         dados = cursor.fetchall()
         if dados:
             return True
-
+             
     return False
 
 #SELECT ENFERMEIROS
@@ -1306,18 +1306,19 @@ def SelectConvenio(request):
 def searchLead(request):
     with connections['customer_refer'].cursor() as cursor:
 
-        query= "SELECT a.nome_lead, a. data_regis_l, b.nome, c.unit_s FROM customer_refer.leads a INNER JOIN admins.units_shiloh c ON a.unity_l = c.id_unit_s INNER JOIN auth_users.users b ON a.medico_resp_l = b.id"
+        query= "SELECT a.nome_lead, a. data_regis_l, b.nome, c.unit_s, status_l FROM customer_refer.leads a INNER JOIN admins.units_shiloh c ON a.unity_l = c.id_unit_s INNER JOIN auth_users.users b ON a.medico_resp_l = b.id"
         cursor.execute(query)
         dados = cursor
         array = []
 
-        for nome, data, medico_resp, unit in dados:
+        for nome, data, medico_resp, unit, status in dados:
             dataFormatada = datetime.strptime(str(data), "%Y-%m-%d").strftime("%d/%m/%Y") if data not in ["", None] else ""
             newinfoa = ({
                 "nome": nome,
                 "data": dataFormatada,
                 "unit": unit,
                 "medico_resp": medico_resp,
+                "status": status,
                 })
             array.append(newinfoa)
         

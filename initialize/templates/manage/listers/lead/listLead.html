@@ -49,6 +49,7 @@ Acompanhe as últimas notícias!
                   <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
                   <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
                   <th data-field="id" style="text-align: center; width: 200px;">Unidade:</th>
+                  <th data-field="id" style="text-align: center; width: 200px;">Status:</th>
                 </tr>
               </thead>
               <tbody id="tb_append">
@@ -58,6 +59,7 @@ Acompanhe as últimas notícias!
                   <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
                   <td style="text-align: center;">{{ k.medico_resp }}</td>
                   <td style="text-align: center;">{{ k.unit }}</td>
+                  <td style="text-align: center;">{{ k.status }}</td>
                 </tr>
                 {% endfor %} <!-- FIM DO ARRAY -->
               </tbody>

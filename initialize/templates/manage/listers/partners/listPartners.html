@@ -308,7 +308,7 @@
                      <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
                      <th data-field="id" style="text-align: center; width: 250px;">Unidade</th>
                      <th data-field="id" style="text-align: center; width: 130px;">Status</th>
-                     <!-- <th data-field="name" style="text-align: center; width: 130px;">Ação</th>-->
+                      <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                    </tr>
                  </thead>
                  <tbody id="tb_append">
@@ -319,7 +319,7 @@
                      <td style="text-align: center;">{{ k.resp_comercial }}</td>
                      <td style="text-align: center;">{{ k.unity }}</td>
                      <td style="text-align: center;">{{ k.status }}</td>
-                     <!--<td style="text-align: center;">
+                     <td style="text-align: center;">
                         <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
                               <i class="material-icons right">edit</i>
@@ -327,7 +327,7 @@
                         </a>
                          <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
                            <i class="material-icons right">check</i>
-                         </button>-->
+                         </button>
                      </td>
                    </tr>
                    {% endfor %} <!-- FIM DO ARRAY -->
