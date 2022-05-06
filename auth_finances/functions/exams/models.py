@@ -1,3 +1,4 @@
+from asyncio import exceptions
 from email.policy import default
 from multiprocessing.sharedctypes import Array
 import numbers
@@ -26,6 +27,7 @@ import json
 import time
 from re import A
 from django.contrib.auth.models import User
+from numpy import empty
 from pymysql import NULL
 from functions.connection.models import Connection, Exams, RegisterActions
 from functions.general.decorator import convertDate, checkDayMonth
@@ -281,7 +283,6 @@ def FunctionModalFinances(request):
                     "filesInt": json.dumps(filesInt),
                     "history": history
                 }
-                print(dict_response)
 
 
     return {
@@ -387,7 +388,7 @@ def fetchFileEditionsFinances(id):
  
 
 
-#GER FILE estou aqui
+#GER FILE 
 def fetchFileEditionsFinancesInt(id):
 
     arr_files = []
@@ -509,7 +510,7 @@ def SaveEditionsFinancesFunctions(request):
                 query9 = "SELECT id, status_p FROM auth_finances.status_progress where id like %s"
                 param =(nomeStatus,)
                 cursor.execute(query9, param)
-                dados = cursor
+                dados = cursor.fetchall()
                 array = []
                         
                 for idP, nomeStatus in dados:
@@ -575,6 +576,7 @@ def FinalizeProcessFunction(request):
     repasse = request.POST.get("date_repass")
     date_age = request.POST.get("date_age")
     tp_exame = request.POST.get("tp_exame")
+    
     with connections['admins'].cursor() as cursor:        
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -589,6 +591,7 @@ def FinalizeProcessFunction(request):
             }
         #atualização de status
         param = ( repasse, statusProgresso, date_create, id_usuario, id_agendamento,)
+        print(statusProgresso)
         query = "UPDATE `auth_finances`.`completed_exams` SET `data_repasse` = %s,  `status_exame_f` = %s, `data_final_f` = %s,  `resp_final_p_f` = %s, `regis` = '1' WHERE (`id_agendamento_f` = %s);"
         cursor.execute(query, param)
         #historico de atualização 
@@ -599,10 +602,12 @@ def FinalizeProcessFunction(request):
         cursor.execute(query2, params2)
 
         if statusProgresso == '4':
+            print(statusProgresso)
             queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
             paramsVal = (
                 doctor,
             )
+            print(paramsVal)
             cursor.execute(queryVal, paramsVal)
             dadosMEDICO = cursor.fetchall()
 
@@ -652,9 +657,11 @@ def FinalizeProcessFunction(request):
                             paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
                             cursor.execute(queryFinance, paramsFinance)
                     else:
-                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0' , 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, '0', %s , 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
                         paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
                         cursor.execute(queryFinance, paramsFinance)
+        else:
+            ("teste n foi")   
 
     return {"response": "true", "message": "Processo Financeiro Finalizado!"}
 
@@ -664,7 +671,7 @@ def searchrRefundCompletedFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id INNER JOIN  admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE  a.status = 'Concluído' AND sp.regis LIKE  '1';"
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         
         for id, paciente, coleta, inicioP, fimP, exame, status_p, unidade in dados:
@@ -696,7 +703,7 @@ def SearchMonthExamsConclFunction(request):
             data2 = data2 + ' 23:59:59'
             query = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id INNER JOIN admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE sp.data_final_f BETWEEN %s AND %s AND a.status = 'Concluído' AND sp.regis LIKE  '1' AND spa.status_p = %s"
             cursor.execute(query, params)
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for id, paciente, coleta, inicioP, fimP, exame, status_p, unidade in dados:
                 newinfoa = ({
@@ -713,7 +720,7 @@ def SearchMonthExamsConclFunction(request):
         elif statusProgresso != "":
             query = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id INNER JOIN  admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE a.status = 'Concluído' AND sp.regis LIKE  '1' AND spa.status_p = %s"
             cursor.execute(query, (statusProgresso,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for id, paciente, coleta, inicioP, fimP, exame, status_p, unidade in dados:
                 newinfoa = ({
@@ -732,7 +739,7 @@ def SearchMonthExamsConclFunction(request):
             data1 = data1 + ' 00:00:00'
             data2 = data2 + ' 23:59:59'
             cursor.execute(queryd, (data1,data2,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for id, paciente, coleta, inicioP, fimP, exame, status_p, unidade in dados:
                 newinfoa = ({
@@ -750,7 +757,7 @@ def SearchMonthExamsConclFunction(request):
         else:
             queryd = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, ex.tipo_exame, spa.status_p, uni.unit_s  FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id INNER JOIN  admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE a.status = 'Concluído' AND sp.regis LIKE  '1';"
             cursor.execute(queryd)
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for id, paciente, coleta, inicioP, fimP, exame, status_p, unidade in dados:
                 newinfoa = ({
@@ -779,7 +786,7 @@ def historicExamConclFunction(id):
         param=(id,)
         query = "SELECT nome_user, descricao, data_operacao FROM admins.register_actions WHERE id_agendamento = %s"
         cursor.execute(query, param)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for name, descrition, date in dados:
             newiRegis = ({
@@ -797,7 +804,7 @@ def FunctionStatusN(request):
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT id, status_progress_n FROM auth_finances.status_progress_negative"
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for id, status in dados:
             newinfoa = ({
@@ -814,7 +821,7 @@ def searchNotReached(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.resp_comercial, a.resp_medico, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.status = 'Concluído' AND sp.regis LIKE  '0' AND spa.status_p NOT LIKE 'Cancelado' AND sp.identification LIKE 'Externo' AND sp.def_glosado_n_atingido LIKE '2';"
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
             
         for id, paciente, comercial, medico, dataconc, status, status_p in dados:
@@ -837,7 +844,7 @@ def searchGlosses(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.resp_comercial, a.resp_medico, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.status = 'Concluído' AND sp.regis LIKE  '0' AND sp.identification LIKE 'Externo' AND spa.status_p NOT LIKE 'Cancelado' AND sp.def_glosado_n_atingido LIKE '1';"
         cursor.execute(query,)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
             
         for id, paciente, comercial, medico, dataconc, status, status_p in dados:
@@ -861,7 +868,7 @@ def searchSolicitationsInt(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.data_fin, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.status = 'Concluído' AND sp.regis LIKE  '0' and spa.status_p NOT LIKE 'Glosado' and spa.status_p NOT LIKE 'Valor Não Atingido' AND a.identification LIKE 'Interno';"
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
             
         for id, paciente, dataconc, status, status_p in dados:
@@ -885,7 +892,7 @@ def pesqMesInternoFinalizados(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE  a.status = 'Concluído' AND sp.regis LIKE  '1' AND a.identification LIKE  'Interno' AND DATE_FORMAT(sp.data_final_f, '%m') = %s"
         cursor.execute(query, (month,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
 
         for id, paciente, coleta, inicioP, fimP, status, status_p in dados:
@@ -917,7 +924,7 @@ def SearchMonthSolicitation(request):
         if data1 and data2 and statusProgressoF != "":
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.data_agendamento BETWEEN %s AND %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE 'Interno' AND spa.status_p = %s; "
             cursor.execute(query, params)
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, dataconc, status, status_p in dados:
@@ -933,7 +940,7 @@ def SearchMonthSolicitation(request):
         elif data1 and data2 != "":
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.data_agendamento BETWEEN %s AND %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE 'Interno'; "
             cursor.execute(query, (data1, data2))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, dataconc, status, status_p in dados:
@@ -949,7 +956,7 @@ def SearchMonthSolicitation(request):
         if statusProgressoF != "":
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE 'Interno' AND spa.status_p = %s; "
             cursor.execute(query, (statusProgressoF,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, dataconc, status, status_p in dados:
@@ -965,7 +972,7 @@ def SearchMonthSolicitation(request):
         else:
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, a.status, spa.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f WHERE a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE 'Interno'; "
             cursor.execute(query)
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, dataconc, status, status_p in dados:
@@ -1009,7 +1016,7 @@ def SearchMonthExamsRefundF(request):
         if data1 and data2 and statusProgressoTable != "" : 
             query = "SELECT a.id, pa.nome_p, a.data_agendamento,  ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN admins.units_shiloh uni ON pa.unity_p = uni.id_unit_s INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id WHERE uni.id_unit_s like %s AND  data_agendamento BETWEEN %s AND %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE  'Externo' AND status_p = %s;"
             cursor.execute(query, params)
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, coleta, exame, status_p, unidade in dados:
@@ -1025,7 +1032,7 @@ def SearchMonthExamsRefundF(request):
         elif statusProgressoTable != "":
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN admins.units_shiloh uni ON pa.unity_p = uni.id_unit_s INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id WHERE uni.id_unit_s like %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE  'Externo' AND status_p = %s;"
             cursor.execute(query, (unityY, statusProgressoTable,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, coleta, exame, status_p, unidade in dados:
@@ -1041,7 +1048,7 @@ def SearchMonthExamsRefundF(request):
         elif  data1 and data2 != "":
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN admins.units_shiloh uni ON pa.unity_p = uni.id_unit_s INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id WHERE uni.id_unit_s like %s AND data_agendamento BETWEEN %s AND %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE  'Externo';"
             cursor.execute(query, (unityY, data1, data2,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, coleta, exame, status_p, unidade in dados:
@@ -1057,7 +1064,7 @@ def SearchMonthExamsRefundF(request):
         else:
             query = "SELECT a.id, pa.nome_p, a.data_agendamento, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN admins.units_shiloh uni ON pa.unity_p = uni.id_unit_s INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id WHERE uni.id_unit_s like %s AND a.status = 'Concluído' AND sp.regis LIKE  '0' AND a.identification LIKE  'Externo';"
             cursor.execute(query, (unityY,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
 
             for id, paciente, coleta, exame, status_p, unidade in dados:
@@ -1079,91 +1086,120 @@ def SearchMonthExamsRefundF(request):
         "message": array
     }
 
+#---------------------------------------------------- FECHAMENTO PARCEIROS ---------------------------------------------------------
 
-#TABELA FECHAMENTO PARCEIROS
+
+#TABELA FECHAMENTO PARCEIROS estou aqui1
 def TableClosingPartners(request):
     month = int(datetime.now().strftime("%m"))
+
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_comercial != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
         cursor.execute(query, (month,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for id, medico, categoria, comercial, rn, data_repasse, valor, status in dados:
-            valor = f"R$ {valor:_.2f}"
-            valor = valor.replace(".", ",").replace("_", ".")
-            newinfoa = ({
-                "id": id,
-                "medico": medico,
-                "rn": rn,
-                "categoria": categoria,
-                "comercial": comercial,
-                "data_repasse": data_repasse,
-                "valor": valor,
-                "status": status,
-                })
-            array.append(newinfoa)
+            if dados == empty:
+                array.append("nenhumm dado")
+            else:
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "id": id,
+                    "medico": medico,
+                    "rn": rn,
+                    "categoria": categoria,
+                    "comercial": comercial,
+                    "data_repasse": data_repasse,
+                    "valor": valor,
+                    "status": status,
+                    })
+                array.append(newinfoa)
+           
+    return array
 
-        return array
+#VALOR TOTAL FECHAMENTO DOS PARCEIROS
+def valTotalPartinersF(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
+        cursor.execute(querys, (monthCount,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R${val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+        return array2
 
 
-#TABELA FECHAMENTO PARCEIROS
+#FILTRO TABELA FECHAMENTO PARCEIROS
 def FilterMonthClosingPartners(request):
     month = request.POST.get('month')
+    monthCount = (datetime.now().strftime("%m"))
+    
     with connections['auth_finances'].cursor() as cursor:
-        params= (month,)
         query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
-        cursor.execute(query, params)
-        dados = cursor
+        cursor.execute(query, (month,))
+        dados = cursor.fetchall()
         array = []
-        for id, medico, categoria, comercial, rn, data_repasse, valor, status in dados:
-            valor = f"R$ {valor:_.2f}"
-            valor = valor.replace(".", ",").replace("_", ".")
-
-            newinfoa = ({
-                "id": id,
-                "medico": medico,
-                "rn": rn,
-                "categoria": categoria,
-                "comercial": comercial,
-                "valor": valor,
-                "status": status,
-                })
-            array.append(newinfoa)
-            print("aqui , ", newinfoa)
+        if dados:
+            for id, medico, categoria, comercial, rn, data_repasse, valor, status in dados:
+                valor = (valor) if valor not in ["", None] else None
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "id": id,
+                    "medico": medico,
+                    "rn": rn,
+                    "categoria": categoria,
+                    "comercial": comercial,
+                    "data_repasse": data_repasse,
+                    "valor": valor,
+                    "status": status,
+                    })
+                array.append(newinfoa)
             
-            querys = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE  MONTH(data_repasse) LIKE %s"
-            cursor.execute(querys, (month,))
-            dados = cursor.fetchall()
-            array2 = []
-            if dados:
-                for qdt, val in dados:
-                    val = f"R$ {val:_.2f}"
-                    val = val.replace(".", ",").replace("_", ".")
-                    newinfoa = ({
-                        "qdt": qdt,
-                        "val": val,
-                        })
-                    array2.append(newinfoa)
-                    print(newinfoa)
-            return array2
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
+        cursor.execute(querys, (month,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R${val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
 
-        return {
-            "response": "true",
-            "message": array,
-            "messages": array2
-        }
+    return { 
+        "response": "true",
+        "messages": array2,
+        "message": array,
+    }
 
 
-#TABELAS FECHAMENTO PARCEIROS - MODAL
+
+#TABELAS FECHAMENTO PARCEIROS - MODAL estou aqui
 def searchNotAtingeClosingPartners(request):
-    month = request.POST.get('month')
     id_medico = request.POST.get('id_user')
-    monthCount = int(datetime.now().strftime("%m"))
-
+    monthCount = request.POST.get('month')
+    monthF = int(datetime.now().strftime("%m"))
+    
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 6 AND b.medico_resp_p = %s"
         cursor.execute(query, (id_medico,))
-        dados = cursor
+        dados = cursor.fetchall()
         arrayNot = []
         for paciente, agendamento, exame in dados:
             newinfoa = ({
@@ -1175,7 +1211,7 @@ def searchNotAtingeClosingPartners(request):
         
         query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 5 AND b.medico_resp_p = %s"
         cursor.execute(query, (id_medico,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for pacienteG, agendamentoG, exameG in dados:
             newinfoa = ({
@@ -1188,7 +1224,7 @@ def searchNotAtingeClosingPartners(request):
 
         query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND b.medico_resp_p = %s"
         cursor.execute(query, (id_medico,))
-        dados = cursor
+        dados = cursor.fetchall()
         arrayAnalise = []
         for pacienteA, agendamentoA, exameA in dados:
             newinfoa = ({
@@ -1199,15 +1235,24 @@ def searchNotAtingeClosingPartners(request):
             arrayAnalise.append(newinfoa)
 
 
-        queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
-        cursor.execute(queryPago, (monthCount, id_medico,))
-        dados = cursor
+     
+        queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
+        if monthCount == "":
+            cursor.execute(queryPago, (monthF, id_medico))
+            print("execute1")
+            print(monthF)
+        else:
+            cursor.execute(queryPago, (monthCount, id_medico))
+            print("execute2")
+
+        dados = cursor.fetchall()
         arrayPago = []
-        for pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
+        for idP, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
             valor_uniP = f"R$ {valor_uniP:_.2f}"
             valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
 
             newinfoa = ({
+                "idP": idP,
                 "pacienteP": pacienteP,
                 "dataColetaP": convertDate(dataColetaP),
                 "dataRepasseP": convertDate(dataRepasseP),
@@ -1215,19 +1260,20 @@ def searchNotAtingeClosingPartners(request):
                 "valor_uniP": valor_uniP,
                 })
             arrayPago.append(newinfoa)
+            
 
-        
+
         query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s "
         params= (
-            monthCount,
+            monthF,
             id_medico,
         )
         cursor.execute(query, params)
-        dados = cursor
+        dados = cursor.fetchall()
         arrayPagoCount = []
         for contagem, valor in dados:
+            valor = float(valor) if valor not in ["", None] else None
             valor = f"R$ {valor:_.2f}"
-            valor if valor not in ["", None] else None
             valorS = valor.replace(".", ",").replace("_", ".")
             newinfoa = ({
                 "contagem": contagem,
@@ -1238,7 +1284,7 @@ def searchNotAtingeClosingPartners(request):
 
         queryOutros = "SELECT id_lead, nome_lead, data_regis_l, status_l FROM customer_refer.leads WHERE medico_resp_l = %s AND status_l NOT LIKE 'Paciente'"
         cursor.execute(queryOutros, (id_medico,))
-        dados = cursor
+        dados = cursor.fetchall()
         arrayOutros = []
         for idlead, pacienteO,  indicacaoO, statusO in dados:
 
@@ -1294,8 +1340,9 @@ def payPartnersVFunction(request):
 #INFOS DO MODAL PARCEIROS
 def SearchInfoFunction(request):
     id_medico = request.POST.get('id_user')
-
+    
     with connections['auth_finances'].cursor() as cursor:
+        
         query = "SELECT b.id, b.nome, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE b.id = %s GROUP BY b.id, b.nome, a.status_partners;"
         cursor.execute(query, (id_medico,))
         dados = cursor.fetchall()
@@ -1308,8 +1355,7 @@ def SearchInfoFunction(request):
                         "status_pagamento": status,
                     },
                 }
-                
-      
+        
             return {
                 "response": False if not dict_response else True,
                 "message": dict_response,
@@ -1320,12 +1366,12 @@ def SearchInfoFunction(request):
 
 #TABELA FECHAMENTO COMERCIAL
 def TableClosingCommercial(request):
-    month = int(datetime.now().strftime("%m"))
+    monthF = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
-        cursor.execute(query, (month,))
-        dados = cursor
-        array = []
+        cursor.execute(query, (monthF,))
+        dados = cursor.fetchall()
+        array = [] 
         for id_comercial, comercial, status, valor in dados:
             valor = f"R$ {valor:_.2f}"
             valor = valor.replace(".", ",").replace("_", ".")
@@ -1338,128 +1384,157 @@ def TableClosingCommercial(request):
             array.append(newinfoa)
         return array
 
-#TABELA FILTRO MES FECHAMENTO COMERCIAL
+
+
+#TABELA FILTRO MES FECHAMENTO COMERCIAL estou aqui
 def FilterMonthClosingCommercial(request):
     month = request.POST.get('month')
+    monthCount = (datetime.now().strftime("%m"))
+    
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT b.nome, a.nome_paciente, a.data_coleta, a.data_repasse, a.valor_uni_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s"
+        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
         cursor.execute(query, (month,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
-        for id_comercial, comercial, status, valor in dados:
-            valor = f"R$ {valor:_.2f}"
-            valor = valor.replace(".", ",").replace("_", ".")
-            newinfoa = ({
-                "id": id_comercial,
-                "nome": comercial,
-                "status": status,
-                "valor": valor
-                })
-            array.append(newinfoa)
-    return {
+        if dados:
+            for idC, comercial, status, valor in dados:
+                valor = (valor) if valor not in ["", None] else None
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "idC": idC,
+                    "comercial": comercial,
+                    "status": status,
+                    "valor": valor,
+                    })
+                array.append(newinfoa)
+            
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
+        cursor.execute(querys, (month,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R${val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+
+    return { 
         "response": "true",
-        "message": array
+        "messages": array2,
+        "message": array,
     }
 
 
-
-#AQUIII
+#estou aqui
 #TABELA FECHAMENTO COMERCIAL - TABELAS
 def searchNotAtingeClosingCommercial(request):
-    month = request.POST.get('month')
     id_comercial = request.POST.get('id_user')
-    monthCount = int(datetime.now().strftime("%m"))
+    month = request.POST.get('month')
+    monthCount = (datetime.now().strftime("%m"))
 
-    with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT a.nome_paciente, a.data_coleta, b.nome FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_finances.completed_exams c ON a.id_agendamento = c.id_agendamento_f INNER JOIN auth_finances.status_progress s ON c.status_exame_f = s.id WHERE a.nome_comercial = %s AND c.status_exame_f = 3"
-        cursor.execute(query, (id_comercial,))
-        dados = cursor
-        arrayPag = []
-        for paciente, agendamento, medicoAA in dados:
+    with connections['auth_finances'].cursor() as cursor:
+        query3 = "SELECT us.resp_comerce, pa.nome_p, us.nome as medico, ex.tipo_exame, ag.data_agendamento FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f WHERE us.resp_comerce = %s AND ff.status_exame_f LIKE 2"
+        cursor.execute(query3, (id_comercial,))
+        dados = cursor.fetchall()
+        ArrayAnalise = []
+
+        for idC, paciente, medico, exame, dataAgemdamento in dados:
             newinfoa = ({
+                "idC": idC,
                 "paciente": paciente,
-                "agendamento": convertDate(agendamento) ,
-                "medicoAA": medicoAA,
+                "medico": medico,
+                "exame": exame,
+                "dataAgemdamento": convertDate(dataAgemdamento) ,
                 })
-            arrayPag.append(newinfoa)
+            ArrayAnalise.append(newinfoa)
         
-        query = "SELECT a.nome_paciente, a.data_coleta, b.nome, s.status_p FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_finances.completed_exams c ON a.id_agendamento = c.id_agendamento_f INNER JOIN auth_finances.status_progress s ON c.status_exame_f = s.id WHERE a.nome_comercial = %s AND c.status_exame_f = 5 AND c.status_exame_f = 6"
-        cursor.execute(query, (id_comercial,))
-        dados = cursor
-        arrayG = []
-        for pacienteG, agendamentoG, medicoG, status in dados:
+        query4 = "SELECT us.resp_comerce, pa.nome_p, us.nome as medico, ex.tipo_exame, ag.data_agendamento, st.status_p FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f INNER JOIN auth_finances.status_progress st ON st.id = ff.status_exame_f WHERE us.resp_comerce = %s AND ff.status_exame_f LIKE 6 OR ff.status_exame_f LIKE 5"
+        cursor.execute(query4, (id_comercial,))
+        dados = cursor.fetchall()
+        Glosa = []
+        for idC, paciente, medico, exame, agendamento, status in dados:
             newinfoa = ({
-                "pacienteG": pacienteG,
-                "agendamentoG": convertDate(agendamentoG) ,
-                "medicoG": medicoG,
-                "status": status,
+                "idC": idC,
+                "paciente": paciente,
+                 "medico": medico,
+                "exame": exame,
+                "agendamento": convertDate(agendamento) ,
+                "status": status ,
                 })
-            arrayG.append(newinfoa)
+            Glosa.append(newinfoa)
 
+        
+        queryP = "SELECT a.nome_comercial, a.nome_paciente, med.nome, a.data_coleta, a.data_repasse, a.exame, a.valor_comercial FROM  auth_finances.closing_finance a INNER JOIN auth_users.users med ON a.nome_medico = med.id WHERE a.nome_comercial LIKE %s AND MONTH(a.data_repasse) = %s"
+        if month == "":
+            cursor.execute(queryP, (id_comercial, monthCount))
+            print("execute1")
+        else:
+            cursor.execute(queryP, (id_comercial, month))
+            print("execute2")
 
-        query = "SELECT a.nome_paciente, a.data_coleta, b.nome FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_finances.completed_exams c ON a.id_agendamento = c.id_agendamento_f WHERE a.nome_comercial = %s AND c.status_exame_f = 2"
-        cursor.execute(query, (id_comercial,))
-        dados = cursor
-        arrayAnalise = []
-        for pacienteA, agendamentoA, medicoA in dados:
-            newinfoa = ({
-                "pacienteA": pacienteA,
-                "agendamentoA": convertDate(agendamentoA) ,
-                "medicoA": medicoA,
-                })
-            arrayAnalise.append(newinfoa)
-
-
-        queryPago = "SELECT a.nome_paciente, b.nome, a.data_coleta, a.data_repasse, a.valor_comercial FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s AND a.nome_comercial = %s"
-        cursor.execute(queryPago, (monthCount, id_comercial,))
-        dados = cursor
+        dados = cursor.fetchall()
+        print("id_comercial", id_comercial)
+        print("monthCount", monthCount)
         arrayPago = []
-        for pacienteP,  medicoP, dataColetaP, dataRepasseP, valor_uniP in dados:
-            valor_uniP = f"R$ {valor_uniP:_.2f}"
-            valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
-
+        for idC, paciente, medico, dataColeta, dataRepasse, exame, valor_uni in dados:
+            valor_uni = f"R$ {valor_uni:_.2f}"
+            valor_uni = valor_uni.replace(".", ",").replace("_", ".")
+            print(valor_uni)
             newinfoa = ({
-                "pacienteP": pacienteP,
-                "dataColetaP": convertDate(dataColetaP),
-                "dataRepasseP": convertDate(dataRepasseP),
-                "medicoP": medicoP,
-                "valor_uniP": valor_uniP,
+                "idC": idC,
+                "paciente": paciente,
+                "medico": medico,
+                "dataColeta": convertDate(dataColeta),
+                "dataRepasse": convertDate(dataRepasse),
+                "exame": exame,
+                "valor_uni": valor_uni,
                 })
             arrayPago.append(newinfoa)
+    
 
+        query5 = "SELECT us.resp_comerce, ll.nome_lead, us.nome, ll.data_regis_l, ll.status_l FROM customer_refer.leads ll INNER JOIN auth_users.users us ON ll.medico_resp_l = us.id WHERE us.resp_comerce LIKE %s AND status_l NOT LIKE 'Paciente' ORDER BY ll.data_regis_l DESC"
+        cursor.execute(query5, (id_comercial,))
+        dados = cursor.fetchall()
+        Outros = []
+        for idC, paciente, medico, dataIndicacao, status in dados:
+            newinfoa = ({
+                "idC": idC,
+                "paciente": paciente,
+                "medico": medico,
+                "dataIndicacao": convertDate(dataIndicacao) ,
+                "status": status,
+                })
+            Outros.append(newinfoa)
         
-        query = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total FROM auth_finances.closing_finance WHERE valor_comercial != 0 AND MONTH(data_repasse) LIKE %s AND nome_comercial = %s "
-        params= (
-            monthCount,
-            id_comercial,
-        )
-        cursor.execute(query, params)
-        dados = cursor
-        arrayPagoCount = []
+        
+    #----------------------------- aqui
 
-        for contagem, valor in dados:
-            valor = f"R$ {valor:_.2f}"
-            valorS = valor.replace(".", ",").replace("_", ".")
-            newinfoa = {
-                "contagem": contagem,
-                "valor": valorS,
-                }
-            arrayPagoCount.append(newinfoa)
 
     return {
         "response": "true",
-        "message": arrayG,
-        "message2": arrayPag,
-        "messageAnalise": arrayAnalise,
-        "messagePago": arrayPago,
-        "messageCount": arrayPagoCount,
+        "Glosa": Glosa,
+        "ArrayAnalise": ArrayAnalise,
+        "arrayPago": arrayPago,
+        "Outros": Outros,
     }
+
+
+
+
+
 
 
 
 
 def SearchInfoCommercialFunction(request):
     id_comerical = request.POST.get('id_user')
+    print(id_comerical)
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT b.id, b.nome, a.status_comercial FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE b.id = %s GROUP BY b.id, b.nome, a.status_comercial;"
         cursor.execute(query, (id_comerical,))
@@ -1600,11 +1675,11 @@ def fetchFileInt(id):
 
 #TABELA FECHAMENTO INTERNO
 def TableClosingInt(request):
-    month = int(datetime.now().strftime("%m"))
+    month = request.POST.get('month')
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse)"
         cursor.execute(query, (month,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for id_comercial, comercial, status, valor in dados:
             valor = f"R$ {valor:_.2f}"
@@ -1624,7 +1699,7 @@ def TableClosingIntFilter(request):
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse)"
         cursor.execute(query, (month,))
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for id_comercial, comercial, status, valor in dados:
             valor = f"R$ {valor:_.2f}"
@@ -1660,7 +1735,7 @@ def SearchFinanceInt(request):
         if perfil == "7":
             queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
             cursor.execute(queryPago, (monthCount, id_usuario,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             if dados in ["", None]:
                 {"response": "true", "message": []}
@@ -1681,7 +1756,7 @@ def SearchFinanceInt(request):
         elif perfil == "6": 
             queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_comercial FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
             cursor.execute(queryPago, (monthCount, id_usuario,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
                 valor_uniP = f"R$ {valor_uniP:_.2f}"
@@ -1698,7 +1773,7 @@ def SearchFinanceInt(request):
         else:
             queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
             cursor.execute(queryPago, (monthCount, id_usuario,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
                 valor_uniP = f"R$ {valor_uniP:_.2f}"
@@ -1733,7 +1808,7 @@ def SearchFinanceIntAgendado(request):
         if perfil == "7":
             query = "SELECT a.nome_p, b.nome_p, data_agendamento, c.tipo_exame, b.status FROM customer_refer.patients a INNER JOIN auth_agenda.collection_schedule b ON a.id_p = b.nome_p INNER JOIN admins.exam_type c ON c.id = b.tp_exame WHERE  NOT b.status LIKE  'Cancelado' AND NOT b.status LIKE 'Concluído' AND a.medico_resp_p = %s;"
             cursor.execute(query, (id_usuario,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteA, agendamentoA, exameA in dados:
                 newinfoa = ({
@@ -1746,7 +1821,7 @@ def SearchFinanceIntAgendado(request):
         elif perfil == "6": 
             query = "SELECT a.nome_p,  data_agendamento, c.tipo_exame, b.status FROM customer_refer.patients a INNER JOIN auth_agenda.collection_schedule b ON a.id_p = b.nome_p INNER JOIN admins.exam_type c ON c.id = b.tp_exame WHERE  NOT b.status LIKE  'Cancelado' AND NOT b.status LIKE 'Concluído' AND b.resp_comercial = %s;"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteA, agendamentoA, exameA,statusAG in dados:
                 newinfoa = ({
@@ -1761,7 +1836,7 @@ def SearchFinanceIntAgendado(request):
         else:
             query = "SELECT a.nome_p, data_agendamento, c.tipo_exame, b.status FROM customer_refer.patients a INNER JOIN auth_agenda.collection_schedule b ON a.id_p = b.nome_p INNER JOIN admins.exam_type c ON c.id = b.tp_exame WHERE  NOT b.status LIKE  'Cancelado' AND NOT b.status LIKE 'Concluído' AND b.resp_comercial = %s;"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteAG, agendamentoAG, exameAG, statusAG in dados:
                 newinfoa = ({
@@ -1792,7 +1867,7 @@ def SearchFinanceIntGlosa(request):
         if perfil == "7":
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame, e.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f INNER JOIN auth_finances.status_progress e ON d.status_exame_f = e.id WHERE d.status_exame_f = 5 AND d.status_exame_f = 6 OR b.medico_resp_p = %s"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteG, agendamentoG, exameG, statusG in dados:
                 newinfoa = ({
@@ -1807,7 +1882,7 @@ def SearchFinanceIntGlosa(request):
         elif perfil == "6": 
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame, e.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f INNER JOIN auth_finances.status_progress e ON d.status_exame_f = e.id WHERE d.status_exame_f = 5 OR d.status_exame_f = 6 AND a.resp_comercial = %s;"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteG, agendamentoG, exameG, statusG in dados:
                 newinfoa = ({
@@ -1821,7 +1896,7 @@ def SearchFinanceIntGlosa(request):
         else:
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame, e.status_p FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f INNER JOIN auth_finances.status_progress e ON d.status_exame_f = e.id WHERE d.status_exame_f = 5 OR d.status_exame_f = 6 AND a.resp_comercial = %s"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteG, agendamentoG, exameG, statusG in dados:
                 newinfoa = ({
@@ -1837,7 +1912,7 @@ def SearchFinanceIntGlosa(request):
 
 
 
-
+ 
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitAnalise(request):
     with connections['auth_users'].cursor() as cursor:
@@ -1855,7 +1930,7 @@ def ClosingUnitAnalise(request):
         if perfil == "7":
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND b.medico_resp_p = %s"
             cursor.execute(query, (id_usuario,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteA, agendamentoA, exameA in dados:
                 newinfoa = ({
@@ -1869,7 +1944,7 @@ def ClosingUnitAnalise(request):
         elif perfil == "6": 
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND a.resp_comercial = %s"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteA, agendamentoA, exameA in dados:
                 newinfoa = ({
@@ -1882,7 +1957,7 @@ def ClosingUnitAnalise(request):
         else:
             query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND a.resp_comercial = %s"
             cursor.execute(query, (nome,))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for pacienteA, agendamentoA, exameA in dados:
                 newinfoa = ({
@@ -1915,7 +1990,7 @@ def ClosingUnitResult(request):
             
             query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
             cursor.execute(query, (monthCount, id_usuario, ))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:
                 if valor not in ["", None]:
@@ -1931,7 +2006,7 @@ def ClosingUnitResult(request):
         elif perfil == "6": 
             query = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
             cursor.execute(query, (monthCount, id_usuario, ))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:
                 if valor not in ["", None]:
@@ -1946,7 +2021,7 @@ def ClosingUnitResult(request):
         else:
             query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
             cursor.execute(query, (monthCount, id_usuario, ))
-            dados = cursor
+            dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:
                 if valor not in ["", None]:
@@ -1963,21 +2038,24 @@ def ClosingUnitResult(request):
 
 
 
-def valTotalPartinersF(request):
+#VALOR TOTAL FECHAMENTO DOS PARCEIROS
+def valTotalCommercialFunction(request):
     monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        querys = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE  MONTH(data_repasse) LIKE %s"
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
         cursor.execute(querys, (monthCount,))
         dados = cursor.fetchall()
         array2 = []
         if dados:
-            for qdt, val in dados:
-                val = f"R$ {val:_.2f}"
+            for qdt, val, mes in dados:
+                val = f"R${val:_.2f}"
                 val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdt,
                     "val": val,
+                    "mes": mes,
                     })
                 array2.append(newinfoa)
-                print(newinfoa)
         return array2
+
+

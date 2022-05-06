@@ -33,6 +33,7 @@ from functions.general.decorator import convertDate, checkDayMonth, fetchQueryUn
 from auth_finances.functions.exams.models import FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
 from django.conf import settings
 from django.core.files.storage import default_storage
+from auth_permissions.functions.decorator import allowPermission, json_without_success
 
 
 #FUNCTION FORMATAR CPF
@@ -107,7 +108,6 @@ def CadastreUser(request):
             query = "INSERT INTO `auth_users`.`users` (`id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '', '', %s, '', 'Ativo', '193', %s, %s, '400.00', NULL, NULL);"
             cursor.execute(query, param)
             id_user = cursor.lastrowid
-            print(param)
         #AUTENTICAÇÃO E CRIAÇÃO DE LOGIN E SENHA  aqui user   
         if User.objects.filter(username=cpf).exists():
             user = User.objects.get(username=cpf)
@@ -120,7 +120,7 @@ def CadastreUser(request):
          
         #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
         arrayPermission = { 
-            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48' ],  #ADMINISTRADOR
+            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48', '49' ],  #ADMINISTRADOR
             "2": ['11', '14', '22', '20', '21', '9', '8', '12', '4', '18', '23', '48'], #ATENDIMENTO (RETIRAR ALGUMAS PERMISSOES)
             "3": ["46", "16", '48'], #ENFERMAGEM
             "5": ['32','31', '26', '42', '41','39', '40', '25', '44','45', '47', '48' ], #FINANCEIRO
@@ -200,7 +200,7 @@ def CadastrePartners(request):
             return {"response": "true", "message": "NC já cadastrado em sistema!"}
         else:
             param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,id_usuario, data_atual, unity, padraoC, porcentagemC, fixoC,)
-            print(param)
+            
 
             query = "INSERT INTO `auth_users`.`users` ( `id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, '7', '', %s, NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', 'Ativo', %s, %s, %s, %s, %s,%s);"
             cursor.execute(query, param)
@@ -312,11 +312,15 @@ def searchCategoria(request):
 def error(request):
     raise PermissionDenied()
 
+@csrf_exempt
+def errors(request):
+    response = HttpResponse('Você não possui permissão.')
+    return response
+
 
 #FUNCTIONS PERMISSOES
 def allowPage(request, idPermission):
     login_usuario = request.user.username
-   
     with connections['auth_permissions'].cursor() as cursor:
         query = "SELECT ap_allow.id FROM auth_permissions.auth_permissions_allow ap_allow INNER JOIN auth_users.users u ON u.id = ap_allow.id_user INNER JOIN auth_permissions.permissions_id p_i ON p_i.id = ap_allow.id_permission WHERE u.login = %s AND p_i.id_description = %s"
         params = (login_usuario, idPermission,)
@@ -324,7 +328,7 @@ def allowPage(request, idPermission):
         dados = cursor.fetchall()
         if dados:
             return True
-             
+        
     return False
 
 #SELECT ENFERMEIROS
@@ -760,6 +764,9 @@ def searchUsers(request):
 
 #CHANGE STATUS > ativa e desativa
 def ApiChangeStatusFunction(request):
+    if not allowPermission(request, "editPartners"):
+        return json_without_success("Você não possui permissão.")
+
     dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
 
     try:
@@ -904,7 +911,7 @@ def searchPartiners(request):
                 "message": array2
             }
 
-#SELECT TABELA PARCEIROS
+#SELECT TABELA PARCEIROS estou aqui2
 def TabelaPartners(request):
     with connections['auth_permissions'].cursor() as cursor:
         query = "SELECT  a.id, a.nome, a.rn, c.categoria, rc.nome, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s"
@@ -966,10 +973,13 @@ def TabelaPartnersUnit(request):
     
 
 
-#MODAL PARCEIROS aquiu
+#MODAL PARCEIROS estou aqui
 def ApiViewDataPartnersModalFunction(request):
-    dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
+    if not allowPermission(request, "editPartners"):
+        return json_without_success("Você não possui permissão.")
 
+    dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
+    
     try:
         id_user = int(request.POST.get('id_user'))
     except:
@@ -977,7 +987,6 @@ def ApiViewDataPartnersModalFunction(request):
             "response": False,
             "message": "Nenhum usuário encontrado com este id."
         }
-    print(id_user)
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
     db.table = "auth_users.users p" #VAR COM CONEEXAO TAVLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
@@ -985,56 +994,56 @@ def ApiViewDataPartnersModalFunction(request):
     dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo"], True)
 
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-            for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo in dados:
-                try:
-                    val_padrao = f"R$ {val_padrao:_.2f}"
-                    val_padrao = val_padrao.replace(".", ",").replace("_", ".")
-                except:
-                    pass
-                try:
-                    val_porcentagem = val_porcentagem / 100
-                    val_porcentagem = f" {val_porcentagem:.0%}"
-                    val_porcentagem = val_porcentagem.replace(".", ",").replace("_", ".")
-                except:
-                    pass  
-                        
-                try:
-                    val_fixo = f"R$ {val_fixo:_.2f}"
-                    val_fixo = val_fixo.replace(".", ",").replace("_", ".")
-                except:
-                    pass
-        
-
-            dict_response = { #VARIAVEL COM OS DICTS
-                "personal": {
-                    "name": p_nome,
-                    "rn": p_rn,
-                    "categoria": p_categoria,
-                },
-                "contacts": {
-                    "email": p_email,
-                    "phone": p_tel1,
-                    "phone_aux": p_tel2,
-                },
-                "address": {
-                    "zipcode": p_cep,
-                    "street": p_rua,
-                    "street_number": p_numero,
-                    "complement": p_complemento,
-                    "district": p_bairro,
-                    "city": p_city,
-                    "state": p_uf,
-                }, 
-                "obs": {
-                    "obs": p_obs,
-                }, 
-                 "finances": {
-                    "val_padrao": val_padrao,
-                    "val_porcentagem": val_porcentagem,
-                    "val_fixo": val_fixo,
-                }, 
-            } #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS
+        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo in dados:
+            try:
+                val_padrao = f"R$ {val_padrao:_.2f}"
+                val_padrao = val_padrao.replace(".", ",").replace("_", ".")
+            except:
+                pass
+            try:
+                val_porcentagem = val_porcentagem / 100
+                val_porcentagem = f" {val_porcentagem:.0%}"
+                val_porcentagem = val_porcentagem.replace(".", ",").replace("_", ".")
+            except:
+                pass  
+                    
+            try:
+                val_fixo = f"R$ {val_fixo:_.2f}"
+                val_fixo = val_fixo.replace(".", ",").replace("_", ".")
+            except:
+                pass
     
+
+        dict_response = { #VARIAVEL COM OS DICTS
+            "personal": {
+                "name": p_nome,
+                "rn": p_rn,
+                "categoria": p_categoria,
+            },
+            "contacts": {
+                "email": p_email,
+                "phone": p_tel1,
+                "phone_aux": p_tel2,
+            },
+            "address": {
+                "zipcode": p_cep,
+                "street": p_rua,
+                "street_number": p_numero,
+                "complement": p_complemento,
+                "district": p_bairro,
+                "city": p_city,
+                "state": p_uf,
+            }, 
+            "obs": {
+                "obs": p_obs,
+            }, 
+                "finances": {
+                "val_padrao": val_padrao,
+                "val_porcentagem": val_porcentagem,
+                "val_fixo": val_fixo,
+            }, 
+        } #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS
+
     return {
         "response": False if not dict_response else True,
         "message": dict_response #RETORNO DO MENSSAGE COM O DICT 
@@ -1080,63 +1089,66 @@ def ApiChangeStatusConvenioFunction(request):
 
 #UPDATE PARCEIROS E USUARIO INTERNO
 def ApiChangeUsersModalFunction(request):
-    bodyData = request.POST #var para não precisar fazer tudo um por um
+    if not allowPermission(request, "editPartners"):
+        #return json_without_success("Permissão negada")
 
-    id_user = bodyData.get('id_user')
-    padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
-    porcentagem = bodyData.get('porcentagem').replace("%", "")
-    fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "")
+        bodyData = request.POST #var para não precisar fazer tudo um por um
+
+        id_user = bodyData.get('id_user')
+        padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
+        porcentagem = bodyData.get('porcentagem').replace("%", "")
+        fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "")
 
 
-    dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
-        "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
-        "cpf": "cpf",
-        "name": "nome",
-        "date_nasc": "data_nasc",
-        "email": "email",
-        "tel1": "tel1",
-        "tel2": "tel2",
-        "zipcode": "cep",
-        "addres": "rua",
-        "number": "numero",
-        "complement": "complemento",
-        "district": "bairro",
-        "city": "city",
-        "uf": "uf",
-        "rn": "rn",
-        "categoria": "categoria",
-        "obs": "obs",  
-    }
+        dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
+            "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
+            "cpf": "cpf",
+            "name": "nome",
+            "date_nasc": "data_nasc",
+            "email": "email",
+            "tel1": "tel1",
+            "tel2": "tel2",
+            "zipcode": "cep",
+            "addres": "rua",
+            "number": "numero",
+            "complement": "complemento",
+            "district": "bairro",
+            "city": "city",
+            "uf": "uf",
+            "rn": "rn",
+            "categoria": "categoria",
+            "obs": "obs",  
+        }
 
-    padrao = float(padrao) if padrao not in ["", None] else None
-    porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
-    fixo = float(fixo) if fixo not in ["", None] else None
- 
-    db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    cursor = db.connection()
+        padrao = float(padrao) if padrao not in ["", None] else None
+        porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
+        fixo = float(fixo) if fixo not in ["", None] else None
 
-    for key in dataKeys:
+        db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
+        cursor = db.connection()
 
-        try:
-            if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
-                query = "UPDATE auth_users.users SET {} = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
-                params = (
-                    bodyData.get(key), #serve para complementar o POST e obter o valor do input
-                    padrao,
-                    porcentagem,
-                    fixo,
-                    id_user,
-                )
-                cursor.execute(query, params)
-                print(query)
-        except:
-            if key in bodyData:
-                query = "UPDATE auth_users.users SET {} = %s WHERE id = %s ".format(dataKeys[key])
-                params = (
-                    bodyData.get(key),
-                    id_user,
-                )
-                cursor.execute(query)
+        for key in dataKeys:
+
+            try:
+                if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
+                    query = "UPDATE auth_users.users SET {} = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
+                    params = (
+                        bodyData.get(key), #serve para complementar o POST e obter o valor do input
+                        padrao,
+                        porcentagem,
+                        fixo,
+                        id_user,
+                    )
+                    cursor.execute(query, params)
+                    
+            except:
+                if key in bodyData:
+                    query = "UPDATE auth_users.users SET {} = %s WHERE id = %s ".format(dataKeys[key])
+                    params = (
+                        bodyData.get(key),
+                        id_user,
+                    )
+                    cursor.execute(query)
     return {
         "response": True,
         "message": "Dados atualizados com sucesso."
@@ -1368,7 +1380,7 @@ def ApiViewDataPatientsModalFunction(request):
     db.condition = "WHERE a.id_p = %s" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
     dados = db.fetch(["a.id_p, a.id_l_p, a.cpf_p, a.nome_p, a.email_p, a.data_nasc_p, a.tel1_p, a.tel2_p, a.cep_p, a.rua_p, a.numero_p, a.complemento_p, a.bairro_p, a.cidade_p, a.uf_p, b.id, d.nome, e.nome, a.obs, a.login_conv, a.senha_conv"], True)
-    print(id_user)
+   
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
         for id_p, id_l_p, cpf_p, nome_p, email_p, data_nasc_p, tel1_p, tel2_p, cep_p, rua_p, numero_p, complemento_p, bairro_p, cidade_p, uf_p, id, nome_m, nome_a, obs_a, login_a, senha_a  in dados:
             dict_response = { #VARIAVEL COM OS DICTS
@@ -1716,7 +1728,6 @@ def FunctionStatusAgendaConc(request):
     id = request.POST.get("id")
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
    
-    print(id)
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -2542,7 +2553,6 @@ def CountAgendamentsCFunction(request):
 #CONTAGEM AGENDAMENTOS > ATRASADOS  
 def CountAgendamentAtrasadosFunction(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d"))
-    print(date_create)
     with connections['customer_refer'].cursor() as cursor:
         query = "SELECT COUNT(id)  FROM auth_agenda.collection_schedule WHERE status = 'Pendente' AND data_agendamento < %s"
         cursor.execute(query, (date_create,))
@@ -2713,7 +2723,7 @@ def searchScheduledPickupInt(request):
             array.append(newinfoa)
     return array 
 
-#MODAL COLETA AGENDADA INTERNA estou aqui
+#MODAL COLETA AGENDADA INTERNA
 def SearchModalScheduledInt(request):
     id = request.POST.get('id_user')
 
@@ -2721,7 +2731,6 @@ def SearchModalScheduledInt(request):
         params = (
             id,
         )
-        print(params)
         query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, e.nome, np.nome, a.tel1_p, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, uni.unit_s , a.perfil_int FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN auth_users.users np ON a.nome_p = np.id INNER JOIN admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE a.id = %s "
         cursor.execute(query, params)
         dados = cursor.fetchall()
@@ -2836,7 +2845,6 @@ def SearchMonthIntFunction(request):
                 "status": a_status_int,
                 })
             array.append(newinfoa)
-        print(array)
     return array 
 
 
@@ -2892,9 +2900,6 @@ def searchRouteNurse(request):
     amanha = date.today() + timedelta(days=1)
 
 
-    print(hoje)
-    print(amanha)
-
     with connections['customer_refer'].cursor() as cursor:
         searchID = "SELECT a.perfil, a.id, a.nome, a.unity FROM auth_users.users a INNER JOIN admins.units_shiloh b ON a.unity = b.id_unit_s WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -2943,7 +2948,6 @@ def searchRouteNurse(request):
 #COLETA EM ANDAMENTO
 def IniciarColetaFunction(request):
     id = request.POST.get("id")
-    print(id)
     with connections['auth_users'].cursor() as cursor:
         query = "UPDATE auth_agenda.collection_schedule SET status = 'Em Andamento' WHERE id = %s;"
         cursor.execute(query, (id,))
@@ -2968,8 +2972,7 @@ def iInfoLog(request):
                         "nomeLog": nomeLog,
                         "unity": unity,
                     },
-                }
-                print(dict_response)    
+                }   
             return {
                 "response": False if not dict_response else True,
                 "message": dict_response
@@ -2981,8 +2984,6 @@ def iInfoLog(request):
 def StatusNegative(request):
     checkbox = request.POST.get("checkbox")
     id_lead = request.POST.get("id_lead")
-    print(id_lead) 
-    print(checkbox) 
     with connections['auth_users'].cursor() as cursor:
         query = "UPDATE `customer_refer`.`leads` SET `status_l` = %s WHERE (`id_lead` = %s);"
         cursor.execute(query, (checkbox, id_lead,))
@@ -3027,8 +3028,6 @@ def SearchStatusLeadFilterFunction(request):
         cursor.execute(query, (unity, statusL,))
         dados = cursor
         array = []
-        print(unity)
-        print(statusL)
         for id, nome, telefone, data, medico_resp, unity, status in dados:
             dataFormatada = datetime.strptime(str(data), "%Y-%m-%d").strftime("%d/%m/%Y") if data not in ["", None] else ""
             newinfoa = ({
@@ -3041,7 +3040,6 @@ def SearchStatusLeadFilterFunction(request):
                 "status": status,
                 })
             array.append(newinfoa)
-            print(newinfoa)
     return {
         "response": True,
         "message": array

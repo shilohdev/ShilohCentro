@@ -87,7 +87,7 @@
          <!--CORPO DO MODAL-->
          <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
             <div class="container">
-               <div class="card" >
+               <div class="card">
                   <div class="card-content" style="margin-top: -40px; background-color: #581848;" >
                      <h5 class="corfont" style="color:white">ATUALIZAR PARCEIRO</h5>
                   </div>
@@ -320,7 +320,7 @@
                      <td style="text-align: center;">{{ k.unity }}</td>
                      <td style="text-align: center;">{{ k.status }}</td>
                      <td style="text-align: center;">
-                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                        <a id="btn_edit" href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
                               <i class="material-icons right">edit</i>
                            </button>
@@ -391,14 +391,21 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
    };
-   
-   $("#modal2").hide();
-      $(object).prop("disabled", true);      
+
+      $("#modal2").hide();
+      $(object).prop("disabled", true);
+
    fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
-         alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         
+         $("#modal1").hide();
+         alert(re["message"]);// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         location.reload();
+
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          $("#modal2").show();
+         $("#btn_edit").attr("href", "#modal1");
+
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
          var dictKeys = {
             "name": key["personal"]["name"],
@@ -419,6 +426,7 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
 
             "obs": key["obs"]["obs"]
          }
+
          
          $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n);
@@ -447,7 +455,7 @@ function changeStatusUser(object){
 
    fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
-         alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         alert(re["message"]);
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
          $(`#tr_${id_user} > td`).eq(2).text(key["status"]);
@@ -455,6 +463,7 @@ function changeStatusUser(object){
          )
       }
    });
+
 }
 
 
@@ -471,7 +480,7 @@ function changeUserModal(object){
 
    fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
-         alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         alert(re["message"]);// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       } 
       else { //SE FOR VERDADDEIRA, PROSSEGUE
             alert(re["message"]);

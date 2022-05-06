@@ -27,7 +27,7 @@ def csrf_failure(request, reason=""):
 #PÁGINA CONCEDER PERMISSÕES
 def setPermissionViews(request):
     if allowPage(request, "insert_permission") == False:
-        return error(request)
+        return 0
 
     searchPermissions = fetchPermissions()
     searchUsers = fetchUsers()

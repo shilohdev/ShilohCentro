@@ -143,6 +143,7 @@ INSTALLED_APPS = [
     'auth_users',
     'functions',
     'auth_finances',
+    'auth_permissions',
 ]
 
 MIDDLEWARE = [
