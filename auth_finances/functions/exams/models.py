@@ -36,7 +36,6 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 import re
 
-
 class FinancesExams:
     def __init__(self) -> None:
         self.cursor = Connection('userdb', '', '', '', '').connection()
