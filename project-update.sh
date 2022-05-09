@@ -10,6 +10,7 @@ cd
 cd /usr/local/shilohcentro
 sudo rm -rf auth_access
 sudo rm -rf auth_users
+sudo rm -rf auth_permission
 sudo rm -rf initialize
 sudo rm -rf shiloh
 sudo rm -rf static
