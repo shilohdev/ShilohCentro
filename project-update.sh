@@ -17,7 +17,6 @@ sudo rm -rf accounts
 sudo rm -rf auth_finances
 sudo rm -rf functions
 sudo rm -rf templates
-mkdir usr/local/project/ShilohCentro/auth_permissions
 sudo mv /usr/local/project/ShilohCentro/auth_access /usr/local/shilohcentro
 sudo mv /usr/local/project/ShilohCentro/auth_users /usr/local/shilohcentro
 sudo mv /usr/local/project/ShilohCentro/initialize /usr/local/shilohcentro
