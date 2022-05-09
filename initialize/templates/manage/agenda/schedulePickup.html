@@ -287,9 +287,15 @@ Realize um agendamento
             var val_pago = $("#val_pago").val();
             var obs = $("#obs").val();
 
-      
+            var str = "31/12/2000";
+            var date = new Date(str.split('/').reverse().join('/'));
+            var novaData = new Date();
+            if(date < novaData){
+            alert("Data de agendamento inválida.")
+            return false;
+            } 
 
-         //VALIDAÇÃO DE CAMPO NULL
+            //VALIDAÇÃO DE CAMPO NULL
             var i = 0;
             $("#userint input[data-required='true'], #userint select[data-required='true']").each(function(){
                if( $(this).val() == "" ){

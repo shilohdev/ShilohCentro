@@ -569,7 +569,7 @@ def FinalizeProcessFunction(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     id_agendamento = request.POST.get("id_user")
     statusProgresso = request.POST.get("statusProgresso")
-    ValorPago = request.POST.get("ValorPago")
+    ValorPago = request.POST.get("ValorPago").replace("R$","").replace(".","").replace(",",".")
     doctor = request.POST.get("doctor")
     paciente = request.POST.get("paciente")
     comercial = request.POST.get("comercial")
@@ -601,13 +601,25 @@ def FinalizeProcessFunction(request):
         )
         cursor.execute(query2, params2)
 
+
+        queryVerif = "SELECT id, id_agendamento FROM auth_finances.closing_finance WHERE id_agendamento LIKE %s "
+        cursor.execute(queryVerif, (id_agendamento,))
+        dados = cursor.fetchall()
+        if dados: 
+            for id, id_agendamento in dados:
+                return {
+                "response": "true",
+                "message": "Processo de reembolso já finalizado."
+            }
+        else:
+            pass
+
         if statusProgresso == '4':
             print(statusProgresso)
             queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
             paramsVal = (
                 doctor,
             )
-            print(paramsVal)
             cursor.execute(queryVal, paramsVal)
             dadosMEDICO = cursor.fetchall()
 
@@ -630,30 +642,30 @@ def FinalizeProcessFunction(request):
                         })
                     array2.append(newinfoa)
                 
-                    if perfil == 7:
+                    if perfil == '7':
                         if val_porcentagem:
                         
                             val_porcentagem = float(val_porcentagem)
                             ValorPago = float(ValorPago)
-                            porcentagem = float(val_porcentagem / 100) * ValorPago
+                            porcentagem = float(val_porcentagem / 100) * float(ValorPago)
                             porcentagem = f'{porcentagem:.2f}'
 
                             queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = porcentagem * 0.10
+                            val_comercial = float(porcentagem) * float(0.10)
                             paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
                             cursor.execute(queryFinance, paramsFinance)
                     
                         elif val_padrao:
-                            val_padrao = val_padrao
+                            val_padrao = float(val_padrao)
                             queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = val_padrao * 0.10
+                            val_comercial = float(val_padrao) * float(0.10)
                             paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
                             cursor.execute(queryFinance, paramsFinance)
                         
                         else:
-                            val_fixo = val_fixo
+                            val_fixo = float(val_fixo)
                             queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = val_fixo * 0.10
+                            val_comercial = float(val_fixo) * float(0.10)
                             paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
                             cursor.execute(queryFinance, paramsFinance)
                     else:
@@ -1094,7 +1106,8 @@ def TableClosingPartners(request):
     month = int(datetime.now().strftime("%m"))
 
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_comercial != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
+        #query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_comercial != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
+        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_uni_partners != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
         cursor.execute(query, (month,))
         dados = cursor.fetchall()
         array = []
@@ -1115,8 +1128,7 @@ def TableClosingPartners(request):
                     "status": status,
                     })
                 array.append(newinfoa)
-           
-    return array
+        return array
 
 #VALOR TOTAL FECHAMENTO DOS PARCEIROS
 def valTotalPartinersF(request):

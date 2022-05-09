@@ -516,13 +516,22 @@ function changeStatusUser(object){
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
          $(`#tr_${id_user} > td`).eq(4).text(key["status"]);
-         $(`#btn_status_${id_user}`).css("background-color", key["btn_status"]
-         )
-      }
-   });
+         $(`#btn_status_${id_user}`).css("background-color", key["btn_status"])
+         }
+      });
    }
 
 function changeUserModal(object){
+   //validação dofinanceiro
+   var val_p_fixo = $("#val_p_fixo").val();
+   var checkbox_porcentagem = $("#val_p").val();
+   var checkbox_fixo = $("#val_fixo").val();
+   if(val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo ==""){
+      alert("Por favor, insira um valor válido ao Financeiro.")
+      return false
+
+   }else{
+
    $("#btn_atualizar").attr("disabled", true);   
 
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
@@ -549,11 +558,9 @@ function changeUserModal(object){
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          alert(re["message"]);
          location.reload();
-
-      }
-      
-   });
-
+         }
+      });
+   }
 }
 
 function searchPatients(object){

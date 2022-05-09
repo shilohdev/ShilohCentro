@@ -732,27 +732,25 @@ console.log(formpost)
    });
 }
 
-
 function searchPatients(object){
-      var e = $(object).val().toUpperCase();
-      if(e == ""){
-         $('#tb_append > tr').each(function() {
-               $(this).show();
-         });
-      } else {
-         $('#tb_append > tr').each(function() {
-            var trs = $(this).find("td");
-            var tr1 = $(trs[0]).text().toUpperCase();
-               var check = (tr1.indexOf(e) != -1);
-               if(check == true){
-                  $(this).show();
-               } else {
-                  $(this).hide();
-               }
-         });
-      }
-   }
-
+   var e = $(object).val().toUpperCase();
+    if(e == ""){
+        $('#tb_append > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append > tr').each(function() {
+           var trs = $(this).find("td");
+           var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if(check == true){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+}
 
 
 //FUNCTION CONCLUIR
@@ -843,7 +841,7 @@ function anxDoc(object){
     });
 
 }
-   
+
 
 </script>
 {% endblock %}

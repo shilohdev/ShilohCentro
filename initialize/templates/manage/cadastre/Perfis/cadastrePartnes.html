@@ -17,7 +17,7 @@ Acompanhe as últimas notícias!
    color: #641108;
    font-weight: bold;
    }
-</style>
+</style> 
 
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
 <div class="container">
@@ -220,9 +220,22 @@ function SelectShow() {
    if(i == 1){
       return false;
    }
-   var val_p_fixo = $("#val_p_fixo").val();
-   var checkbox_porcentagem = $("#val_p").val();
-   var checkbox_fixo = $("#val_fixo").val();
+
+
+
+      //validação dofinanceiro
+      var val_p_fixo = $("#val_p_fixo").val();
+      var checkbox_porcentagem = $("#val_p").val();
+      var checkbox_fixo = $("#val_fixo").val();
+      if(val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo ==""){
+         alert("Por favor, insira um valor válido ao Financeiro.")
+         return false
+
+      }else{
+
+         var val_p_fixo = $("#val_p_fixo").val();
+         var checkbox_porcentagem = $("#val_p").val();
+         var checkbox_fixo = $("#val_fixo").val();
          var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "categoria": $('#categoria').val(), 
             "name": $('#name').val(),
@@ -250,8 +263,9 @@ function SelectShow() {
                alert(re["message"]);
                $("#btn_cadastrar").attr("disabled", true);
                location.reload();
-         }   
-      });
+            }   
+         });
+      }  
    };
 
    function padrao(){
