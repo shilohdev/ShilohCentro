@@ -33,7 +33,7 @@ from functions.general.decorator import convertDate, checkDayMonth, fetchQueryUn
 from auth_finances.functions.exams.models import FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
 from django.conf import settings
 from django.core.files.storage import default_storage
-from auth_permissions.functions.decorator import allowPermission, json_without_success
+from auth_permissions.decorator import allowPermission, json_without_success
 
 
 #FUNCTION FORMATAR CPF
