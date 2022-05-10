@@ -40,7 +40,7 @@ Acompanhe as últimas notícias!
                      <label style="margin-bottom: 15px;">Convenio</label>
                      <div class="select-wrapper" style="margin-top: 30px;">
                        <select name="select" id="tp_conv" onchange="SelectShow()" class="error " required="">
-                           <option value="SELECIONE">Selecione</option>
+                           <option value="">Selecione</option>
                            {% for k in arr_SearchConvenio %} 
                            <option value="{{ k.id }}">{{ k.nome_conv }}</option>
                            {% endfor %}

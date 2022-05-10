@@ -187,7 +187,7 @@ Acompanhe as últimas notícias!
                            <label for="cpf">
                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
                        </div>
-
+ 
                        <div class="input-field col s2">
                            <select name="select" id="mes_search" class="error">
                                <option value="">Selecione um mês</option>
@@ -277,10 +277,16 @@ $(document).ready(function() {
         "width": "80%",
     });
 });
-
+ 
 
 function searchMonth() {
     var month = $("#mes_search").val();
+
+    if (month == ""){
+        alert("Selecione um mês válido" )
+            return false
+    }
+
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "month": month //DICT COM O VALOR DO ID
@@ -288,12 +294,11 @@ function searchMonth() {
     console.log(month)
     fetchRequest("{% url 'SearchClosingIntFilter' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         var dados = re["message"];
-        console.log(dados)
+        console.log(dados) 
         var restable = !dados.length;
-        console.log(teste)
         if  (restable === true){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
             $("#tb_append2").html("");
-            var appende = ' <tr> <td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+            var appende = ' <tr> <td colspan="4" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
                $("#tb_append2").append(appende); 
                }
         else{

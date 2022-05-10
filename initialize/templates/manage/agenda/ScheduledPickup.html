@@ -254,8 +254,8 @@ Acompanhe as últimas notícias!
       <div class="card" id="search_agenda">
          <div id="userint" class="row container" >
             <div class="col s12"  style="margin-top: 30px">
-               <div class="input-field col m5 s12">
-                  <input id="search_nome" type="text" data-show="search" data-modal_config="search_name">
+               <div class="input-field col m5 s12"> 
+                  <input id="search_nome" type="text" data-show="search" data-modal_config="search_name" onkeyup="searchColeta(this)">
                   <label for="search_nome">
                   <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
                </div>
@@ -796,6 +796,27 @@ console.log(formpost)
          }
       });
    }
+}
+
+
+function searchColeta(object){
+   var e = $(object).val().toUpperCase();
+    if(e == ""){
+        $('#tb_append > tr').each(function() {
+            $(this).show();
+        });
+    } else {
+        $('#tb_append > tr').each(function() {
+           var trs = $(this).find("td");
+           var tr1 = $(trs[0]).text().toUpperCase();
+            var check = (tr1.indexOf(e) != -1);
+            if(check == true){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 }
 
 </script>

@@ -614,7 +614,6 @@ def FinalizeProcessFunction(request):
             pass
 
         if statusProgresso == '4':
-            print(statusProgresso)
             queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
             paramsVal = (
                 doctor,
@@ -642,6 +641,7 @@ def FinalizeProcessFunction(request):
                     array2.append(newinfoa)
                 
                     if perfil == '7':
+                        print("teste perfil 2", perfil)
                         if val_porcentagem:
                         
                             val_porcentagem = float(val_porcentagem)
@@ -668,11 +668,12 @@ def FinalizeProcessFunction(request):
                             paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
                             cursor.execute(queryFinance, paramsFinance)
                     else:
-                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, '0', %s , 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                        print("perfil>>>", perfil)
+                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
                         paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
                         cursor.execute(queryFinance, paramsFinance)
         else:
-            ("teste n foi")   
+            return {"message":"Não foi possível encontrar este paciente."}
 
     return {"response": "true", "message": "Processo Financeiro Finalizado!"}
 
@@ -708,7 +709,7 @@ def SearchMonthExamsConclFunction(request):
     statusProgresso = request.POST.get('statusProgressoF')
     
     with connections['auth_agenda'].cursor() as cursor:
-        params =(data1, data2, statusProgresso)
+        params =(data1, data2, statusProgresso,)
         if data1 and data2 and statusProgresso != "":
             data1 = data1 + ' 00:00:00'
             data2 = data2 + ' 23:59:59'
@@ -1215,7 +1216,7 @@ def searchNotAtingeClosingPartners(request):
         for paciente, agendamento, exame in dados:
             newinfoa = ({
                 "paciente": paciente,
-                "agendamento": convertDate(agendamento) ,
+                "agendamento": convertDate(agendamento),
                 "exame": exame,
                 })
             arrayNot.append(newinfoa)
@@ -1227,7 +1228,7 @@ def searchNotAtingeClosingPartners(request):
         for pacienteG, agendamentoG, exameG in dados:
             newinfoa = ({
                 "pacienteG": pacienteG,
-                "agendamentoG": convertDate(agendamentoG) ,
+                "agendamentoG": convertDate(agendamentoG),
                 "exameG": exameG,
                 })
             array.append(newinfoa)
@@ -1248,16 +1249,19 @@ def searchNotAtingeClosingPartners(request):
 
      
         queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
-        if monthCount == "":
-            cursor.execute(queryPago, (monthF, id_medico))
+        if monthCount == "" or monthCount == None:
+            cursor.execute(queryPago, (monthF, id_medico,))
             print("execute1")
             print(monthF)
         else:
-            cursor.execute(queryPago, (monthCount, id_medico))
+            cursor.execute(queryPago, (monthCount, id_medico,))
             print("execute2")
+            print(monthCount)
+            print(id_medico)
 
         dados = cursor.fetchall()
         arrayPago = []
+        print(dados)
         for idP, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
             valor_uniP = f"R$ {valor_uniP:_.2f}"
             valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
@@ -1271,7 +1275,6 @@ def searchNotAtingeClosingPartners(request):
                 "valor_uniP": valor_uniP,
                 })
             arrayPago.append(newinfoa)
-            
 
 
         query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s "
@@ -1538,11 +1541,6 @@ def searchNotAtingeClosingCommercial(request):
 
 
 
-
-
-
-
-
 def SearchInfoCommercialFunction(request):
     id_comerical = request.POST.get('id_user')
     print(id_comerical)
@@ -1684,9 +1682,9 @@ def fetchFileInt(id):
     return arr_files
 
 
-#TABELA FECHAMENTO INTERNO
+#TABELA FECHAMENTO INTERNO estou aqui
 def TableClosingInt(request):
-    month = request.POST.get('month')
+    month = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse)"
         cursor.execute(query, (month,))
@@ -1708,8 +1706,9 @@ def TableClosingInt(request):
 def TableClosingIntFilter(request):
     month = request.POST.get('month')
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse)"
-        cursor.execute(query, (month,))
+        params = (month,)
+        query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s AND a.valor_comercial LIKE '0' GROUP BY a.nome_medico, b.nome, a.status_partners"
+        cursor.execute(query, params)
         dados = cursor.fetchall()
         array = []
         for id_comercial, comercial, status, valor in dados:
@@ -1718,12 +1717,16 @@ def TableClosingIntFilter(request):
             newinfoa = ({
                 "id": id_comercial,
                 "nome": comercial,
-                "status": status,
+                "status": status, 
                 "valor": valor
                 })
             array.append(newinfoa)
+            print(newinfoa)
             
-        return {"response": "true", "message": array}
+    return{
+        "response": "true", 
+        "message": array
+        }
 
 
 

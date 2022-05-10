@@ -75,7 +75,7 @@ Acompanhe as últimas notícias!
                <div class="input-field col m3 s12" >
                   <label style="margin-bottom: 15px;">Convênio</label>
                   <div class="select-wrapper" style="margin-top: 30px;">
-                     <select name="select" id="convenio" class="error ">
+                     <select name="select" id="convenio" class="error" data-required='true'>
                         <option value="">Selecione</option>
                         {% for k in  arr_SelectConvenio %}
                         <option value="{{ k.id }}">{{ k.nome_conv }}</option>
