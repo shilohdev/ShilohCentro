@@ -1379,7 +1379,7 @@ def SearchInfoFunction(request):
 def TableClosingCommercial(request):
     monthF = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
+        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s AND  b.nome NOT LIKE 'Tosyn Lopes' GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
         cursor.execute(query, (monthF,))
         dados = cursor.fetchall()
         array = [] 
@@ -1403,7 +1403,7 @@ def FilterMonthClosingCommercial(request):
     monthCount = (datetime.now().strftime("%m"))
     
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
+        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s AND b.nome NOT LIKE 'Tosyn Lopes' GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
         cursor.execute(query, (month,))
         dados = cursor.fetchall()
         array = []
@@ -1420,7 +1420,7 @@ def FilterMonthClosingCommercial(request):
                     })
                 array.append(newinfoa)
             
-        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial NOT LIKE 193 group by MONTH(data_repasse)"
         cursor.execute(querys, (month,))
         dados = cursor.fetchall()
         array2 = []
@@ -2053,7 +2053,7 @@ def ClosingUnitResult(request):
 def valTotalCommercialFunction(request):
     monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s group by MONTH(data_repasse)"
+        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial NOT LIKE '193' group by MONTH(data_repasse)"
         cursor.execute(querys, (monthCount,))
         dados = cursor.fetchall()
         array2 = []

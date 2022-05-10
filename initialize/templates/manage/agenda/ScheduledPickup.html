@@ -724,14 +724,12 @@ function StatusCanc(e){
 //FUNCTION REAGENDAR
 function ReagendarAge(e){
 
-   var str = "31/12/2000";
-   var date = new Date(str.split('/').reverse().join('/'));
-   var novaData = new Date();
-    if(date < novaData){
-      alert("Data de reagendaamento inválida.")
-      return false;
-    }
-
+   datafim = '2010-01-01'
+   if(date_age < datafim){
+   alert("Data de agendamento inválida.")
+   return false;
+   }
+   else{
 
    $("#divMotivo").show();
    //VALIDAÇÃO DE CAMPO NULL
