@@ -450,7 +450,7 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
 
       $("#modal2").hide();
          $(object).prop("disabled", true);    
-      fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+      fetchRequest("{% url 'ApiViewDataPartnersModalint' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
          if(re["response"] == false){ 
             alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
          } else { //SE FOR VERDADDEIRA, PROSSEGUE
