@@ -75,8 +75,6 @@ urlpatterns = [
     #API LISTAR PARCEIROS 
     path('api/listar/parceiros/', views.ApiListPartnesViews, name='ApiListPartnes'),
     path('api/modal/parceiros/', views.ApiViewDataPartnersModal, name='ApiViewDataPartnersModal'),
-    path('api/modal/parceiros/', views.ApiViewDataPartnersModalINT, name='ApiViewDataPartnersModalINT'), #MODAL MEUS PACIENTE INTERNO 
-
 
  
     #LISTAR PACIENTES
