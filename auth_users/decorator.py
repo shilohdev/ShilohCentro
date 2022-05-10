@@ -1054,8 +1054,7 @@ def ApiViewDataPartnersModalFunction(request):
 
 #MODAL PARCEIROS estou aqui
 def ApiViewDataPartnersModalFunctionINT(request):
-    dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
-    
+    dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICTD
     try:
         id_user = int(request.POST.get('id_user'))
     except:
@@ -1090,38 +1089,38 @@ def ApiViewDataPartnersModalFunctionINT(request):
                 pass
     
 
-        dict_response = { #VARIAVEL COM OS DICTS
-            "personal": {
-                "name": p_nome,
-                "rn": p_rn,
-                "categoria": p_categoria,
-            },
-            "contacts": {
-                "email": p_email,
-                "phone": p_tel1,
-                "phone_aux": p_tel2,
-            },
-            "address": {
-                "zipcode": p_cep,
-                "street": p_rua,
-                "street_number": p_numero,
-                "complement": p_complemento,
-                "district": p_bairro,
-                "city": p_city,
-                "state": p_uf,
-            }, 
-            "obs": {
-                "obs": p_obs,
-            }, 
-                "finances": {
-                "val_padrao": val_padrao,
-                "val_porcentagem": val_porcentagem,
-                "val_fixo": val_fixo,
-            }, 
+            dict_response = { #VARIAVEL COM OS DICTS
+                "personal": {
+                    "name": p_nome,
+                    "rn": p_rn,
+                    "categoria": p_categoria,
+                },
+                "contacts": {
+                    "email": p_email,
+                    "phone": p_tel1,
+                    "phone_aux": p_tel2,
+                },
+                "address": {
+                    "zipcode": p_cep,
+                    "street": p_rua,
+                    "street_number": p_numero,
+                    "complement": p_complemento,
+                    "district": p_bairro,
+                    "city": p_city,
+                    "state": p_uf,
+                }, 
+                "obs": {
+                    "obs": p_obs,
+                }, 
+                    "finances": {
+                    "val_padrao": val_padrao,
+                    "val_porcentagem": val_porcentagem,
+                    "val_fixo": val_fixo,
+                }, 
         } #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS
 
     return {
-        "response": False if not dict_response else True,
+        "response": True,
         "message": dict_response #RETORNO DO MENSSAGE COM O DICT 
     }
 
