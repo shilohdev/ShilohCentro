@@ -507,24 +507,8 @@ $("#modal3").hide();
      
                $.map(docs, function(n, i){
             console.log(n, i);
-           /* ap += `
-               <tr> 
-                  <td>${n.name}</td>
-                  <td>${n.date_create.pt}</td>
-                  <td>${n.type_desc}</td>
-                  <td style="text-align: center;">
-                     <a onclick=\"viewFile(this)\" style="width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;cursor: pointer;" download class="btn mb-1 waves-effect waves-light ativ" href="${n.url}" data-target="dropdown2">
-                        <i class="material-icons right">cloud_download</i>
-                     </a>
-                      <a onclick=\"deleteFile(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="${n.path}" class="btn mb-1 waves-effect waves-light ativ">
-                        <i class="material-icons right">delete</i>
-                     </a>
-                  </td>
-               </tr>
-            `;
-            */
              ap += `
-               <tr> 
+               <tr id="tr_${n.id}"> 
                   <td>${n.name}</td>
                   <td>${n.date_create.pt}</td>
                   <td>${n.type_desc}</td>
@@ -535,7 +519,6 @@ $("#modal3").hide();
                   </td>
                </tr>
             `;
-            
 
          });
             $("#tb_appendAnx").html(ap);
@@ -746,9 +729,10 @@ function SlvAnx(object) {
         files = "";
     }
 
-   
-    //verificação para preencher o tipo do arquivo.
 
+
+
+   //verificação para preencher o tipo do arquivo.
     var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
     
  

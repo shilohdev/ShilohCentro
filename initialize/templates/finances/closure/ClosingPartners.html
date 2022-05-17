@@ -11,6 +11,7 @@ Fechamento de Parceiros
 Acompanhe as últimas notícias!
 {% endblock %}
 {% block content %}
+
 <style type="text/css">
    .corfont{
    color: #641108;
@@ -126,21 +127,36 @@ Acompanhe as últimas notícias!
             </table>
         </div>
 
-        <div class="col s11 mt-2 ml-4">
-            <button id="btn_pay" data-id_user="" onclick="PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
-                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
-            </span></button>
+        <div class="col s12">
+            <div class="col s3"></div>
+            <div class="col s3 m6 mt-2">
+                <button id="btn_pay" data-id_user="" onclick="teste(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;" value="733">
+                    <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
+                </span></button>
+            </div>
         </div>
 
-   </div>
 
+
+
+        <div class="col s3 m2"></div>
+        <div class="col s3 m8">
+            <div id="docss" class="container" style="width:364px;"></div>
+        </div>
+        <div class="col s3 m2"></div>
+
+
+
+
+
+
+   </div>
    <div class="modal-footer">
        <!--BUTTON-->
        <div class="col s12 ">
            <div class="col s10"></div>
            <div class="col s2">
                <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-
            </div>
        </div>
    </div>
@@ -157,6 +173,64 @@ Acompanhe as últimas notícias!
                </div>
            </div>
        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col s12 m4 " style="padding: 19px;">
+           <!-- Current Balance -->
+           <div class="card animate fadeLeft">
+              <div class="card-content" style="background: #76c0763d;">
+                 <h6 class="center-align">
+                    <span style="text-align: center;  font-weight: bold;">PAGO</span>
+                    <p id="regisPayf"></p> 
+                    {% for k in arr_valPartinersPay %} 
+                    <p id="regisPay" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
+                     <i class="material-icons float-right">more_vert</i>
+                 </h6><br>
+                 <h5 id="valPay" class="center-align" style="color: #0d4d0dda;">{{ k.val }}</h5>
+                 {% endfor %}
+                 <h5 id="hPay" class="center-align" style="color: #0d4d0dda;"></h5>
+              </div>
+           </div>
+        </div>
+        <div class="col s12 m4 " style="padding: 19px;">
+            <!-- Current Balance -->
+            <div class="card animate fadeLeft" style="background: #f5000052;">
+               <div class="card-content">
+                <h6 class="center-align">
+                    <span style="text-align: center;  font-weight: bold;">A PAGAR</span>
+                    <p id="regisPendingf"></p> 
+                    {% for k in arr_valPartinersPending %}
+                    <p id="regisPending" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
+                    <i class="material-icons float-right">more_vert</i>
+                </h6><br>
+                  <h5 id="valPending" class="center-align" style="color: #ff0303;">{{ k.val }}</h5>
+                {% endfor %}
+                <h5 id="hPending"></h5>
+            </div>
+            </div>
+         </div>
+         <div class="col s12 m4 " style="padding: 19px;">
+            <!-- Current Balance -->
+            <div class="card animate fadeLeft">
+               <div class="card-content" style="background: #fabb002b;">
+                <h6 class="center-align">
+                    <span style="text-align: center; font-weight: bold;">TOTAL</span>
+                    <p id="regisAllf"></p> 
+                    {% for k in arr_valTotalPartiners %}
+                    <p id="regisAll" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
+                    <i class="material-icons float-right">more_vert</i>
+                </h6><br>
+                  <h5 id="valAll" class="center-align">{{ k.val }}</h5>
+                {% endfor %}
+                <h5 id="hAll" class="center-align"></h5>
+               </div>
+            </div>
+         </div>
+        
+     </div>
+
        <div class="container">
            <div class="card">
                <!-- Externo -->
@@ -190,13 +264,7 @@ Acompanhe as últimas notícias!
                            <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
                                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
                            </button>
-                       </div> 
-                       {% for k in arr_valTotalPartiners %}
-                       <div id="val1" class="col s12 m2" style="margin-top: 18px ;text-align: center;">
-                            <label style="font-size: 30px; font-weight: bold;">{{ k.val }}</label>
-                        </div>
-                        {% endfor %}
-                        <div id="valF" class="col s12 m2" style="margin-top: 18px ;text-align: center;"></div>
+                       </div>
                        <!-- COMEÇO DA TABLE -->
                        <div class="col s12 scroll">
                            <table id="page-length-option" class="bordered" style="overflow-x: auto">
@@ -233,10 +301,12 @@ Acompanhe as últimas notícias!
                </div>
            </div>
       </div>
-   </div>
 </div>
 
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
 
@@ -289,12 +359,29 @@ function searchMonth() {
         var dados = re["message"]
         if (dados == false) {
             $("#tb_appendTable").html(""); 
-            $("#valF").html(""); 
-            $("#val1").html("");
+            $("#hPay").html(""); 
+            $("#hPending").html(""); 
+            $("#hAll").html(""); 
+            //COLOCAR QUANDO N ENCONTRAR NADA R$ 00,00
 
             var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
-            $("#tb_appendTable").append(appende); 
+            $("#tb_appendTable").append(appende);
+            
+            var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
+            $("#hPay").append(hPay);
+            $("#valPay").hide();
 
+
+            var hPending = '<h5 class="center-align" style="color: #ff0303;">R$ 00,00</h5>'
+            $("#hPending").append(hPending); 
+            $("#valPending").hide();
+
+            var hAll = '<h5 class="center-align">R$ 00,00</h5>'
+            $("#hAll").append(hAll); 
+            $("#valAll").hide();
+
+        
+        
 		} else {
             var dados = re["message"];
             $("#tb_appendTable").html(""); 
@@ -317,17 +404,84 @@ function searchMonth() {
 
 
                 var dados = re["messages"];
-                $("#valF").html(""); 
-                $("#val1").html("");
+                $("#valAll").hide();
+                $("#hAll").html(""); 
+                $("#regisAll").hide(); 
+                $("#regisAllf").html(""); 
                 $.map(dados, function(n, i) {
                     var b = `
-                        <div class="col s12 m2" style=" text-align: center;">
-                            <label style="font-size: 30px; font-weight: bold;">${n.val}</label>
-                        </div>        
+                        <h5 id="hAll" class="center-align">${n.val}</h5>     
                     `;
-                    $("#valF").append(b);
+                    $("#hAll").append(b);
+
+                    var b2 = ` 
+                        <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
+                    `;
+                    $("#regisAllf").append(b2);
+
+
 
                 });
+
+
+                var dados = re["messageApagar"];
+                $("#hPending").html(""); 
+                $("#valPending").hide();
+                $("#regisPending").hide();
+                $("#regisPendingf").html("");
+                $.map(dados, function(n, i) {
+                    var c = `
+                    <h5 class="center-align" style="color: #ff0303;">${n.val}</h5>     
+                    `;
+                    $("#hPending").append(c);
+
+                    var c2 = ` 
+                        <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
+                    `;
+                    $("#regisPendingf").append(c2);
+
+                });
+
+
+                var dados = re["messagePag"];
+                if (dados == false){
+                    $("#hPay").html(""); 
+                    $("#valPay").hide();
+                    $("#regisPayf").html(""); 
+                    $("#regisPay").hide();
+                    var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
+                    $("#hPay").append(hPay);
+                    $("#valPay").hide();
+
+                    var hPay2 = ` 
+                        <p class="medium-small center-align"><i>(0 registros)</i></p> 
+                    `;
+                    $("#regisPayf").append(hPay2);
+
+                }else{
+                    $("#hPay").html(""); 
+                    $("#valPay").hide();
+                    $("#regisPayf").html(""); 
+                    $("#regisPay").hide();
+                    $.map(dados, function(n, i) {
+                        var d = `
+                        <h5 class="center-align" style="color: #0d4d0dda;">${n.val}</h5>     
+                        `;
+                        $("#hPay").append(d);
+
+                        var d2 = ` 
+                        <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
+                    `;
+                    $("#regisPayf").append(d2);
+
+                    });
+
+                }
+                
+
+
+
+
         });
         
             
@@ -341,6 +495,108 @@ $("#pesq_agenda").click(function() {
 
 
 
+
+
+
+
+class request {
+  constructor(token) {
+      this.token = token;
+  }
+  body(to, method, typeMethod, formdata, sucess){
+    $.ajax({
+        url: to+"?csrfmiddlewaretoken="+this.token,
+        type: method,
+        dataType: typeMethod,
+        data: JSON.stringify(formdata),
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  put(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "PUT",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  get(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "GET",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  post(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "POST",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+  delete(to, formdata, sucess){
+    $.ajax({
+        url: to,
+        type: "DELETE",
+        dataType: "JSON",
+        headers: {'X-CSRFToken': this.token},
+        mode: 'same-origin',
+        data: formdata,
+        success: function(response) {
+            sucess(response);
+        },
+        error: function (request, status, error) {
+            sucess(error);
+        }
+    });
+  }
+}
+
+
+
+
+
+//VISUALIZA O APPEND
+function viewFile(object) {
+    var path = $(object).data("url");
+    var filename = $(object).data("id");
+    var a = document.createElement("a");
+    a.href = "/docs/" + path;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+}
 
 
 function viewAgenModal(object){
@@ -414,8 +670,6 @@ function viewAgenModal(object){
             `;
             $("#pago").append(a);
         });
-        console.log(dados)
-
 
         var dados = re["messageOutros"];
         $("#outros").html("");
@@ -452,9 +706,71 @@ function viewAgenModal(object){
     }
 
     });
+
+
+    var r = new request($('{% csrf_token %}').val());
+    r.get("{% url 'FetchPartnersFiles' %}", formpost, function(re) {
+        if(re["response"] == true){
+         var dados = re["message"];
+         var docs = dados["docs"];
+            if (docs.length > 0){
+                $.map(docs, function(n, i){
+                    div += `
+                        <div class="container" style="width:364px;">
+                            <div class="dropify-wrapper has-preview" style="height: 114px;">
+                                <div class="dropify-errors-container">
+                                </div>
+                                <input id="doc_anx" name="file1" type="file" class="dropify" data-height="100"><button type="button" class="dropify-clear">Remove</button>
+                                <div class="dropify-preview" style="display: block;">
+                                    <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">sql</span></span>
+                                    <div class="dropify-infos">
+                                        <div class="dropify-infos-inner">
+                                        <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">customer_refer_register_paciente.sql</span></p>
+                                        <p class="dropify-infos-message">Clique para fazer download.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                });
+                $("#docss").html(div);
+
+            }
+            else{
+                divInput = `
+                <div class="dropify-wrapper">
+                    <div class="dropify-message">
+                        <span class="file-icon"></span> 
+                        <p>Drag and drop a file here or click</p>
+                        <div class="dropify-loader" style="display: none;"></div>
+                        <div class="dropify-errors-container">
+                            <ul></ul>
+                        </div>
+                        <input  id="doc_anx" type="file" id="input-file-now" class="dropify"><button type="button" class="dropify-clear">Remove</button>
+                        <div class="dropify-preview" style="display: none;">
+                            <span class="dropify-render"></span>
+                            <div class="dropify-infos">
+                                <div class="dropify-infos-inner">
+                                <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">Estima Nutrição.xlsx</span></p>
+                                <p class="dropify-infos-message">Drag and drop or click to replace</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               `
+                $("#docss").html(divInput);
+                console.log(divInput)
+
+        }
+        } 
+        
+    });
+   
 }
 
-//FINALIZAR PROCESSO
+//PAGO
 function PartnersPago(object) {
     var id_user = $(object).data("id_user");
 
@@ -472,9 +788,7 @@ function PartnersPago(object) {
     });
 }
 
-
-
-
+//INFOS DO MODAL  (NOME/STATUS)
 function SearchInfo(object) { //FUNCTION DO ONCLICK
     var id_user = $(object).data("id_user");
 
@@ -493,7 +807,6 @@ function SearchInfo(object) { //FUNCTION DO ONCLICK
         } else { //SE FOR VERDADDEIRA, PROSSEGUE
             $("#modal2").show();
             var key = re["message"];
-            console.log(key)
             var dictKeys = { // nome id / nome do grupo/ nome do value
                 "btn_pay": key["teste"]["btn_pay"],
                 "nome_medico": key["teste"]["nome_medico"],
@@ -518,5 +831,67 @@ function SearchInfo(object) { //FUNCTION DO ONCLICK
 
 
 
+// ------------------------  DOCS  --------------------------------//
+$('.dropify').dropify();
+
+
+function teste(object){
+    var id_partners = $(object).data("id_user");
+    var files =  $("#doc_anx").val();
+    console.log(files)
+    if (files == "" || ($("#doc_anx").prop("files") == undefined)){
+        alert("Por favor, insira a Nota Fiscal.")
+    }else{
+        files = document.querySelector("#doc_anx").files[0]; // seleciona o doc e manda para o back
+
+        var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+        var formpost = [{
+                "name": "csrfmiddlewaretoken",
+                "value": $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            {
+                "name": "file",
+                "value": files
+            },
+            {
+                "name": "id_partners",
+                "value": id_partners
+            },
+        ];
+        console.log(files)
+        fetchRequestFiles("{% url 'ApiNfPartners' %}", "POST", "JSON", formpost, function(re) {
+            if (re["response"] == false) {
+                alert("Nenhum dado encontrado.");
+            } else {
+                //$("#btn_salvar").attr("disabled", true);
+                alert(re["message"]);
+                location.reload();
+            }
+        });
+    }
+   
+    //verificação para preencher o tipo do arquivo.
+    
+
+
+}
+
+
+/*
+    var files = $("#doc_anx")[0].files[0];
+    if ($("#doc_anx").val() != "") {
+        if ($("#doc_anx").prop("files") != undefined) {
+            if ($("#tp_anx").val() == "") {
+                return alert("Preencha o tipo de anexo para salvar.");
+            } else {
+                files = document.querySelector("#doc_anx").files[0];
+            }
+        } else {
+            files = "";
+        }
+    } else {
+        files = "";
+    }
+*/
 </script>
 {% endblock %}      

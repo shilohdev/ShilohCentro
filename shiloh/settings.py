@@ -325,3 +325,7 @@ LISTPATHTYPE = {
     "5": "Carterinha Convênio",
     "6": "Documento Pessoal",
 }
+
+LISTPATHTYPEFINANCE = {
+    "NF": "NF",
+}

@@ -173,107 +173,12 @@ Acompanhe as últimas notícias!
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+
 <script type="text/javascript">
    $("#cpf").mask("999.999.999-99");   
    $("#tel1").mask("(99) 99999-9999");
    $("#tel2").mask("(99) 99999-9999");
-      $("#zipcode").mask("99999-999");
-
-
-function CadastreUser(){
-      var select_leads = $("#select_leads").val();
-      var medico_resp = $("#medico_resp").val();
-      var conv_medico = $("#conv_medico").val();
-      var cpf = $("#cpf").val();
-      var name = $("#name").val();
-      var date_nasc = $("#date_nasc").val();
-      var email = $("#email").val();
-      var tel1 = $("#tel1").val();
-      var tel2 = $("#tel2").val();
-      var zipcode = $("#zipcode").val();
-      var addres = $("#addres").val();
-      var number = $("#number").val();
-      var complement = $("#complement").val();
-      var district = $("#district").val();
-      var city = $("#city").val();
-      var uf = $("#uf").val();
-      var obs = $("#obs").val();
-      var login = $("#login").val();
-      var senha = $("#senha").val();
-
-      var teste = document.getElementById("date_nasc").value.split("-")[0];
-      var data = new Date();
-      var anoatual = data.getFullYear()
-      var Calc = (anoatual - teste)
-
-      console.log(Calc)
-      console.log(anoatual)
-      console.log(teste)
-
-      if (Calc <= 10 ){
-         $("#cpf").attr("class", "data-required='true'");
-         alert("CPF obrigatório acima de 10 anos.")
-         var i = 0;
-         $("#userint input[data-required='true']").each(function(){        
-            if($(this).val() == ""){            
-               alert("Preencha os campos obrigatórios.");            
-               $(this).focus();            
-               i = 1;
-               return false;
-            }
-         });
-         if(i == 1){
-            return false;
-         }
-      } 
-      else{
-         var i = 0;
-         $("#userint input[data-required='true']").each(function(){
-            if($(this).val() == ""){
-               alert("Preencha os campos obrigatórios.");
-               $(this).focus();
-               i = 1;
-               return false;
-            }
-         });
-         if(i == 1){
-            return false;
-         }
-      }
-   //VALIDAÇÃO DE CAMPO NULL
-  
-      var btncadastrar = {
-         "csrfmiddlewaretoken": $($('{% csrf_token %}').clone()).val(), //PEGA TODOS OS VALORES E JÁ FAZ O DICT AO MESMO TEMPO
-         "cpf": $('#cpf').val(), 
-         "name": $('#name').val(),
-         "date_nasc": $('#date_nasc').val(),
-         "email": $('#email').val(),
-         "tel1": $('#tel1').val(),
-         "tel2": $('#tel2').val(),
-         "zipcode": $('#zipcode').val(),
-         "addres": $('#addres').val(),
-         "number": $('#number').val(),
-         "complement": $('#complement').val(),
-         "district": $('#district').val(),
-         "city": $('#city').val(),
-         "uf": $('#uf').val(),
-         "medico_resp": $('#medico_resp').val(),
-         "select_leads": $('#select_leads').val(),
-         "conv_medico": $('#conv_medico').val(),
-         "obs": $('#obs').val(),
-         "login": $('#login').val(),
-         "senha": $('#senha').val(),
-         };
-
-         $("#btn_cadastrar").attr("disabled", true);
-
-      fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function(re){
-         if(re["response"] == "true"){
-            alert(re["message"]);
-            location.reload();
-      }   
-   });
-};
+   $("#zipcode").mask("99999-999");
 
 
 // CEP 

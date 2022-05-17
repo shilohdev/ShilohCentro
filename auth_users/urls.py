@@ -184,4 +184,12 @@ urlpatterns = [
     #INFOLOG
     path('info/log/', views.LogUser, name='LogUser'),#EXAMES FINALIZADOS
 
+
+    
+    #API PARTNERSS
+    path('anx/nf/partners/', views.ApiNfPartners, name='ApiNfPartners'),#EXAMES FINALIZADOS
+    path('anx/nf/partners/ger-file/', views.ApiGerFilePartners, name='ApiGerFilePartners'),#EXAMES FINALIZADOS
+    path('api/modal/parceiros/files', views.FetchPartnersFiles.as_view(), name='FetchPartnersFiles'), #FILE PACIENTE
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

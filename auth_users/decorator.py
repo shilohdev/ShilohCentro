@@ -1574,7 +1574,7 @@ def fetchHistoryPatient(id):
     return arr_response
 
 
-def FetchPatientsFilesFunction(bodyData):
+def FetchPatientsFilesFunction(bodyData): #aqi
     try:
         keysLIST = []
         id = bodyData.id_user
@@ -2440,7 +2440,7 @@ def searchUnit(request):
 
 #--------------------------------------------------------------------------------------------------------------------
 
- 
+  #DOC AQUI
 #GET FILE >> ADICIONAR DIRETORIO
 def saveFilePatient(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     PATH = settings.BASE_DIR_DOCS + "/patients/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
@@ -2458,7 +2458,7 @@ def saveFilePatient(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     return True
 
 
-#GER FILE
+#GER FILE >> retornar HTML
 def fetchFilePatient(id):
     arr_files = []
 
@@ -3121,3 +3121,86 @@ def SearchStatusLeadFilterFunction(request):
         "response": True,
         "message": array
     }
+
+#------------------------------------------- DOCS FINANCEIROS --------------------------------------------
+
+
+#SERVE PARA CRIAR O DIRETÓRIO DO MEU ARQUIVO
+def ApiGerFilePartnersFunction(id, FILES):
+    PATH = settings.BASE_DIR_DOCS + "/partners/finances/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+    PATH_USER = PATH.format(id) # ADICIONANDO ID NO {} DE CIMA /\
+    PATH_TYPES = PATH_USER + "/" + "NF" + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
+    
+    arr_dir = []
+    for name, file in FILES.items():
+        file_name = default_storage.save(PATH_TYPES + file.name, file)
+        arr_dir.append({
+            "name": file.name,
+            "path": PATH_TYPES + file.name
+        })
+    return True
+
+
+#QUANDO CLICAR NO BOTÃO, EXECUTA ESSA FUNÇÃO.
+def ApiNfPartnersFunction(request):
+    id_partners = request.POST.get('id_partners')
+    print(id_partners)
+    date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    #chama função externa
+    ApiGerFilePartnersFunction(id_partners, request.FILES)
+
+    return {
+        "response": True,
+        "message": "Dados atualizados com sucesso."
+    }
+
+
+
+def FetchPartnersFilesFunction(bodyData):
+    try:
+        keysLIST = []
+        id = bodyData.id_user
+        PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+        PATH_ORIGIN = f"/partners/finances/{id}"
+        DS = default_storage
+        if DS.exists(PATH):
+            LIST_TYPES = DS.listdir(PATH)
+            if LIST_TYPES:
+                if len(LIST_TYPES) > 0:
+                    arrLIST = []
+                    for key in LIST_TYPES[0]:
+                        arrLIST.append(key)
+
+                    if arrLIST:
+                        for paths in arrLIST:
+                            arrLISTPATHS = DS.listdir(f"{PATH}/{paths}")
+                            for key in arrLISTPATHS[1]:
+                                keysLIST.append({
+                                    "type": str(paths),
+                                    "type_desc": settings.LISTPATHTYPEFINANCE.get(str(paths), ""),
+                                    "name": key,
+                                    "path": PATH_ORIGIN + f"/{paths}/{key}",
+                                    "date_create": {
+                                        "en": str(default_storage.get_created_time(f"{PATH}/{paths}/{key}").date()),
+                                        "pt": str(default_storage.get_created_time(f"{PATH}/{paths}/{key}").strftime("%d/%m/%Y"))
+                                    },
+                                    "url": settings.SHORT_PLATAFORM + f"/docs/partners/finances/{id}/{paths}/{key}"
+                                })
+
+        return {
+            "response": True,
+            "message": {
+                "docs": keysLIST,
+            }
+        }
+
+    except Exception as err:
+        return {
+            "response": False,
+            "message": "Não foi possível encontrar este parceiro."
+        }
+
+
+
+
+
