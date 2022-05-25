@@ -36,12 +36,12 @@ Acompanhe as últimas notícias!
          <!-- Externo -->
       <div id="userint" class="row" >
         <div class="col s12 m12"  style="margin-top: 30px;">
-          <div class="input-field col m3 s12">
+          <!--<div class="input-field col m3 s12">
              <input id="cpf" type="text" >
              <label for="cpf">
              <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
-          </div>
-          <div class="input-field col m9 s12">
+          </div>-->
+          <div class="input-field col m8 s12">
              <input id="name" type="text" data-required='true' class="upper">
              <label for="name">
              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
@@ -174,7 +174,7 @@ function SelectShow() {
 
 
 
-      $("#cpf").mask("999.999.999-99");
+      //$("#cpf").mask("999.999.999-99");
       $("#tel1").mask("(99) 99999-9999");
       $("#tel2").mask("(99) 99999-9999");
    
@@ -199,7 +199,7 @@ function SelectShow() {
          var btncadastrar = {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "convenio": $('#convenio').val(), 
-            "cpf": $('#cpf').val(), 
+            //"cpf": $('#cpf').val(), 
             "name": $('#name').val(),
             "email": $('#email').val(),
             "tel1": $('#tel1').val(),

@@ -80,7 +80,7 @@ urlpatterns = [
 
  
     #LISTAR PACIENTES
-    path('listar/indicacao/', views.listIndicationViews, name='listIndication'),
+    path('listar/pacientes/', views.listIndicationViews, name='listIndication'),
     path('api/modal/pacientes/', views.ApiViewDataPatientsModal, name='ApiViewDataPatientsModal'),
     path('api/modal/pacientes/update', views.ApiChangePatientsModal, name='ApiChangePatientsModal'), #UPDATE PACIENTE
     path('api/modal/pacientes/files', views.FetchPatientsFiles.as_view(), name='FetchPatientsFiles'), #FILE PACIENTE
@@ -190,6 +190,11 @@ urlpatterns = [
     path('anx/nf/partners/', views.ApiNfPartners, name='ApiNfPartners'),#EXAMES FINALIZADOS
     path('anx/nf/partners/ger-file/', views.ApiGerFilePartners, name='ApiGerFilePartners'),#EXAMES FINALIZADOS
     path('api/modal/parceiros/files', views.FetchPartnersFiles.as_view(), name='FetchPartnersFiles'), #FILE PACIENTE
+    path('api/financeiro/pagamentos/partners/files/remove', views.RemoveFilePartners, name='RemoveFilePartners'), #FINANCEIRO EXAMES
+
+
+    #DASBOARDS
+    path('dashboards/financeiro/reembolsos/', views.DashboardsRefunds, name='DashboardsRefunds'), #FINANCEIRO EXAMES
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

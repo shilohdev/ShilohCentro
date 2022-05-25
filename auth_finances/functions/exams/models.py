@@ -1286,8 +1286,8 @@ def FilterMonthClosingPartners(request):
 #GER FILE >> retornar HTML
 def fetchFilePartners(id):
     arr_files = []
-    ORIGIN_PATH = f"/partners/finances/{id}"
-    PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+    ORIGIN_PATH = f"/partners/finances/{id}/NF"
+    PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id}/NF" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
     EXISTS = default_storage.exists(PATH) #verifica se existe >>> true or false
     if EXISTS:
         FILES = default_storage.listdir(PATH) #lista meus diretórios, nf ou outra pasta
@@ -1305,7 +1305,6 @@ def fetchFilePartners(id):
                             if len(fkey) > 1:
                                 PATH_FILE = PATH_TYPE + f"/{fkey}"  #Caminho completo do meu documento
                                 ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
-                                print("ORIGIN_PATH_FILE", ORIGIN_PATH_FILE)
                                 arr_files.append({
                                     "type": key,
                                     "description_type": settings.LISTPATHTYPEFINANCE.get(key, ""),
@@ -1321,6 +1320,7 @@ def fetchFilePartners(id):
                         except Exception as err:
                             print("ERRO >>>", err)
 
+
     return arr_files
 
 
@@ -1334,7 +1334,6 @@ def searchNotAtingeClosingPartners(request):
     monthF = int(datetime.now().strftime("%m"))
     
     files = fetchFilePartners(id_medico) #CHAMA A FUNÇÃO, LOCALIZA MEU DIRETÓRIO.
-    print(files)
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 6 AND b.medico_resp_p = %s"
         cursor.execute(query, (id_medico,))
@@ -2188,4 +2187,396 @@ def valTotalCommercialFunction(request):
                 array2.append(newinfoa)
         return array2
 
+# ------------------------------------------------------- DASHBOARD ---------------------------------------------
 
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- PENDENTE
+def FunctionDashPendente(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        PorcPendente = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification"
+        cursor.execute(PorcPendente)
+        dados = cursor.fetchall()
+        porcentagemPendente = []
+        if dados:
+            for qdtP, regis in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "regis": regis,
+                    })
+                porcentagemPendente.append(newinfoa)
+
+            QtdPendente = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE status_exame_f LIKE '8' AND identification LIKE 'Externo' group by identification"
+            cursor.execute(QtdPendente)
+            dados = cursor.fetchall()
+            pendente = []
+            if dados:
+                for qdt, regis in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "regis": regis,
+                        "percentage": percentage,
+                        })
+                    pendente.append(newinfoa)
+
+            return pendente
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- EM ANDAMENTO
+def FunctionDashAndamento(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        PorcAndamento = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification"
+        cursor.execute(PorcAndamento)
+        dados = cursor.fetchall()
+        porcentagemAndamento = []
+        if dados:
+            for qdtP, regis in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "regis": regis,
+                    })
+                porcentagemAndamento.append(newinfoa)
+
+            QtdAndamento = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE status_exame_f LIKE '1' AND identification LIKE 'Externo' group by identification"
+            cursor.execute(QtdAndamento)
+            dados = cursor.fetchall()
+            andamento = []
+            if dados:
+                for qdt, regis in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "regis": regis,
+                        "percentage": percentage,
+                        })
+                    andamento.append(newinfoa)
+
+            return andamento
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- EM ANÁLISE
+def FunctionDashAnalise(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        PorcAnalise = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification"
+        cursor.execute(PorcAnalise)
+        dados = cursor.fetchall()
+        porcentagemAnalise = []
+        if dados:
+            for qdtP, regis in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "regis": regis,
+                    })
+                porcentagemAnalise.append(newinfoa)
+
+            QtdAnalise = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE status_exame_f LIKE '2' AND identification LIKE 'Externo' group by identification"
+            cursor.execute(QtdAnalise)
+            dados = cursor.fetchall()
+            analise = []
+            if dados:
+                for qdt, mes in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "mes": mes,
+                        "percentage": percentage,
+                        })
+                    analise.append(newinfoa)
+
+            return analise
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- PAGO
+def FunctionDashPago(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        PorcPago = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification"
+        cursor.execute(PorcPago)
+        dados = cursor.fetchall()
+        porcentagemPago = []
+        if dados:
+            for qdtP, regis in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "regis": regis,
+                    })
+                porcentagemPago.append(newinfoa)
+
+            QtdPago = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem,  SUM(val_pag_f), identification FROM auth_finances.completed_exams WHERE status_exame_f LIKE '4' AND identification LIKE 'Externo' group by identification"
+            cursor.execute(QtdPago)
+            dados = cursor.fetchall()
+            pago = []
+            if dados:
+                for qdt, val, iden in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "percentage": percentage,
+                        "val": val,
+                        "iden": iden,
+                        })
+                    pago.append(newinfoa)
+
+                return pago
+
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- OUTROS
+def FunctionDashOutros(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        PorcOutros = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification"
+        cursor.execute(PorcOutros)
+        dados = cursor.fetchall()
+        porcentagemOutros = []
+        if dados:
+            for qdtP, regis in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "regis": regis,
+                    })
+                porcentagemOutros.append(newinfoa)
+
+                QtdOutros= "SELECT COUNT(DISTINCT a.id_agendamento_f), b.status_p, a.identification FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress b ON b.id = a.status_exame_f WHERE a.status_exame_f LIKE 5 OR a.status_exame_f LIKE 6 AND a.identification LIKE 'Externo' group by b.status_p, a.identification"
+                cursor.execute(QtdOutros)
+                dados = cursor.fetchall()
+                outros = []
+                if dados:
+                    for qdt, status, iden in dados:
+                        percentage = (qdt * 100 /qdtP )
+                        percentage= f"{percentage:_.2f} %"
+                        newinfoa = ({
+                            "qdt": qdt,
+                            "status": status,
+                            "iden": iden,
+                            "percentage": percentage,
+                            })
+                        outros.append(newinfoa)
+                        print(newinfoa)
+                
+
+                return outros
+
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- TODOS EM ABERTO
+def FunctionDashGeralPendente(request):
+    with connections['auth_finances'].cursor() as cursor:
+        PorcTotalP = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification;"
+        cursor.execute(PorcTotalP)
+        dados = cursor.fetchall()
+        porcentagemTotalP = []
+        if dados:
+            for qdtP, identification in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "identification": identification,
+                    })
+                porcentagemTotalP.append(newinfoa)
+
+            QtdTotalP = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, regis FROM auth_finances.completed_exams WHERE regis LIKE 0 AND identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by regis"
+            cursor.execute(QtdTotalP)
+            dados = cursor.fetchall()
+            TotalP = []
+            if dados:
+                 for qdt, mes in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "mes": mes,
+                        "percentage": percentage,
+                        })
+                    TotalP.append(newinfoa)
+
+            return TotalP
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- TODOS FINALIZADOS
+def FunctionDashGeralFinalizados(request):
+    with connections['auth_finances'].cursor() as cursor:
+        PorcTotalF = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, identification FROM auth_finances.completed_exams WHERE identification LIKE 'Externo' AND status_exame_f NOT LIKE 9 group by identification;"
+        cursor.execute(PorcTotalF)
+        dados = cursor.fetchall()
+        porcentagemTotalF = []
+        if dados:
+            for qdtP, identification in dados:
+                newinfoa = ({
+                    "qdtP": qdtP,
+                    "identification": identification,
+                    })
+                porcentagemTotalF.append(newinfoa)
+
+            QtdTotalF = "SELECT COUNT(DISTINCT id_agendamento_f) AS contagem, regis FROM auth_finances.completed_exams WHERE regis LIKE 1 AND status_exame_f NOT LIKE 9 group by regis"
+            cursor.execute(QtdTotalF)
+            dados = cursor.fetchall()
+            TotalF = []
+            if dados:
+                 for qdt, mes in dados:
+                    percentage = (qdt * 100 /qdtP )
+                    percentage= f"{percentage:_.2f} %"
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "mes": mes,
+                        "percentage": percentage,
+                        })
+                    TotalF.append(newinfoa)
+
+            return TotalF
+
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- CARD ALVARO
+def FunctionDashCardAlvaro(request):
+    with connections['auth_finances'].cursor() as cursor:
+        monthCount = int(datetime.now().strftime("%m"))
+        with connections['auth_finances'].cursor() as cursor:
+            CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
+            cursor.execute(CardAlvaro, (monthCount,))
+            dados = cursor.fetchall()
+            ArrCardAlvaro = []
+            if dados:
+                for qtd, val, mes in dados:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qtd": qtd,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    ArrCardAlvaro.append(newinfoa)
+
+            return ArrCardAlvaro
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- CARD WORKLAB
+def FunctionDashCardWorkLab(request):
+    with connections['auth_finances'].cursor() as cursor:
+        monthCount = int(datetime.now().strftime("%m"))
+        with connections['auth_finances'].cursor() as cursor:
+            CardWorkLab = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_work_f), MONTH(data_inc_proc_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_inc_proc_f) LIKE %s AND identification LIKE 'Externo' group by  MONTH(data_inc_proc_f);"
+            cursor.execute(CardWorkLab, (monthCount,))
+            dados = cursor.fetchall()
+            ArrCardWorkLab = []
+            if dados:
+                for qtd, val, mes in dados:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qtd": qtd,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    ArrCardWorkLab.append(newinfoa)
+
+            return ArrCardWorkLab
+
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- REEMBOLSADO
+def FunctionCardReembolsado(request):
+    with connections['auth_finances'].cursor() as cursor:
+        monthCount = int(datetime.now().strftime("%m"))
+        with connections['auth_finances'].cursor() as cursor:
+            CardReembolsado = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_pag_f), MONTH(data_repasse) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_repasse) LIKE %s AND identification LIKE 'Externo' AND status_exame_f LIKE 4 group by MONTH(data_repasse);"
+            cursor.execute(CardReembolsado, (monthCount,))
+            dados = cursor.fetchall()
+            ArrCardReembolsado = []
+            if dados:
+                for qtd, val, mes in dados:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qtd": qtd,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    ArrCardReembolsado.append(newinfoa)
+
+            return ArrCardReembolsado
+
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- TABELA MES
+def FunctionDashFinanceTable(request):
+    with connections['auth_finances'].cursor() as cursor:
+        monthCount = int(datetime.now().strftime("%m"))
+        with connections['auth_finances'].cursor() as cursor:
+            Q = "SELECT conv.nome_conv, count(conv.nome_conv), MONTH(finance.data_repasse) AS mes, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND MONTH(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, MONTH(finance.data_repasse) ORDER BY sum(finance.val_pag_f) DESC;;"
+            cursor.execute(Q, (monthCount,))
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for nome_conv, qtd, mes, alvaro, worklab, pago in dados:
+                    percentage = (pago * 100 /worklab)
+                    percentage= f"{percentage:_.2f} %"
+                    
+                    alvaro = f"R$ {alvaro:_.2f}"
+                    alvaro = alvaro.replace(".", ",").replace("_", ".")
+
+                    worklab = f"R$ {worklab:_.2f}"
+                    worklab = worklab.replace(".", ",").replace("_", ".")
+
+                    pago = f"R$ {pago:_.2f}"
+                    pago = pago.replace(".", ",").replace("_", ".")
+
+                    newinfoa = ({
+                        "nome_conv": nome_conv,
+                        "qtd": qtd,
+                        "mes": mes,
+                        "percentage": percentage,
+                        "alvaro": alvaro,
+                        "worklab": worklab,
+                        "pago": pago,
+                        })
+                    array.append(newinfoa)
+
+            return array
+
+ 
+
+
+#DASHBOARD FINANCEIRO - REEMBOLSO -- TABELA ANO
+def FunctionDashFinanceTableYear(request):
+    with connections['auth_finances'].cursor() as cursor:
+        yearCount = int(datetime.now().strftime("%Y"))
+        print(yearCount)
+        with connections['auth_finances'].cursor() as cursor:
+            Q = "SELECT conv.nome_conv, count(conv.nome_conv), YEAR(finance.data_repasse) AS ano, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND YEAR(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, YEAR(finance.data_repasse) ORDER BY sum(val_pag_f) DESC;"
+            cursor.execute(Q, (yearCount,))
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for nome_conv, qtd, ano, alvaro, worklab, pago in dados:
+                    percentage = (pago * 100 / worklab)
+                    percentage= f"{percentage:_.2f} %"
+                
+                    alvaro = f"R$ {alvaro:_.2f}"
+                    alvaro = alvaro.replace(".", ",").replace("_", ".")
+
+                    worklab = f"R$ {worklab:_.2f}"
+                    worklab = worklab.replace(".", ",").replace("_", ".")
+
+                    pago = f"R$ {pago:_.2f}"
+                    pago = pago.replace(".", ",").replace("_", ".")
+
+                    newinfoa = ({
+                        "nome_conv": nome_conv,
+                        "qtd": qtd,
+                        "ano": ano,
+                        "percentage": percentage,
+                        "alvaro": alvaro,
+                        "worklab": worklab,
+                        "pago": pago,
+                        })
+                    array.append(newinfoa)
+
+            return array

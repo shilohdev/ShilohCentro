@@ -36,12 +36,14 @@ Acompanhe as últimas notícias!
          <!-- Externo -->
          <div id="userint" class="row" >
             <div class="col s12 m12"  style="margin-top: 30px;">
+              <!--
                <div class="input-field col s12 m3">
                   <input id="cpf" type="text" >
                   <label for="cpf">
                   <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
                </div>
-               <div class="input-field col m5 s12">
+              --> 
+               <div class="input-field col m8 s12">
                   <input id="name" type="text" data-required='true' class="upper">
                   <label for="name">
                   <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
@@ -176,7 +178,7 @@ function SelectShow() {
 
 
 
-      $("#cpf").mask("999.999.999-99");
+      //$("#cpf").mask("999.999.999-99");
       $("#tel1").mask("(99) 99999-9999");
       $("#tel2").mask("(99) 99999-9999");
    
@@ -186,7 +188,7 @@ function SelectShow() {
 
          var doctor = $("#doctor").val();
          var convenio = $("#convenio").val();
-         var cpf = $("#cpf").val();
+         //var cpf = $("#cpf").val();
          var name = $("#name").val();
          var email = $("#email").val();
          var tel1 = $("#tel1").val();
@@ -215,7 +217,7 @@ function SelectShow() {
          var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "doctor": $('#doctor').val(),  //aqui
             "convenio": $('#convenio').val(), 
-            "cpf": $('#cpf').val(), 
+            //"cpf": $('#cpf').val(), 
             "name": $('#name').val(),
             "email": $('#email').val(),
             "tel1": $('#tel1').val(),

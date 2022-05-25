@@ -67,11 +67,11 @@ def BodyDecode(dataKeys):
 
 
 def fetchQueryUnity(column, perfil, unityY=None):
-    if str(perfil) == "2"  or "1" or "5":
+    if str(perfil) == "1":
         return f"{column} IS NOT NULL"
-
-    return f"{column} = {unityY}"
-
+    else:
+        return f"{column} = {unityY}"
+            
 
 def fetchQueryUnityFinance(column, perfil, unityY=None):
     if str(perfil) == "5" or "2":

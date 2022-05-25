@@ -524,6 +524,18 @@ $(document).ready(function () {
 	$('.modal').modal();
 });
 
+
+
+//CONFIG MODAL
+$(document).ready(function() {
+    $('.modal').modal();
+    $('.modal').css({
+        "width": "80%",
+    });
+});
+
+
+
 //MAP 
 function viewAgenModal(object) { //FUNCTION DO ONCLICK
    
@@ -553,7 +565,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"tp_conv": key["agendamento"]["convenio"],
 				"driver": key["agendamento"]["motoristaNome"],
 				"doctor": key["agendamento"]["doctor"],
-				"nurse": key["agendamento"]["nurse"],
+				"nurse": key["agendamento"]["nurse"], // verificar 
 				"id": key["agendamento"]["id"],
 				"tel1": key["pessoal"]["phone1"],
 				"tel2": key["pessoal"]["phone2"],
@@ -623,8 +635,11 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 //FUNCTION CONCLUIR
 function StatusConc(e){ 
    var id = $(e).data("id");
+   var convenio = $("tp_conv").val();
+   
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "convenio": convenio,
       "id": id,
 }
    fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
@@ -818,6 +833,7 @@ function searchColeta(object){
         });
     }
 }
+
 
 </script>
 {% endblock %}

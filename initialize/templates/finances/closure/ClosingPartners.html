@@ -27,366 +27,348 @@ Acompanhe as últimas notícias!
 </style>
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
-   <div class="modal-content" id="modal2">
+    <div class="modal-content" id="modal2">
        <div class="card-content">
-        <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_medico" type="text" >
-        <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
+          <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_medico" type="text" >
+          <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
        </div>
        <!--PAGO-->
-      <div class="container col s8" style="margin-top:20px">
-        <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-            <div class="collapsible-header col s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
+       <div class="container col s8" style="margin-top:20px">
+          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+             <div class="collapsible-header col s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
                 <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO</labe>
-            </div>
-            <thead>
+             </div>
+             <thead>
                 <tr role="row">
-                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
-                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
                 </tr>
-            </thead>
-            <tbody id="pago">
-            </tbody>
-            <tfoot id="Count"></tfoot>
-        </table>
+             </thead>
+             <tbody id="pago">
+             </tbody>
+             <tfoot id="Count"></tfoot>
+          </table>
+       </div>
+       <!--EM ANÁLISE-->
+       <div class="container col s8" style="margin-top:80px">
+          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+             <div class="collapsible-header col s12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >EM ANÁLISE</labe>
+             </div>
+             <thead>
+                <tr role="row">
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                </tr>
+             </thead>
+             <tbody id="analise">
+             </tbody>
+          </table>
+       </div>
+       <!--NÃO ATINGIDO-->
+       <div class="container col s8" style="margin-top:80px">
+          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+             <div class="collapsible-header col s12" style="  height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >NÃO ATINGIDO</labe>
+             </div>
+             <thead>
+                <tr role="row">
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                </tr>
+             </thead>
+             <tbody id="tb_naoAtingido"></tbody>
+          </table>
+       </div>
+       <!--GLOSA-->
+       <div class="container col s8" style="margin-top:80px">
+          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+             <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA</labe>
+             </div>
+             <thead>
+                <tr role="row">
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                </tr>
+             </thead>
+             <tbody id="glosa">
+             </tbody>
+          </table>
+       </div>
+       <!--OUTROS-->
+       <div class="container col s8" style="margin-top:80px">
+          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+             <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
+             </div>
+             <thead>
+                <tr role="row">
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
+                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                </tr>
+             </thead>
+             <tbody id="outros">
+             </tbody>
+          </table>
+       </div>
+       <!--INPUT FILE-->
+       <div class="col s3 m1" style="vertical-align: middle;"> 
+         <label for="doc_anx">
+         <a class="btn btn-floating pulse" style="background-color: #aaa;">
+         <i class="material-icons tooltipped" data-position="right" data-tooltip="Insira a Nota Fiscal">attach_file</i>
+         </a>
+         </label>
+         <input id="doc_anx" type="file" style="display: none;"/>
       </div>
-
-        <!--EM ANÁLISE-->
-        <div class="container col s8" style="margin-top:80px">
-            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-                <div class="collapsible-header col s12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
-                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >EM ANÁLISE</labe>
-                </div>
-                <thead>
-                    <tr role="row">
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-                    </tr>
-                </thead>
-                <tbody id="analise">
-                </tbody>
-            </table>
-        </div>
-
-
-        <!--NÃO ATINGIDO-->
-        <div class="container col s8" style="margin-top:80px">
-            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-                <div class="collapsible-header col s12" style="  height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
-                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >NÃO ATINGIDO</labe>
-                </div>
-                <thead>
-                    <tr role="row">
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-                    </tr>
-                </thead>
-                <tbody id="tb_naoAtingido"></tbody>
-            </table>
-        </div>
-
-        
-        <!--GLOSA-->
-        <div class="container col s8" style="margin-top:80px"> 
-            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-                <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
-                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA</labe>
-                </div>
-                <thead>
-                    <tr role="row">
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-                    </tr>
-                </thead>
-                <tbody id="glosa">
-                </tbody>
-            </table>
-        </div>
-
-
-         <!--OUTROS-->
-         <div class="container col s8" style="margin-top:80px"> 
-            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-                <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
-                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
-                </div>
-                <thead>
-                    <tr role="row">
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
-                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
-                    </tr>
-                </thead>
-                <tbody id="outros">
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col s12">
-            <div class="col s3"></div>
-            <div class="col s3 m6 mt-2">
-                <button id="btn_pay" data-id_user="" onclick="teste(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;" value="733">
-                    <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
-                </span></button>
-            </div>
-        </div>
-
-
-
-
-        <div class="col s3 m2"></div>
-        <div class="col s3 m8">
-            <div id="docss" class="container" style="width:364px;"></div>
-        </div>
-        <div class="col s3 m2"></div>
-
-
-
-
-
-
-   </div>
-   <div class="modal-footer">
+      <!--BOTÃO PAGO-->
+       <div id="docss" class="col s12 m12" style="display: none; margin-top: 10px ;"></div>
+       <div class="col s12">
+         <div class="col s3"></div>
+         <div class="col s3 m6 mt-2">
+            <button id="btn_pay" data-id_user="" onclick="GetFile(this), PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;" value="733">
+            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
+            </span></button>
+         </div>
+      </div>
+    </div>
+    <div class="modal-footer">
        <!--BUTTON-->
        <div class="col s12 ">
-           <div class="col s10"></div>
-           <div class="col s2">
-               <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-           </div>
-       </div>
-   </div>
-</div>
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-   <!--FIM DO MODAL-->
-
-
-   <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-       <div class="container">
-           <div class="card">
-               <div class="card-content" style="margin-top: -93px;">
-                   <h5 class="corfont">FECHAMENTO DE PARCEIROS</h5>
-               </div>
-           </div>
+          <div class="col s10"></div>
+          <div class="col s2">
+             <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+          </div>
        </div>
     </div>
-
-
+ </div>
+ <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+    <!--FIM DO MODAL-->
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+       <div class="container">
+          <div class="card">
+             <div class="card-content" style="margin-top: -93px;">
+                <h5 class="corfont">FECHAMENTO DE PARCEIROS</h5>
+             </div>
+          </div>
+       </div>
+    </div>
     <div class="row">
-        <div class="col s12 m4 " style="padding: 19px;">
-           <!-- Current Balance -->
-           <div class="card animate fadeLeft">
-              <div class="card-content" style="background: #76c0763d;">
-                 <h6 class="center-align">
-                    <span style="text-align: center;  font-weight: bold;">PAGO</span>
-                    <p id="regisPayf"></p> 
-                    {% for k in arr_valPartinersPay %} 
-                    <p id="regisPay" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
-                     <i class="material-icons float-right">more_vert</i>
-                 </h6><br>
-                 <h5 id="valPay" class="center-align" style="color: #0d4d0dda;">{{ k.val }}</h5>
-                 {% endfor %}
-                 <h5 id="hPay" class="center-align" style="color: #0d4d0dda;"></h5>
-              </div>
-           </div>
-        </div>
-        <div class="col s12 m4 " style="padding: 19px;">
-            <!-- Current Balance -->
-            <div class="card animate fadeLeft" style="background: #f5000052;">
-               <div class="card-content">
+       <div class="col s12 m4 " style="padding: 19px;">
+          <!-- Current Balance -->
+          <div class="card animate fadeLeft">
+             <div class="card-content" style="background: #76c0763d;">
                 <h6 class="center-align">
-                    <span style="text-align: center;  font-weight: bold;">A PAGAR</span>
-                    <p id="regisPendingf"></p> 
-                    {% for k in arr_valPartinersPending %}
-                    <p id="regisPending" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
-                    <i class="material-icons float-right">more_vert</i>
-                </h6><br>
-                  <h5 id="valPending" class="center-align" style="color: #ff0303;">{{ k.val }}</h5>
+                   <span style="text-align: center;  font-weight: bold;">PAGO</span>
+                   <p id="regisPayf"></p>
+                   {% for k in arr_valPartinersPay %} 
+                   <p id="regisPay" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p>
+                   <i class="material-icons float-right">more_vert</i>
+                </h6>
+               </br>
+                <h5 id="valPay" class="center-align" style="color: #0d4d0dda;">{{ k.val }}</h5>
+                {% endfor %}
+                <h5 id="hPay" class="center-align" style="color: #0d4d0dda;"></h5>
+             </div>
+          </div>
+       </div>
+       <div class="col s12 m4 " style="padding: 19px;">
+          <!-- Current Balance -->
+          <div class="card animate fadeLeft" style="background: #f5000052;">
+             <div class="card-content">
+                <h6 class="center-align">
+                   <span style="text-align: center;  font-weight: bold;">A PAGAR</span>
+                   <p id="regisPendingf"></p>
+                   {% for k in arr_valPartinersPending %}
+                   <p id="regisPending" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p>
+                   <i class="material-icons float-right">more_vert</i>
+                </h6>
+               </br>
+                <h5 id="valPending" class="center-align" style="color: #ff0303;">{{ k.val }}</h5>
                 {% endfor %}
                 <h5 id="hPending"></h5>
-            </div>
-            </div>
-         </div>
-         <div class="col s12 m4 " style="padding: 19px;">
-            <!-- Current Balance -->
-            <div class="card animate fadeLeft">
-               <div class="card-content" style="background: #fabb002b;">
+             </div>
+          </div>
+       </div>
+       <div class="col s12 m4 " style="padding: 19px;">
+          <!-- Current Balance -->
+          <div class="card animate fadeLeft">
+             <div class="card-content" style="background: #fabb002b;">
                 <h6 class="center-align">
-                    <span style="text-align: center; font-weight: bold;">TOTAL</span>
-                    <p id="regisAllf"></p> 
-                    {% for k in arr_valTotalPartiners %}
-                    <p id="regisAll" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p> 
-                    <i class="material-icons float-right">more_vert</i>
-                </h6><br>
-                  <h5 id="valAll" class="center-align">{{ k.val }}</h5>
+                   <span style="text-align: center; font-weight: bold;">TOTAL</span>
+                   <p id="regisAllf"></p>
+                   {% for k in arr_valTotalPartiners %}
+                   <p id="regisAll" class="medium-small center-align"><i>({{ k.qdt}} registros)</i></p>
+                   <i class="material-icons float-right">more_vert</i>
+                </h6>
+               </br>
+                <h5 id="valAll" class="center-align">{{ k.val }}</h5>
                 {% endfor %}
                 <h5 id="hAll" class="center-align"></h5>
-               </div>
-            </div>
-         </div>
-        
-     </div>
+             </div>
+          </div>
+       </div>
+    </div>
+    <div class="container">
+       <div class="card">
+          <!-- Externo -->
+          <div id="userint" class="row">
+             <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="input-field col s12 m4">
+                   <input  id="cpf" type="text" onkeyup="searchPatients(this)">
+                   <label for="cpf">
+                   <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+                </div>
+                <div class="input-field col s12 m2">
+                   <label class="active" for="select">Selecione um mês</label>
+                   <select name="select" id="mes_search" class="error">
+                      <option value="">Selecione</option>
+                      <option value="01">Janeiro</option>
+                      <option value="02">Fevereiro</option>
+                      <option value="03">Março</option>
+                      <option value="04">Abril</option>
+                      <option value="05">Maio</option>
+                      <option value="06">Junho</option>
+                      <option value="07">Julho</option>
+                      <option value="08">Agosto</option>
+                      <option value="09">Setembro</option>
+                      <option value="10">Outubro</option>
+                      <option value="11">Novembro</option>
+                      <option value="12">Dezembro</option>
+                   </select>
+                </div>
+                <div class="col s12 m3">&nbsp;
+                   <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                   <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                   </button>
+                </div>
+                <!-- COMEÇO DA TABLE -->
+                <div class="col s12 scroll">
+                   <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                      <thead style="background-color: #581848; color: white; font-size: 15px">
+                         <tr>
+                            <th data-field="id" style="text-align: center;">Nome [NC]</th>
+                            <th data-field="id" style="text-align: center;">Categoria</th>
+                            <th data-field="id" style="text-align: center;">Comercial</th>
+                            <th data-field="id" style="text-align: center;">Status</th>
+                            <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                            <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                         </tr>
+                      </thead>
+                      <tbody id="tb_appendTable">
+                         {% for k in arr_SearchClosingPartners %}
+                         <tr id="tr_{{ k.id }}">
+                            <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
+                            <td style="text-align: center;">{{ k.categoria}}</td>
+                            <td style="text-align: center;">{{ k.comercial}}</td>
+                            <td style="text-align: center;">{{ k.status}}</td>
+                            <td style="text-align: center;">{{ k.valor}}</td>
+                            <td style="text-align: center;">
+                               <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                               <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                               </a>
+                            </td>
+                         </tr>
+                         {% endfor %}
+                      </tbody>
+                   </table>
+                </div>
+                <!-- FIM DA TABLE -->
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
 
-       <div class="container">
-           <div class="card">
-               <!-- Externo -->
-               <div id="userint" class="row">
-                   <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                       <div class="input-field col s12 m4">
-                         <input  id="cpf" type="text" onkeyup="searchPatients(this)">
-                           <label for="cpf">
-                               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                       </div>
-
-                       <div class="input-field col s12 m2">
-                        <label class="active" for="select">Selecione um mês</label>
-                           <select name="select" id="mes_search" class="error">
-                               <option value="">Selecione</option>
-                               <option value="1">Janeiro</option>
-                               <option value="2">Fevereiro</option>
-                               <option value="3">Março</option>
-                               <option value="4">Abril</option>
-                               <option value="5">Maio</option>
-                               <option value="6">Junho</option>
-                               <option value="7">Julho</option>
-                               <option value="8">Agosto</option>
-                               <option value="9">Setembro</option>
-                               <option value="10">Outubro</option>
-                               <option value="11">Novembro</option>
-                               <option value="12">Dezembro</option>
-                           </select>
-                       </div> 
-                       <div class="col s12 m3">&nbsp;
-                           <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                           </button>
-                       </div>
-                       <!-- COMEÇO DA TABLE -->
-                       <div class="col s12 scroll">
-                           <table id="page-length-option" class="bordered" style="overflow-x: auto">
-                               <thead style="background-color: #581848; color: white; font-size: 15px">
-                                   <tr>
-                                       <th data-field="id" style="text-align: center;">Nome [NC]</th>
-                                       <th data-field="id" style="text-align: center;">Categoria</th>
-                                       <th data-field="id" style="text-align: center;">Comercial</th>
-                                       <th data-field="id" style="text-align: center;">Status</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
-                                       <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                                   </tr>
-                               </thead>
-                               <tbody id="tb_appendTable">
-                                {% for k in arr_SearchClosingPartners %}
-                                   <tr id="tr_{{ k.id }}">
-                                       <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
-                                       <td style="text-align: center;">{{ k.categoria}}</td>
-                                       <td style="text-align: center;">{{ k.comercial}}</td>
-                                       <td style="text-align: center;">{{ k.status}}</td>
-                                       <td style="text-align: center;">{{ k.valor}}</td>
-                                       <td style="text-align: center;">
-                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                                                <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                                            </a>
-                                       </td>
-                                   </tr>
-                                   {% endfor %}
-                               </tbody>
-                           </table>
-                       </div>
-                       <!-- FIM DA TABLE -->
-                   </div>
-               </div>
-           </div>
-      </div>
-</div>
-
-
-
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+
 <script type = "text/javascript" >
 
-
-//FUNCTION BUSCAR
-function searchPatients(object) {
-    var e = $(object).val().toUpperCase();
-    if (e == "") {
-        $('#tb_appendTable > tr').each(function() {
+   //FUNCTION BUSCAR
+   function searchPatients(object) {
+      var e = $(object).val().toUpperCase();
+      if (e == "") {
+         $('#tb_appendTable > tr').each(function () {
             $(this).show();
-        });
-    } else {
-        $('#tb_appendTable > tr').each(function() {
+         });
+      } else {
+         $('#tb_appendTable > tr').each(function () {
             var trs = $(this).find("td");
             var tr1 = $(trs[0]).text().toUpperCase();
             var check = (tr1.indexOf(e) != -1);
             if (check == true) {
-                $(this).show();
+               $(this).show();
             } else {
-                $(this).hide();
+               $(this).hide();
             }
-        });
-    }
-}
+         });
+      }
+   }
 
 //CONFIG MODAL
-$(document).ready(function() {
-    $('.modal').modal();
-    $('.modal').css({
-        "width": "80%",
-    });
+$(document).ready(function () {
+   $('.modal').modal();
+   $('.modal').css({
+      "width": "80%",
+   });
 });
 
 
 function searchMonth() {
-    //VALIDAÇÃO DE CAMPO NULL
-    var month = $("#mes_search").val();
+   //VALIDAÇÃO DE CAMPO NULL
+   var month = $("#mes_search").val();
 
-        if (month == ""){
-            alert("Selecione um mês válido" )
-                return false
-        }
-            
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "month": month //DICT COM O VALOR DO ID
-    };
-    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-        var dados = re["message"]
-        if (dados == false) {
-            $("#tb_appendTable").html(""); 
-            $("#hPay").html(""); 
-            $("#hPending").html(""); 
-            $("#hAll").html(""); 
-            //COLOCAR QUANDO N ENCONTRAR NADA R$ 00,00
-
-            var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
-            $("#tb_appendTable").append(appende);
-            
-            var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
-            $("#hPay").append(hPay);
-            $("#valPay").hide();
+   if (month == "") {
+      alert("Selecione um mês válido")
+      return false
+   }
 
 
-            var hPending = '<h5 class="center-align" style="color: #ff0303;">R$ 00,00</h5>'
-            $("#hPending").append(hPending); 
-            $("#valPending").hide();
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "month": month //DICT COM O VALOR DO ID
+   };
+   fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
+      var dados = re["message"]
+      if (dados == false) {
+         $("#tb_appendTable").html("");
+         $("#hPay").html("");
+         $("#hPending").html("");
+         $("#hAll").html("");
+         //COLOCAR QUANDO N ENCONTRAR NADA R$ 00,00
 
-            var hAll = '<h5 class="center-align">R$ 00,00</h5>'
-            $("#hAll").append(hAll); 
-            $("#valAll").hide();
+         var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+         $("#tb_appendTable").append(appende);
 
-        
-        
-		} else {
-            var dados = re["message"];
-            $("#tb_appendTable").html(""); 
-            $.map(dados, function(n, i) {
-                var a = `
+         var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
+         $("#hPay").append(hPay);
+         $("#valPay").hide();
+
+
+         var hPending = '<h5 class="center-align" style="color: #ff0303;">R$ 00,00</h5>'
+         $("#hPending").append(hPending);
+         $("#valPending").hide();
+
+         var hAll = '<h5 class="center-align">R$ 00,00</h5>'
+         $("#hAll").append(hAll);
+         $("#valAll").hide();
+
+
+      } else {
+         var dados = re["message"];
+         $("#tb_appendTable").html("");
+         $.map(dados, function (n, i) {
+            var a = `
                     <tr id="tr_${n.id}">
                         <td style="text-align: center;">${n.medico} [${n.rn}] </td>
                         <td style="text-align: center;">${n.categoria}</td>
@@ -400,224 +382,243 @@ function searchMonth() {
                         </td>
                     </tr>
                     `;
-                $("#tb_appendTable").append(a);
+            $("#tb_appendTable").append(a);
 
 
-                var dados = re["messages"];
-                $("#valAll").hide();
-                $("#hAll").html(""); 
-                $("#regisAll").hide(); 
-                $("#regisAllf").html(""); 
-                $.map(dados, function(n, i) {
-                    var b = `
+            var dados = re["messages"];
+            $("#valAll").hide();
+            $("#hAll").html("");
+            $("#regisAll").hide();
+            $("#regisAllf").html("");
+            $.map(dados, function (n, i) {
+               var b = `
                         <h5 id="hAll" class="center-align">${n.val}</h5>     
                     `;
-                    $("#hAll").append(b);
+               $("#hAll").append(b);
 
-                    var b2 = ` 
+               var b2 = ` 
                         <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
                     `;
-                    $("#regisAllf").append(b2);
+               $("#regisAllf").append(b2);
 
 
+            });
 
-                });
 
-
-                var dados = re["messageApagar"];
-                $("#hPending").html(""); 
-                $("#valPending").hide();
-                $("#regisPending").hide();
-                $("#regisPendingf").html("");
-                $.map(dados, function(n, i) {
-                    var c = `
+            var dados = re["messageApagar"];
+            $("#hPending").html("");
+            $("#valPending").hide();
+            $("#regisPending").hide();
+            $("#regisPendingf").html("");
+            $.map(dados, function (n, i) {
+               var c = `
                     <h5 class="center-align" style="color: #ff0303;">${n.val}</h5>     
                     `;
-                    $("#hPending").append(c);
+               $("#hPending").append(c);
 
-                    var c2 = ` 
+               var c2 = ` 
                         <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
                     `;
-                    $("#regisPendingf").append(c2);
+               $("#regisPendingf").append(c2);
 
-                });
+            });
 
 
-                var dados = re["messagePag"];
-                if (dados == false){
-                    $("#hPay").html(""); 
-                    $("#valPay").hide();
-                    $("#regisPayf").html(""); 
-                    $("#regisPay").hide();
-                    var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
-                    $("#hPay").append(hPay);
-                    $("#valPay").hide();
+            var dados = re["messagePag"];
+            if (dados == false) {
+               $("#hPay").html("");
+               $("#valPay").hide();
+               $("#regisPayf").html("");
+               $("#regisPay").hide();
+               var hPay = '<h5 class="center-align" style="color: #0d4d0dda;">R$ 00,00</h5>'
+               $("#hPay").append(hPay);
+               $("#valPay").hide();
 
-                    var hPay2 = ` 
+               var hPay2 = ` 
                         <p class="medium-small center-align"><i>(0 registros)</i></p> 
                     `;
-                    $("#regisPayf").append(hPay2);
+               $("#regisPayf").append(hPay2);
 
-                }else{
-                    $("#hPay").html(""); 
-                    $("#valPay").hide();
-                    $("#regisPayf").html(""); 
-                    $("#regisPay").hide();
-                    $.map(dados, function(n, i) {
-                        var d = `
+            } else {
+               $("#hPay").html("");
+               $("#valPay").hide();
+               $("#regisPayf").html("");
+               $("#regisPay").hide();
+               $.map(dados, function (n, i) {
+                  var d = `
                         <h5 class="center-align" style="color: #0d4d0dda;">${n.val}</h5>     
                         `;
-                        $("#hPay").append(d);
+                  $("#hPay").append(d);
 
-                        var d2 = ` 
+                  var d2 = ` 
                         <p class="medium-small center-align"><i>(${n.qdt} registros)</i></p> 
                     `;
-                    $("#regisPayf").append(d2);
+                  $("#regisPayf").append(d2);
 
-                    });
+               });
 
-                }
-                
-
+            }
 
 
+         });
 
-        });
-        
-            
-        }
-    });
+
+      }
+   });
 }
 
-$("#pesq_agenda").click(function() {
-    searchMonth();
+$("#pesq_agenda").click(function () {
+   searchMonth();
 });
 
 
-
-
-
-
-
 class request {
-  constructor(token) {
+   constructor(token) {
       this.token = token;
-  }
-  body(to, method, typeMethod, formdata, sucess){
-    $.ajax({
-        url: to+"?csrfmiddlewaretoken="+this.token,
-        type: method,
-        dataType: typeMethod,
-        data: JSON.stringify(formdata),
-        success: function(response) {
+   }
+   body(to, method, typeMethod, formdata, sucess) {
+      $.ajax({
+         url: to + "?csrfmiddlewaretoken=" + this.token,
+         type: method,
+         dataType: typeMethod,
+         data: JSON.stringify(formdata),
+         success: function (response) {
             sucess(response);
-        },
-        error: function (request, status, error) {
+         },
+         error: function (request, status, error) {
             sucess(error);
-        }
-    });
-  }
-  put(to, formdata, sucess){
-    $.ajax({
-        url: to,
-        type: "PUT",
-        dataType: "JSON",
-        headers: {'X-CSRFToken': this.token},
-        mode: 'same-origin',
-        data: formdata,
-        success: function(response) {
+         }
+      });
+   }
+   put(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "PUT",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
             sucess(response);
-        },
-        error: function (request, status, error) {
+         },
+         error: function (request, status, error) {
             sucess(error);
-        }
-    });
-  }
-  get(to, formdata, sucess){
-    $.ajax({
-        url: to,
-        type: "GET",
-        dataType: "JSON",
-        headers: {'X-CSRFToken': this.token},
-        mode: 'same-origin',
-        data: formdata,
-        success: function(response) {
+         }
+      });
+   }
+   get(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "GET",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
             sucess(response);
-        },
-        error: function (request, status, error) {
+         },
+         error: function (request, status, error) {
             sucess(error);
-        }
-    });
-  }
-  post(to, formdata, sucess){
-    $.ajax({
-        url: to,
-        type: "POST",
-        dataType: "JSON",
-        headers: {'X-CSRFToken': this.token},
-        mode: 'same-origin',
-        data: formdata,
-        success: function(response) {
+         }
+      });
+   }
+   post(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "POST",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
             sucess(response);
-        },
-        error: function (request, status, error) {
+         },
+         error: function (request, status, error) {
             sucess(error);
-        }
-    });
-  }
-  delete(to, formdata, sucess){
-    $.ajax({
-        url: to,
-        type: "DELETE",
-        dataType: "JSON",
-        headers: {'X-CSRFToken': this.token},
-        mode: 'same-origin',
-        data: formdata,
-        success: function(response) {
+         }
+      });
+   }
+   delete(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "DELETE",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
             sucess(response);
-        },
-        error: function (request, status, error) {
+         },
+         error: function (request, status, error) {
             sucess(error);
-        }
-    });
-  }
+         }
+      });
+   }
 }
 
+//REMOVE O FILE 
+function removeFile(object) {
+   var id_partners = $(object).data("id_partners");
+   var name_file = $(object).data("name");
+   var type_file = $(object).data("type");
+   console.log(name_file)
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "name_file": name_file,
+      "type_file": type_file,
+      "id_partners": id_partners
+   };
 
-
+   fetchRequest("{% url 'RemoveFilePartners' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+      if (re["response"] == "true") {
+         alert(re["message"]);
+         $(object).closest(".closests").remove();
+      }
+   });
+}
 
 
 //VISUALIZA O APPEND
 function viewFile(object) {
-    var path = $(object).data("url");
-    var filename = $(object).data("id");
-    var a = document.createElement("a");
-    a.href = "/docs/" + path;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
+   var path = $(object).data("path");
+   var filename = $(object).data("name");
+   console.log(path)
+   console.log(filename)
+   var a = document.createElement("a");
+   a.href = "/docs/" + path;
+   a.download = filename;
+   document.body.appendChild(a);
+   a.click();
 }
 
 
-function viewAgenModal(object){
-    var id_user = $(object).data("id_user");
-    var month = $("#mes_search").val();
+function viewAgenModal(object) {
+   var id_user = $(object).data("id_user");
+   var month = $("#mes_search").val();
 
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user ,
-        "month": month,
-    };
-    $("#modal2").hide();
-    $(object).prop("disabled", true);
-    fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-        if (re["response"] == false) {
-			alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-		} else {
-        $("#modal2").show();
-        var dados = re["message2"];
-        $("#tb_naoAtingido").html("");
-        $.map(dados, function(n, i) {
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user,
+      "month": month,
+   };
+   $("#modal2").hide();
+   $(object).prop("disabled", true);
+   fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
+      if (re["response"] == false) {
+         alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      } else {
+         $("#modal2").show();
+         var dados = re["message2"];
+         $("#tb_naoAtingido").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.id}" role="row" class="odd">
                     <td>${n.paciente}</td>
@@ -626,11 +627,11 @@ function viewAgenModal(object){
                 </tr>
             `;
             $("#tb_naoAtingido").append(a);
-        });
-        
-        var dados = re["message"];
-        $("#glosa").html("");
-        $.map(dados, function(n, i) {
+         });
+
+         var dados = re["message"];
+         $("#glosa").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.id}" role="row" class="odd">
                     <td>${n.pacienteG}</td>
@@ -639,12 +640,12 @@ function viewAgenModal(object){
                 </tr>
             `;
             $("#glosa").append(a);
-        });
+         });
 
 
-        var dados = re["messageAnalise"];
-        $("#analise").html("");
-        $.map(dados, function(n, i) {
+         var dados = re["messageAnalise"];
+         $("#analise").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.id}" role="row" class="odd">
                     <td>${n.pacienteA}</td>
@@ -653,12 +654,12 @@ function viewAgenModal(object){
                 </tr>
             `;
             $("#analise").append(a);
-        });
+         });
 
 
-        var dados = re["messagePago"];
-        $("#pago").html("");
-        $.map(dados, function(n, i) {
+         var dados = re["messagePago"];
+         $("#pago").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.idP}" role="row" class="odd">
                     <td>${n.pacienteP}</td>
@@ -669,11 +670,11 @@ function viewAgenModal(object){
                 </tr>
             `;
             $("#pago").append(a);
-        });
+         });
 
-        var dados = re["messageOutros"];
-        $("#outros").html("");
-        $.map(dados, function(n, i) {
+         var dados = re["messageOutros"];
+         $("#outros").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.idlead}" role="row" class="odd">
                     <td>${n.pacienteO}</td>
@@ -682,14 +683,12 @@ function viewAgenModal(object){
                 </tr>
             `;
             $("#outros").append(a);
-        });
+         });
 
 
-
-    
-        var dados = re["messageCount"];
-        $("#Count").html("");
-        $.map(dados, function(n, i) {
+         var dados = re["messageCount"];
+         $("#Count").html("");
+         $.map(dados, function (n, i) {
             var a = `
                 <tr id="tr_${n.id}">
                     <th rowspan="1" colspan="1"> TOTAL: </th>
@@ -699,179 +698,158 @@ function viewAgenModal(object){
                     <th rowspan="1" colspan="1">${n.valor}</th>
                 </tr>
             `;
-            $("#Count" ).append(a);
-        });
-
-    
-    }
-
-    });
+            $("#Count").append(a);
+         });
 
 
-    var r = new request($('{% csrf_token %}').val());
-    r.get("{% url 'FetchPartnersFiles' %}", formpost, function(re) {
-        if(re["response"] == true){
+      }
+
+   });
+
+   var r = new request($('{% csrf_token %}').val());
+   r.get("{% url 'FetchPartnersFiles' %}", formpost, function (re) {
+      if (re["response"] == true) {
          var dados = re["message"];
          var docs = dados["docs"];
-            if (docs.length > 0){
-                $.map(docs, function(n, i){
-                    div += `
-                        <div class="container" style="width:364px;">
-                            <div class="dropify-wrapper has-preview" style="height: 114px;">
+         div = ""
+         div2 = ""
+         console.log(docs)
+         if (docs.length > 0) {
+            $.map(docs, function (n, i) {
+               $("#docss").css("display", "block");
+               div += ` 
+                        <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0" data-down="${n.path}">
+                            <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
                                 <div class="dropify-errors-container">
                                 </div>
-                                <input id="doc_anx" name="file1" type="file" class="dropify" data-height="100"><button type="button" class="dropify-clear">Remove</button>
-                                <div class="dropify-preview" style="display: block;">
-                                    <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">sql</span></span>
-                                    <div class="dropify-infos">
+                                <button type="button" class="dropify-clear" onclick=\"removeFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">Remover</button>
+                                <div id="display" class="dropify-preview" style="display: block;">
+                                    <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">NF</span></span>
+                                    <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
                                         <div class="dropify-infos-inner">
-                                        <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">customer_refer_register_paciente.sql</span></p>
-                                        <p class="dropify-infos-message">Clique para fazer download.</p>
+                                            </br>
+                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
+                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.type}</span></p>
+                                            <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     `
-                });
-                $("#docss").html(div);
+            });
 
-            }
-            else{
-                divInput = `
-                <div class="dropify-wrapper">
-                    <div class="dropify-message">
-                        <span class="file-icon"></span> 
-                        <p>Drag and drop a file here or click</p>
-                        <div class="dropify-loader" style="display: none;"></div>
-                        <div class="dropify-errors-container">
-                            <ul></ul>
-                        </div>
-                        <input  id="doc_anx" type="file" id="input-file-now" class="dropify"><button type="button" class="dropify-clear">Remove</button>
-                        <div class="dropify-preview" style="display: none;">
-                            <span class="dropify-render"></span>
-                            <div class="dropify-infos">
-                                <div class="dropify-infos-inner">
-                                <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">Estima Nutrição.xlsx</span></p>
-                                <p class="dropify-infos-message">Drag and drop or click to replace</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-               `
-                $("#docss").html(divInput);
-                console.log(divInput)
+            $("#docss").html(div);
 
-        }
-        } 
-        
-    });
-   
+         } else {
+            $("#docss").css("display", "none");
+         }
+      }
+
+   });
+
 }
 
 //PAGO
 function PartnersPago(object) {
-    var id_user = $(object).data("id_user");
+   var id_user = $(object).data("id_user");
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user, //DICT COM O VALOR DO ID
 
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user, //DICT COM O VALOR DO ID
-        
-    };
-    fetchRequest("{% url 'payPartnersV' %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == "true") {
-            alert(re["message"]);
-            $("#btn_end").attr("disabled", true);
-            location.reload();
-        }
-    });
+   };
+   fetchRequest("{% url 'payPartnersV' %}", "POST", "JSON", formpost, function (re) {
+      if (re["response"] == "true") {
+         $("#btn_end").attr("disabled", true);
+      }
+   });
 }
 
 //INFOS DO MODAL  (NOME/STATUS)
 function SearchInfo(object) { //FUNCTION DO ONCLICK
-    var id_user = $(object).data("id_user");
+   var id_user = $(object).data("id_user");
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user //DICT COM O VALOR DO ID
+   };
 
-    
-    //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
-    //$("#btn_start").data("id_user", id_user);
+   fetchRequest("{% url 'SearchInfoM' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+      if (re["response"] == false) {
+         alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         $("#modal2").show();
+         var key = re["message"];
+         var dictKeys = { // nome id / nome do grupo/ nome do value
+            "btn_pay": key["teste"]["btn_pay"],
+            "nome_medico": key["teste"]["nome_medico"],
+            "status_pagamento": key["teste"]["status_pagamento"],
+            "valorTotal": key["teste"]["val"],
 
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user //DICT COM O VALOR DO ID
-    };
+         }
+         $.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+            $(`#${i}`).val(n);
+            var findLabel = $(`#${i}`).closest("div");
+            $(findLabel).find("label").attr("class", "active");
+         });
 
-    fetchRequest("{% url 'SearchInfoM' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-        if (re["response"] == false) {
-            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-        } else { //SE FOR VERDADDEIRA, PROSSEGUE
-            $("#modal2").show();
-            var key = re["message"];
-            var dictKeys = { // nome id / nome do grupo/ nome do value
-                "btn_pay": key["teste"]["btn_pay"],
-                "nome_medico": key["teste"]["nome_medico"],
-                "status_pagamento": key["teste"]["status_pagamento"],
-                "valorTotal": key["teste"]["val"],
+         $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
 
-            }
-            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
-                $(`#${i}`).val(n);
-                var findLabel = $(`#${i}`).closest("div");
-                $(findLabel).find("label").attr("class", "active");
-            });
-            
-            $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
-
-        }
-    });
+      }
+   });
 
 }
 
 
-
-
-
 // ------------------------  DOCS  --------------------------------//
-$('.dropify').dropify();
+$('.dropify').dropify(); //Ativar o dropify
 
+   $(document).ready(function(){ // tooltip
+      $('.tooltipped').tooltip();
+   });
 
-function teste(object){
-    var id_partners = $(object).data("id_user");
-    var files =  $("#doc_anx").val();
-    console.log(files)
-    if (files == "" || ($("#doc_anx").prop("files") == undefined)){
-        alert("Por favor, insira a Nota Fiscal.")
-    }else{
-        files = document.querySelector("#doc_anx").files[0]; // seleciona o doc e manda para o back
+function GetFile(object) {
+   var id_partners = $(object).data("id_user");
+   var month = $("#mes_search").val();
 
-        var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
-        var formpost = [{
-                "name": "csrfmiddlewaretoken",
-                "value": $('input[name="csrfmiddlewaretoken"]').val()
-            },
-            {
-                "name": "file",
-                "value": files
-            },
-            {
-                "name": "id_partners",
-                "value": id_partners
-            },
-        ];
-        console.log(files)
-        fetchRequestFiles("{% url 'ApiNfPartners' %}", "POST", "JSON", formpost, function(re) {
-            if (re["response"] == false) {
-                alert("Nenhum dado encontrado.");
-            } else {
-                //$("#btn_salvar").attr("disabled", true);
-                alert(re["message"]);
-                location.reload();
-            }
-        });
-    }
-   
-    //verificação para preencher o tipo do arquivo.
-    
+   var files = $("#doc_anx").val();
+   console.log(files)
+
+   if (files == "" || ($("#doc_anx").prop("files") == undefined)) {
+      alert("Por favor, insira a Nota Fiscal para esse mês.")
+   } else {
+
+      files = document.querySelector("#doc_anx").files[0]; // seleciona o doc e manda para o back
+
+      var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+      var formpost = [{
+            "name": "csrfmiddlewaretoken",
+            "value": $('input[name="csrfmiddlewaretoken"]').val()
+         },
+         {
+            "name": "file",
+            "value": files
+         },
+         {
+            "name": "id_partners",
+            "value": id_partners
+         },
+         {
+            "name": "month",
+            "value": month
+         },
+      ];
+      console.log(files)
+      fetchRequestFiles("{% url 'ApiNfPartners' %}", "POST", "JSON", formpost, function (re) {
+         if (re["response"] == false) {
+            alert("Nenhum dado encontrado.");
+         } else {
+            alert(re["message"]);
+            location.reload();
+         }
+      });
+   }
+
+   //verificação para preencher o tipo do arquivo.
 
 
 }
@@ -893,5 +871,7 @@ function teste(object){
         files = "";
     }
 */
+
+
 </script>
 {% endblock %}      

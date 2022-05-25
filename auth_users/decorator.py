@@ -447,12 +447,27 @@ def FschedulePickup(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
+        
+
+        searchID = "SELECT A.nome_p, B.nome_p, B.unity_p FROM auth_agenda.collection_schedule A INNER JOIN customer_refer.patients B ON B.id_p = %s;"
+        cursor.execute(searchID, (name,))
+        dados = cursor.fetchall()
+        if dados:
+            for idPaciente, nomePaciente, unityPaciente in dados:
+                pass
+        else:
+            return {
+                "response": "false",
+                "message": "Por favor tente novamente."
+            }
+
         searchID = "SELECT id, nome_conv FROM admins.health_insurance WHERE nome_conv = %s"
         cursor.execute(searchID, (convenio,))
         dados = cursor.fetchall()
         
         for id_conv, nome_conv  in dados:
-            params = (name, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number,complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unity,)
+            params = (name, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number,complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente,)
+            print(params)
             query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_resgistro`, `unity`, `identification`, `perfil_int`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '');"
             cursor.execute(query, params)
 
@@ -594,7 +609,6 @@ def FScheduledPickup(request):
             }
 
     Q = fetchQueryUnity("cs.unity", perfil, unityY)
-
     # VARIABLES aqui
     S_COLUMNS = ""
     S_TABLE = "auth_agenda.collection_schedule cs INNER JOIN customer_refer.patients au2 ON au2.id_p = cs.nome_p INNER JOIN auth_users.users au ON au.id = cs.resp_enfermeiro INNER JOIN admins.type_services ts ON ts.id = cs.tp_servico INNER JOIN admins.health_insurance hi ON hi.id = cs.convenio INNER JOIN admins.exam_type et ON et.id = cs.tp_exame INNER JOIN auth_users.users usrr ON usrr.nome = cs.resp_atendimento INNER JOIN admins.units_shiloh unit ON unit.id_unit_s = usrr.unity"
@@ -822,15 +836,16 @@ def ApiViewDataUserModalFunction(request):
         }
 
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "auth_users.users u" #VAR COM CONEXAO TABLE
+    db.table = "auth_users.users u INNER JOIN auth_permissions.permissions_type b ON u.perfil = b.id"  #VAR COM CONEXAO TABLE
     db.condition = "WHERE u.id = %s" #VAR COM A CONDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM 
-    dados = db.fetch(["u.perfil, u.cpf, u.nome, u.data_nasc, u.email, u.tel1, u.tel2, u.cep, u.rua, u.numero, u.complemento, u.bairro, u.city, u.uf"], True)
+    dados = db.fetch(["b.descriptions, u.cpf, u.nome, u.data_nasc, u.email, u.tel1, u.tel2, u.cep, u.rua, u.numero, u.complemento, u.bairro, u.city, u.uf, u.unity"], True)
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for u_perfil, u_cpf, u_nome, u_data_nasc, u_email, u_tel1, u_tel2, u_cep, u_rua, u_numero, u_complemento, u_bairro, u_city, u_uf in dados:
+        for b_descriptions, u_cpf, u_nome, u_data_nasc, u_email, u_tel1, u_tel2, u_cep, u_rua, u_numero, u_complemento, u_bairro, u_city, u_uf, unity in dados:
             dict_response = { #VARIAVEL COM OS DICTS
                 "id": id_user,
-                "perfil": u_perfil,
+                "perfil": b_descriptions,
+                "unity": unity,
                 "personal": {
                     "cpfcnpj": u_cpf,
                     "name": u_nome,
@@ -973,7 +988,7 @@ def TabelaPartnersUnit(request):
     
 
 
-#MODAL PARCEIROS estou aqui
+#MODAL PARCEIROS
 def ApiViewDataPartnersModalFunction(request):
     if not allowPermission(request, "editPartners"):
         return json_without_success("Você não possui permissão.")
@@ -1167,18 +1182,18 @@ def ApiChangeStatusConvenioFunction(request):
 #UPDATE PARCEIROS E USUARIO INTERNO
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
-        #return json_without_success("Permissão negada")
-
+        print(allowPermission)
+    else:
         bodyData = request.POST #var para não precisar fazer tudo um por um
 
         id_user = bodyData.get('id_user')
+        perfil = bodyData.get('perfil')
         padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
         porcentagem = bodyData.get('porcentagem').replace("%", "")
         fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "")
 
-
         dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
-            "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
+            #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
             "cpf": "cpf",
             "name": "nome",
             "date_nasc": "data_nasc",
@@ -1195,17 +1210,24 @@ def ApiChangeUsersModalFunction(request):
             "rn": "rn",
             "categoria": "categoria",
             "obs": "obs",  
+            "unity": "unity",  
         }
 
         padrao = float(padrao) if padrao not in ["", None] else None
         porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
         fixo = float(fixo) if fixo not in ["", None] else None
-
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
 
         for key in dataKeys:
-
+            query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
+            params = (
+                perfil,
+            )    
+            cursor.execute(query, params)
+            dados = cursor.fetchall()
+            for id in dados:
+                pass
             try:
                 if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     query = "UPDATE auth_users.users SET {} = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
@@ -1220,16 +1242,18 @@ def ApiChangeUsersModalFunction(request):
                     
             except:
                 if key in bodyData:
-                    query = "UPDATE auth_users.users SET {} = %s WHERE id = %s ".format(dataKeys[key])
+                    query = "UPDATE auth_users.users SET {} = %s, perfil = %s WHERE id = %s ".format(dataKeys[key])
                     params = (
                         bodyData.get(key),
+                        id,
                         id_user,
                     )
+                    print(params)
                     cursor.execute(query)
-    return {
-        "response": True,
-        "message": "Dados atualizados com sucesso."
-    }
+        return {
+            "response": True,
+            "message": "Dados atualizados com sucesso."
+        }
 
 #SELECT PACIENTES LISTAR
 def searchIndication(request):
@@ -1354,21 +1378,31 @@ def ApiCadastrePatienteFunction(request):
        
         queryExists = "SELECT id_p FROM customer_refer.patients WHERE cpf_p LIKE %s"
         cursor.execute(queryExists, (cpf,))
+        print("este é o cpf >>>>", cpf)
         dados = cursor.fetchall()
-        if dados:
-            return {"response": "true", "message": "Paciente já cadastrado em sistema!"}
 
+        if cpf == "":
+            queryName = "SELECT id_p FROM customer_refer.patients WHERE nome_p LIKE %s"
+            cursor.execute(queryName, (name,))
+            print("este é o name >>>>", name)
+            dados = cursor.fetchall()
+            if dados:
+                return {"response": "false", "message": "Paciente já cadastrado em sistema!"}
+            else:
+                param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity,)
+                query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(query, param)
+
+                query2= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = '1');"
+                cursor.execute(query2)
+
+                #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
+                query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
+                cursor.execute(query, (lead,))
         else:
-            param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity,)
-            query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(query, param)
-
-            query2= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = '1');"
-            cursor.execute(query2)
-
-            #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
-            query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
-            cursor.execute(query, (lead,))
+            if dados:
+                return {"response": "false", "message": "Paciente já cadastrado em sistema!"}
+                
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -1709,7 +1743,6 @@ def searchScheduledPickup(request):
 
         Q = fetchQueryUnity("unit.id_unit_s", perfil, unityY) 
         query = "SELECT unit.unit_s, a.id, pa.nome_p, a.tel1_p, b.tipo_servico, c.tipo_exame, e.nome, a.resp_medico, a.data_agendamento, a.status, a.hr_agendamento FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_users.users usrr ON usrr.nome = a.resp_atendimento INNER JOIN admins.units_shiloh unit ON unit.id_unit_s = usrr.unity WHERE {} AND a.status IN ('Pendente', 'Em Andamento') AND a.identification LIKE  'Externo'  ORDER BY a.data_agendamento DESC".format(Q)
-        
         cursor.execute(query)
         dados = cursor.fetchall()
         array = []
@@ -1803,6 +1836,7 @@ def SearchModalScheduled(request):
 #ATUALIZAR STATUS DO AGENDAMENTO CONCLUIDO
 def FunctionStatusAgendaConc(request):
     id = request.POST.get("id")
+    convenio = request.POST.get("convenio")
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
    
     with connections['auth_users'].cursor() as cursor:
@@ -1822,11 +1856,17 @@ def FunctionStatusAgendaConc(request):
         param2= ( id, data_atual,)
         query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s WHERE (`id` = %s);"
         cursor.execute(query, param)
-
-        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `status_exame_f`, `data_registro_f`, `regis`, `identification`) VALUES (NULL, %s, '8', %s, '0', 'Externo');"
-        cursor.execute(query2, param2)
         
-        
+        paramver = (id,)
+        queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
+        cursor.execute(queryver, paramver)
+        dados = cursor.fetchall()
+        if dados:
+            for tp_serviço, id, conv in dados:
+                if  tp_serviço != "5" or conv !=  72:
+                    query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `status_exame_f`, `data_registro_f`, `regis`, `identification`) VALUES (NULL, %s, '8', %s, '0', 'Externo');"
+                    cursor.execute(query2, param2)
+                        
         params7=(id,)
         searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
         cursor.execute(searchID2, params7)
@@ -1835,9 +1875,9 @@ def FunctionStatusAgendaConc(request):
             for idc, id_paciente in dadoss:
                 pass
 
-        params3 = (id_paciente, data_atual, data_atual, nome,)
-        query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
-        cursor.execute(query3, params3)
+                params3 = (id_paciente, data_atual, data_atual, nome,)
+                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
+                cursor.execute(query3, params3)
         
     return {"response": "true", "message": "Ok"}
 
@@ -2782,9 +2822,8 @@ def searchScheduledPickupInt(request):
 
         Q = fetchQueryUnityFinance("unit.id_unit_s", perfil, unityY) 
         query = "SELECT unit.unit_s, a.id, pa.nome, a.tel1_p, a.data_agendamento, a.status, a.perfil_int FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users pa ON a.nome_p = pa.id INNER JOIN auth_users.users usrr ON usrr.nome = a.resp_atendimento INNER JOIN admins.units_shiloh unit ON unit.id_unit_s = usrr.unity WHERE  {} AND  a.identification LIKE 'Interno' AND a.status IN ('Pendente', 'Em Andamento') ORDER BY a.data_agendamento".format(Q)
-
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
         for  a_unity_int, a_id, us_nome, a_tel1_int, a_data_agendamento_int, a_status_int, a_perfil_int,  in dados:
             dataFormatada = datetime.strptime(str(a_data_agendamento_int), "%Y-%m-%d").strftime("%d/%m/%Y") if a_data_agendamento_int not in ["", None] else ""
@@ -3126,10 +3165,11 @@ def SearchStatusLeadFilterFunction(request):
 
 
 #SERVE PARA CRIAR O DIRETÓRIO DO MEU ARQUIVO
-def ApiGerFilePartnersFunction(id, FILES):
-    PATH = settings.BASE_DIR_DOCS + "/partners/finances/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+def ApiGerFilePartnersFunction(id, month, FILES):
+
+    PATH = settings.BASE_DIR_DOCS + "/partners/finances/{}"  # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
     PATH_USER = PATH.format(id) # ADICIONANDO ID NO {} DE CIMA /\
-    PATH_TYPES = PATH_USER + "/" + "NF" + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
+    PATH_TYPES = PATH_USER + "/" + "NF" + "/" + month + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
     
     arr_dir = []
     for name, file in FILES.items():
@@ -3144,11 +3184,15 @@ def ApiGerFilePartnersFunction(id, FILES):
 #QUANDO CLICAR NO BOTÃO, EXECUTA ESSA FUNÇÃO.
 def ApiNfPartnersFunction(request):
     id_partners = request.POST.get('id_partners')
-    print(id_partners)
+    month = request.POST.get('month')
+    if (month == ""):
+        month = str(datetime.now().strftime("%m-%Y"))
+    else:
+        month = (month + str(datetime.now().strftime("-%Y")))
+
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     #chama função externa
-    ApiGerFilePartnersFunction(id_partners, request.FILES)
-
+    ApiGerFilePartnersFunction(id_partners, month, request.FILES)
     return {
         "response": True,
         "message": "Dados atualizados com sucesso."
@@ -3156,12 +3200,18 @@ def ApiNfPartnersFunction(request):
 
 
 
-def FetchPartnersFilesFunction(bodyData):
+def FetchPartnersFilesFunction(bodyData): #to aqui
     try:
         keysLIST = []
+        month = bodyData.month
+        if (month == ""):
+            month = (month) = str(datetime.now().strftime("0%m-%Y"))
+        else:
+            month = (month + str(datetime.now().strftime("-%Y")))
+        
         id = bodyData.id_user
-        PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-        PATH_ORIGIN = f"/partners/finances/{id}"
+        PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id}/NF/" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+        PATH_ORIGIN = f"/partners/finances/{id}/NF"
         DS = default_storage
         if DS.exists(PATH):
             LIST_TYPES = DS.listdir(PATH)
@@ -3170,7 +3220,6 @@ def FetchPartnersFilesFunction(bodyData):
                     arrLIST = []
                     for key in LIST_TYPES[0]:
                         arrLIST.append(key)
-
                     if arrLIST:
                         for paths in arrLIST:
                             arrLISTPATHS = DS.listdir(f"{PATH}/{paths}")
@@ -3186,7 +3235,6 @@ def FetchPartnersFilesFunction(bodyData):
                                     },
                                     "url": settings.SHORT_PLATAFORM + f"/docs/partners/finances/{id}/{paths}/{key}"
                                 })
-
         return {
             "response": True,
             "message": {
@@ -3195,6 +3243,7 @@ def FetchPartnersFilesFunction(bodyData):
         }
 
     except Exception as err:
+        print("EROOOOO>>", err)
         return {
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
@@ -3203,4 +3252,42 @@ def FetchPartnersFilesFunction(bodyData):
 
 
 
+
+
+#GET FILE REMOVE
+def RemoveFilePartnersFunction(request):
+    id_partners = request.POST.get('id_partners')
+    type_file = request.POST.get('type_file')
+    name_file = request.POST.get('name_file')
+
+    try:
+        id_partners = int(id_partners)
+    except:
+        return {
+            "response": "false",
+            "message": "Não foi possível encontrar este arquivo."
+        }
+    
+    PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id_partners}/NF/{type_file}/{name_file}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+    if default_storage.exists(PATH):
+        print(PATH, "PATH>>>>")
+        try:
+            default_storage.delete(PATH)
+            if not default_storage.exists(PATH):
+                return {
+                    "response": "true",
+                    "message": "Arquivo excluido com sucesso."
+                }
+        except:
+            pass
+    else:
+        return {
+            "response": "true",
+            "message": "Arquivo excluido com sucesso."
+        }
+    
+    return {
+        "response": "false",
+        "message": "Não foi possível encontrar ou remover este arquivo."
+    } 
 

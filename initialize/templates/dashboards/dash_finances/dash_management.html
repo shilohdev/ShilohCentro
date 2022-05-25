@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Dashboard Financeiro{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %} 
+{% block title-page %}
+Dashboard Financeiro
+{% endblock %}
+{% block description-page %}
+Acompanhe as últimas notícias!
+{% endblock %}
+{% block content %}
+
+
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+   @media only screen and (max-width: 800ypx){
+    .tfoot {
+        display: block;
+    }
+   } 
+   .scroll-y{
+   height: 505px;
+   max-height: 505px;
+   overflow-y: scroll;
+   }
+
+   .size{
+   font-size: 11px;
+   }
+
+</style>
+
+
+<div id="card-stats" class="pt-0">
+   <div class="row">
+      <div class="col s12 m6 l4">
+         {% for k in arr_DashCardAlvaro %}
+         <div class="card animate fadeLeft">
+            <div class="card-content red accent-2 white-text">
+               <p class="card-stats-title"><i class="material-icons">attach_money</i>Custo Alvaro</p>
+               <h4 class="card-stats-number white-text">{{k.val}}</h4>
+               <p class="card-stats-compare">
+                  <i class="material-icons">keyboard_arrow_up</i> {{k.qtd}}<span class="red-text text-lighten-5">&nbsp;(mês)</span>
+               </p>
+            </div>
+            <div class="card-action red">
+               <div id="sales-compositebar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+      <div class="col s12 m6 l4">
+         {% for k in arr_DashCardWorkLab %}
+         <div class="card animate fadeRight">
+            <div class="card-content orange lighten-1 white-text">
+               <p class="card-stats-title"><i class="material-icons">attach_money</i>WorkLab</p>
+               <h4 class="card-stats-number white-text">{{k.val}}</h4>
+               <p class="card-stats-compare">
+                  <i class="material-icons">keyboard_arrow_up</i> {{k.qtd}}<span class="red-text text-lighten-5">&nbsp;(mês)</span>
+               </p>
+            </div>
+            <div class="card-action orange">
+               <div id="profit-tristate" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+      <div class="col s12 m6 l4">
+         {% for k in arr_DashCardReembolsado %}
+         <div class="card animate fadeRight">
+            <div class="card-content green lighten-1 white-text">
+               <p class="card-stats-title"><i class="material-icons">attach_money</i>Reembolsado</p>
+               <h4 class="card-stats-number white-text">{{k.val}}</h4>
+               <p class="card-stats-compare">
+                  <i class="material-icons">keyboard_arrow_up</i> {{k.qtd}}<span class="red-text text-lighten-5">&nbsp;(mês)</span>
+               </p>
+            </div>
+            <div class="card-action green">
+               <div id="invoice-line" class="center-align"><canvas style="display: inline-block; width: 251.175px; height: 25px; vertical-align: top;" width="251" height="25"></canvas></div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+      <!--
+      <div class="col s12 m6 l3">
+         <div class="card animate fadeLeft">
+            <div class="card-content cyan white-text">
+               <p class="card-stats-title"><i class="material-icons"></i> % Porcentagem Reembolsada</p>
+               <h4 class="card-stats-number white-text">566</h4>
+               <p class="card-stats-compare">
+                  <i class="material-icons">keyboard_arrow_up</i> 15%
+                  <span class="cyan text text-lighten-5">from yesterday</span>
+               </p>
+            </div>
+            <div class="card-action cyan darken-1">
+               <div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
+            </div>
+         </div>
+      </div>
+      -->
+   </div>
+</div>
+
+
+
+
+
+
+<div class="row">
+   <div class="col s12 m3 ">
+      <!-- Pendente -->
+      {% for k in arr_DashPendentes %}
+         <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+               <div class="col s5 m5">
+                  <h5 class="mb-0">{{k.qdt}}</h5>
+                  <p class="no-margin">&nbsp;</p>
+                  <p class="mb-0 pt-8">{{k.percentage}}</p>
+               </div>
+               <div class="col s7 m7 right-align">
+                  <i class="material-icons background-round mt-5 mb-5 gradient-45deg-light-blue-cyan white-text">hourglass_empty</i>
+                  <p class="mb-0">Pendente</p>
+                  <i class="m-0 size">(geral)</i>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+      <!-- Em anadamento -->
+      {% for k in arr_DashAndamento %}
+         <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+               <div class="col s5 m5">
+                  <h5 class="mb-0">{{k.qdt}}</h5>
+                  <p class="no-margin">&nbsp;</p>
+                  <p class="mb-0 pt-8">{{k.percentage}}</p>
+               </div>
+               <div class="col s7 m7 right-align">
+                  <i class="material-icons background-round mt-5 mb-5 gradient-45deg-amber-amber white-text">loop</i>
+                  <p class="mb-0">Em Andamento</p>
+                  <i class="m-0 size ">(geral)</i>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+         <!-- Em análise -->
+         {% for k in arr_DashAnalise %}
+         <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+               <div class="col s5 m5">
+                  <h5 class="mb-0">{{k.qdt}}</h5>
+                  <p class="no-margin">&nbsp;</p>
+                  <p class="mb-0 pt-8">{{k.percentage}}</p>
+               </div>
+               <div class="col s7 m7 right-align">
+                  <i class="material-icons background-round mt-5 mb-5 #ffeb3b yellow gradient-shadow white-text">search</i>
+                  <p class="mb-0">Em Análise</p>
+                  <p class="m-0 size">(geral)</p>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+         <!-- Pago -->
+         {% for k in arr_DashPago %}
+         <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+               <div class="col s5 m7">
+                  <h5 class="mb-0">{{k.qdt}}</h5>
+                  <p class="no-margin">{{k.val}}</p>
+                  <p class="mb-0 pt-8">{{k.percentage}}</p>
+               </div>
+               <div class="col s7 m5 right-align">
+                  <i class="material-icons background-round mt-5 mb-5 gradient-45deg-green-teal white-text">attach_money</i>
+                  <p class="mb-0">Pago</p>
+                  <i class="m-0 size">(geral)</i>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+
+          <!-- outros -->
+          <div class="card padding-4 animate fadeLeft">
+             <div class="row">
+                <div class="col s5 m7">
+                  {% for k in arr_DashOutros %}
+                   <h5 class="mb-0">{{k.qdt}}</h5>
+                   <p class="mb-0 mt-0">{{k.percentage}} - ({{k.status}})</p>
+                   {% endfor %}
+                </div>
+                <div class="col s7 m5 right-align">
+                   <i class="material-icons background-round mt-5 mb-5 gradient-45deg-deep-orange-orange white-text">thumb_down</i>
+                   <p class="mb-0">Outros</p>
+                   <i class="m-0 size">(geral)</i>
+                </div>
+             </div>
+          </div>
+
+
+          <!-- GERAL EM ABERTO -->
+          {% for k in arr_DashGeralPendente %}
+          <div class="card padding-4 animate fadeLeft">
+             <div class="row">
+                <div class="col s5 m5">
+                   <h5 class="mb-0">{{k.qdt}}</h5>
+                   <p class="no-margin">&nbsp;</p>
+                   <p class="mb-0 pt-8">{{k.percentage}}</p>
+                </div>
+                <div class="col s7 m7 right-align">
+                   <i class="material-icons background-round mt-5 mb-5 gradient-45deg-amber-amber gradient-shadow white-text">watch_later</i>
+                   <p class="mb-0">Em Aberto</p>
+                   <p class="m-0 size">(geral)</p>
+                </div>
+             </div>
+          </div>
+          {% endfor %}
+
+           <!-- GERAL FINALIZADO -->
+         {% for k in arr_DashGeralFinanceiro %}
+         <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+               <div class="col s5 m5">
+                  <h5 class="mb-0">{{k.qdt}}</h5>
+                  <p class="no-margin">&nbsp;</p>
+                  <p class="mb-0 pt-8">{{k.percentage}}</p>
+               </div>
+               <div class="col s7 m7 right-align">
+                  <i class="material-icons background-round mt-5 mb-5 gradient-45deg-green-teal gradient-shadow white-text" >check</i>
+                  <p class="mb-0">Finalizados</p>
+                  <p class="m-0 size">(geral)</p>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+
+   </div>
+
+   <!--INICIO DA TABLE-->
+   <div class="col s12 m6 l9">
+      <div class="card subscriber-list-card animate fadeRight">
+         <div class="card-content pb-1">
+            <h4 class="card-title mb-0"><strong>MÊS</strong><i class="material-icons float-right">more_vert</i></h4>
+         </div>
+         <div class="scroll scroll-y">
+            <table class="subscription-table highlight">
+               <thead>
+                  <tr>
+                     <th>Convênio</th>
+                     <th>Custo Alvaro</th>
+                     <th>WorkLab</th>
+                     <th>Reembolsado</th>
+                     <th>% Reembolsada</th>
+                     <th>Qtd.</th>
+                  </tr>
+               </thead>
+               {% for k in arr_DashFinanceTable%}
+               <tbody>
+                  <tr>
+                     <td>{{k.nome_conv}}</td>
+                     <td>{{k.alvaro}}</td>
+                     <td>{{k.worklab}}</td>
+                     <td>{{k.pago}}</td>
+                     <td>{{k.percentage}}</td>
+                     <td>{{k.qtd}}</td>
+                  </tr>
+               </tbody>
+               {% endfor %}
+            </table>
+         </div>
+      </div>
+   </div>
+   <!--FIM DA TABLE-->
+
+
+
+
+
+
+    <!--INICIO DA TABLE-->
+    <div class="col s12 m6 l9">
+      <div class="card subscriber-list-card animate fadeRight">
+         <div class="card-content pb-1">
+            <h4 class="card-title mb-0"><strong>ANO</strong><i class="material-icons float-right">more_vert</i></h4>
+         </div>
+         <div class="scroll scroll-y">
+            <table class="subscription-table highlight">
+               <thead>
+                  <tr>
+                     <th>Convênio</th>
+                     <th>Custo Alvaro</th>
+                     <th>WorkLab</th>
+                     <th>Reembolsado</th>
+                     <th>% Reembolsada</th>
+                     <th>Qtd.</th>
+                  </tr>
+               </thead>
+               {% for k in arr_DashFinanceTableYear%}
+               <tbody>
+                  <tr>
+                     <td>{{k.nome_conv}}</td>
+                     <td>{{k.alvaro}}</td>
+                     <td>{{k.worklab}}</td>
+                     <td>{{k.pago}}</td>
+                     <td>{{k.percentage}}</td>
+                     <td>{{k.qtd}}</td>
+                  </tr>
+               </tbody>
+               {% endfor %}
+            </table>
+         </div>
+      </div>
+   </div>
+   <!--FIM DA TABLE-->
+   
+   
+
+
+
+
+</div>
+
+  
+
+
+
+
+
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+<script type = "text/javascript" >
+
+
+
+
+</script>
+{% endblock %}      

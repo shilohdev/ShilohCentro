@@ -516,6 +516,7 @@ $("#modal3").hide();
                       <a onclick=\"deleteFile(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="${n.path}" class="btn mb-1 waves-effect waves-light ativ">
                         <i class="material-icons right">delete</i>
                      </a>
+                     <a data-url="${n.path}" data-id="${n.name}" onclick=\"viewFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"><i class="material-icons right">cloud_download</i></a>
                   </td>
                </tr>
             `;
@@ -671,14 +672,14 @@ function checkAnexo(){
          <td>DATA</td>
          <td>${typeFile}</td>
          <td style="text-align: center;">
-               <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+            <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
                <i class="material-icons right">delete</i>
             </a>
          </td>
       </tr>
       `;
 
-      $("#tb_append").append(append);
+      $("#tb_appendAnx").append(append);
    }
 }
 
