@@ -32,7 +32,7 @@ Acompanhe as últimas notícias!
                        </div>
                        <div id="card_ag" class="row">
                            <div class="col s12" style="margin-top: 10px;">
-                               <div class="input-field col s3">
+                               <div class="input-field col s3 ">
                                    <input readonly="readonly" style="color: black;" id="date_age" type="date">
                                    <label for="date_age">Data Agendamento</label>
                                </div>
@@ -239,7 +239,7 @@ Acompanhe as últimas notícias!
                                        <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor Pago</label>
                                </div>
                                <div class="input-field col s2">
-                                   <input readonly="readonly" style="color: black; border-bottom: none;text-align: left; font-size: 20px;" id="porcentagem" type="text">
+                                   <input readonly="readonly" style="color: black; border-bottom: none;text-align: left; font-size: 20px;" id="porcentagem" type="text" >
                                    <label id="labelporcentagem" for="porcentagem" class="active">
                                        <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Porcentagem paga:
                                    </label>
@@ -347,7 +347,7 @@ Acompanhe as últimas notícias!
 
            </div>
            <div class="col s2">
-               <button onclick="changeUserModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
+               <button onclick="UpdateModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
                    <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">SALVAR
                    </span></button>
            </div>
@@ -370,42 +370,24 @@ Acompanhe as últimas notícias!
                <!-- Externo -->
                <div id="userint" class="row">
                    <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                       <div class="input-field col s3">
+                       <div class="input-field col s12 m3">
                            <input id="cpf" type="text" onkeyup="searchPatients(this)">
                            <label for="cpf">
                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
                        </div>
-                       <div class="col s4">
-                            <div class="input-field col s6">
+                       <div class="col s12 m4">
+                            <div class="input-field col s6 m6">
                                 <input  id="data1" type="date">
                                 <label for="data1">
                                 <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data inicial </label>
                             </div>
-                            <div class="input-field col s6">
+                            <div class="input-field col s6 m6">
                                 <input  id="data2" type="date">
                                 <label for="data2">
                                 <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data final </label>
                             </div>
                        </div>
-                       <!--
-                        <div class="input-field col s2">
-                           <select name="select" id="mes_search" class="error">
-                               <option value="">Selecione um mês</option>
-                               <option value="01">Janeiro</option>
-                               <option value="02">Fevereiro</option>
-                               <option value="03">Março</option>
-                               <option value="04">Abril</option>
-                               <option value="05">Maio</option>
-                               <option value="06">Junho</option>
-                               <option value="07">Julho</option>
-                               <option value="08">Agosto</option>
-                               <option value="09">Setembro</option>
-                               <option value="10">Outubro</option>
-                               <option value="11">Novembro</option>
-                               <option value="12">Dezembro</option>
-                           </select>
-                       </div> -->
-                       <div class="input-field col s3">
+                       <div class="input-field col s12 m3">
                             <div class="select-wrapper">
                                 <select class="error" name="select" id="statusProgressoTable" required="true" data-required='true'>
                                     <option value="">Status do Processo</option>
@@ -415,11 +397,14 @@ Acompanhe as últimas notícias!
                                 </select>
                             </div>
                         </div>
-                       <div class="col s2">&nbsp;
+                       <div class="col s12 m2">&nbsp;
                            <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
                                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
                            </button>
                        </div>
+                   </div>
+                    </div>
+                   <div  class="row container" >
                        <!-- COMEÇO DA TABLE -->
                        <div class="col s12" style="overflow-x: auto">
                            <table id="page-length-option" class="bordered">
@@ -760,7 +745,8 @@ $("#doc_anx, #tp_anx").change(function(){
 
 
 //BTN ATUALIZAR - SALVAR
-function changeUserModal(object) {
+function UpdateModal(object) {
+    
     var id_user = $(object).data("id_user");
     var cust_alv = $("#cust_alv").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
     var val_w_lab = $("#val_w_lab").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
@@ -768,96 +754,123 @@ function changeUserModal(object) {
     var porcentagem = $("#porcentagem").val().replace("%", "");
     var date_repass = $("#data_r").val();
     var n_nf = $("#n_nf").val();
-    var statusProgresso = $("#statusProgresso").val();
     var obsF = $("#obsF").val();
     var files = $("#doc_anx")[0].files[0];
-    console.log(porcentagem)
-    if ($("#doc_anx").val() != "") {
-        if ($("#doc_anx").prop("files") != undefined) {
-            if ($("#tp_anx").val() == "") {
-                return alert("Preencha o tipo de anexo para salvar.");
+    var statusProgresso = $("#statusProgresso").val();
+
+    if (statusProgresso == ""){
+        var statusProgresso = $("#statusProgresso").val("1");
+    }
+
+    if (statusProgresso == "4"){
+        var i = 0;
+        $("#porcentagem").attr("data-required='true'");
+        
+        $("#cardFinance input[data-required='true']").each(function() {
+            if ($(this).val() == "") {
+                alert("Preencha os campos obrigatórios.");
+                $(this).focus();
+                i = 1;
+                return false;
+            }
+        });
+        if (i == 1) {
+            return false;
+        }
+
+        if ($("#tp_anx").val() != "2") {
+            alert("Por favor insira a Nota Fiscal.")
+            return false
+        }
+   
+
+        if ($("#doc_anx").val() != "") {
+            if ($("#doc_anx").prop("files") != undefined) {
+                if ($("#tp_anx").val() == "") {
+                    return alert("Preencha o tipo de anexo para salvar.");
+                } else {
+                    files = document.querySelector("#doc_anx").files[0];
+                }
             } else {
-                files = document.querySelector("#doc_anx").files[0];
+                files = "";
             }
         } else {
             files = "";
         }
-    } else {
-        files = "";
-    }
-
-   
-    //verificação para preencher o tipo do arquivo.
-
-    var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
-    
- 
-    var formpost2 = {
-        "id_user": id_user,
-        "date_repass": date_repass,
-        "n_nf": n_nf,
-        "statusProgresso": statusProgresso,
-        "obsF": obsF,
-    };
-    console.log(formpost2)
-    //data.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
-
-    var formpost = [{
-            "name": "csrfmiddlewaretoken",
-            "value": $('input[name="csrfmiddlewaretoken"]').val()
-        },
-        {
-            "name": "file",
-            "value": files
-        },
-        {
-            "name": "id_user",
-            "value": id_user
-        },
-        {
-            "name": "type_doc",
-            "value": $("#tp_anx").val()
-        },
-        {
-            "name": "obsF",
-            "value": obsF
-        },
-         {
-            "name": "statusProgresso",
-            "value": statusProgresso
-        },
-        {
-            "name": "cust_alv",
-            "value": cust_alv
-        },
-        {
-            "name": "val_w_lab",
-            "value": val_w_lab
-        },
-        {
-            "name": "val_pago",
-            "value": val_pago
-        },
-        {
-            "name": "porcentagem",
-            "value": porcentagem
-        },
-        {
-            "name": "data",
-            "value": JSON.stringify(formpost2)
-        },
-    ];
-
-    fetchRequestFiles("{% url 'SaveEditionsFinances' %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == false) {
-            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-        } else { //SE FOR VERDADDEIRA, PROSSEGUE
-            $("#btn_salvar").attr("disabled", true);
-            alert(re["message"]);
-            location.reload();
 
         }
-    });
+        //verificação para preencher o tipo do arquivo.
+
+        var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+        
+    
+        var formpost2 = {
+            "id_user": id_user,
+            "date_repass": date_repass,
+            "n_nf": n_nf,
+            "statusProgresso": statusProgresso,
+            "obsF": obsF,
+        };
+        console.log(formpost2)
+        //data.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+
+        var formpost = [{
+                "name": "csrfmiddlewaretoken",
+                "value": $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            {
+                "name": "file",
+                "value": files
+            },
+            {
+                "name": "id_user",
+                "value": id_user
+            },
+            {
+                "name": "type_doc",
+                "value": $("#tp_anx").val()
+            },
+            {
+                "name": "obsF",
+                "value": obsF
+            },
+            {
+                "name": "statusProgresso",
+                "value": statusProgresso
+            },
+            {
+                "name": "cust_alv",
+                "value": cust_alv
+            },
+            {
+                "name": "val_w_lab",
+                "value": val_w_lab
+            },
+            {
+                "name": "val_pago",
+                "value": val_pago
+            },
+            {
+                "name": "porcentagem",
+                "value": porcentagem
+            },
+            {
+                "name": "data",
+                "value": JSON.stringify(formpost2)
+            },
+        ];
+
+        fetchRequestFiles("{% url 'SaveEditionsFinances' %}", "POST", "JSON", formpost, function(re) {
+            if (re["response"] == false) {
+                alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            } else { //SE FOR VERDADDEIRA, PROSSEGUE
+                $("#btn_salvar").attr("disabled", true);
+                alert(re["message"]);
+                location.reload();
+
+            }
+        });
+    
 }
 
 

@@ -38,7 +38,7 @@ Acompanhe as últimas notícias!
 
 <div id="card-stats" class="pt-0">
    <div class="row">
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l3">
          {% for k in arr_DashCardAlvaro %}
          <div class="card animate fadeLeft">
             <div class="card-content red accent-2 white-text">
@@ -54,7 +54,7 @@ Acompanhe as últimas notícias!
          </div>
          {% endfor %}
       </div>
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l3">
          {% for k in arr_DashCardWorkLab %}
          <div class="card animate fadeRight">
             <div class="card-content orange lighten-1 white-text">
@@ -70,7 +70,7 @@ Acompanhe as últimas notícias!
          </div>
          {% endfor %}
       </div>
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l3">
          {% for k in arr_DashCardReembolsado %}
          <div class="card animate fadeRight">
             <div class="card-content green lighten-1 white-text">
@@ -86,23 +86,24 @@ Acompanhe as últimas notícias!
          </div>
          {% endfor %}
       </div>
-      <!--
+    
+
       <div class="col s12 m6 l3">
          <div class="card animate fadeLeft">
             <div class="card-content cyan white-text">
-               <p class="card-stats-title"><i class="material-icons"></i> % Porcentagem Reembolsada</p>
-               <h4 class="card-stats-number white-text">566</h4>
+               <p class="card-stats-title"><i class="material-icons"></i> NFs Emitidas</p>
+               {% for k in arr_DashCardNFs %}
+               <h4 class="card-stats-number white-text">{{ k.qtd_anx}}</h4>
                <p class="card-stats-compare">
-                  <i class="material-icons">keyboard_arrow_up</i> 15%
-                  <span class="cyan text text-lighten-5">from yesterday</span>
+                  <i class="material-icons">keyboard_arrow_up</i><span class="red-text text-lighten-5">&nbsp;(mês)</span>
                </p>
+               {% endfor %}
             </div>
             <div class="card-action cyan darken-1">
                <div id="clients-bar" class="center-align"><canvas width="227" height="25" style="display: inline-block; width: 227px; height: 25px; vertical-align: top;"></canvas></div>
             </div>
          </div>
       </div>
-      -->
    </div>
 </div>
 

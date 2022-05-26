@@ -464,7 +464,7 @@ function StatusCanc(e) {
         //"true" -> STRING
         //true -> BOOLEAN
         if (re["response"] == "true") {
-            alert("Agendamento Cancelado com sucesso!"); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
             location.reload();
 
         }

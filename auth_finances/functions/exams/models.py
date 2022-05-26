@@ -458,6 +458,8 @@ def SaveEditionsFinancesFunctions(request):
     val_pago = request.POST.get('val_pago')
     porcentagem = request.POST.get('porcentagem')
 
+
+
     saveFileEditionsFinances(id_user, type_doc, request.FILES)
     bodyData = json.loads(request.POST.get('data'))
     
@@ -472,19 +474,28 @@ def SaveEditionsFinancesFunctions(request):
         "obsF": "obs_f",
     }
     with connections['auth_finances'].cursor() as cursor:
-            searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
-            cursor.execute(searchID, (request.user.username,))
-            dados = cursor.fetchall()
-            if dados:
-                for id_usuario, nome in dados:
-                    pass
-            else:
-                return {
-                    "response": "false",
-                    "message": "Login expirado, faça login novamente para continuar."
-                }
-            for key in dataKeys:
-                if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
+        searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if dados:
+            for id_usuario, nome in dados:
+                pass
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+
+        if type_doc == '2':
+            queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id` = %s);"
+            cursor.execute(queryAtt, (date_create, id_user,))
+            print(type_doc)
+            print(id_user)
+            type(type_doc)
+
+        for key in dataKeys:
+            
+            if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     vData = bodyData.get(key)
                     if key == "date_repass":
                         vData = vData if vData not in ["", None] else None
@@ -493,7 +504,7 @@ def SaveEditionsFinancesFunctions(request):
                     worklab = float (val_w_lab) if val_w_lab not in ["", None] else None #serve para aceitar campo null quando double
                     pago = float (val_pago) if val_pago not in ["", None] else None #serve para aceitar campo null quando double
                     porcentagem = float (porcentagem) if porcentagem not in ["", None] else None #serve para aceitar campo null quando double
-
+        
                     query = "UPDATE auth_finances.completed_exams SET {} = %s, val_alvaro_f = %s,  val_work_f = %s, val_pag_f = %s, porcentagem_paga_f = %s WHERE id_agendamento_f = %s".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
                     params = (
                         vData,
@@ -505,61 +516,61 @@ def SaveEditionsFinancesFunctions(request):
                     )
                     cursor.execute(query, params)
 
-            if obsF == '':
-                query9 = "SELECT id, status_p FROM auth_finances.status_progress where id like %s"
-                param =(nomeStatus,)
-                cursor.execute(query9, param)
-                dados = cursor.fetchall()
-                array = []
-                        
-                for idP, nomeStatus in dados:
-                    newinfoa = ({
-                        "id": idP,
-                        "nomeStatus": nomeStatus,
-                        })
-                    array.append(newinfoa)
-                query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Salvou o cadastro | Status do Processo: ' %s , %s);"
-                params2 = (
-                    id_user, nome, nomeStatus, date_create, 
-                )
-                cursor.execute(query2, params2)
-            else:
-                query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Salvou o cadastro | Status do Processo: ' %s , %s);"
-                params2 = (
-                    id_user, nome, nomeStatus, date_create, 
-                )
-                cursor.execute(query2, params2)
+        if obsF == '':
+            query9 = "SELECT id, status_p FROM auth_finances.status_progress where id like %s"
+            param =(nomeStatus,)
+            cursor.execute(query9, param)
+            dados = cursor.fetchall()
+            array = []
+                    
+            for idP, nomeStatus in dados:
+                newinfoa = ({
+                    "id": idP,
+                    "nomeStatus": nomeStatus,
+                    })
+                array.append(newinfoa)
+            query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Salvou o cadastro | Status do Processo: ' %s , %s);"
+            params2 = (
+                id_user, nome, nomeStatus, date_create, 
+            )
+            cursor.execute(query2, params2)
+        else:
+            query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Salvou o cadastro | Status do Processo: ' %s , %s);"
+            params2 = (
+                id_user, nome, nomeStatus, date_create, 
+            )
+            cursor.execute(query2, params2)
 
-                query4 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Observação: ' %s, %s);"
+            query4 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Observação: ' %s, %s);"
 
-                params4 = (
-                    id_user, nome, obsF, date_create,
-                )
-                cursor.execute( query4, params4)
+            params4 = (
+                id_user, nome, obsF, date_create,
+            )
+            cursor.execute( query4, params4)
+        
+        if type_doc != '':
+            queryS = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Inseriu um Anexo', %s);"
+            paramS =( id_user, nome, date_create,)
+            cursor.execute(queryS,paramS )
+
+        if nomeStatus == 'Glosa': #aqui
+            queryG = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '1' WHERE `id_agendamento_f` = %s"
+            paramG =( id_user,)
+            cursor.execute(queryG,paramG )
             
-            if type_doc != '':
-                queryS = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Salvar Modal',  %s, 'Inseriu um Anexo', %s);"
-                paramS =( id_user, nome, date_create,)
-                cursor.execute(queryS,paramS )
-
-            if nomeStatus == 'Glosa': #aqui
-                queryG = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '1' WHERE `id_agendamento_f` = %s"
-                paramG =( id_user,)
-                cursor.execute(queryG,paramG )
-               
-               
             
-            if nomeStatus == 'Valor Não Atingido': #aqui
-                queryN = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '2' WHERE `id_agendamento_f` = %s"
-                paramN =( id_user,)
-                cursor.execute(queryN,paramN )
-              
-              
+        
+        if nomeStatus == 'Valor Não Atingido': #aqui
+            queryN = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '2' WHERE `id_agendamento_f` = %s"
+            paramN =( id_user,)
+            cursor.execute(queryN,paramN )
+            
+            
 
-            return {
-                "response": True,
-                "message": "Dados atualizados com sucesso."
-            }
+        return {
+            "response": True,
+            "message": "Dados atualizados com sucesso."
+        }
 
 
 
@@ -1847,9 +1858,9 @@ def TableClosingIntFilter(request):
 
 #MEU FECHAMENTO FINANCEIRO
 def SearchFinanceInt(request):
-    with connections['auth_users'].cursor() as cursor:
-        monthCount = int(datetime.now().strftime("%m"))
+    monthCount = int(datetime.now().strftime("%m"))
 
+    with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
@@ -2436,147 +2447,160 @@ def FunctionDashGeralFinalizados(request):
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- CARD ALVARO
 def FunctionDashCardAlvaro(request):
+    monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        monthCount = int(datetime.now().strftime("%m"))
-        with connections['auth_finances'].cursor() as cursor:
-            CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
-            cursor.execute(CardAlvaro, (monthCount,))
-            dados = cursor.fetchall()
-            ArrCardAlvaro = []
-            if dados:
-                for qtd, val, mes in dados:
-                    val = f"R$ {val:_.2f}"
-                    val = val.replace(".", ",").replace("_", ".")
-                    newinfoa = ({
-                        "qtd": qtd,
-                        "val": val,
-                        "mes": mes,
-                        })
-                    ArrCardAlvaro.append(newinfoa)
+        CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
+        cursor.execute(CardAlvaro, (monthCount,))
+        dados = cursor.fetchall()
+        ArrCardAlvaro = []
+        if dados:
+            for qtd, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qtd": qtd,
+                    "val": val,
+                    "mes": mes,
+                    })
+                ArrCardAlvaro.append(newinfoa)
 
-            return ArrCardAlvaro
+        return ArrCardAlvaro
 
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- CARD WORKLAB
 def FunctionDashCardWorkLab(request):
+    monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        monthCount = int(datetime.now().strftime("%m"))
-        with connections['auth_finances'].cursor() as cursor:
-            CardWorkLab = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_work_f), MONTH(data_inc_proc_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_inc_proc_f) LIKE %s AND identification LIKE 'Externo' group by  MONTH(data_inc_proc_f);"
-            cursor.execute(CardWorkLab, (monthCount,))
-            dados = cursor.fetchall()
-            ArrCardWorkLab = []
-            if dados:
-                for qtd, val, mes in dados:
-                    val = f"R$ {val:_.2f}"
-                    val = val.replace(".", ",").replace("_", ".")
-                    newinfoa = ({
-                        "qtd": qtd,
-                        "val": val,
-                        "mes": mes,
-                        })
-                    ArrCardWorkLab.append(newinfoa)
+        CardWorkLab = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_work_f), MONTH(data_inc_proc_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_inc_proc_f) LIKE %s AND identification LIKE 'Externo' group by  MONTH(data_inc_proc_f);"
+        cursor.execute(CardWorkLab, (monthCount,))
+        dados = cursor.fetchall()
+        ArrCardWorkLab = []
+        if dados:
+            for qtd, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qtd": qtd,
+                    "val": val,
+                    "mes": mes,
+                    })
+                ArrCardWorkLab.append(newinfoa)
 
-            return ArrCardWorkLab
+        return ArrCardWorkLab
 
 
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- REEMBOLSADO
 def FunctionCardReembolsado(request):
+    monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        monthCount = int(datetime.now().strftime("%m"))
-        with connections['auth_finances'].cursor() as cursor:
-            CardReembolsado = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_pag_f), MONTH(data_repasse) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_repasse) LIKE %s AND identification LIKE 'Externo' AND status_exame_f LIKE 4 group by MONTH(data_repasse);"
-            cursor.execute(CardReembolsado, (monthCount,))
-            dados = cursor.fetchall()
-            ArrCardReembolsado = []
-            if dados:
-                for qtd, val, mes in dados:
-                    val = f"R$ {val:_.2f}"
-                    val = val.replace(".", ",").replace("_", ".")
-                    newinfoa = ({
-                        "qtd": qtd,
-                        "val": val,
-                        "mes": mes,
-                        })
-                    ArrCardReembolsado.append(newinfoa)
+        CardReembolsado = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_pag_f), MONTH(data_repasse) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_repasse) LIKE %s AND identification LIKE 'Externo' AND status_exame_f LIKE 4 group by MONTH(data_repasse);"
+        cursor.execute(CardReembolsado, (monthCount,))
+        dados = cursor.fetchall()
+        ArrCardReembolsado = []
+        if dados:
+            for qtd, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qtd": qtd,
+                    "val": val,
+                    "mes": mes,
+                    })
+                ArrCardReembolsado.append(newinfoa)
 
-            return ArrCardReembolsado
+        return ArrCardReembolsado
 
 
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- TABELA MES
 def FunctionDashFinanceTable(request):
+    monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        monthCount = int(datetime.now().strftime("%m"))
-        with connections['auth_finances'].cursor() as cursor:
-            Q = "SELECT conv.nome_conv, count(conv.nome_conv), MONTH(finance.data_repasse) AS mes, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND MONTH(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, MONTH(finance.data_repasse) ORDER BY sum(finance.val_pag_f) DESC;;"
-            cursor.execute(Q, (monthCount,))
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for nome_conv, qtd, mes, alvaro, worklab, pago in dados:
-                    percentage = (pago * 100 /worklab)
-                    percentage= f"{percentage:_.2f} %"
-                    
-                    alvaro = f"R$ {alvaro:_.2f}"
-                    alvaro = alvaro.replace(".", ",").replace("_", ".")
+        Q = "SELECT conv.nome_conv, count(conv.nome_conv), MONTH(finance.data_repasse) AS mes, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND MONTH(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, MONTH(finance.data_repasse) ORDER BY sum(finance.val_pag_f) DESC;;"
+        cursor.execute(Q, (monthCount,))
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for nome_conv, qtd, mes, alvaro, worklab, pago in dados:
+                percentage = (pago * 100 /worklab)
+                percentage= f"{percentage:_.2f} %"
+                
+                alvaro = f"R$ {alvaro:_.2f}"
+                alvaro = alvaro.replace(".", ",").replace("_", ".")
 
-                    worklab = f"R$ {worklab:_.2f}"
-                    worklab = worklab.replace(".", ",").replace("_", ".")
+                worklab = f"R$ {worklab:_.2f}"
+                worklab = worklab.replace(".", ",").replace("_", ".")
 
-                    pago = f"R$ {pago:_.2f}"
-                    pago = pago.replace(".", ",").replace("_", ".")
+                pago = f"R$ {pago:_.2f}"
+                pago = pago.replace(".", ",").replace("_", ".")
 
-                    newinfoa = ({
-                        "nome_conv": nome_conv,
-                        "qtd": qtd,
-                        "mes": mes,
-                        "percentage": percentage,
-                        "alvaro": alvaro,
-                        "worklab": worklab,
-                        "pago": pago,
-                        })
-                    array.append(newinfoa)
+                newinfoa = ({
+                    "nome_conv": nome_conv,
+                    "qtd": qtd,
+                    "mes": mes,
+                    "percentage": percentage,
+                    "alvaro": alvaro,
+                    "worklab": worklab,
+                    "pago": pago,
+                    })
+                array.append(newinfoa)
 
-            return array
+        return array
 
  
 
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- TABELA ANO
 def FunctionDashFinanceTableYear(request):
+    yearCount = int(datetime.now().strftime("%Y"))
+    print(yearCount)
     with connections['auth_finances'].cursor() as cursor:
-        yearCount = int(datetime.now().strftime("%Y"))
-        print(yearCount)
-        with connections['auth_finances'].cursor() as cursor:
-            Q = "SELECT conv.nome_conv, count(conv.nome_conv), YEAR(finance.data_repasse) AS ano, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND YEAR(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, YEAR(finance.data_repasse) ORDER BY sum(val_pag_f) DESC;"
-            cursor.execute(Q, (yearCount,))
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for nome_conv, qtd, ano, alvaro, worklab, pago in dados:
-                    percentage = (pago * 100 / worklab)
-                    percentage= f"{percentage:_.2f} %"
-                
-                    alvaro = f"R$ {alvaro:_.2f}"
-                    alvaro = alvaro.replace(".", ",").replace("_", ".")
+        Q = "SELECT conv.nome_conv, count(conv.nome_conv), YEAR(finance.data_repasse) AS ano, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND YEAR(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, YEAR(finance.data_repasse) ORDER BY sum(val_pag_f) DESC;"
+        cursor.execute(Q, (yearCount,))
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for nome_conv, qtd, ano, alvaro, worklab, pago in dados:
+                percentage = (pago * 100 / worklab)
+                percentage= f"{percentage:_.2f} %"
+            
+                alvaro = f"R$ {alvaro:_.2f}"
+                alvaro = alvaro.replace(".", ",").replace("_", ".")
 
-                    worklab = f"R$ {worklab:_.2f}"
-                    worklab = worklab.replace(".", ",").replace("_", ".")
+                worklab = f"R$ {worklab:_.2f}"
+                worklab = worklab.replace(".", ",").replace("_", ".")
 
-                    pago = f"R$ {pago:_.2f}"
-                    pago = pago.replace(".", ",").replace("_", ".")
+                pago = f"R$ {pago:_.2f}"
+                pago = pago.replace(".", ",").replace("_", ".")
 
-                    newinfoa = ({
-                        "nome_conv": nome_conv,
-                        "qtd": qtd,
-                        "ano": ano,
-                        "percentage": percentage,
-                        "alvaro": alvaro,
-                        "worklab": worklab,
-                        "pago": pago,
-                        })
-                    array.append(newinfoa)
+                newinfoa = ({
+                    "nome_conv": nome_conv,
+                    "qtd": qtd,
+                    "ano": ano,
+                    "percentage": percentage,
+                    "alvaro": alvaro,
+                    "worklab": worklab,
+                    "pago": pago,
+                    })
+                array.append(newinfoa)
 
-            return array
+        return array
+
+
+
+def FunctionDashCardNFs(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        Q = "SELECT MONTH(data_aquivo_f), COUNT(anx_f) FROM auth_finances.completed_exams WHERE  MONTH(data_aquivo_f) LIKE %s GROUP BY MONTH(data_aquivo_f)"
+        cursor.execute(Q, (monthCount,))
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for mes, qtd_anx in dados:
+                newinfoa = ({
+                    "mes": mes,
+                    "qtd_anx": qtd_anx,
+                    })
+                array.append(newinfoa)
+        return array

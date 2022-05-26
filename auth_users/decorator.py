@@ -30,7 +30,7 @@ from re import A
 from django.contrib.auth.models import User
 from functions.connection.models import Connection
 from functions.general.decorator import convertDate, checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
-from auth_finances.functions.exams.models import FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
+from auth_finances.functions.exams.models import saveFileEditionsFinances, FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
 from django.conf import settings
 from django.core.files.storage import default_storage
 from auth_permissions.decorator import allowPermission, json_without_success
@@ -1861,12 +1861,23 @@ def FunctionStatusAgendaConc(request):
         queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
         cursor.execute(queryver, paramver)
         dados = cursor.fetchall()
-        if dados:
-            for tp_serviço, id, conv in dados:
-                if  tp_serviço != "5" or conv !=  72:
-                    query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `status_exame_f`, `data_registro_f`, `regis`, `identification`) VALUES (NULL, %s, '8', %s, '0', 'Externo');"
+        for tp_serviço, id, conv in dados:
+            if  tp_serviço != 5:
+                if conv !=  '72':
+                    queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
+                    cursor.execute(queryVerif, (id,))
+                    dados = cursor.fetchall()
+                    if dados:
+                        for id, idagendamento in dados:
+                            return {
+                            "response": "true", 
+                            "message": "Coleta já concluída."
+                            }
+                    else:
+                        pass
+
+                    query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `status_exame_f`, `anx_f`, `data_registro_f`, `regis`, `identification`) VALUES (NULL, %s, '8', '0' %s, '0', 'Externo');"
                     cursor.execute(query2, param2)
-                        
         params7=(id,)
         searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
         cursor.execute(searchID2, params7)
@@ -1879,7 +1890,7 @@ def FunctionStatusAgendaConc(request):
                 query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
                 cursor.execute(query3, params3)
         
-    return {"response": "true", "message": "Ok"}
+        return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
 
 
 #REGAENDAR
@@ -2050,6 +2061,8 @@ def searchConcluidosF(request):
         dados = cursor.fetchall()
         if dados:
             for perfil, id_usuario, nome, unityY in dados: 
+                print(type(perfil))
+
                 pass
         else:
             return {
@@ -2310,7 +2323,7 @@ def UpdatePerfil(request):
     return {"response": "true", "message": "Cadastrado atualizado com sucesso!"}
 
 
-#GET FILE REMOVE
+#GET FILE REMOVE >>>
 def ModalExamsFinanceFileRemoveFunction(request):
     id_patient = request.POST.get('id_patient')
     type_file = request.POST.get('type_file')
@@ -2336,6 +2349,7 @@ def ModalExamsFinanceFileRemoveFunction(request):
                 }
         except:
             pass
+
     else:
         return {
             "response": "true",

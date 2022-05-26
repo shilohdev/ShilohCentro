@@ -583,9 +583,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"val_pago": key["finance"]["val_pag"],
 				"obs": key["obs"]["obs"], 
 				"color_s": key["obs"]["color"],
-            
 			}
-         console.log(dictKeys)
 			$.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
@@ -634,6 +632,8 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
 //FUNCTION CONCLUIR
 function StatusConc(e){ 
+   $("#btn_conc").attr("disabled", true);
+   
    var id = $(e).data("id");
    var convenio = $("tp_conv").val();
    
@@ -643,14 +643,14 @@ function StatusConc(e){
       "id": id,
 }
    fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
-   
-      //"true" -> STRING
-      //true -> BOOLEAN
-      if(re["response"] == "true"){ 
+      if(re["response"] == "true"){
+         $("#btn_conc").attr("disabled", true);
          alert("Agendamento Concluído com sucesso!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
          location.reload();
-
-      } 
+      }
+      else{
+         $("#btn_conc").attr("disabled", false);
+      }
    });
 }
 
