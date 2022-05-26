@@ -5,6 +5,9 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [ 
+    #API MEU FINANCEIRO EM MASSA 
+    path('create/access/meu-financeiro/', views.ApiMyFinanceAll, name='ApiMyFinanceAll'),
+
     #CADASTRAR USUARIO
     path('manage/cadastrar/usuarios/', views.cadastreUserViews, name='cadastreUser'),
     

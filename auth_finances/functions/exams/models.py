@@ -1940,7 +1940,7 @@ def SearchFinanceIntAgendado(request):
         if dados:
             for id_usuario, nome, perfil in dados:
                 pass
-        else:#aqui
+        else:
             return {
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
@@ -1950,11 +1950,13 @@ def SearchFinanceIntAgendado(request):
             cursor.execute(query, (id_usuario,))
             dados = cursor.fetchall()
             array = []
-            for pacienteA, agendamentoA, exameA in dados:
+            for pacienteA, nomep, agendamentoA, exameA, status in dados:
                 newinfoa = ({
                     "pacienteAG": pacienteA,
                     "agendamentoAG": convertDate(agendamentoA) ,
                     "exameAG": exameA,
+                    "nomep": nomep,
+                    "status": status,
                     })
                 array.append(newinfoa)
 
