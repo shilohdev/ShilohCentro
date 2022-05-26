@@ -1876,9 +1876,8 @@ def FunctionStatusAgendaConc(request):
                             }
                     else:
                         pass
-
-                    query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `status_exame_f`, `anx_f`, `data_registro_f`, `regis`, `identification`) VALUES (NULL, %s, '8', '0' %s, '0', 'Externo');"
-                    cursor.execute(query2, param2)
+                        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
+                        cursor.execute(query2, param2)
         params7=(id,)
         searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
         cursor.execute(searchID2, params7)
