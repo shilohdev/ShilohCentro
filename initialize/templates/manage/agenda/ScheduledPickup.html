@@ -565,7 +565,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"tp_conv": key["agendamento"]["convenio"],
 				"driver": key["agendamento"]["motoristaNome"],
 				"doctor": key["agendamento"]["doctor"],
-				"nurse": key["agendamento"]["nurse"], // verificar 
+				"nurse": key["agendamento"]["nurse"], 
 				"id": key["agendamento"]["id"],
 				"tel1": key["pessoal"]["phone1"],
 				"tel2": key["pessoal"]["phone2"],
@@ -633,7 +633,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 //FUNCTION CONCLUIR
 function StatusConc(e){ 
    $("#btn_conc").attr("disabled", true);
-   
+
    var id = $(e).data("id");
    var convenio = $("tp_conv").val();
    
