@@ -205,7 +205,7 @@ function CadastreUser(){
 
       var anoNasc = document.getElementById("date_nasc").value.split("-")[0];
       var data = new Date();
-      var anoatual = data.getFullYear() 
+      var anoatual = data.getFullYear()
       var Calc = (anoatual - anoNasc)
 
          
@@ -221,12 +221,12 @@ function CadastreUser(){
          return false;
       }
 
-      if (Calc >= 10 ){
+      
+      if (Calc <= 10 ){
          $("#cpf").attr("class", "data-required='true'");
          alert("CPF obrigatório acima de 10 anos.")
-         return false   
-      }
-      else{
+         return false
+         }
          var i = 0;
          $('#userint input[data-required="true"]').each(function(){
             if($(this).val() == ""){
@@ -239,7 +239,7 @@ function CadastreUser(){
          if(i == 1){
             return false;
          }
-      }
+      
    //VALIDAÇÃO DE CAMPO NULL
   
       var btncadastrar = {

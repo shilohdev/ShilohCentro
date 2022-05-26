@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from unicodedata import category
 from django.http import QueryDict
 from email import message
@@ -1326,7 +1327,7 @@ def searchLeads(request):
         return array
 
 
-#CADASTRAR PACIENTE
+#CADASTRAR PACIENTE estou aquiiiiiii55
 def ApiCadastrePatienteFunction(request):
     lead = request.POST.get("select_leads")
     data_nasc = request.POST.get("date_nasc")
@@ -1360,6 +1361,7 @@ def ApiCadastrePatienteFunction(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
+
         searchID = "SELECT medico_resp_l, nome_lead FROM customer_refer.leads WHERE id_lead = %s"
         cursor.execute(searchID, (lead,))
         dados = cursor.fetchall()
@@ -1376,15 +1378,12 @@ def ApiCadastrePatienteFunction(request):
         tel1 = formatTEL(tel1)
         tel2 = formatTEL(tel2)
        
-        queryExists = "SELECT id_p FROM customer_refer.patients WHERE cpf_p LIKE %s"
+        queryExists = "SELECT cpf_p, id_p FROM customer_refer.patients WHERE cpf_p LIKE %s"
         cursor.execute(queryExists, (cpf,))
-        print("este é o cpf >>>>", cpf)
         dados = cursor.fetchall()
-
-        if cpf == "":
+        if dados:
             queryName = "SELECT id_p FROM customer_refer.patients WHERE nome_p LIKE %s"
             cursor.execute(queryName, (name,))
-            print("este é o name >>>>", name)
             dados = cursor.fetchall()
             if dados:
                 return {"response": "false", "message": "Paciente já cadastrado em sistema!"}
@@ -1393,18 +1392,20 @@ def ApiCadastrePatienteFunction(request):
                 query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.execute(query, param)
 
-                query2= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = '1');"
-                cursor.execute(query2)
-
                 #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
                 query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
                 cursor.execute(query, (lead,))
         else:
-            if dados:
-                return {"response": "false", "message": "Paciente já cadastrado em sistema!"}
-                
+            param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity,)
+            query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(query, param)
 
-    return {"response": "true", "message": "Cadastrado com sucesso!"}
+            #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
+            query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
+            cursor.execute(query, (lead,))
+            
+
+            return {"response": "true", "message": "Cadastrado com sucesso!"}
 
 
 
