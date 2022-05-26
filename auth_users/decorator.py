@@ -1403,7 +1403,7 @@ def ApiCadastrePatienteFunction(request):
             #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
             query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
             cursor.execute(query, (lead,))
-            
+
 
             return {"response": "true", "message": "Cadastrado com sucesso!"}
 
