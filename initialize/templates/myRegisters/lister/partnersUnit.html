@@ -316,46 +316,53 @@ Acompanhe as últimas notícias!
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
 
-   function padrao() {
-       var checkbox_padrao = $("#val_p_fixo").val();
+function padrao(){
+   var checkbox_padrao = $("#val_p_fixo").val();
 
-       if ($("#val_p_fixo_check").is(":checked")) {
-           $("#val_p, #val_fixo").attr("disabled", true)
-           $("#val_p_check, #val_fixo_check").attr('disabled', true);
-           $("#val_p_fixo").val("R$ 400,00");
+   if($("#val_p_fixo_check").is(":checked")){
+      $("#val_p, #val_fixo").attr("disabled", true)
+      $("#val_p_check, #val_fixo_check").attr('disabled',true);
+      $("#val_p_fixo").val("R$ 400,00");   
+      $("#val_p, #val_fixo").val("");    
 
-       } else {
-           $("#val_p, #val_fixo").attr("disabled", false)
-           $("#val_p_check, #val_fixo_check").attr('disabled', false);
-           $("#val_p, #val_fixo,  #val_p_fixo").val("");
-       }
+
    }
-
-   function porcentagem() {
-      var checkbox_porcentagem = $("#val_p").val();
-
-      if ($("#val_p_check").is(":checked")) {
-         $("#val_fixo").attr("disabled", true)
-         $("#val_p_fixo_check, #val_fixo_check").attr('disabled', true);
-      } else {
-         $("#val_fixo").attr("disabled", false)
-         $("#val_p_fixo_check, #val_fixo_check").attr('disabled', false);
-         $("#val_p, #val_fixo").val("");
-      }
+   else{
+      $("#val_p, #val_fixo").attr("disabled", false)
+      $("#val_p_check, #val_fixo_check").attr('disabled',false);
+      $("#val_p, #val_fixo,  #val_p_fixo").val("");    
    }
+}
 
-   function fixo() {
-      var checkbox_fixo = $("#val_fixo").val();
+   function porcentagem(){
+   var checkbox_porcentagem = $("#val_p").val();
 
-      if ($("#val_fixo_check").is(":checked")) {
-         $("#val_p ").attr('disabled', true);
-         $("#val_p_fixo_check, #val_p_check").attr("disabled", true)
-      } else {
-         $("#val_p ").attr('disabled', false);
-         $("#val_p_fixo_check, #val_p_check").attr("disabled", false)
-         $("#val_p, #val_fixo").val("");
-      }
+   if($("#val_p_check").is(":checked")){
+      $("#val_fixo").attr("disabled", true)
+      $("#val_p_fixo_check, #val_fixo_check").attr('disabled',true);
+      $("#val_fixo,  #val_p_fixo").val("");    
+
+   }else{
+      $("#val_fixo").attr("disabled", false)
+      $("#val_p_fixo_check, #val_fixo_check").attr('disabled',false);
+      $("#val_p, #val_fixo").val("");
    }
+}
+
+   function fixo(){
+   var checkbox_fixo = $("#val_fixo").val();
+
+   if($("#val_fixo_check").is(":checked")){
+      $("#val_p ").attr('disabled',true);
+      $("#val_p_fixo_check, #val_p_check").attr("disabled", true)
+      $("#val_p, #val_p_fixo").val("");    
+
+   }else{
+      $("#val_p ").attr('disabled',false);
+      $("#val_p_fixo_check, #val_p_check").attr("disabled", false)
+      $("#val_p, #val_fixo").val("");
+   }
+}
 
    function SelectShow() {
       var show = document.getElementById("categoria").value;
@@ -493,6 +500,7 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
                   var findObject = $(`span:contains(${valueObject})`).closest("li");
                   $(findObject).attr("class", "selected");
                }
+
             });
             $("#btn_atualizar").data("id_user", id_user); //PEGA O ID DO USER
 

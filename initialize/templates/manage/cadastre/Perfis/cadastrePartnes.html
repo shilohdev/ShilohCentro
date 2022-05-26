@@ -45,7 +45,7 @@ Acompanhe as últimas notícias!
          <div class="input-field col m4 s12" >
             <div class="select-wrapper">
               <select name="select" id="categoria" onchange="SelectShow()" class="error " data-required='true'>
-                  <option value="SELECIONE">Categoria</option>
+                  <option value="">Categoria</option>
                   {% for k in arr_SearchCategoria %}
                   <option value="{{ k.id }}">{{ k.categoria }}</option>
                   {% endfor %}
@@ -187,7 +187,7 @@ function SelectShow() {
   var show = document.getElementById("categoria").value;
       $("#btn_cadastrar").attr("disabled", true);   
       
-      if(show == 'SELECIONE'){
+      if(show == ''){
          alert("Por favor, preencha um tipo de Categoria")
         }else{
       $("#btn_cadastrar").attr("disabled", false);
