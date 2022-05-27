@@ -1180,7 +1180,7 @@ def ApiChangeStatusConvenioFunction(request):
         "message": dict_response #RETORNO DO MENSSAGE COM O DICT 
     }
 
-#UPDATE PARCEIROS E USUARIO INTERNO    estou aqui
+#UPDATE PARCEIROS E USUARIO INTERNO
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
             return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
@@ -1333,7 +1333,7 @@ def searchLeads(request):
         return array
 
 
-#CADASTRAR PACIENTE estou aquiiiiiii55
+#CADASTRAR PACIENTE
 def ApiCadastrePatienteFunction(request):
     lead = request.POST.get("select_leads")
     data_nasc = request.POST.get("date_nasc")

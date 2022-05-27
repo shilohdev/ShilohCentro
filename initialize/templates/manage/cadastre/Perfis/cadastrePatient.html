@@ -225,7 +225,9 @@ function CadastreUser(){
          $("#cpf").attr("class", "data-required='true'");
          alert("CPF obrigatório acima de 10 anos.")
          return false
-         }
+      }else{
+
+     
          var i = 0;
          $('#userint input[data-required="true"]').each(function(){
             if($(this).val() == ""){
@@ -277,6 +279,7 @@ function CadastreUser(){
 
       } 
    });
+}
 };
 
 
