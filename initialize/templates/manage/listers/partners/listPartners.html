@@ -350,10 +350,7 @@
    });
 
 function PesquisarFilter() {
-   
       var tp_category = $("#tp_category").val();
-
-      console.log(tp_category)
 
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -441,6 +438,30 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
             }
          });
          $("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
+      
+      
+         if (val_p_fixo != ""){
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+            $('input').filter('#val_p_fixo_check').prop('checked',true); // coloca o input checado
+            $("#val_p_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+         }
+         
+         else if (checkbox_porcentagem != ""){
+            
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+            $('input').filter('#val_p_check').prop('checked',true); // coloca o input checado
+            $("#val_p_fixo_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+         }
+         
+         else{
+            
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+            $('input').filter('#val_fixo_check').prop('checked',true); // coloca o input checado
+            $("#val_p_fixo_check, #val_p_check").attr("disabled", true) //desabilita o campo
+         }
+      
+      
+      
       }
    });
 }

@@ -33,7 +33,7 @@ def CreatepermissionMyFinance(request):
         if dados:
             print(dados)
             for id, perfil in dados:
-                queryCreate = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES ('999',  %s, '');"
+                queryCreate = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES ('48',  %s, '');"
                 cursor.execute(queryCreate, (id,))
 
         return {

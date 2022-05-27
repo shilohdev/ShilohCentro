@@ -1184,6 +1184,8 @@ def ApiChangeStatusConvenioFunction(request):
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
         print(allowPermission)
+
+        print("to aqui")
     else:
         bodyData = request.POST #var para não precisar fazer tudo um por um
 
@@ -1192,6 +1194,9 @@ def ApiChangeUsersModalFunction(request):
         padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
         porcentagem = bodyData.get('porcentagem').replace("%", "")
         fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "")
+        print(fixo)
+        print(porcentagem)
+        print(padrao)
 
         dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
             #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
@@ -1240,7 +1245,7 @@ def ApiChangeUsersModalFunction(request):
                         id_user,
                     )
                     cursor.execute(query, params)
-                    
+                    print("passei pela query att >>>>", params)
             except:
                 if key in bodyData:
                     query = "UPDATE auth_users.users SET {} = %s, perfil = %s WHERE id = %s ".format(dataKeys[key])
@@ -1255,6 +1260,9 @@ def ApiChangeUsersModalFunction(request):
             "response": True,
             "message": "Dados atualizados com sucesso."
         }
+
+
+
 
 #SELECT PACIENTES LISTAR
 def searchIndication(request):

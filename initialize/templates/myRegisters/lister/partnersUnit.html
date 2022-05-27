@@ -317,13 +317,12 @@ Acompanhe as últimas notícias!
 <script type = "text/javascript" >
 
 function padrao(){
-   var checkbox_padrao = $("#val_p_fixo").val();
-
-   if($("#val_p_fixo_check").is(":checked")){
-      $("#val_p, #val_fixo").attr("disabled", true)
-      $("#val_p_check, #val_fixo_check").attr('disabled',true);
-      $("#val_p_fixo").val("R$ 400,00");   
-      $("#val_p, #val_fixo").val("");    
+   var checkbox_padrao = $("#val_p_fixo").val(); // recebe o valor do input
+   if($("#val_p_fixo_check").is(":checked")){ // se o campo do checkbox estiver checado
+      $("#val_p, #val_fixo").attr("disabled", true) // desabilita os campos inputs
+      $("#val_p_check, #val_fixo_check").attr('disabled',true);// desabilita os campos checkbox
+      $("#val_p_fixo").val("R$ 400,00");  // atribui valor fixo padrao
+      $("#val_p, #val_fixo").val("");  // e zera os inputs do outro
 
 
    }
@@ -447,7 +446,8 @@ function padrao(){
    });
 
 function viewUserModal(object){//FUNCTION DO ONCLICK
-      // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+
+   // para ter o data, precisa conter os seguintes parametros: elemento, key, value
       var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
       
       var formpost = {
@@ -504,6 +504,36 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
             });
             $("#btn_atualizar").data("id_user", id_user); //PEGA O ID DO USER
 
+
+            var val_p_fixo = $("#val_p_fixo").val();
+            var checkbox_porcentagem = $("#val_p").val();
+            var checkbox_fixo = $("#val_fixo").val();
+
+
+
+            if (val_p_fixo != ""){
+               
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_p_fixo_check').prop('checked',true); // coloca o input checado
+               $("#val_p_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+            }
+            
+            else if (checkbox_porcentagem != ""){
+               
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_p_check').prop('checked',true); // coloca o input checado
+               $("#val_p_fixo_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+            }
+            
+            else{
+               
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_fixo_check').prop('checked',true); // coloca o input checado
+               $("#val_p_fixo_check, #val_p_check").attr("disabled", true) //desabilita o campo
+            }
+
+
+
          }
       
 
@@ -559,9 +589,10 @@ function changeUserModal(object){
    $("#modalint input, #modalint select").each(function(){ // PROCCURA O QUE ESTÁ PREENCHIDO E SELECIONADO E ATRAVER DO FORMPOST PEGA O VALOR E MANDA PARA O BACK
       formpost[$(this).attr("id")] = $(this).val();
    });
-
+ 
    fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       if(re["response"] == false){ 
+         $("#btn_atualizar").attr("disabled", false);   
          alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       } else { //SE FOR VERDADDEIRA, PROSSEGUE
          alert(re["message"]);
