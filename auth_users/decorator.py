@@ -927,7 +927,7 @@ def searchPartiners(request):
                 "message": array2
             }
 
-#SELECT TABELA PARCEIROS estou aqui2
+#SELECT TABELA PARCEIROS
 def TabelaPartners(request):
     with connections['auth_permissions'].cursor() as cursor:
         query = "SELECT  a.id, a.nome, a.rn, c.categoria, rc.nome, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s"
@@ -1180,12 +1180,10 @@ def ApiChangeStatusConvenioFunction(request):
         "message": dict_response #RETORNO DO MENSSAGE COM O DICT 
     }
 
-#UPDATE PARCEIROS E USUARIO INTERNO
+#UPDATE PARCEIROS E USUARIO INTERNO    estou aqui
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
-        print(allowPermission)
-
-        print("to aqui")
+            return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
     else:
         bodyData = request.POST #var para não precisar fazer tudo um por um
 

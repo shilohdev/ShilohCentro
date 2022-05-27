@@ -63,7 +63,7 @@ Acompanhe as últimas notícias!
                <div class="input-field col m5 s12">
                   <input id="name" type="text"  data-required="true" class="upper">
                   <label for="name">
-                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
+                  <i class="material-icons" onkeyup="formatText()" style="font-size: 15px">person</i>&nbsp;Nome</label>
                </div>
                <div class="input-field col m4 s12">
                   <input id="date_nasc" type="date"  data-required="true">
@@ -139,6 +139,9 @@ Acompanhe as últimas notícias!
    $("#tel1").mask("(99) 99999-9999");
    $("#tel2").mask("(99) 99999-9999");
    $("#zipcode").mask("99999-999");
+
+
+
 
    function SelectShow() {
       var show = document.getElementById("tp_perfil").value;
