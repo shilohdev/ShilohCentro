@@ -1411,7 +1411,7 @@ def ApiCadastrePatienteFunction(request):
             cursor.execute(query, (lead,))
 
 
-            return {"response": "true", "message": "Cadastrado com sucesso!"}
+        return {"response": "true", "message": "Cadastrado com sucesso!"}
 
 
 
