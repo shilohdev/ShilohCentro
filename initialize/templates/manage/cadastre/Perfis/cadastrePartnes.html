@@ -35,7 +35,7 @@ Acompanhe as últimas notícias!
           <div class="input-field col m6 s12">
              <input id="name" type="text" class="upper">
              <label for="name">
-             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento</label>
+             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento<span style="color: red;">*</span></label>
           </div>
           <div class="input-field col m2 s12">
             <input id="rn" type="text" >
@@ -62,7 +62,7 @@ Acompanhe as últimas notícias!
           <div class="input-field col m2 s12">
              <input id="tel1" type="tel" data-required='true'>
              <label for="tel1">
-             <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+             <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1 <span style="color: red;">*</span></label>
           </div>
           <div class="input-field col m2 s12">
              <input id="tel2" type="tel">
@@ -162,7 +162,13 @@ Acompanhe as últimas notícias!
          </div>
          <!--BUTTON-->
          <div class="col s12 m12">
-            <div class="col s12 m12 mb-2">
+            <div class="col m6 s12 mb-2"></div>
+            <div class="col m3 s12 mb-2">
+               <button onclick="CadastrePrePartners()" id="btn_precadastro" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #444054;">
+               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pré-Cadastro</spanpx>
+               </button>
+            </div>
+            <div class="col m3 s12 mb-2">
                <button disabled onclick="CadastrePartners()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                </button>
@@ -199,7 +205,7 @@ function SelectShow() {
       $("#zipcode").mask("99999-999");
       $("#val_fixo").mask('#.##0,00', {
          reverse: true
-      });
+      }); 
       $("#val_p").mask('99%', {
          reverse: true
       });
@@ -359,7 +365,65 @@ function SelectShow() {
    }
 
 
-   
+   function CadastrePrePartners(){
+
+      var categoria = $('#categoria').val();
+      var name = $('#name').val();
+      var email = $('#email').val();
+      var tel1 = $('#tel1').val();
+      var tel2 = $('#tel2').val();
+      var zipcode = $('#zipcode').val();
+      var addres = $('#addres').val();
+      var number = $('#number').val();
+      var complement = $('#complement').val();
+      var district = $('#district').val();
+      var city = $('#city').val();
+      var uf = $('#uf').val();
+      var rn = $('#rn').val();
+      var obs = $('#obs').val();
+      var padrao = $('#val_p_fixo').val();
+      var porcentagem = $('#val_p').val();
+      var fixo = $('#val_fixo').val();
+      
+      if(name == "" || tel1 == ""){
+         alert("Preencha os campos obrigatórios.");
+         $("#btn_precadastro").attr("disabled", false);
+            return false;
+
+      }else{
+      var btnprecadastro = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
+         "categoria": categoria, 
+         "name": name,
+         "email": email,
+         "tel1": tel1,
+         "tel2": tel2,
+         "zipcode": zipcode,
+         "addres": addres,
+         "number": number,
+         "complement": complement,
+         "district": district,
+         "city": city,
+         "uf": uf,
+         "rn": rn,
+         "obs": obs,
+         "padrao": padrao,
+         "porcentagem": porcentagem,
+         "fixo": fixo,
+      };
+
+      fetchRequest("{% url 'ApiCadastrePrePartners' %}", "POST", "JSON", btnprecadastro, function(re){
+         if(re["response"] == "true"){
+            $("#btn_precadastro").attr("disabled", true);
+            alert(re["message"]);
+            location.reload();
+         }
+      });
+   }
+};
+         
+            
+           
       
 
    </script>

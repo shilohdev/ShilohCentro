@@ -16,12 +16,16 @@ urlpatterns = [
 
     #CADASTRAR PARCEIROS
     path('manage/cadastrar/parceiros/', views.cadastrePartnesViews, name='cadastrePartnes'),
+    #PRÉ PARCEIRO
+    path('api/manage/cadastrar/pre-parceiros/', views.ApiCadastrePrePartners, name='ApiCadastrePrePartners'),
  
     #API CADASTRAR USER 
     path('api/manage/cadastrar/user/', views.ApiCadastreUser, name='ApiCadastreUser'),
 
     #API CADASTRAR PARCEIROS
     path('api/manage/cadastrar/parceiros/', views.ApiCadastrePartners, name='ApiCadastrePartnes'),
+    path('api/manage/cadastrar/parceiros/cadastre', views.PartnersCadFunctionBNT, name='PartnersCadFunctionBNT'),
+    path('api/manage/cadastrar/parceiros/cancel', views.PrePartnerCancel, name='PrePartnerCancel'),
 
     #CADASTRAR INDICAÇÃO
     path('cadastrar/indicacao/', views.cadastreIndicationViews, name='cadastreIndication'),#LEAD
@@ -200,4 +204,6 @@ urlpatterns = [
     path('dashboards/financeiro/reembolsos/', views.DashboardsRefunds, name='DashboardsRefunds'), #FINANCEIRO EXAMES
 
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+   
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  

@@ -468,7 +468,6 @@ def FschedulePickup(request):
         
         for id_conv, nome_conv  in dados:
             params = (name, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number,complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente,)
-            print(params)
             query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_resgistro`, `unity`, `identification`, `perfil_int`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '');"
             cursor.execute(query, params)
 
@@ -780,7 +779,7 @@ def searchUsers(request):
 #CHANGE STATUS > ativa e desativa
 def ApiChangeStatusFunction(request):
     if not allowPermission(request, "editPartners"):
-        return json_without_success("Você não possui permissão.")
+        return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
 
     dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
 
@@ -884,7 +883,7 @@ def searchPartiners(request):
     with connections['auth_permissions'].cursor() as cursor:
         param = (tp_category,)
         if tp_category != "":
-            query = "SELECT  a.id, a.nome, b.categoria, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners b ON a.categoria = b.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s WHERE b.id LIKE %s"
+            query = "SELECT  a.id, a.nome, b.categoria, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners b ON a.categoria = b.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s WHERE b.id LIKE %s AND a.status like 'Ativo' AND  a.status like 'Inativo' "
             cursor.execute(query, param)
             dados = cursor.fetchall()
             array = []
@@ -964,8 +963,8 @@ def TabelaPartnersUnit(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
-#aqui parceiro
-        query= "SELECT  a.id, a.nome, c.categoria, a.rn, a.status, rc.nome, a.data_regis FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id WHERE a.resp_comerce LIKE %s"
+
+        query= "SELECT  a.id, a.nome, c.categoria, a.rn, a.status, rc.nome, a.data_regis FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id WHERE a.resp_comerce LIKE %s ORDER BY a.status DESC"
         params = (id_usuario,)
         cursor.execute(query, params)
         dados = cursor
@@ -989,10 +988,10 @@ def TabelaPartnersUnit(request):
     
 
 
-#MODAL PARCEIROS
+#MODAL PARCEIROS (INFOS DO MODAL)
 def ApiViewDataPartnersModalFunction(request):
     if not allowPermission(request, "editPartners"):
-        return json_without_success("Você não possui permissão.")
+        return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
 
     dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
     
@@ -1004,13 +1003,13 @@ def ApiViewDataPartnersModalFunction(request):
             "message": "Nenhum usuário encontrado com este id."
         }
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "auth_users.users p" #VAR COM CONEEXAO TAVLE
+    db.table = "auth_users.users p INNER JOIN auth_users.users rc ON p.resp_comerce = rc.id" #VAR COM CONEEXAO TAVLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
-    dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo"], True)
+    dados = db.fetch(["rc.nome, p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo"], True)
 
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo in dados:
+        for comercial, p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo in dados:
             try:
                 val_padrao = f"R$ {val_padrao:_.2f}"
                 val_padrao = val_padrao.replace(".", ",").replace("_", ".")
@@ -1035,6 +1034,7 @@ def ApiViewDataPartnersModalFunction(request):
                 "name": p_nome,
                 "rn": p_rn,
                 "categoria": p_categoria,
+                "comercial": comercial,
             },
             "contacts": {
                 "email": p_email,
@@ -1053,7 +1053,7 @@ def ApiViewDataPartnersModalFunction(request):
             "obs": {
                 "obs": p_obs,
             }, 
-                "finances": {
+            "finances": {
                 "val_padrao": val_padrao,
                 "val_porcentagem": val_porcentagem,
                 "val_fixo": val_fixo,
@@ -1081,10 +1081,10 @@ def ApiViewDataPartnersModalFunctionINT(request):
     db.table = "auth_users.users p" #VAR COM CONEEXAO TAVLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
-    dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo"], True)
+    dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, p.status"], True)
 
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo in dados:
+        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo, status in dados:
             try:
                 val_padrao = f"R$ {val_padrao:_.2f}"
                 val_padrao = val_padrao.replace(".", ",").replace("_", ".")
@@ -1126,6 +1126,7 @@ def ApiViewDataPartnersModalFunctionINT(request):
             }, 
             "obs": {
                 "obs": p_obs,
+                "status": status,
             }, 
                 "finances": {
                 "val_padrao": val_padrao,
@@ -1133,7 +1134,6 @@ def ApiViewDataPartnersModalFunctionINT(request):
                 "val_fixo": val_fixo,
             }, 
         } #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS
-
     return {
         "response": False if not dict_response else True,
         "message": dict_response #RETORNO DO MENSSAGE COM O DICT 
@@ -1183,7 +1183,7 @@ def ApiChangeStatusConvenioFunction(request):
 #UPDATE PARCEIROS E USUARIO INTERNO
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
-            return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
+        return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
     else:
         bodyData = request.POST #var para não precisar fazer tudo um por um
 
@@ -1191,10 +1191,15 @@ def ApiChangeUsersModalFunction(request):
         perfil = bodyData.get('perfil')
         padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
         porcentagem = bodyData.get('porcentagem').replace("%", "")
-        fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "")
-        print(fixo)
-        print(porcentagem)
-        print(padrao)
+        fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "").replace("R$", "")
+
+        resp_commerce = bodyData.get('resp_commerce')
+        print(">>>>>>>>>", resp_commerce)
+
+
+        padrao = float(padrao) if padrao not in ["", None] else None
+        porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
+        fixo = float(fixo) if fixo not in ["", None] else None
 
         dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
             #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
@@ -1217,43 +1222,52 @@ def ApiChangeUsersModalFunction(request):
             "unity": "unity",  
         }
 
-        padrao = float(padrao) if padrao not in ["", None] else None
-        porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
-        fixo = float(fixo) if fixo not in ["", None] else None
+        
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
 
         for key in dataKeys:
-            query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
-            params = (
-                perfil,
-            )    
-            cursor.execute(query, params)
-            dados = cursor.fetchall()
-            for id in dados:
-                pass
             try:
+                query = "SELECT id, nome, status FROM auth_users.users where nome LIKE %s"
+                cursor.execute(query, (resp_commerce,))
+                dados = cursor.fetchall()
+                for idC, nomeC, statusC in dados:
+                    print(dados)
+                    if idC != "":
+                        resp_commerce = idC
+                        print("1>>>>", resp_commerce)
+                    
                 if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
-                    query = "UPDATE auth_users.users SET {} = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
+                    query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
                     params = (
                         bodyData.get(key), #serve para complementar o POST e obter o valor do input
+                        resp_commerce,
                         padrao,
                         porcentagem,
                         fixo,
                         id_user,
                     )
                     cursor.execute(query, params)
-                    print("passei pela query att >>>>", params)
             except:
-                if key in bodyData:
-                    query = "UPDATE auth_users.users SET {} = %s, perfil = %s WHERE id = %s ".format(dataKeys[key])
-                    params = (
-                        bodyData.get(key),
-                        id,
-                        id_user,
-                    )
-                    print(params)
-                    cursor.execute(query)
+                print("ERRROOO")
+                query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
+                params = (
+                    perfil,
+                )    
+                cursor.execute(query, params)
+                dados = cursor.fetchall()
+                for id in dados:
+                    pass
+
+                    if key in bodyData:
+                        query = "UPDATE auth_users.users SET {} = %s, perfil = %s WHERE id = %s ".format(dataKeys[key])
+                        params = (
+                            bodyData.get(key),
+                            id,
+                            id_user,
+                        )
+                        print(params)
+                        cursor.execute(query)
         return {
             "response": True,
             "message": "Dados atualizados com sucesso."
@@ -1787,7 +1801,6 @@ def SearchModalScheduled(request):
         dados = cursor.fetchall()
         if dados:
             for a_id, a_data_agendamento, a_hr_agendamento, b_tipo_servico, c_tipo_exame, g_nome_conv, jj_id, e_nome, jm_nome, np_nome_p, a_tel1_p, a_tel2_p, a_resp_medico, a_resp_atendimento, a_resp_comercial, a_cep, a_rua, a_numero, a_complemento, a_bairro, a_cidade, a_uf, a_val_cust, a_val_work_lab, a_val_pag, a_obs, b_tipo_servico, c_tipo_exame, a_status, a_motivo_status, co_color in dados:
-                print(jj_id)
                 dict_response = {
                     "agendamento": {
                         "data_agendamento": a_data_agendamento,
@@ -2068,7 +2081,6 @@ def searchConcluidosF(request):
         dados = cursor.fetchall()
         if dados:
             for perfil, id_usuario, nome, unityY in dados: 
-                print(type(perfil))
 
                 pass
         else:
@@ -3291,7 +3303,6 @@ def RemoveFilePartnersFunction(request):
     
     PATH = settings.BASE_DIR_DOCS + f"/partners/finances/{id_partners}/NF/{type_file}/{name_file}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
     if default_storage.exists(PATH):
-        print(PATH, "PATH>>>>")
         try:
             default_storage.delete(PATH)
             if not default_storage.exists(PATH):
@@ -3311,4 +3322,166 @@ def RemoveFilePartnersFunction(request):
         "response": "false",
         "message": "Não foi possível encontrar ou remover este arquivo."
     } 
+
+
+
+#PRÉ CADASTRO PARCEIROS
+def CadastrePrePartners(request):
+    categoria = request.POST.get("categoria")
+    name = request.POST.get("name")
+    email = request.POST.get("email")
+    tel1 = request.POST.get("tel1")
+    tel2 = request.POST.get("tel2")
+    zipcode = request.POST.get("zipcode")
+    addres = request.POST.get("addres")
+    number = request.POST.get("number")
+    complement = request.POST.get("complement")
+    district = request.POST.get("district")
+    city = request.POST.get("city")
+    uf = request.POST.get("uf")
+    obs = request.POST.get("obs")
+    rn = request.POST.get("rn")    
+    padrao = request.POST.get("padrao")
+    porcentagem = request.POST.get("porcentagem")
+    fixo = request.POST.get("fixo")
+
+    padraos = padrao.replace(",", ".").replace("R$", "")
+    porcentagems = porcentagem.replace("%", "")
+    fixos = fixo.replace(".", "|").replace(",", ".").replace("|", "")
+
+    padraoC = float (padraos) if padraos not in ["", None] else None
+    porcentagemC = float (porcentagems) if porcentagems not in ["", None] else None
+    fixoC = float (fixos) if fixos not in ["", None] else None
+
+
+    with connections['auth_users'].cursor() as cursor:
+        qVerif =  "select id, nome, tel1 FROM auth_users.users WHERE nome LIKE %s AND tel1 LIKE %s"
+        cursor.execute(qVerif, (name, tel1,))
+        dados = cursor.fetchall()
+        
+        if dados:
+            return {"response": "true", "message": "Parceiro já cadastrado."}
+        
+        else:
+            param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, padraoC, porcentagemC, fixoC,)
+            query = "INSERT INTO `auth_users`.`users` (`id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, '7', '', %s, NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '', 'Pré-Cadastro', '3', NULL, '1', %s, %s, %s);"
+            cursor.execute(query, param,)
+        
+        return {"response": "true", "message": "Pré-cadastrado com sucesso!"}
+
+
+
+#PRÉ CADASTRO PARCEIROS
+def CadastrePrePartnersFunctionBNT(request):
+    name = request.POST.get("name")
+    email = request.POST.get("email")
+    tel1 = request.POST.get("tel1")
+    tel2 = request.POST.get("tel2")
+    zipcode = request.POST.get("zipcode")
+    addres = request.POST.get("addres")
+    number = request.POST.get("number")
+    complement = request.POST.get("complement")
+    district = request.POST.get("district")
+    city = request.POST.get("city")
+    uf = request.POST.get("uf")
+    obs = request.POST.get("obs")
+    rn = request.POST.get("rn")
+    id_partners = request.POST.get("id_user")
+    categoria = request.POST.get("categoria")
+    year = str(datetime.now().strftime("%d%Y"))
+    data_atual = str(datetime.now().strftime('%Y-%m-%d'))
+    padrao = request.POST.get("padrao")
+    porcentagem = request.POST.get("porcentagem")
+    fixo = request.POST.get("fixo")
+
+    with connections['auth_users'].cursor() as cursor:
+
+        padraos = padrao.replace(",", ".").replace("R$", "")
+        porcentagems = porcentagem.replace("%", "")
+        fixos = fixo.replace(".", "|").replace(",", ".").replace("|", "")
+
+        padraoC = float (padraos) if padraos not in ["", None] else None
+        porcentagemC = float (porcentagems) if porcentagems not in ["", None] else None
+        fixoC = float (fixos) if fixos not in ["", None] else None
+
+        searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if dados:
+            for id_comercial, nome, unity in dados:
+                pass
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+
+        tel1 = formatTEL(tel1)
+        tel2 = formatTEL(tel2)
+        zipcode = zipcode.replace("-", "")
+
+        param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,  id_comercial , data_atual, unity, padraoC, porcentagemC, fixoC, id_partners,)
+
+        query = "UPDATE `auth_users`.`users` SET `nome` = %s, `email` = %s, `tel1` = %s, `tel2` = %s, `cep` =  %s, `rua` = %s, `numero` = %s, `complemento` = %s, `bairro` = %s, `city` = %s, `uf` = %s, `rn` = %s, `obs` = %s, `categoria` = %s, `login` = %s, `status` = 'Ativo', `resp_comerce` = %s, `data_regis` = %s, `unity` = %s, `val_padrao` = %s, `val_porcentagem` = %s, `val_fixo` = %s  WHERE (`id` = %s);"
+        cursor.execute(query, param)
+
+        if User.objects.filter(username=rn).exists():
+            user = User.objects.get(username=rn)
+            user.nome = rn
+            user.email = email
+
+            user.save()
+        else:
+           user = User.objects.create_user(username=rn, email=email, first_name=name, last_name='', password=year)
+        
+        #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
+        arrayPermission = {
+           "7":  ["20", "16",], #PARCEIRO(RETIRAR ALGUMAS PERMISSOES)
+        }
+        try:
+            dictP = arrayPermission[str("7")]
+        except:
+            dictP = []
+        
+        if dictP:
+            for id_permission in dictP:
+                params = (
+                    id_permission,
+                    id_comercial,
+                )
+                query = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES (%s, %s, '')"
+                cursor.execute(query, params)
+
+            return {"response": "true", "message": "Cadastrado com sucesso!"}
+
+
+
+    #PRÉ CADASTRO PARCEIROS
+def PrePartnerCancelFunction(request):
+    id_partners = request.POST.get("id_user")
+
+    with connections['auth_users'].cursor() as cursor:
+
+        query = "UPDATE `auth_users`.`users` SET `status` = 'Cancelado'  WHERE (`id` = %s);"
+        cursor.execute(query, (id_partners,))
+
+    return {"response": "true", "message": "Pré-cadastro cancelado."}
+
+
+
+#SELECT COM TODOS OS COMERIAIS ATIVOS
+def searchComercialFunction(request):
+    with connections['userdb'].cursor() as cursor:
+        query = "SELECT id, nome, status FROM auth_users.users where perfil = 6 AND status = 'Ativo';"
+        cursor.execute(query)
+        dados = cursor
+        array = []
+        for id, nome, status in dados:
+            newinfoa = ({
+                "id": id,
+                "status": status,
+                "nome": nome
+                })
+            array.append(newinfoa)
+        return array
 
