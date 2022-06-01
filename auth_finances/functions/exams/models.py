@@ -489,9 +489,6 @@ def SaveEditionsFinancesFunctions(request):
         if type_doc == '2':
             queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id` = %s);"
             cursor.execute(queryAtt, (date_create, id_user,))
-            print(type_doc)
-            print(id_user)
-            type(type_doc)
 
         for key in dataKeys:
             
@@ -2233,8 +2230,7 @@ def FunctionDashPendente(request):
                         "percentage": percentage,
                         })
                     pendente.append(newinfoa)
-
-            return pendente
+                return pendente
 
 
 #DASHBOARD FINANCEIRO - REEMBOLSO -- EM ANDAMENTO
@@ -2374,7 +2370,6 @@ def FunctionDashOutros(request):
                             "percentage": percentage,
                             })
                         outros.append(newinfoa)
-                        print(newinfoa)
                 
 
                 return outros
@@ -2451,7 +2446,7 @@ def FunctionDashGeralFinalizados(request):
 def FunctionDashCardAlvaro(request):
     monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams  val_alvaro_f WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
+        CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
         cursor.execute(CardAlvaro, (monthCount,))
         dados = cursor.fetchall()
         ArrCardAlvaro = []
@@ -2465,7 +2460,17 @@ def FunctionDashCardAlvaro(request):
                     "mes": mes,
                     })
                 ArrCardAlvaro.append(newinfoa)
-
+        else:
+            qtd = 0
+            val = 0
+            mes = 0
+            val = f"R$ {val:_.2f}"
+            newinfoa = ({
+                "qtd": qtd,
+                "val": val,
+                "mes": mes,
+                })
+            ArrCardAlvaro.append(newinfoa)
         return ArrCardAlvaro
 
 
@@ -2510,7 +2515,18 @@ def FunctionCardReembolsado(request):
                     "mes": mes,
                     })
                 ArrCardReembolsado.append(newinfoa)
-
+        else:
+            qtd = 0
+            val = 0
+            mes = 0
+            val = f"R$ {val:_.2f}"
+            newinfoa = ({
+                "qtd": qtd,
+                "val": val,
+                "mes": mes,
+                })
+            ArrCardReembolsado.append(newinfoa)
+        
         return ArrCardReembolsado
 
 
@@ -2547,6 +2563,25 @@ def FunctionDashFinanceTable(request):
                     "pago": pago,
                     })
                 array.append(newinfoa)
+        else:
+            nome_conv = "-"
+            qtd = "-"
+            mes = "-"
+            percentage = "-"
+            alvaro = "-"
+            worklab = "-"
+            pago = "-"
+
+            newinfoa = ({
+                "nome_conv": nome_conv,
+                "qtd": qtd,
+                "mes": mes,
+                "percentage": percentage,
+                "alvaro": alvaro,
+                "worklab": worklab,
+                "pago": pago,
+                })
+            array.append(newinfoa)
 
         return array
 
@@ -2556,7 +2591,6 @@ def FunctionDashFinanceTable(request):
 #DASHBOARD FINANCEIRO - REEMBOLSO -- TABELA ANO
 def FunctionDashFinanceTableYear(request):
     yearCount = int(datetime.now().strftime("%Y"))
-    print(yearCount)
     with connections['auth_finances'].cursor() as cursor:
         Q = "SELECT conv.nome_conv, count(conv.nome_conv), YEAR(finance.data_repasse) AS ano, sum(finance.val_alvaro_f) as alvaro, sum(val_work_f)  as worklab, sum(val_pag_f) as pago FROM auth_agenda.collection_schedule ag INNER JOIN admins.health_insurance conv ON conv.id = ag.convenio INNER JOIN auth_finances.completed_exams finance ON finance.id_agendamento_f = ag.id WHERE conv.nome_conv NOT LIKE 'Cortesia Exames Autorizado ' AND YEAR(finance.data_repasse) LIKE %s AND finance.regis LIKE 1 group by conv.nome_conv, YEAR(finance.data_repasse) ORDER BY sum(val_pag_f) DESC;"
         cursor.execute(Q, (yearCount,))
@@ -2640,7 +2674,6 @@ def CountPendingFinanceFunction(request):
         searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
-        print(dados)
         if dados:
             for id_usuario, perfil, unity in dados:
                 pass
@@ -2679,7 +2712,6 @@ def CountPendingFinanceFunction(request):
                         "progress": progress,
                         })
                     array.append(newinfoa)
-                    print(newinfoa)
                 return array
 
 
@@ -2689,7 +2721,6 @@ def CountAnalityFinanceFunction(request):
         searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
-        print(dados)
         if dados:
             for id_usuario, perfil, unity in dados:
                 pass
@@ -2737,7 +2768,6 @@ def CountAnalityFinanceFunction(request):
                         "progress": progress,
                         })
                     array.append(newinfoa)
-                    print(newinfoa)
                 return array
 
 
@@ -2750,7 +2780,6 @@ def CountPayFinanceFunction(request):
         searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
-        print(dados)
         if dados:
             for id_usuario, perfil, unity in dados:
                 pass
@@ -2774,7 +2803,6 @@ def CountPayFinanceFunction(request):
                     percentage = f"{percentage:_.2f} %"
                     progress = percentage.replace("%","").replace(" ","")
                     progress = f"{progress}%"
-                    print(progress)
                     newinfoa = ({
                         "qtd": qtdff,
                         "status": status,
