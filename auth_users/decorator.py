@@ -1241,7 +1241,6 @@ def ApiChangeUsersModalFunction(request):
         else:
             pass
 
-
         for key in dataKeys:
             try:
                 query = "SELECT id, nome, status FROM auth_users.users where nome LIKE %s"

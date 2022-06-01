@@ -247,7 +247,7 @@ Acompanhe as últimas notícias!
             <a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-actionwaves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #c74d4d; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Cancelar</span></a>
          </div>
          <div class="col s2 m2">
-            <button onclick="changeUserModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-action waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #ff4081; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Atualizar</span></button>
+            <button onclick="updatePartnersModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-action waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #ff4081; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Atualizar</span></button>
          </div>
          <div class="col s2 m2" id="btn_cadastrar2">
             <button onclick="CadastrePartners(this)" id="btn_cadastrar" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-actionwaves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #76c076da; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Cadastrar</span></button>
@@ -573,7 +573,7 @@ function changeStatusUser(object) {
    });
 }
 
-function changeUserModal(object) {
+function updatePartnersModal(object) {
    //validação dofinanceiro
    var val_p_fixo = $("#val_p_fixo").val();
    var checkbox_porcentagem = $("#val_p").val();
