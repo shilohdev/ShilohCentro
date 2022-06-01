@@ -77,3 +77,9 @@ def fetchQueryUnityFinance(column, perfil, unityY=None):
     if str(perfil) == "5" or "2":
         return f"{column} IS NOT NULL"
     return f"{column} = {unityY}"
+
+
+def fetchQueryDashUnity(column, perfil, unity=None):
+    if str(perfil) == "1":
+        return f"{column} IS NOT NULL"
+    return f"{column} = {unity}"

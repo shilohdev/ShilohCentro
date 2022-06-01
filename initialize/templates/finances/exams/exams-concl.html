@@ -16,6 +16,7 @@ Acompanhe as últimas notícias!
    color: #641108;
    font-weight: bold;
    }
+
 </style>
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
@@ -355,6 +356,7 @@ Acompanhe as últimas notícias!
        </div>
    </div>
 </div>
+
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
    <!--FIM DO MODAL-->
    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
@@ -364,8 +366,103 @@ Acompanhe as últimas notícias!
                    <h5 class="corfont">SOLICITAÇÕES DE REEMBOLSO</h5>
                </div>
            </div>
+        </div>
+        <!--NEW CARD-->
+       <div class="row container m-0">
+        <div class="col s12 m3">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Total</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #794c8a !important"></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        
+                        <div class="col s5 m5 left-align">
+                            <p class="mb-0 pt-8">&nbsp;</p>
+                        </div>
+                        {% for k in arr_CountAllFinance %}
+                        <div class="col s7 m7 right-align">
+                            <h4 class="mb-0">{{k.qtd}}</h4>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m3">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Pendentes</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        {% for k in arr_PendingFinance %}
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="determinate" style="background-color: #ffa726!important; width: {{k.progress}};"></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        
+                        <div class="col s5 m5 left-align">
+                            <p class="mb-0 pt-8">{{k.percentage}}</p>
+                        </div>
+                        <div class="col s7 m7 right-align">
+                            <h4 class="mb-0">{{k.qtd}}</h4>
+                        </div>
+                        {% endfor %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m3">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Andamento / Análise</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        {% for k in arr_AnalityFinance %}
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="determinate" style="background-color: #00bcd4!important; width: {{k.progress}};"></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="col s5 m5 left-align">
+                            <p class="mb-0 pt-8">{{k.percentage}}</p>
+                        </div>
+                        <div class="col s7 m7 right-align">
+                            <h4 class="mb-0">{{k.qtd}}</h4>
+                        </div>
+                        {% endfor %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m3">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">À Finalizar</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        {% for k in arr_PayFinance %} 
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="determinate" style="background-color: #66bb6a!important; width: {{k.progress}}; "></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="col s5 m5 left-align">
+                            <p class="mb-0 pt-8">{{k.percentage}}</p>
+                        </div>
+                        <div class="col s7 m7 right-align">
+                            <h4 class="mb-0">{{k.qtd}}</h4>
+                        </div>
+                        {% endfor %} 
+                    </div>
+                </div>
+            </div>
+        </div>
        </div>
-       <div class="container">
+        <!--FINISH CARD-->
+
+        <div class="container">
            <div class="card">
                <!-- Externo -->
                <div id="userint" class="row">
@@ -374,7 +471,7 @@ Acompanhe as últimas notícias!
                            <input id="cpf" type="text" onkeyup="searchPatients(this)">
                            <label for="cpf">
                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                       </div>
+                       </div> 
                        <div class="col s12 m4">
                             <div class="input-field col s6 m6">
                                 <input  id="data1" type="date">
@@ -442,11 +539,9 @@ Acompanhe as últimas notícias!
                        <!-- FIM DA TABLE -->
                    </div>
                </div>
-           </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </div>
-
 
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
@@ -657,7 +752,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 ap += `
                   <li class="timeline-items timeline-icon-green active">
                      <div id="data_f" class="timeline-time">${n.data_operacao}</div>
-                     <h6 id="name_u" class="timeline-title">${n.nome_user}</h6>
+                     <h5 id="name_u" class="timeline-title">${n.nome_user}</h5>
                      <p id="action_f" class="timeline-text">${n.descricao}</p>
                   </li>
                `;

@@ -2,94 +2,144 @@
 {% load static %}
 {% block title %}Shiloh | Minhas Indicações{% endblock %}
 {% block icon-page %}
-metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+   metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
 {% block title-page %}
-Página inicial
+   Página inicial
 {% endblock %}
 {% block description-page %}
-Acompanhe as últimas notícias!
+   Acompanhe as últimas notícias!
 {% endblock %}
-
 {% block content %}
 
-<style type="text/css">
-   .corfont{
-   color: #641108;
-   font-weight: bold;
-   }
+   <style type="text/css">
+      .corfont{
+      color: #641108;
+      font-weight: bold;
+      }
 
-</style>
-
-
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
-<div class="container">
-   <div class="card" >
-      <div class="card-content" style="margin-top: -93px;">
-         <h5 class="corfont">CONSULTAR INDICAÇÕES</h5>
+   </style>
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content" id="modal2">
+      <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">        
+         <div class="container col s12">
+            <div class="active" style="margin-top: 20px;">
+               <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                  <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">HISTÓRICO</labe>
+               </div>
+               <div class="row">
+                  <div class="col s12" style="margin-top: 10px;">
+                     <div id="activity" class="col s12 active" style="display: block;">
+                        <div class="activity">
+                           <ul id="historico" class="widget-timeline mb-0">
+                              <td id="null" class="col s12 mb-8" colspan="5" style="text-align: center;">Nenhum Registro Encontrado</td>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>               
       </div>
    </div>
+   <div class="modal-footer">
+      <!--BUTTON-->
+      <div class="col s12 ">
+         <div class="col s10"></div>
+       <div class="col s2">
+          <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+       </div>       
+    </div>
 </div>
-<div class="container"> 
-   <div class="card" >
-         <!-- Externo -->
-      <div id="userint" class="row" >
-        <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="input-field col s4">
-                <input id="bscinput" type="text" onkeyup="searchLead(this)">
-                <label for="bscinput">
-                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>
-                </div>
-
-   <!-- COMEÇO DA TABLE -->
-         <div class="col s12">
-            <table id="page-length-option" class="bordered" style="overflow-x: auto">
-              <thead style="background-color: #581848; color: white; font-size: 15px" >
-                <tr>
-                  <th data-field="id" >Nome</th>
-                  <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
-                  <th data-field="id" style="text-align: center; width: 150px;">Indicado por:</th>
-                </tr>
-              </thead>
-              <tbody id="tb_append">
-                 {% for k in arr_SearchLeads %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
-                <tr>
-                  <td>{{ k.nome }}</td>
-                  <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
-                  <td style="text-align: center;">{{ k.medico_resp }}</td>
-                </tr>
-                {% endfor %} <!-- FIM DO ARRAY -->
-              </tbody>
-            </table>
-          </div>
-          <!-- FIM DA TABLE -->
+</div>
+<!--FIM DO MODAL 2-->
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+   <div class="container">
+      <div class="card" >
+         <div class="card-content" style="margin-top: -40px;">
+            <h5 class="corfont">MINHAS INDICAÇÕES</h5>
+         </div>
       </div>
-      
    </div>
-
-   
+   <div class="container">
+      <div class="card" ><!-- Externo -->         
+         <div id="userint" class="row" >
+            <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+               <div class="input-field col m4 s12">
+                  <input id="bscinput" type="text" onkeyup="searchLead(this)">
+                     <label for="bscinput">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>
+               </div>
+               <!-- COMEÇO DA TABLE -->
+               <div class="col s12 scroll">
+                  <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                     <thead style="background-color: #581848; color: white; font-size: 15px" >
+                        <tr>
+                           <th data-field="id" >Nome</th>
+                           <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
+                           <th data-field="id" style="text-align: center; width: 250px;">Setor Atual</th>
+                           <th data-field="id" style="text-align: center; width: 250px;">Barra de Progresso</th>
+                           <th data-field="id" style="text-align: center; width: 100px;">Ação</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tb_append">
+                        {% for k in arr_SearchLeads %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                        <tr>
+                           <td>{{ k.nome }}</td>
+                           <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
+                           <td style="text-align: center;">{{ k.medico_resp }}</td>
+                           <td style="text-align: center;">
+                              <label for="file"></label>
+                              <progress background="#76c076da" id="file" max="100" value="70"> 70% </progress></td>
+                           <td style="text-align: center;">
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoricoModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
+                                    <i class="material-icons right">remove_red_eye</i>
+                                 </button>
+                              </a>
+                              
+                           </td>
+                        </tr>
+                        {% endfor %}<!-- FIM DO ARRAY -->
+                     </tbody>
+                  </table>
+               </div>
+               <!-- FIM DA TABLE -->
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
 
 <script type="text/javascript">
-function searchLead(object){
-   var e = $(object).val().toUpperCase();
-    if(e == ""){
-        $('#tb_append > tr').each(function() {
-            $(this).show();
-        });
-    } else {
-        $('#tb_append > tr').each(function() {
-           var trs = $(this).find("td");
-           var tr1 = $(trs[0]).text().toUpperCase();
-            var check = (tr1.indexOf(e) != -1);
-            if(check == true){
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-}
+      function searchLead(object){
+         var e = $(object).val().toUpperCase();
+         if(e == ""){
+            $('#tb_append > tr').each(function() {
+                  $(this).show();
+            });
+         } else {
+            $('#tb_append > tr').each(function() {
+               var trs = $(this).find("td");
+               var tr1 = $(trs[0]).text().toUpperCase();
+                  var check = (tr1.indexOf(e) != -1);
+                  if(check == true){
+                     $(this).show();
+                  } else {
+                     $(this).hide();
+                  }
+            });
+         }
+      }
+//CONFIG MODAL
+$(document).ready(function() {
+   $('.modal').modal();
+   $('.modal').css({
+       "width": "80%",
+   });
+});
+      
 
-</script>
+
+   </script>
 {% endblock %}

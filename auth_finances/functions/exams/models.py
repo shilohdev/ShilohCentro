@@ -30,7 +30,7 @@ from django.contrib.auth.models import User
 from numpy import empty
 from pymysql import NULL
 from functions.connection.models import Connection, Exams, RegisterActions
-from functions.general.decorator import convertDate, checkDayMonth
+from functions.general.decorator import convertDate, checkDayMonth, fetchQueryDashUnity 
 from django.forms import model_to_dict
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -2603,6 +2603,193 @@ def FunctionDashCardNFs(request):
                 newinfoa = ({
                     "mes": mes,
                     "qtd_anx": qtd_anx,
+                    })
+                array.append(newinfoa)
+        return array
+
+
+
+#----------------------------CONTATOR REEMBOLSOS------------------------------------------
+# DASH SOLICITAÇÕES TOTAL
+def CountAllFinanceFunction(request):
+    with connections['auth_finances'].cursor() as cursor:
+        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if dados:
+            for id_usuario, perfil, unity in dados:
+                pass
+            
+            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            query = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            cursor.execute(query)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qtd, regis in dados:
+                    newinfoa = ({
+                        "qtd": qtd,
+                        "regis": regis,
+                        })
+                    array.append(newinfoa)
+            return array
+
+#DASH SOLICITAÇÕES - PENDENTES
+def CountPendingFinanceFunction(request):
+    with connections['auth_finances'].cursor() as cursor:
+        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        print(dados)
+        if dados:
+            for id_usuario, perfil, unity in dados:
+                pass
+            
+
+            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            cursor.execute(queryTotal)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qtd, regis in dados:
+                    pass
+
+            query = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND f.status_exame_f LIKE 8 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
+            cursor.execute(query)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qtdP, regis, status in dados:
+                    percentage = qtdP * 100 / qtd
+                    percentage = f"{percentage:_.2f} %"
+                    progress = f"{percentage:.2}%"
+                
+                    if qtdP == "":
+                        qtdP = 0
+                        percentage = 0
+                    else:
+                        qtdP = qtdP
+
+                    newinfoa = ({
+                        "qtd": qtdP,
+                        "regis": regis,
+                        "status": status,
+                        "percentage": percentage,
+                        "progress": progress,
+                        })
+                    array.append(newinfoa)
+                    print(newinfoa)
+                return array
+
+
+#DASH SOLICITAÇÕES - análise / em andamento
+def CountAnalityFinanceFunction(request):
+    with connections['auth_finances'].cursor() as cursor:
+        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        print(dados)
+        if dados:
+            for id_usuario, perfil, unity in dados:
+                pass
+            
+            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            cursor.execute(queryTotal)
+            dados = cursor.fetchall()
+            if dados:
+                for qtd, regis in dados:
+                    pass
+                
+            queryAnalise = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 1 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
+            cursor.execute(queryAnalise)
+            dados = cursor.fetchall()
+            if dados:
+                for qtdAnalise, regis, status in dados:
+                    pass
+            else:
+                qtdAnalise = 0
+
+            queryAndamento = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 2 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
+            cursor.execute(queryAndamento)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qtdAndamento, regis, status in dados:
+                    qtdTotal = qtdAnalise + qtdAndamento
+
+                    percentage = qtdTotal * 100 / qtd
+                    percentage = f"{percentage:_.2f} %"
+                    progress = f"{percentage:.2}%"
+                
+                    if qtdTotal == "":
+                        qtdTotal = 0
+                        percentage = 0
+                    else:
+                        qtdTotal = qtdTotal
+
+                    newinfoa = ({
+                        "qtd": qtdTotal,
+                        "regis": regis,
+                        "status": status,
+                        "percentage": percentage,
+                        "progress": progress,
+                        })
+                    array.append(newinfoa)
+                    print(newinfoa)
+                return array
+
+
+
+
+
+#DASH SOLICITAÇÕES - análise / em andamento
+def CountPayFinanceFunction(request):
+    with connections['auth_finances'].cursor() as cursor:
+        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        print(dados)
+        if dados:
+            for id_usuario, perfil, unity in dados:
+                pass
+            
+            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            cursor.execute(queryTotal)
+            dados = cursor.fetchall()
+            if dados:
+                for qtd, regis in dados:
+                    pass
+
+            queryff = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 4 AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            cursor.execute(queryff)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qtdff, status in dados:
+
+                    percentage = qtdff * 100 / qtd
+                    percentage = f"{percentage:_.2f} %"
+                    progress = percentage.replace("%","").replace(" ","")
+                    progress = f"{progress}%"
+                    print(progress)
+                    newinfoa = ({
+                        "qtd": qtdff,
+                        "status": status,
+                        "percentage": percentage,
+                        "progress": progress,
+                        })
+                    array.append(newinfoa)
+            else:
+                percentage = "0%"
+                progress = "0%"
+                qtdff = 0
+                newinfoa = ({
+                    "qtd": qtdff,
+                    "percentage": percentage,
+                    "progress": progress,
                     })
                 array.append(newinfoa)
         return array

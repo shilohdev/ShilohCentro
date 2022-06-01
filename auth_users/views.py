@@ -21,7 +21,7 @@ from datetime import datetime
 
 from requests import request
 from auth_users.decorator import searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartnersFunctionBNT, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_finances.functions.exams.models import CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
 
@@ -409,14 +409,28 @@ def ApiStatusAgendaCancel(request):
 
 #FINANCEIRO
 @login_required
-#INICIAR PROCESSO
+#INICIAR PROCESSO aquiii
 def FinancialExamsViews(request):
     if allowPage(request, "agend_concluidos") == False:
         return error(request)
     SearchCompletedExams =  searchConcluidosF(request)
     SearchStratusProgress = FunctionStatus(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
-    return render(request, 'finances/exams/exams-concl.html', {"arr_SearchCompletedExams": SearchCompletedExams, "arr_SearchStratusProgress": SearchStratusProgress, "arr_SearchTypeAnexo": SearchTypeAnexo, })
+    CountAllFinance = CountAllFinanceFunction(request)
+    PendingFinance = CountPendingFinanceFunction(request)
+    AnalityFinance = CountAnalityFinanceFunction(request)
+    PayFinance = CountPayFinanceFunction(request)
+
+    return render(request, 'finances/exams/exams-concl.html', 
+    {"arr_SearchCompletedExams": SearchCompletedExams, 
+    "arr_SearchStratusProgress": SearchStratusProgress, 
+    "arr_SearchTypeAnexo": SearchTypeAnexo, 
+    "arr_CountAllFinance": CountAllFinance, 
+    "arr_PendingFinance": PendingFinance, 
+    "arr_AnalityFinance": AnalityFinance, 
+    "arr_PayFinance": PayFinance, 
+    
+})
 
 # MODAL FINANCES
 @login_required
@@ -650,7 +664,12 @@ def SolicitationsRetfund(request):
     SearchExams =  RetfundFConcl(request)
     SearchStratusProgress = FunctionStatus(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
-    return render(request, 'internalProcedure/SolicitationsRefund.html', {"arr_SearchInicioExams": SearchExams, "arr_SearchStratusProgress": SearchStratusProgress, "arr_SearchTypeAnexo": SearchTypeAnexo, })
+
+    return render(request, 'internalProcedure/SolicitationsRefund.html', 
+    {"arr_SearchInicioExams": SearchExams, 
+    "arr_SearchStratusProgress": SearchStratusProgress, 
+    "arr_SearchTypeAnexo": SearchTypeAnexo, 
+    })
 
 
 

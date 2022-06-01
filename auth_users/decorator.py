@@ -1194,8 +1194,6 @@ def ApiChangeUsersModalFunction(request):
         fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "").replace("R$", "")
 
         resp_commerce = bodyData.get('resp_commerce')
-        print(">>>>>>>>>", resp_commerce)
-
 
         padrao = float(padrao) if padrao not in ["", None] else None
         porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
@@ -1225,6 +1223,24 @@ def ApiChangeUsersModalFunction(request):
         
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
+        
+        if resp_commerce == "" or resp_commerce == None:
+            searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+            cursor.execute(searchID, (request.user.username,))
+            dados = cursor.fetchall()
+            if dados:
+                for id_usuario, nome in dados:
+                    pass
+            else:
+                return {
+                    "response": "false",
+                    "message": "Login expirado, faça login novamente para continuar."
+            }
+
+            resp_commerce = id_usuario
+        else:
+            pass
+
 
         for key in dataKeys:
             try:
