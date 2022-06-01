@@ -138,6 +138,7 @@ urlpatterns = [
     path('listar/parceiros/meus-registros/', views.ListerPartnersUnitViews, name='ListerPartnersUnitViews'),#PARCEIROS
     path('listar/indicacoes/meus-registros/', views.ListerIndicationsUnitViews, name='ListerIndicationsUnitViews'),#INDICAÇÕES
     path('meu/fechamento/financeiro/', views.ClosingFinanceUnit, name='ClosingFinanceUnit'),#INDICAÇÕES
+    path('api/meus/parceiros/atualizacao/', views.ApiAttPartners, name='ApiAttPartners'),#INDICAÇÕES
 
     #LISTAR LEADS
     path('listar/leads/all-leads/', views.LeadsViews, name='LeadsViews'),#INDICAÇÕES

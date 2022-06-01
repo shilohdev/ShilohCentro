@@ -261,7 +261,7 @@ Acompanhe as últimas notícias!
 <div class="container">
    <div class="card" >
       <div class="card-content" style="margin-top: -93px;">
-         <h5 class="corfont">CONSULTAR PARCEIROS</h5>
+         <h5 class="corfont">MEUS PARCEIROS</h5>
       </div>
    </div>
 </div>
@@ -606,7 +606,7 @@ function updatePartnersModal(object) {
          formpost[$(this).attr("id")] = $(this).val();
       });
 
-      fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+      fetchRequest("{% url 'ApiAttPartners' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
          if (re["response"] == false) {
             $("#btn_atualizar").attr("disabled", false);
             alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE

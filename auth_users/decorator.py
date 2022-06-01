@@ -1184,8 +1184,11 @@ def ApiChangeStatusConvenioFunction(request):
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
         return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
+
     else:
+        
         bodyData = request.POST #var para não precisar fazer tudo um por um
+        print("passei aquii")
 
         id_user = bodyData.get('id_user')
         perfil = bodyData.get('perfil')
@@ -1219,7 +1222,7 @@ def ApiChangeUsersModalFunction(request):
             "obs": "obs",  
             "unity": "unity",  
         }
-
+        print(dataKeys)
         
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
@@ -3500,3 +3503,114 @@ def searchComercialFunction(request):
             array.append(newinfoa)
         return array
 
+
+#MEUS PARCEIROS
+def ApiAttPartnersFunction(request):
+    if not allowPermission(request, "meus_registros_parceiros"):
+        return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
+
+    else:
+        
+        bodyData = request.POST #var para não precisar fazer tudo um por um
+        print("passei aquii")
+
+        id_user = bodyData.get('id_user')
+        perfil = bodyData.get('perfil')
+        padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
+        porcentagem = bodyData.get('porcentagem').replace("%", "")
+        fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "").replace("R$", "")
+
+        resp_commerce = bodyData.get('resp_commerce')
+
+        padrao = float(padrao) if padrao not in ["", None] else None
+        porcentagem = float(porcentagem) if porcentagem not in ["", None] else None
+        fixo = float(fixo) if fixo not in ["", None] else None
+
+        dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
+            #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
+            "cpf": "cpf",
+            "name": "nome",
+            "date_nasc": "data_nasc",
+            "email": "email",
+            "tel1": "tel1",
+            "tel2": "tel2",
+            "zipcode": "cep",
+            "addres": "rua",
+            "number": "numero",
+            "complement": "complemento",
+            "district": "bairro",
+            "city": "city",
+            "uf": "uf",
+            "rn": "rn",
+            "categoria": "categoria",
+            "obs": "obs",  
+            "unity": "unity",  
+        }
+        print(dataKeys)
+        
+        db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
+        cursor = db.connection()
+        
+        if resp_commerce == "" or resp_commerce == None:
+            searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+            cursor.execute(searchID, (request.user.username,))
+            dados = cursor.fetchall()
+            if dados:
+                for id_usuario, nome in dados:
+                    pass
+            else:
+                return {
+                    "response": "false",
+                    "message": "Login expirado, faça login novamente para continuar."
+            }
+
+            resp_commerce = id_usuario
+        else:
+            pass
+
+        for key in dataKeys:
+            try:
+                query = "SELECT id, nome, status FROM auth_users.users where nome LIKE %s"
+                cursor.execute(query, (resp_commerce,))
+                dados = cursor.fetchall()
+                for idC, nomeC, statusC in dados:
+                    print(dados)
+                    if idC != "":
+                        resp_commerce = idC
+                        print("1>>>>", resp_commerce)
+                    
+                if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
+                    query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
+                    params = (
+                        bodyData.get(key), #serve para complementar o POST e obter o valor do input
+                        resp_commerce,
+                        padrao,
+                        porcentagem,
+                        fixo,
+                        id_user,
+                    )
+                    cursor.execute(query, params)
+            except:
+                print("ERRROOO")
+                query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
+                params = (
+                    perfil,
+                )    
+                cursor.execute(query, params)
+                dados = cursor.fetchall()
+                for id in dados:
+                    pass
+
+                    if key in bodyData:
+                        query = "UPDATE auth_users.users SET {} = %s, perfil = %s WHERE id = %s ".format(dataKeys[key])
+                        params = (
+                            bodyData.get(key),
+                            id,
+                            id_user,
+                        )
+                        print(params)
+                        cursor.execute(query)
+        return {
+            "response": True,
+            "message": "Dados atualizados com sucesso."
+        }
