@@ -1184,7 +1184,7 @@ def ApiChangeStatusConvenioFunction(request):
 def ApiChangeUsersModalFunction(request):
     if not allowPermission(request, "editPartners"):
         return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
-
+        
     else:
         
         bodyData = request.POST #var para não precisar fazer tudo um por um

@@ -218,7 +218,7 @@ var end_state = $("#uf").val("");
 <div class="container">
    <div class="card" >
       <div class="card-content" style="margin-top: -93px;">
-         <h5 class="corfont">CONSULTAR USUÁRIOS</h5>
+         <h5 class="corfont">USUÁRIOS INTERNOS</h5>
       </div>
    </div>
 </div>
@@ -264,7 +264,7 @@ var end_state = $("#uf").val("");
                   <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
                   <th data-field="id" style="text-align: center; width: 130px;">Status</th>
                   <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                </tr>
+                </tr>   
               </thead>
               <tbody id="tb_append">
                  {% for k in arr_SearchUsersFull %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
@@ -280,7 +280,7 @@ var end_state = $("#uf").val("");
                            <i class="material-icons right">edit</i>
                         </button>
                      </a>
-                      <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: 68.16 %;">
+                      <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
                         <i class="material-icons right">check</i>
                       </button>
                   </td>
