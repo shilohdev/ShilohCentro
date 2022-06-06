@@ -2531,7 +2531,7 @@ def searchUnit(request):
 
 #--------------------------------------------------------------------------------------------------------------------
 
-  #DOC AQUI
+#DOC AQUI
 #GET FILE >> ADICIONAR DIRETORIO
 def saveFilePatient(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     PATH = settings.BASE_DIR_DOCS + "/patients/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO

@@ -460,7 +460,7 @@ def SaveEditionsFinancesFunctions(request):
 
 
 
-    saveFileEditionsFinances(id_user, type_doc, request.FILES)
+    #saveFileEditionsFinances(id_user, type_doc, request.FILES)
     bodyData = json.loads(request.POST.get('data'))
     
     nomeStatus = bodyData.get('statusProgresso')
@@ -485,10 +485,6 @@ def SaveEditionsFinancesFunctions(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
-
-        if type_doc == '2':
-            queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id` = %s);"
-            cursor.execute(queryAtt, (date_create, id_user,))
 
         for key in dataKeys:
             
@@ -550,14 +546,14 @@ def SaveEditionsFinancesFunctions(request):
             paramS =( id_user, nome, date_create,)
             cursor.execute(queryS,paramS )
 
-        if nomeStatus == 'Glosa': #aqui
+        if nomeStatus == 'Glosa': 
             queryG = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '1' WHERE `id_agendamento_f` = %s"
             paramG =( id_user,)
             cursor.execute(queryG,paramG )
             
             
         
-        if nomeStatus == 'Valor Não Atingido': #aqui
+        if nomeStatus == 'Valor Não Atingido':
             queryN = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '2' WHERE `id_agendamento_f` = %s"
             paramN =( id_user,)
             cursor.execute(queryN,paramN )
@@ -571,7 +567,7 @@ def SaveEditionsFinancesFunctions(request):
 
 
 
-#FINALIZAR  PROCESSO REEMBOLSO
+#FINALIZAR  PROCESSO REEMBOLSO aquip
 def FinalizeProcessFunction(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     id_agendamento = request.POST.get("id_user")
@@ -621,62 +617,73 @@ def FinalizeProcessFunction(request):
             pass
 
         if statusProgresso == '4':
-            queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
-            paramsVal = (
-                doctor,
-            )
-            cursor.execute(queryVal, paramsVal)
-            dadosMEDICO = cursor.fetchall()
+            Qnf = "SELECT id_agendamento_f, anx_f FROM auth_finances.completed_exams where id_agendamento_f like %s;"
+            cursor.execute(Qnf, (id_agendamento,))
+            dados = cursor.fetchall()
+            if dados: 
+                for id_agendamento_f, anx_f in dados:
+                    print(anx_f)
+                    if anx_f == '1':
 
-            for perfil, id, nome, val_padrao, val_porcentagem, val_fixo in dadosMEDICO:
-                SelectIndicacao="SELECT b.nome_p, a.data_regis_l, a.medico_resp_l as medico, c.resp_comerce as comercial FROM customer_refer.leads a INNER JOIN customer_refer.patients b ON b.id_l_p = a.id_lead INNER JOIN auth_users.users c ON a.medico_resp_l = c.id WHERE a.medico_resp_l = %s"
-                cursor.execute(SelectIndicacao, (id,))
-                dados = cursor.fetchall()
-                array2 = []
+                        queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
+                        paramsVal = (
+                            doctor,
+                        )
+                        cursor.execute(queryVal, paramsVal)
+                        dadosMEDICO = cursor.fetchall()
 
-                val_padrao =  (val_padrao) if val_padrao not in ["", None] else None
-                val_porcentagem = (val_porcentagem) if val_porcentagem not in ["", None] else None
-                val_fixo =  (val_fixo) if val_fixo not in ["", None] else None
+                        for perfil, id, nome, val_padrao, val_porcentagem, val_fixo in dadosMEDICO:
+                            SelectIndicacao="SELECT b.nome_p, a.data_regis_l, a.medico_resp_l as medico, c.resp_comerce as comercial FROM customer_refer.leads a INNER JOIN customer_refer.patients b ON b.id_l_p = a.id_lead INNER JOIN auth_users.users c ON a.medico_resp_l = c.id WHERE a.medico_resp_l = %s"
+                            cursor.execute(SelectIndicacao, (id,))
+                            dados = cursor.fetchall()
+                            array2 = []
 
-                for pacienteS, data_indicacaoS, medicoS, comercialS in dados:
-                    newinfoa = ({
-                        "paciente": pacienteS,
-                        "data_indicacao": data_indicacaoS,
-                        "medico": medicoS,
-                        "comercial": comercialS,
-                        })
-                    array2.append(newinfoa)
-                
-                    if perfil == '7':
-                        if val_porcentagem:
-                        
-                            val_porcentagem = float(val_porcentagem)
-                            ValorPago = float(ValorPago)
-                            porcentagem = float(val_porcentagem / 100) * float(ValorPago)
-                            porcentagem = f'{porcentagem:.2f}'
+                            val_padrao =  (val_padrao) if val_padrao not in ["", None] else None
+                            val_porcentagem = (val_porcentagem) if val_porcentagem not in ["", None] else None
+                            val_fixo =  (val_fixo) if val_fixo not in ["", None] else None
 
-                            queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = float(porcentagem) * float(0.10)
-                            paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
-                            cursor.execute(queryFinance, paramsFinance)
-                    
-                        elif val_padrao:
-                            val_padrao = float(val_padrao)
-                            queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = float(val_padrao) * float(0.10)
-                            paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
-                            cursor.execute(queryFinance, paramsFinance)
-                        
-                        else:
-                            val_fixo = float(val_fixo)
-                            queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                            val_comercial = float(val_fixo) * float(0.10)
-                            paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
-                            cursor.execute(queryFinance, paramsFinance)
+                            for pacienteS, data_indicacaoS, medicoS, comercialS in dados:
+                                newinfoa = ({
+                                    "paciente": pacienteS,
+                                    "data_indicacao": data_indicacaoS,
+                                    "medico": medicoS,
+                                    "comercial": comercialS,
+                                    })
+                                array2.append(newinfoa)
+                            
+                                if perfil == '7':
+                                    if val_porcentagem:
+                                    
+                                        val_porcentagem = float(val_porcentagem)
+                                        ValorPago = float(ValorPago)
+                                        porcentagem = float(val_porcentagem / 100) * float(ValorPago)
+                                        porcentagem = f'{porcentagem:.2f}'
+
+                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                        val_comercial = float(porcentagem) * float(0.10)
+                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
+                                        cursor.execute(queryFinance, paramsFinance)
+                                
+                                    elif val_padrao:
+                                        val_padrao = float(val_padrao)
+                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                        val_comercial = float(val_padrao) * float(0.10)
+                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
+                                        cursor.execute(queryFinance, paramsFinance)
+                                    
+                                    else:
+                                        val_fixo = float(val_fixo)
+                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                        val_comercial = float(val_fixo) * float(0.10)
+                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
+                                        cursor.execute(queryFinance, paramsFinance)
+                                else:
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
+                                    cursor.execute(queryFinance, paramsFinance)
                     else:
-                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
-                        cursor.execute(queryFinance, paramsFinance)
+                        return {"message":"Insira Nota Fiscal."}
+
         else:
             return {"message":"Não foi possível encontrar este paciente."}
 
@@ -2821,3 +2828,26 @@ def CountPayFinanceFunction(request):
                     })
                 array.append(newinfoa)
         return array
+
+
+
+
+#SALVAR ANEXO DA TELA SOLICITAÇÕES DE REEMBOLSO
+def AnxDoc(request):
+    id_agendamento = request.POST.get('id_user')
+    type_doc = request.POST.get('type_doc')
+    date_create = str(datetime.now().strftime("%Y-%m-%d"))
+    saveFileEditionsFinances(id_agendamento, type_doc, request.FILES)
+
+    print(type(type_doc))
+    with connections['auth_finances'].cursor() as cursor:
+        if type_doc == "2":
+            queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id_agendamento_f` = %s);"
+
+            cursor.execute(queryAtt, (date_create, id_agendamento,))
+            print(id_agendamento)
+
+        return {
+            "response": True,
+            "message": "Anexado!"
+        }

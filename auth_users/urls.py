@@ -205,6 +205,11 @@ urlpatterns = [
     path('dashboards/financeiro/reembolsos/', views.DashboardsRefunds, name='DashboardsRefunds'), #FINANCEIRO EXAMES
 
 
+
+    #ANEXAR ARQUIVO FINANCEIRO
+    path('api/anx/docs/', views.ApiAnexarFiles, name='ApiAnexarFiles'), #FINANCEIRO EXAMES
+
+    
    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  

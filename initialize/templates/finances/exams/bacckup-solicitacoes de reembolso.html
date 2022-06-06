@@ -270,7 +270,7 @@ Acompanhe as últimas notícias!
                                <div class="col s4 mt-2 ml-3">
                                    <input id="doc_anx" type="file">
                                </div>
-                               <div class="input-field col s3">
+                               <div class="input-field col s3" >
                                    <div class="select-wrapper">
                                        <select name="select" id="tp_anx" class="error" required="true" data-show="search">
                                            <option value="">Tipo do Anexo</option>
@@ -280,11 +280,11 @@ Acompanhe as últimas notícias!
                                        </select>
                                    </div>
                                </div>
-                               <div class="col s2" style="margin-top: 22px">
-                                <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
-                                    <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
-                                </button>
-                            </div>
+                                <div class="col s2" style="margin-top: 22px">
+                                    <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
+                                        <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
+                                    </button>
+                                </div>
                            </div>
                        </div>
                        <div class="row">
@@ -354,9 +354,10 @@ Acompanhe as últimas notícias!
            </div>
            <div class="col s2">
                <button onclick="UpdateModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
-                   <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">SALVAR</span>
-                </button>
+                   <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">SALVAR
+                   </span></button>
            </div>
+
        </div>
    </div>
 </div>
@@ -550,26 +551,25 @@ Acompanhe as últimas notícias!
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
 
-
-function ShowFinance(object) {
-    var id_user = $(object).data("id_user");
-    var statusProgresso = $("#statusProgresso").val();
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user,//DICT COM O VALOR DO ID
-    };
-    fetchRequest("{% url 'ApiStartProcess' %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == "true"){
-            var dados = re["dadoss"];
-                alert(re["message"]);
-                    $("#btn_start").hide();
-                    $("#card_finance").show();
-                    $("#statusProgresso").val(dados["statusProgresso"]).attr("selected","selected");
-                    $("#date_first").val(dados["date_first"]);
-                    
-        }
-    });
-}
+    function ShowFinance(object) {
+        var id_user = $(object).data("id_user");
+        var statusProgresso = $("#statusProgresso").val();
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user,//DICT COM O VALOR DO ID
+        };
+        fetchRequest("{% url 'ApiStartProcess' %}", "POST", "JSON", formpost, function(re) {
+            if (re["response"] == "true"){
+               var dados = re["dadoss"];
+                  alert(re["message"]);
+                     $("#btn_start").hide();
+                     $("#card_finance").show();
+                     $("#statusProgresso").val(dados["statusProgresso"]).attr("selected","selected");
+                     $("#date_first").val(dados["date_first"]);
+                     
+            }
+        });
+    }
 
 //FUNCTION BUSCAR
 function searchPatients(object) {
@@ -607,8 +607,6 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
     var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
     $("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
     $("#btn_start").data("id_user", id_user);
-    $("#anx_file").data("id_user", id_user);
-
 
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -657,11 +655,9 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 var findLabel = $(`#${i}`).closest("div");
                 $(findLabel).find("label").attr("class", "active");
             });
-            
             $("#btn_start").data("id_user", id_user); //PEGA O ID DO PACIENTE
             $("#btn_end").data("id_user", id_user); //PEGA O ID DO PACIENTE
             $("#btn_salvar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
-            $("#anx_file").data("id_user", key["id"]);
 
 
             //Verifica se está pendente ou em andamento, para aparecer a div
@@ -814,6 +810,7 @@ function removeFileExists(object){
 }
 
 
+
 //BTN ATUALIZAR - SALVAR
 function UpdateModal(object) {
     
@@ -825,8 +822,11 @@ function UpdateModal(object) {
     var date_repass = $("#data_r").val();
     var n_nf = $("#n_nf").val();
     var obsF = $("#obsF").val();
-    var files = $("#doc_anx")[0].files[0];
+    //var files = $("#doc_anx")[0].files[0]; // meu nome do file que vai para o back
     var statusProgresso = $("#statusProgresso").val();
+
+
+
 
     if (statusProgresso == ""){
         var statusProgresso = $("#statusProgresso").val("1");
@@ -848,7 +848,31 @@ function UpdateModal(object) {
             return false;
         }
 
+        if ($("#tp_anx").val() != "2") {
+            alert("Por favor insira a Nota Fiscal.")
+            return false
+        }
+   
+
+        if ($("#doc_anx").val() != "") {
+            if ($("#doc_anx").prop("files") != undefined) {
+                if ($("#tp_anx").val() == "") {
+                    return alert("Preencha o tipo de anexo para salvar.");
+                } else {
+                    files = document.querySelector("#doc_anx").files[0];
+                }
+            } else {
+                files = "";
+            }
+        } else {
+            files = "";
+        }
+
+        }
+        //verificação para preencher o tipo do arquivo.
         var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
+        
+    
         var formpost2 = {
             "id_user": id_user,
             "date_repass": date_repass,
@@ -862,18 +886,18 @@ function UpdateModal(object) {
                 "name": "csrfmiddlewaretoken",
                 "value": $('input[name="csrfmiddlewaretoken"]').val()
             },
-            // {
-            //   "name": "file",
-            //  "value": files
-            // },
+            {
+                "name": "file",
+                "value": array
+            },
             {
                 "name": "id_user",
                 "value": id_user
             },
-            // {
-            //    "name": "type_doc",
-            //    "value": $("#tp_anx").val()
-            // },
+            {
+                "name": "type_doc",
+                "value": $("#tp_anx").val()
+            },
             {
                 "name": "obsF",
                 "value": obsF
@@ -903,6 +927,7 @@ function UpdateModal(object) {
                 "value": JSON.stringify(formpost2)
             },
         ];
+            console.log(formpost)
         fetchRequestFiles("{% url 'SaveEditionsFinances' %}", "POST", "JSON", formpost, function(re) {
             if (re["response"] == false) {
                 alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
@@ -914,7 +939,6 @@ function UpdateModal(object) {
             }
         });
     
-}
 }
 
 
@@ -953,7 +977,6 @@ function CalVal(valor) {
 
 //FINALIZAR PROCESSO
 function FinalizeProcess(object) {
-    console.log("passei aqui")
     //VALIDAÇÃO DE CAMPO NULL
     var i = 0;
     $("#cardFinance input[data-required='true']").each(function() {
@@ -980,7 +1003,6 @@ function FinalizeProcess(object) {
     var date_repass = $("#data_r").val();
     var date_age = $("#date_age").val();
     var tp_exame = $("#tp_exame").val();
-
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user, //DICT COM O VALOR DO ID
@@ -994,14 +1016,11 @@ function FinalizeProcess(object) {
         "tp_exame": tp_exame,
         
     };
-
     fetchRequest("{% url 'ApiFinalizeProcess' %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == "true") {
             alert(re["message"]);
             $("#btn_end").attr("disabled", true);
             location.reload();
-        }else{
-            alert(re["message"]);
         }
     });
 }
@@ -1066,95 +1085,72 @@ $("#cust_alv").mask('#.##0,00', {
 
 
 
-////////////////////////////////////
 
-function AnxDoc(object) {
-    $("#anx_file").attr("disabled", true);
 
-    var timeElapsed = Date.now();
-    var today = new Date(timeElapsed);
-    
-    var id_user = $(object).data("id_user");
 
-    var typeFile = $("#tp_anx option:selected").text(); 
-    var name_file = $('#doc_anx').val().split('\\').pop();
-    var data = today.toLocaleDateString();
-
-    var files = $("#doc_anx")[0].files[0];
-    if ($("#doc_anx").val() != "") {    //verificação para preencher o tipo do arquivo.
-        if ($("#doc_anx").prop("files") != undefined) {
-            if ($("#tp_anx").val() == "") {
-                return alert("Preencha o tipo de anexo para prosseguir.");
-            } else {
-                files = document.querySelector("#doc_anx").files[0];
-            }
-        } else {
-            files = "";
-        }
-    } else {
-        files = "";
+var i = 0;
+function checkAnexo(){ //verifica se existe o tipo do anexo
+    if(!($("#doc_anx").val() != "" && $("#tp_anx").val() != "")){
+        return false;
     }
-    
-   
-   var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val(); 
-    var formpost2 = {
-        "id_user": id_user,
-    };
-    var formpost = [{
-            "name": "csrfmiddlewaretoken",
-            "value": $('input[name="csrfmiddlewaretoken"]').val()
-        },
-        {
-            "name": "file",
-            "value": files
-        },
-        {
-            "name": "id_user",
-            "value": id_user
-        },
-        {
-            "name": "type_doc",
-            "value": $("#tp_anx").val()
-        },
-        {
-            "name": "data",
-            "value": JSON.stringify(formpost2)
-        },
-    ];
 
-    fetchRequestFiles("{% url 'ApiAnexarFiles'  %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == false) {
-            $("#anx_file").attr("disabled", false);
+    var cloneObject = $("#doc_anx").clone(); // clona meu elemento do id doc_anx
+    var typeObject = $("#tp_anx option:selected").text(); 
+    var name_file = $('#doc_anx').val().split('\\').pop();
+    var data = today.toLocaleDateString()
 
-            alert("Nenhum dado encontrado.");
-        }else{
-            $("#anx_file").attr("disabled", false);
 
-          var append = `
-            <tr> 
-                <td>${name_file}</td>
-                <td>${data}</td>
-                <td>${typeFile}</td>
-                <td style="text-align: center;">
-                    <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+    $(cloneObject).attr("id", i);
+    $(cloneObject).hide();
+    i += 1;
+
+    var btnanx = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
+            "newunit": newunit, 
+      };
+
+      fetchRequest("{% url 'ApiCadastreUnit' %}", "POST", "JSON", btnanx, function(re){
+         if(re["response"] == "true"){
+            var append = `
+                <tr class="trFile" data-id='${name_file}'>
+                    <td>${name_file}</td>
+                    <td>${data}</td>
+                    <td>${typeObject}</td>
+                    <td style="text-align: center;">
+                        <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
                         <i class="material-icons right">delete</i>
                     </a>
-                </td>
-            </tr>
-            `;
+                    </td>
+                </tr>
+    `;
 
-            $("#tb_append").append(append);
+    $("#tb_append").append(append);
+    $(`tr[data-id="${name_file}"]`).append(cloneObject);
+            }
             alert(re["message"]);
 
-          }
-
-    });
+      });
+      var limpa = $("#newunit").val("");
 }
 
 
+
+
 $("#anx_file").click(function(){
-    AnxDoc(this);
+   checkAnexo();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
