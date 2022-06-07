@@ -284,10 +284,10 @@ def FunctionModalFinances(request):
                 }
 
 
-    return {
-        "response": False if not dict_response else True,
-        "message": dict_response #RETORNO DO MENSSAGE COM O DICT
-    }
+        return {
+            "response": False if not dict_response else True,
+            "message": dict_response #RETORNO DO MENSSAGE COM O DICT
+        }
 
  
 #GET FILE >> ADICIONAR DIRETORIO
@@ -465,7 +465,6 @@ def SaveEditionsFinancesFunctions(request):
     
     nomeStatus = bodyData.get('statusProgresso')
     obsF = bodyData.get('obsF')
-
     dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
         "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
         "date_repass": "data_repasse",
