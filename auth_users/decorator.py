@@ -2219,7 +2219,7 @@ def FunctionStartProcess(request):
         }
     
 
-#MODAL COLETA AGENDADA CONCLUIDA kkk
+#MODAL SOLICITAÇÕES DE REEMBOLSO
 def SearchModalExamsFunction(request):
     id = request.POST.get('id_user')
     
@@ -2234,7 +2234,7 @@ def SearchModalExamsFunction(request):
 
     #dict_response["history"] = historicExamConclFunction(id)
     return {
-        "response": False if not dict_response else True,
+        "response": True,
         "message": dict_response #RETORNO DO MESSAGE COM O DICT 
     }
 
