@@ -279,12 +279,12 @@ Acompanhe as últimas notícias!
                                            {% endfor %}
                                        </select>
                                    </div>
-                               </div>
+                               </div> 
                                <div class="col s2" style="margin-top: 22px">
-                                <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
-                                    <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
-                                </button>
-                            </div>
+                                    <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
+                                        <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
+                                    </button>
+                                </div>
                            </div>
                        </div>
                        <div class="row">
@@ -816,7 +816,7 @@ function removeFileExists(object){
 
 //BTN ATUALIZAR - SALVAR
 function UpdateModal(object) {
-    
+    console.log("passei aqui")
     var id_user = $(object).data("id_user");
     var cust_alv = $("#cust_alv").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
     var val_w_lab = $("#val_w_lab").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
@@ -847,7 +847,7 @@ function UpdateModal(object) {
         if (i == 1) {
             return false;
         }
-
+    }
         var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
         var formpost2 = {
             "id_user": id_user,
@@ -914,7 +914,7 @@ function UpdateModal(object) {
             }
         });
     
-}
+
 }
 
 
