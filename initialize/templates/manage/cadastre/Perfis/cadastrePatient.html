@@ -36,254 +36,401 @@ Acompanhe as últimas notícias!
          </div>
       </div>
    </div>
-<div class="container">
-   <div class="card" >
-      <div class="row">
-         <div class="input-field col s12" style="margin-top: 10px;">
-            <div class="input-field col s3">
-               <span>Nome:</span>
-               <select id="select_leads" class="select2 browser-default" data-required="true">
-                  <option value="">Selecione:</option>
-                  {% for k in arr_SearchPatients %}
-                     <option  data-conv_medico="{{ k.conv_medico }}" data-medico_resp="{{ k.medico_resp }}" data-cpf="{{ k.cpf }}" data-name="{{ k.nome }}" data-phone="{{ k.phone }}" data-phone_aux="{{ k.phone_aux }}" data-email="{{ k.email }}" value="{{ k.id }}">[{{ k.id }}] - {{ k.nome }}</option>
-                  {% endfor %}
-               </select>
-            </div>
-            <div id="resp" class="input-field col s5" style="display: none; margin-top: 19px;">
-               <input readonly="readonly" style="color: black;"  id="medico_resp" type="text" data-required="true">
-               <label for="medico_resp">
-               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Indicação de:</label>
-            </div>
-            <div id="conv" class="input-field col s4" style="display: none; margin-top: 19px;"> 
-               <select name="select" id="conv_medico"  class="error " data-required="true">
-                  <option value="">Selecione</option>
-                  {% for k in arr_SearchConvenio %}
-                      <option value="{{ k.id }}">{{ k.nome_conv }}</option>
-                  {% endfor %}
-              </select>
+   <div class="container">
+      <div class="card" >
+         <div class="row">
+            <div class="container">
+               <div class="col s12 m12 m-b10" style="padding-left: 10px;">
+                  <div class="active">
+                     <div class="collapsible-header col m6 s12 " style="height: 40px; margin-top: 10px; background-color: #581848; color: white;" tabindex="0">
+                        <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Selecione:</labe>
+                     </div>
+                  </div>
+               </div>
+               <div class=" col s3 m3 mb-5" style="margin-top: 30px;">
+                  <label>
+                  <input id="lead" class="with-gap" type="radio" name="option" />
+                  <span style="padding-left: 25px;">Lead</span>
+                  </label>
+               </div>
+               <div class="container col s3 m3" style="margin-top: 30px;">
+                  <label>
+                  <input id="new_regis" class="with-gap" type="radio" name="option" />
+                  <span style="padding-left: 25px;">Novo Registro</span>
+                  </label>
+               </div>
             </div>
          </div>
-      </div>
-
-         <!-- Interno -->
-      <div id="userint" class="row" >
-        <div class="col s12">
-          <div class="input-field col s3">
-             <input id="cpf" type="text">
-             <label for="cpf">
-             <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
-          </div>
-          <div class="input-field col s5">
-             <input id="name" type="text" data-required="true" class="upper">
-             <label for="name">
-             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
-          </div>
-          <div class="input-field col s4">
-             <input id="date_nasc" type="date" data-required="true">
-             <label for="date_nasc">Data de Nacimento</label>
-          </div>
-       </div>
-       <div class="col s12">
-          <div class="input-field col s8">
-             <input id="email" type="email" data-required="true">
-             <label for="email">
-             <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
-          </div>
-          <div class="input-field col s2">
-             <input id="tel1" type="tel" data-required="true">
-             <label for="tel1">
-             <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
-          </div>
-          <div class="input-field col s2">
-             <input id="tel2" type="tel" >
-             <label for="tel2">
-             <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
-          </div>
-       </div>
-       <div class="col s12">
-          <div class="input-field col s3">
-             <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required="true">
-             <label for="zipcode">
-             <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
-          </div>
-          <div class="input-field col s7">
-             <input id="addres" type="text" data-required="true">
-             <label for="addres">Logradouro </label>
-          </div>
-          <div class="input-field col s2">
-             <input id="number" type="text" >
-             <label for="number">Número </label>
-          </div>
-       </div> 
-       <div class="col s12">
-          <div class="input-field col s3">
-             <input id="complement" type="text" >
-             <label for="complement">Complemento</label>
-          </div> 
-          <div class="input-field col s5">
-            <input id="district" type="text" data-required="true">
-            <label for="district">Bairro</label>
-         </div>
-          <div class="input-field col s2">
-            <input id="city" type="text" data-required="true">
-            <label for="city">Cidade</label>
-         </div>
-         <div class="input-field col s2">
-            <input id="uf" type="text"  maxlength="2" data-required="true">
-            <label for="uf">UF</label>
-         </div>
-       </div>
-       <div class="col s12">
-         <div class="input-field col s12">
-            <input id="obs" type="text" >
-            <label for="obs"> 
-            <i class="material-icons" style="font-size: 15px">edit</i>&nbsp;Observação</label>
-         </div>
-       </div>
-       <div class="col s12">
-         <div class="col s12" style="margin-top: 15px;">
-            <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:</label>
-         </div>
-         <div class="input-field col s3">
-
-            <input id="login" type="text" >
-            <label for="login"> 
-            <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
-         </div>
-         <div class="input-field col s5">
-            <input id="senha" type="text" >
-            <label for="senha"> 
-            <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
-         </div>
-       </div>
-
-         <!--BUTTON-->
-         <div class="col s12 ">
-            <div class="col s12 mb-2">
-               <button id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastreUser()">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
-               </button>
+         <!--LEAD-->
+         <div id="cadastre_lead" style="display: none">
+            <div class="row">
+               <div class="input-field col s12">
+                  <div class="input-field col s3" style="margin-top: 10px;">
+                     <span>Nome:</span>
+                     <select id="select_leads" class="select2 browser-default" data-required="true">
+                        <option value="">Selecione</option>
+                        {% for k in arr_SearchPatients %}
+                        <option  data-conv_medico="{{ k.conv_medico }}" data-medico_resp="{{ k.medico_resp }}" data-cpf="{{ k.cpf }}" data-name="{{ k.nome }}" data-phone="{{ k.phone }}" data-phone_aux="{{ k.phone_aux }}" data-email="{{ k.email }}" value="{{ k.id }}">[{{ k.id }}] - {{ k.nome }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+                  <div id="resp" class="input-field col s5" style="display: none;">
+                     <input readonly="readonly" style="color: black;"  id="medico_resp" type="text" data-required="true">
+                     <label for="medico_resp">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Indicação de:</label>
+                  </div>
+                  <div id="conv" class="input-field col s4" style="display: none; ">
+                     <select name="select" id="conv_medico"  class="error " data-required="true">
+                        <option value="">Selecione</option>
+                        {% for k in arr_SearchConvenio %}
+                        <option value="{{ k.id }}">{{ k.nome_conv }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row" >
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="cpf" type="text">
+                     <label for="cpf">
+                     <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="name" type="text" data-required="true" class="upper">
+                     <label for="name">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
+                  </div>
+                  <div class="input-field col s4">
+                     <input id="date_nasc" type="date" data-required="true">
+                     <label for="date_nasc">Data de Nacimento</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s8">
+                     <input id="email" type="email" data-required="true">
+                     <label for="email">
+                     <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="tel1" type="tel" data-required="true">
+                     <label for="tel1">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="tel2" type="tel" >
+                     <label for="tel2">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required="true">
+                     <label for="zipcode">
+                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                  </div>
+                  <div class="input-field col s7">
+                     <input id="addres" type="text" data-required="true">
+                     <label for="addres">Logradouro </label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="number" type="text" >
+                     <label for="number">Número </label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="complement" type="text" >
+                     <label for="complement">Complemento</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="district" type="text" data-required="true">
+                     <label for="district">Bairro</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="city" type="text" data-required="true">
+                     <label for="city">Cidade</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="uf" type="text"  maxlength="2" data-required="true">
+                     <label for="uf">UF</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s12">
+                     <input id="obs" type="text" >
+                     <label for="obs"> 
+                     <i class="material-icons" style="font-size: 15px">edit</i>&nbsp;Observação</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="col s12" style="margin-top: 15px;">
+                     <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="login" type="text" >
+                     <label for="login"> 
+                     <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="senha" type="text" >
+                     <label for="senha"> 
+                     <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                  </div>
+               </div>
+               <!--BUTTON-->
+               <div class="col s12 ">
+                  <div class="col s12 mb-2">
+                     <button id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastrePatient()">
+                     <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
+                     </button>
+                  </div>
+               </div>
             </div>
          </div>
+         <!-- FIM LEAD-->
+ 
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
          
+          <!--NOVO REGISTRO-->
+         <div id="cadastre_new_regis" style="display: none">
+            <div class="row">
+               <div class="input-field col m12 s12">
+                  <div class="input-field col m3 s12">
+                     <div class="select-wrapper">
+                        <span>Indicado por:</span>
+                        <select id="doctor_new" onchange="SelectShow()" class="select2 browser-default" data-required="true">
+                           <option value="">Selecione</option>
+                           {% for k in arr_SearchDoctorL %}
+                           <option value="{{ k.id }}">{{ k.nome }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+                  <div id="conv2" class="input-field col m3 s12" style="display: none; margin-top: 0px;">
+                     <span>Convênio:</span>
+                     <select name="select" id="conv_medico_new"  class="error" data-required="true">
+                        <option value="">Selecione</option>
+                        {% for k in arr_SearchConvenio %}
+                        <option value="{{ k.id }}">{{ k.nome_conv }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row" >
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="cpf_new" type="text">
+                     <label for="cpf_new">
+                     <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="name_new" type="text" data-required="true" class="upper">
+                     <label for="name_new">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome</label>
+                  </div>
+                  <div class="input-field col s4">
+                     <input id="date_nasc_new" type="date" data-required="true">
+                     <label for="date_nasc_new">Data de Nacimento</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s8">
+                     <input id="email_new" type="email" data-required="true">
+                     <label for="email_new">
+                     <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="tel1_new" type="tel" data-required="true">
+                     <label for="tel1_new">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="tel2_new" type="tel" >
+                     <label for="tel2_new">
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="zipcode_new" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required="true">
+                     <label for="zipcode_new">
+                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                  </div>
+                  <div class="input-field col s7">
+                     <input id="addres_new" type="text" data-required="true">
+                     <label for="addres_new">Logradouro </label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="number_new" type="text" >
+                     <label for="number_new">Número </label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s3">
+                     <input id="complement_new" type="text" >
+                     <label for="complement_new">Complemento</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="district_new" type="text" data-required="true">
+                     <label for="district_new">Bairro</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="city_new" type="text" data-required="true">
+                     <label for="city_new">Cidade</label>
+                  </div>
+                  <div class="input-field col s2">
+                     <input id="uf_new" type="text"  maxlength="2" data-required="true">
+                     <label for="uf_new">UF</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="input-field col s12">
+                     <input id="obs_new" type="text" >
+                     <label for="obs_new"> 
+                     <i class="material-icons" style="font-size: 15px">edit</i>&nbsp;Observação</label>
+                  </div>
+               </div>
+               <div class="col s12">
+                  <div class="col s12" style="margin-top: 15px;">
+                     <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:</label>
+                  </div>
+                  <div class="input-field col s3">
+                     <input id="login_new" type="text" >
+                     <label for="login_new"> 
+                     <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+                  </div>
+                  <div class="input-field col s5">
+                     <input id="senha_new" type="text" >
+                     <label for="senha_new"> 
+                     <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                  </div>
+               </div>
+               <!--BUTTON-->
+               <div class="col s12 ">
+                  <div class="col s12 mb-2">
+                     <button id="btn_cadastrar_new"  disabled class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastrePartients_NewRegis()">
+                     <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- FIM NOVO REGISTRO-->
       </div>
-      
    </div>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
 <script type="text/javascript">
 
   
-   $("#cpf").mask("999.999.999-99");   
-   $("#tel1").mask("(99) 99999-9999");
-   $("#tel2").mask("(99) 99999-9999");
-      $("#zipcode").mask("99999-999");
+   $("#cpf, #cpf_new").mask("999.999.999-99");   
+   $("#tel1, #tel1_new ").mask("(99) 99999-9999");
+   $("#tel2, #tel2_new").mask("(99) 99999-9999");
+   $("#zipcode, #zipcode_new").mask("99999-999");
+
+   
+
+      
+function CadastrePatient() {
+
+   var select_leads = $("#select_leads").val();
+   var medico_resp = $("#medico_resp").val();
+   var conv_medico = $("#conv_medico").val();
+   var cpf = $("#cpf").val();
+   var name = $("#name").val();
+   var date_nasc = $("#date_nasc").val();
+   var email = $("#email").val();
+   var tel1 = $("#tel1").val();
+   var tel2 = $("#tel2").val();
+   var zipcode = $("#zipcode").val();
+   var addres = $("#addres").val();
+   var number = $("#number").val();
+   var complement = $("#complement").val();
+   var district = $("#district").val();
+   var city = $("#city").val();
+   var uf = $("#uf").val();
+   var obs = $("#obs").val();
+   var login = $("#login").val();
+   var senha = $("#senha").val();
+
+   var anoNasc = document.getElementById("date_nasc").value.split("-")[0];
+   var data = new Date();
+   var anoatual = data.getFullYear()
+   var Calc = (anoatual - anoNasc)
+
+   if (conv_medico == '') {
+      alert("Selecione um convênio válido.")
+      $("#conv_medico").focus();
+      return false
+   }
+
+   if (anoNasc > anoatual || (Calc >= 100)) {
+      alert("Data de nascimento inválida.")
+      $("#date_nasc").focus();
+      return false;
+   }
 
 
-function CadastreUser(){
-      var select_leads = $("#select_leads").val();
-      var medico_resp = $("#medico_resp").val();
-      var conv_medico = $("#conv_medico").val();
-      var cpf = $("#cpf").val();
-      var name = $("#name").val();
-      var date_nasc = $("#date_nasc").val();
-      var email = $("#email").val();
-      var tel1 = $("#tel1").val();
-      var tel2 = $("#tel2").val();
-      var zipcode = $("#zipcode").val();
-      var addres = $("#addres").val();
-      var number = $("#number").val();
-      var complement = $("#complement").val();
-      var district = $("#district").val();
-      var city = $("#city").val();
-      var uf = $("#uf").val();
-      var obs = $("#obs").val();
-      var login = $("#login").val();
-      var senha = $("#senha").val();
-
-      var anoNasc = document.getElementById("date_nasc").value.split("-")[0];
-      var data = new Date();
-      var anoatual = data.getFullYear()
-      var Calc = (anoatual - anoNasc)
-
-         
-      if(conv_medico == ''){
-         alert("Selecione um convênio válido.")
-         $("#conv_medico").focus();
-         return false
-      }
-
-      if (anoNasc > anoatual || (Calc >= 100)){
-         alert("Data de nascimento inválida.")
-         $("#date_nasc").focus();
+   if (cpf == "" && Calc >= 10) {
+      $("#cpf").attr("class", "data-required='true'");
+      alert("CPF obrigatório acima de 10 anos.")
+      console.log(cpf)
+      return false
+   } else {
+      //VALIDAÇÃO DE CAMPO NULL
+      var i = 0;
+      $('#cadastre_lead input[data-required="true"], #cadastre_lead select[data-required="true"]').each(function () {
+         if ($(this).val() == "") {
+            alert("Preencha os campos obrigatórios.");
+            $(this).focus();
+            i = 1;
+            return false;
+         }
+      });
+      if (i == 1) {
          return false;
       }
 
-      
-      if (cpf == "" && Calc >= 10 ){
-         $("#cpf").attr("class", "data-required='true'");
-         alert("CPF obrigatório acima de 10 anos.")
-         console.log(cpf)
-         return false
-      }
-      else{
 
-     
-         var i = 0;
-         $('#userint input[data-required="true"]').each(function(){
-            if($(this).val() == ""){
-               alert("Preencha os campos obrigatórios.");
-               $(this).focus();
-               i = 1;
-               return false;
-            }
-         });
-         if(i == 1){
-            return false;
-         }
-      
-   //VALIDAÇÃO DE CAMPO NULL
-  
       var btncadastrar = {
          "csrfmiddlewaretoken": $($('{% csrf_token %}').clone()).val(), //PEGA TODOS OS VALORES E JÁ FAZ O DICT AO MESMO TEMPO
-         "cpf": $('#cpf').val(), 
-         "name": $('#name').val(),
-         "date_nasc": $('#date_nasc').val(),
-         "email": $('#email').val(),
-         "tel1": $('#tel1').val(),
-         "tel2": $('#tel2').val(),
-         "zipcode": $('#zipcode').val(),
-         "addres": $('#addres').val(),
-         "number": $('#number').val(),
-         "complement": $('#complement').val(),
-         "district": $('#district').val(),
-         "city": $('#city').val(),
-         "uf": $('#uf').val(),
-         "medico_resp": $('#medico_resp').val(),
-         "select_leads": $('#select_leads').val(),
-         "conv_medico": $('#conv_medico').val(),
-         "obs": $('#obs').val(),
-         "login": $('#login').val(),
-         "senha": $('#senha').val(),
-         };
+         "cpf": cpf,
+         "name": name,
+         "date_nasc": date_nasc,
+         "email": email,
+         "tel1": tel1,
+         "tel2": tel2,
+         "zipcode": zipcode,
+         "addres": addres,
+         "number": number,
+         "complement": complement,
+         "district": district,
+         "city": city,
+         "uf": uf,
+         "medico_resp": medico_resp,
+         "select_leads": select_leads,
+         "conv_medico": conv_medico,
+         "obs": obs,
+         "login": login,
+         "senha": senha,
+      };
 
-         $("#btn_cadastrar").attr("disabled", true);
+      $("#btn_cadastrar").attr("disabled", true);
 
-      fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function(re){
-         if(re["response"] == "true"){
+      fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function (re) {
+         if (re["response"] == "true") {
             alert(re["message"]);
             location.reload();
-      }else{
-         alert(re["message"]);
-         $("#btn_cadastrar").attr("disabled", false);
-         location.reload();
+         } else {
+            alert(re["message"]);
+            $("#btn_cadastrar").attr("disabled", false);
+            location.reload();
 
-      } 
-   });
-}
+         }
+      });
+   }
 };
-
 
 // CEP 
 function pesquisacep(valor) {
@@ -292,10 +439,10 @@ function pesquisacep(valor) {
    if (cep != "") {
       var validacep = /^[0-9]{8}$/;
       if(validacep.test(cep)) {
-         var end_addres = $("#addres").val("...");
-         var end_district = $("#district").val("...");
-         var end_city = $("#city").val("...");
-         var end_state = $("#uf").val("...");
+         var end_addres = $("#addres, #addres_new").val("...");
+         var end_district = $("#district, #district_new").val("...");
+         var end_city = $("#city, #city_new").val("...");
+         var end_state = $("#uf, #uf_new").val("...");
          var script = document.createElement('script');
 
          script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=bsccep';
@@ -313,10 +460,10 @@ function pesquisacep(valor) {
 
 function bsccep(val) {
    if (!("erro" in val)) {
-      var end_addres = $("#addres").val(val.logradouro);
-      var end_district = $("#district").val(val.bairro);
-      var end_city = $("#city").val(val.localidade);
-      var end_state = $("#uf").val(val.uf);
+      var end_addres = $("#addres, #addres_new").val(val.logradouro);
+      var end_district = $("#district, #district_new").val(val.bairro);
+      var end_city = $("#city, #city_new").val(val.localidade);
+      var end_state = $("#uf, #uf_new").val(val.uf);
    } 
    else {
       limocamp();
@@ -379,7 +526,152 @@ $(".select2").select2({
     width: '100%'
 
 });
+ 
 
 
+
+// quando clica nesse radio id select_leads ele zera o campo select 2
+$("#lead").click(function() {
+   var valor = $("#select_leads").val()
+   $("#cadastre_lead").css("display", "block");
+   $("#cadastre_new_regis").css("display", "none");
+   $("input").val("");
+   $("#resp, #conv").hide();
+
+});
+
+function clearSelect2(object){
+   $(object).val(null).trigger('change');
+   $(object).val("").trigger("change");
+   $(object).closest("div").find("span[class='select2-selection__rendered']").attr("title", "Selecione");
+   $(object).closest("div").find("span[class='select2-selection__rendered']").text("Selecione");
+}
+
+$("#lead, #new_regis").change(function() {
+   clearSelect2($("#select_leads, #doctor_new"));
+});
+//////
+
+$("#new_regis").click(function() {
+
+   $("#cadastre_new_regis").css("display", "block");
+   $("#cadastre_lead").css("display", "none");
+   $("input").val("");
+});
+
+
+// NOVO REGISTRO
+function CadastrePartients_NewRegis(){
+   var medico_resp = $("#doctor_new").val();
+   var conv_medico = $("#conv_medico_new").val();
+   var cpf = $("#cpf_new").val();
+   var name = $("#name_new").val();
+   var date_nasc = $("#date_nasc_new").val();
+   var email = $("#email_new").val();
+   var tel1 = $("#tel1_new").val();
+   var tel2 = $("#tel2_new").val();
+   var zipcode = $("#zipcode_new").val();
+   var addres = $("#addres_new").val();
+   var number = $("#number_new").val();
+   var complement = $("#complement_new").val();
+   var district = $("#district_new").val();
+   var city = $("#city_new").val();
+   var uf = $("#uf_new").val();
+   var obs = $("#obs_new").val();
+   var login = $("#login_new").val();
+   var senha = $("#senha_new").val();
+
+   var anoNasc = document.getElementById("date_nasc_new").value.split("-")[0];
+   var data = new Date();
+   var anoatual = data.getFullYear()
+   var Calc = (anoatual - anoNasc)
+   
+   if(conv_medico == ''){
+      alert("Selecione um convênio válido.")
+      $("#conv_medico_new").focus();
+      return false
+   }
+
+   if (anoNasc > anoatual || (Calc >= 100)){
+      alert("Data de nascimento inválida.")
+      $("#date_nasc_new").focus();
+      return false;
+   }
+
+   
+   if (cpf == "" && Calc >= 10 ){
+      $("#cpf_new").attr("class", "data-required='true'");
+      alert("CPF obrigatório acima de 10 anos.")
+      console.log(cpf)
+      return false
+   }
+   else{
+      var i = 0;
+      $('#cadastre_new_regis input[data-required="true"], #cadastre_new_regis select[data-required="true"]').each(function(){
+         if($(this).val() == ""){
+            alert("Preencha os campos obrigatórios.");
+            $(this).focus();
+            i = 1;
+            return false;
+         }
+      });
+      if(i == 1){
+         return false;
+      }
+
+   var btncadastrar = {
+      "csrfmiddlewaretoken": $($('{% csrf_token %}').clone()).val(), //PEGA TODOS OS VALORES E JÁ FAZ O DICT AO MESMO TEMPO
+      "cpf": cpf, 
+      "name":name ,
+      "date_nasc": date_nasc,
+      "email": email,
+      "tel1": tel1,
+      "tel2": tel2,
+      "zipcode":zipcode ,
+      "addres": addres,
+      "number": number,
+      "complement": complement,
+      "district":district ,
+      "city": city,
+      "uf": uf,
+      "medico_resp": medico_resp,
+      "conv_medico": conv_medico,
+      "obs": obs,
+      "login": login,
+      "senha": senha,
+      };
+      console.log(btncadastrar)
+
+      $("#btn_cadastrar_new").attr("disabled", true);
+
+   fetchRequest("{% url 'ApiNewRegisPatient' %}", "POST", "JSON", btncadastrar, function(re){
+   if(re["response"] == true){
+         console.log("foi")
+         alert(re["message"]);
+         location.reload();
+   }else{
+      alert(re["message"]);
+      console.log("n foi")
+
+      $("#btn_cadastrar_new").attr("disabled", false);
+
+   } 
+   });
+}
+};
+
+
+
+function SelectShow() {
+  var show = $("#doctor_new").val();      
+  var conevnio = $("#conv2").val();      
+      if(show != ""){
+       $("#conv2").css("display", "block");
+      }
+     if (conevnio != ""){
+      $("#btn_cadastrar_new").attr("disabled", true);
+
+     }
+}
 </script>
 {% endblock %}

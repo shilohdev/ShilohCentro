@@ -200,6 +200,11 @@ Acompanhe as últimas notícias!
                                        </select>
                                     </div>
                                  </div>
+                                 <div class="col s2" style="margin-top: 22px">
+                                    <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
+                                        <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
+                                    </button>
+                                </div>
                            </div>
                         </div>
                         <div class="row">
@@ -489,7 +494,8 @@ function deleteFile(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
 function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
    $("#btn_salvar").data("id_user", id_user); 
-   
+   $("#anx_file").data("id_user", id_user);
+
 $("#modal3").hide();
      $(object).prop("disabled", true);
    var formpost = {
@@ -659,33 +665,6 @@ function removeFileExists(object){
    $("#doc_anx").val("");
 }
 
-function checkAnexo(){
-   var objectFile = $("#doc_anx");
-   var typeFile = $("#tp_anx");
-   console.log(objectFile.val());
-   if(objectFile.val() != "" && typeFile.val() != ""){
-      var nameFile = ($(objectFile)[0].files[0]).name;
-      var typeFile = $("#tp_anx option:selected").text();
-      var append = `
-      <tr> 
-         <td>${nameFile}</td>
-         <td>DATA</td>
-         <td>${typeFile}</td>
-         <td style="text-align: center;">
-            <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
-               <i class="material-icons right">delete</i>
-            </a>
-         </td>
-      </tr>
-      `;
-
-      $("#tb_appendAnx").append(append);
-   }
-}
-
-$("#doc_anx, #tp_anx").change(function(){
-   checkAnexo();
-});
 
 function changeUserModal(object){
    $("#btn_atualizar").attr("disabled", true);   
@@ -712,14 +691,23 @@ function changeUserModal(object){
 
 }
 
+function AnxDoc(object) {
+    $("#anx_file").attr("disabled", true);
 
-function SlvAnx(object) {
+    var timeElapsed = Date.now();
+    var today = new Date(timeElapsed);
+    
     var id_user = $(object).data("id_user");
+
+    var typeFile = $("#tp_anx option:selected").text(); 
+    var name_file = $('#doc_anx').val().split('\\').pop();
+    var data = today.toLocaleDateString();
+
     var files = $("#doc_anx")[0].files[0];
-    if ($("#doc_anx").val() != "") {
+    if ($("#doc_anx").val() != "") {    //verificação para preencher o tipo do arquivo.
         if ($("#doc_anx").prop("files") != undefined) {
             if ($("#tp_anx").val() == "") {
-                return alert("Preencha o tipo de anexo para salvar.");
+                return alert("Preencha o tipo de anexo para prosseguir.");
             } else {
                 files = document.querySelector("#doc_anx").files[0];
             }
@@ -729,18 +717,12 @@ function SlvAnx(object) {
     } else {
         files = "";
     }
-
-
-
-
-   //verificação para preencher o tipo do arquivo.
-    var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
     
- 
+   
+   var Csrftoken = $('input[name="csrfmiddlewaretoken"]').val(); 
     var formpost2 = {
         "id_user": id_user,
     };
-
     var formpost = [{
             "name": "csrfmiddlewaretoken",
             "value": $('input[name="csrfmiddlewaretoken"]').val()
@@ -763,17 +745,39 @@ function SlvAnx(object) {
         },
     ];
 
-    fetchRequestFiles("{% url 'SaveEditionsPatient' %}", "POST", "JSON", formpost, function(re) {
+    fetchRequestFiles("{% url 'SaveEditionsPatient'  %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == false) {
-            alert("Nenhum dado encontrado.");
-        } else {
-            $("#btn_salvar").attr("disabled", true);
-            alert(re["message"]);
-            location.reload();
+            $("#anx_file").attr("disabled", false);
 
-        }
+            alert("Nenhum dado encontrado.");
+        }else{
+            $("#anx_file").attr("disabled", false);
+
+          var append = `
+            <tr> 
+                <td>${name_file}</td>
+                <td>${data}</td>
+                <td>${typeFile}</td>
+                <td style="text-align: center;">
+                    <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+                        <i class="material-icons right">delete</i>
+                    </a>
+                </td>
+            </tr>
+            `;
+
+            $("#tb_appendAnx").append(append);
+            alert("Anexado")
+
+          }
+
     });
 }
+
+
+$("#anx_file").click(function(){
+    AnxDoc(this);
+});
 
 
 

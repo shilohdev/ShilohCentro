@@ -41,7 +41,7 @@ Realize um agendamento
             <div id="card_ag" class="row" >
                <div class="col s12"  style="margin-top: 10px;">
                   <div class="input-field col s3">
-                     <input id="date_age" type="date" data-required='true' onChange="teste()">
+                     <input id="date_age" type="date" data-required='true'>
                      <label for="date_age">Data Agendamento</label>
                   </div>
                   <div class="input-field col s3">
@@ -234,7 +234,7 @@ Realize um agendamento
    <!--BUTTON-->
    <div class="col s12 ">
       <div class="col s12 mb-2" >
-         <button disabled="disabled" onclick="CadastreIndication()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px;">
+         <button disabled="disabled" onclick="agendarColeta()"id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px;">
          <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Agendar</spanpx>
          </button>
       </div>
@@ -268,7 +268,7 @@ $(".select2").select2({
          $("#zipcode").mask("99999-999");
 
    
-         function CadastreIndication(){
+         function agendarColeta(){
             var date_age = $("#date_age").val();
             var hr_age = $("#hr_age").val();
             var tp_service = $("#tp_service").val();
@@ -295,27 +295,26 @@ $(".select2").select2({
             var obs = $("#obs").val();
 
             datafim = '2010-01-01'
-            console.log(date_age)
-            console.log(datafim)
             if(date_age < datafim){
-            alert("Data de agendamento inválida.")
+               alert("Data de agendamento inválida.")
             return false;
             }
             else{
             //VALIDAÇÃO DE CAMPO NULL
-            var i = 0;
-            $("#userint input[data-required='true'], #userint select[data-required='true']").each(function(){
-               if( $(this).val() == "" ){
-                  alert("Preencha os campos obrigatórios.");
-                  $(this).val().focus();
-                  i = 1;
-                  return false;
-               }
+               var i = 0;
+               $("#userint input[data-required='true'], #userint select[data-required='true']").each(function(){
+                  if( $(this).val() == "" ){
+                     alert("Preencha os campos obrigatórios.");
+                     $(this).val().focus();
+                     i = 1;
+                     return false;
+                  }
             });
             if(i == 1){
                return false;
             }
             
+            $("#btn_cadastrar").attr("disabled", true);
 
             var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
                "date_age": $('#date_age').val(), 
@@ -343,12 +342,13 @@ $(".select2").select2({
                "val_pago": $('#val_pago').val(),
                "obs": $('#obs').val(),
                };
-      
+               console.log(btncadastrar)
          fetchRequest("{% url 'ApiSchedulePickup' %}", "POST", "JSON", btncadastrar, function(re){
                if(re["response"] == "true"){
                   alert(re["message"]);
-                  $("#btn_cadastrar").attr("disabled", true);
                   location.reload();
+            }else{
+               $("#btn_cadastrar").attr("disabled", false);
             }
          });
       }
@@ -438,13 +438,6 @@ $("#namePaciente").change(function(){
 
    
   
-
-function teste(){
-   var date_age = $("#date_age").val().replace();
-   
-  
-   alert(hoje)
-}
 
    
 </script>

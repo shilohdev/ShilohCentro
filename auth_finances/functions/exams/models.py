@@ -2661,7 +2661,7 @@ def CountAllFinanceFunction(request):
                 pass
             
             Q = fetchQueryDashUnity("unit.unity", perfil, unity)
-            query = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            query = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(query)
             dados = cursor.fetchall()
             array = []
@@ -2686,7 +2686,7 @@ def CountPendingFinanceFunction(request):
             
 
             Q = fetchQueryDashUnity("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()
             array = []
@@ -2732,7 +2732,7 @@ def CountAnalityFinanceFunction(request):
                 pass
             
             Q = fetchQueryDashUnity("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()
             if dados:
@@ -2748,7 +2748,7 @@ def CountAnalityFinanceFunction(request):
             else:
                 qtdAnalise = 0
 
-            queryAndamento = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 2 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
+            queryAndamento = "SELECT count(f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 2 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
             cursor.execute(queryAndamento)
             dados = cursor.fetchall()
             array = []
@@ -2791,7 +2791,7 @@ def CountPayFinanceFunction(request):
                 pass
             
             Q = fetchQueryDashUnity("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
+            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()
             if dados:
@@ -2826,10 +2826,10 @@ def CountPayFinanceFunction(request):
                     "progress": progress,
                     })
                 array.append(newinfoa)
-        return array
+        return array 
 
 
-
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #SALVAR ANEXO DA TELA SOLICITAÇÕES DE REEMBOLSO
 def AnxDoc(request):

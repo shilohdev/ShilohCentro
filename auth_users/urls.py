@@ -31,7 +31,9 @@ urlpatterns = [
     path('cadastrar/indicacao/', views.cadastreIndicationViews, name='cadastreIndication'),#LEAD
     path('ApiCadastrar/indicacao/', views.ApiCadastreIndication, name='ApiCadastreIndication'),#API CADASTRAR LEAD
     path('manage/cadastrar/paciente/', views.CadastrePatientViews, name='cadastrePatient'),#CADASTRAR PACIENTE
-    path('api/cadastrar/paciente/', views.ApiCadastrePatientViews, name='ApiCadastrePatient'),#API CADASTRAR PACIENTE
+    path('api/cadastrar/paciente/lead', views.ApiCadastrePatientViews, name='ApiCadastrePatient'),#API CADASTRAR PACIENTE LEAD
+    path('api/cadastrar/paciente/novo-registro/', views.ApiNewRegisPatient, name='ApiNewRegisPatient'),#API CADASTRAR PACIENTE NOVO REGISTRO
+    
 
     #API FORMATAR CPF
     path('api/cpf/', views.apiFormatCPF, name='apiFormatCPF'),

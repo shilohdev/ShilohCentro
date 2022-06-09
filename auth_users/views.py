@@ -20,7 +20,7 @@ from django.http import HttpResponseForbidden
 from datetime import datetime
 
 from requests import request
-from auth_users.decorator import ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartnersFunctionBNT, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_users.decorator import ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartnersFunctionBNT, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
 from auth_finances.functions.exams.models import AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
@@ -328,16 +328,27 @@ def listLeadsViews(request):
 def CadastrePatientViews(request):
     if allowPage(request, "cadastre_patients") == False:
         return error(request)
-    SsearchPatients = searchLeads(request)
+    SsearchPatients = searchLeads(request)  
     SsearchConvenio =  searchConvenio(request)
     SsearchDoctorL =  searchDoctorLead(request)
-    return render(request, 'manage/cadastre/Perfis/cadastrePatient.html', {"arr_SearchPatients": SsearchPatients,"arr_SearchConvenio": SsearchConvenio,"arr_SearchDoctorL": SsearchDoctorL})
+    return render(request, 'manage/cadastre/Perfis/cadastrePatient.html', 
+    {"arr_SearchPatients": SsearchPatients,
+    "arr_SearchConvenio": SsearchConvenio,
+    "arr_SearchDoctorL": SsearchDoctorL,
+    })
     
     
-#CADASTRAR PACIENTES
+#CADASTRAR PACIENTES LEAD
 @login_required
 def ApiCadastrePatientViews(request):
     array = ApiCadastrePatienteFunction(request)
+    return JsonResponse(array, safe=False, status=200)
+ 
+
+#CADASTRAR PACIENTES NOVO REGISTRO
+@login_required
+def ApiNewRegisPatient(request):
+    array = ApiNewRegisPatientFunction(request)
     return JsonResponse(array, safe=False, status=200)
  
  
@@ -523,7 +534,13 @@ def LeadsViews(request): #INDICAÇÕES
     CountLeadsMes = CountLeadsMesFunction(request)
     CountLeadsDay = CountLeadsDayFunction(request)
     SearchStatusLead = FunctionSearchStatusLead(request)
-    return render(request, 'manage/listers/lead/LEADS.html', {"arr_SearchLeadsAll": SsearchLeadsAll, "arr_SearchCountLeadsAll": CountLeadsAll, "arr_SearchCountLeadsMes": CountLeadsMes, "arr_SearchCountLeadsDay": CountLeadsDay,  "arr_SearchStatusLead": SearchStatusLead,})
+    return render(request, 'manage/listers/lead/LEADS.html', 
+    {"arr_SearchLeadsAll": SsearchLeadsAll,
+    "arr_SearchCountLeadsAll": CountLeadsAll,
+    "arr_SearchCountLeadsMes": CountLeadsMes,
+    "arr_SearchCountLeadsDay": CountLeadsDay, 
+    "arr_SearchStatusLead": SearchStatusLead,
+    })
 
     
 #CADASTRAR LEAD 
@@ -800,7 +817,7 @@ def ApiIniciarColeta(request):
     return JsonResponse(array, safe=False, status=200)
     
 
-#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
+#Salvar anexo 
 @login_required
 def SaveAnexo(request):
     array = SaveAnexoFunction(request)
