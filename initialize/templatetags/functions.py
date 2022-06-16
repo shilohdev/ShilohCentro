@@ -50,7 +50,7 @@ def allDataUser(self):
 def fetchUser(self):
     user = self
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT id, substring_index(nome, ' ', 3) as NomeLog from auth_users.users WHERE login LIKE %s"
+        query = "SELECT id, substring_index(nome, ' ', 1) as NomeLog from auth_users.users WHERE login LIKE %s"
     
         cursor.execute(query, (user,))
         dados = cursor.fetchall()

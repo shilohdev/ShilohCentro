@@ -24,7 +24,6 @@ urlpatterns = [
 
     #API CADASTRAR PARCEIROS
     path('api/manage/cadastrar/parceiros/', views.ApiCadastrePartners, name='ApiCadastrePartnes'),
-    path('api/manage/cadastrar/parceiros/cadastre', views.PartnersCadFunctionBNT, name='PartnersCadFunctionBNT'),
     path('api/manage/cadastrar/parceiros/cancel', views.PrePartnerCancel, name='PrePartnerCancel'),
 
     #CADASTRAR INDICAÇÃO
@@ -141,6 +140,12 @@ urlpatterns = [
     path('listar/indicacoes/meus-registros/', views.ListerIndicationsUnitViews, name='ListerIndicationsUnitViews'),#INDICAÇÕES
     path('meu/fechamento/financeiro/', views.ClosingFinanceUnit, name='ClosingFinanceUnit'),#INDICAÇÕES
     path('api/meus/parceiros/atualizacao/', views.ApiAttPartners, name='ApiAttPartners'),#INDICAÇÕES
+    #MEU PERFIL
+    path('meu/perfil/', views.MyProfileViews, name='myProfile'),
+    #API MEU PERFIL
+    path('api/meu/perfil/salvar/', views.ApichangeUserProfile, name='ApichangeUserProfile'), 
+
+ 
 
     #LISTAR LEADS
     path('listar/leads/all-leads/', views.LeadsViews, name='LeadsViews'),#INDICAÇÕES
@@ -206,12 +211,15 @@ urlpatterns = [
     #DASBOARDS
     path('dashboards/financeiro/reembolsos/', views.DashboardsRefunds, name='DashboardsRefunds'), #FINANCEIRO EXAMES
 
-
-
     #ANEXAR ARQUIVO FINANCEIRO
     path('api/anx/docs/', views.ApiAnexarFiles, name='ApiAnexarFiles'), #FINANCEIRO EXAMES
-
+        
     
+    #ANEXAR FOTO MEU PERFIL
+    path('api/anx/foto-perfil/', views.ApiPhotoProfile, name='ApiPhotoProfile'), #FINANCEIRO EXAMES
+
+
+     
    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  

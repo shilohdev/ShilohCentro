@@ -194,18 +194,30 @@ def CadastrePartners(request):
         tel2 = formatTEL(tel2)
         zipcode = zipcode.replace("-", "")
 
-        queryExists = "SELECT id FROM auth_users.users WHERE rn LIKE %s"
+        queryExists = "SELECT id, status FROM auth_users.users WHERE rn LIKE %s AND status LIKE 'Ativo'"
         cursor.execute(queryExists, (rn,))
         dados = cursor.fetchall()
         if dados:
-            return {"response": "true", "message": "NC já cadastrado em sistema!"}
+            for id, status in dados:
+                return {"response": "true", "message": "NC já cadastrado em sistema!"}
+                
         else:
-            param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,id_usuario, data_atual, unity, padraoC, porcentagemC, fixoC,)
-            
+            queryPre = "SELECT id, status FROM auth_users.users WHERE tel1 LIKE %s AND status LIKE 'Pré-Cadastro'"
+            cursor.execute(queryPre, (tel1,))
+            dados = cursor.fetchall()
 
-            query = "INSERT INTO `auth_users`.`users` ( `id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, '7', '', %s, NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', 'Ativo', %s, %s, %s, %s, %s,%s);"
-            cursor.execute(query, param)
-            id_user = cursor.lastrowid
+            if dados: 
+                param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,  id_usuario, data_atual, unity, padraoC, porcentagemC, fixoC, id_user,)
+                query = "UPDATE `auth_users`.`users` SET `nome` = %s, `email` = %s, `tel1` = %s, `tel2` = %s, `cep` =  %s, `rua` = %s, `numero` = %s, `complemento` = %s, `bairro` = %s, `city` = %s, `uf` = %s, `rn` = %s, `obs` = %s, `categoria` = %s, `login` = %s, `status` = 'Ativo', `resp_comerce` = %s, `data_regis` = %s, `unity` = %s, `val_padrao` = %s, `val_porcentagem` = %s, `val_fixo` = %s  WHERE (`id` = %s);"
+                cursor.execute(query, param)  
+            
+            else:
+                param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,id_usuario, data_atual, unity, padraoC, porcentagemC, fixoC,)
+
+                query = "INSERT INTO `auth_users`.`users` ( `id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, '7', '', %s, NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', 'Ativo', %s, %s, %s, %s, %s,%s);"
+                cursor.execute(query, param)
+                id_user = cursor.lastrowid
+
         #AUTENTICAÇÃO E CRIAÇÃO DE LOGIN E SENHA    
         if User.objects.filter(username=rn).exists():
             user = User.objects.get(username=rn)
@@ -2109,13 +2121,13 @@ def searchConcluidosF(request):
             }
 
         if perfil == "1":
-            query = "SELECT ag.id as id_agendamento, pa.nome_p, ag.data_agendamento, exame.tipo_exame, un.unit_s, ag.unity, st.status_p FROM auth_agenda.collection_schedule ag INNER JOIN admins.exam_type exame ON ag.tp_exame LIKE exame.id INNER JOIN admins.units_shiloh un ON ag.unity LIKE un.id_unit_s INNER JOIN customer_refer.patients pa ON ag.nome_p LIKE pa.id_p INNER JOIN auth_finances.completed_exams ff  ON ff.id_agendamento_f like ag.id INNER JOIN auth_finances.status_progress st ON ff.status_exame_f like st.id WHERE ag.status LIKE 'Concluído' AND ff.regis LIKE '0' AND ag.identification LIKE 'Externo' AND ff.status_exame_f NOT LIKE 6 AND ff.status_exame_f NOT LIKE 9 AND ff.status_exame_f NOT LIKE 5 ORDER BY ag.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query)
             dados = cursor
 
             array = []
 
-            for id_agendamento, nome_paciente, data_agendamento, exame, unidade, id_unidade, status in dados:
+            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente in dados:
                 newinfoa = ({
                     "id": id_agendamento,
                     "paciente": nome_paciente,
@@ -2124,18 +2136,17 @@ def searchConcluidosF(request):
                     "status_p": status,
                     "unidade": unidade,
                     "id_unidade": id_unidade,
+                    "regis": regis,
                     })
                 array.append(newinfoa)
-                print(len(array))
 
         else:
-            query = "SELECT ag.id as id_agendamento, pa.nome_p, ag.data_agendamento, exame.tipo_exame, un.unit_s, ag.unity, st.status_p FROM auth_agenda.collection_schedule ag INNER JOIN admins.exam_type exame ON ag.tp_exame LIKE exame.id INNER JOIN admins.units_shiloh un ON ag.unity LIKE un.id_unit_s INNER JOIN customer_refer.patients pa ON ag.nome_p LIKE pa.id_p INNER JOIN auth_finances.completed_exams ff  ON ff.id_agendamento_f like ag.id INNER JOIN auth_finances.status_progress st ON ff.status_exame_f like st.id WHERE un.id_unit_s LIKE %s AND ag.status LIKE 'Concluído' AND ff.regis LIKE '0' AND ag.identification LIKE 'Externo' AND ff.status_exame_f NOT LIKE 6 AND ff.status_exame_f NOT LIKE 9 AND ff.status_exame_f NOT LIKE 5 ORDER BY ag.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query, (unityY,))
             dados = cursor
-            print(len(dados))
             array = []
                 
-            for id_agendamento, nome_paciente, data_agendamento, exame, unidade, id_unidade, status in dados:
+            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente in dados:
                 newinfoa = ({
                     "id": id_agendamento,
                     "paciente": nome_paciente,
@@ -2144,6 +2155,7 @@ def searchConcluidosF(request):
                     "status_p": status,
                     "unidade": unidade,
                     "id_unidade": id_unidade,
+                    "regis": regis,
                     })
                 array.append(newinfoa)
 
@@ -2534,7 +2546,7 @@ def searchUnit(request):
 #--------------------------------------------------------------------------------------------------------------------
 
 #DOC AQUI
-#GET FILE >> ADICIONAR DIRETORIO
+#GET FILE >> ADICIONAR DIRETORIO PACIENTES
 def saveFilePatient(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     PATH = settings.BASE_DIR_DOCS + "/patients/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
     PATH_USER = PATH.format(id) # ADICIONANDO ID NO {} DE CIMA /\
@@ -3430,91 +3442,6 @@ def CadastrePrePartners(request):
 
 
 
-#PRÉ CADASTRO PARCEIROS
-def CadastrePrePartnersFunctionBNT(request):
-    name = request.POST.get("name")
-    email = request.POST.get("email")
-    tel1 = request.POST.get("tel1")
-    tel2 = request.POST.get("tel2")
-    zipcode = request.POST.get("zipcode")
-    addres = request.POST.get("addres")
-    number = request.POST.get("number")
-    complement = request.POST.get("complement")
-    district = request.POST.get("district")
-    city = request.POST.get("city")
-    uf = request.POST.get("uf")
-    obs = request.POST.get("obs")
-    rn = request.POST.get("rn")
-    id_partners = request.POST.get("id_user")
-    categoria = request.POST.get("categoria")
-    year = str(datetime.now().strftime("%d%Y"))
-    data_atual = str(datetime.now().strftime('%Y-%m-%d'))
-    padrao = request.POST.get("padrao")
-    porcentagem = request.POST.get("porcentagem")
-    fixo = request.POST.get("fixo")
-
-    with connections['auth_users'].cursor() as cursor:
-
-        padraos = padrao.replace(",", ".").replace("R$", "")
-        porcentagems = porcentagem.replace("%", "")
-        fixos = fixo.replace(".", "|").replace(",", ".").replace("|", "")
-
-        padraoC = float (padraos) if padraos not in ["", None] else None
-        porcentagemC = float (porcentagems) if porcentagems not in ["", None] else None
-        fixoC = float (fixos) if fixos not in ["", None] else None
-
-        searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_comercial, nome, unity in dados:
-                pass
-        else:
-            return {
-                "response": "false",
-                "message": "Login expirado, faça login novamente para continuar."
-            }
-
-        tel1 = formatTEL(tel1)
-        tel2 = formatTEL(tel2)
-        zipcode = zipcode.replace("-", "")
-
-        param =(name, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, rn, obs, categoria, rn,  id_comercial , data_atual, unity, padraoC, porcentagemC, fixoC, id_partners,)
-
-        query = "UPDATE `auth_users`.`users` SET `nome` = %s, `email` = %s, `tel1` = %s, `tel2` = %s, `cep` =  %s, `rua` = %s, `numero` = %s, `complemento` = %s, `bairro` = %s, `city` = %s, `uf` = %s, `rn` = %s, `obs` = %s, `categoria` = %s, `login` = %s, `status` = 'Ativo', `resp_comerce` = %s, `data_regis` = %s, `unity` = %s, `val_padrao` = %s, `val_porcentagem` = %s, `val_fixo` = %s  WHERE (`id` = %s);"
-        cursor.execute(query, param)
-
-        if User.objects.filter(username=rn).exists():
-            user = User.objects.get(username=rn)
-            user.nome = rn
-            user.email = email
-
-            user.save()
-        else:
-           user = User.objects.create_user(username=rn, email=email, first_name=name, last_name='', password=year)
-        
-        #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
-        arrayPermission = {
-           "7":  ["20", "16",], #PARCEIRO(RETIRAR ALGUMAS PERMISSOES)
-        }
-        try:
-            dictP = arrayPermission[str("7")]
-        except:
-            dictP = []
-        
-        if dictP:
-            for id_permission in dictP:
-                params = (
-                    id_permission,
-                    id_comercial,
-                )
-                query = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES (%s, %s, '')"
-                cursor.execute(query, params)
-
-            return {"response": "true", "message": "Cadastrado com sucesso!"}
-
-
-
     #PRÉ CADASTRO PARCEIROS
 def PrePartnerCancelFunction(request):
     id_partners = request.POST.get("id_user")
@@ -3737,3 +3664,156 @@ def ApiNewRegisPatientFunction(request):
             "response": True,
             "message": "Cadastrado com sucesso!"
         } 
+
+
+
+#MEU PERFIL PUXAR TODAS INFORMAÇÕES DO BANCO
+def DataMyProfileViews(request):
+    with connections['auth_users'].cursor() as cursor:
+        params = (request.user.username,)
+        searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"                        
+        cursor.execute(searchID, params,)        
+        dados = cursor.fetchall()
+        if dados:            
+            for id_usuario, nome in dados:
+                pass               
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+        query= "SELECT id, cpf, nome, data_nasc, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf FROM auth_users.users WHERE id LIKE %s ORDER BY data_nasc desc"
+        params = (id_usuario,)
+        cursor.execute(query, params)
+        dados = cursor        
+        array = []    
+        for id, cpf, nome, data_nasc, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf in dados:
+            birthday = datetime.strftime(data_nasc, "%d/%m/%Y")
+             
+            nomes = nome.split(None, 1)
+            frist_name = nomes[0]
+            last_name = nomes[1]
+            newinfoa = ({ #VARIAVEL COM OS DICTS
+                "id": id,
+                "cpf": cpf,
+                "frist_name": frist_name,
+                "name": last_name,                  
+                "birthday": birthday,
+                "email": email,
+                "tel1": tel1,
+                "tel2": tel2,
+                "zipcode": cep,
+                "addres": rua,
+                "number": numero,
+                "complement": complemento,
+                "district": bairro,
+                "city": city,
+                "uf": uf,                
+            }) #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS  
+            array.append(newinfoa)
+
+        return array
+ 
+#SALVAR MEU PERFIL
+def ApichangeUserProfileFunction(request):
+    cpf = request.POST.get("cpf")
+    nome = request.POST.get("fullname")    
+    data_nasc = request.POST.get("date_nasc")
+    email = request.POST.get("email")
+    tel1 = request.POST.get("tel1")
+    tel2 = request.POST.get("tel2")
+    cep = request.POST.get("zipcode")
+    rua = request.POST.get("addres")
+    numero = request.POST.get("number")
+    complemento = request.POST.get("complement")
+    bairro = request.POST.get("district")
+    city = request.POST.get("city")
+    uf = request.POST.get("uf")
+    
+    bodyData = json.loads(request.POST.get('data'))
+    
+    file = bodyData.get('file')
+
+    print(file)
+
+    with connections['auth_users'].cursor() as cursor:
+        searchID = "SELECT id, unity FROM auth_users.users WHERE login LIKE %s"
+        params = (request.user.username,)                       
+        cursor.execute(searchID, params)        
+        dados = cursor.fetchall()
+        
+        if dados:         
+            for id_usuario, unity  in dados:
+                pass               
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+        cpf = formatcpfcnpj(cpf)
+        tel1 = formatTEL(tel1)
+        tel2 = formatTEL(tel2)
+        cep = cep.replace("-", "")   
+        birthday = data_nasc.replace("/", "-")
+
+        date2 = birthday.split('-')
+        d1 = date2[0]
+        d2 = date2[1]
+        d3 = date2[2]
+        birthday = d3 + "-" + d2 + "-" + d1
+
+        param2 = (cpf, nome, birthday, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf, id_usuario,)
+        
+        query2 = "UPDATE users SET cpf = %s, nome = %s, data_nasc = %s, email = %s, tel1 = %s, tel2 = %s, cep = %s, rua = %s, numero = %s, complemento = %s, bairro = %s, city = %s, uf = %s WHERE id = %s"
+        cursor.execute(query2, param2)
+
+    return {    
+        "response": True,    
+        "message": "Dados atualizados com sucesso."
+    }
+
+
+
+def PhotoProfileFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
+        params = (request.user.username,)                       
+        cursor.execute(searchID, params)        
+        dados = cursor.fetchall()
+        
+        if dados:         
+            for id_usuario, nome, unity  in dados:
+                pass               
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+
+    ApiPhotoProfileFunction(id_usuario, request.FILES)
+    return {
+        "response": True,
+        "message": "Dados atualizados com sucesso."
+    }
+
+
+
+
+#GET FILE >> FOTO DO MEU PERFIL
+def ApiPhotoProfileFunction(id, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
+    id = str(id)
+    print("FILES", FILES)
+    PATH = settings.BASE_DIR_DOCS + "/FotoPerfil/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+    PATH_USER = PATH.format(id) # ADICIONANDO ID NO {} DE CIMA /\
+
+    PATH_TYPES = PATH_USER + "/" + id + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
+    print(PATH_TYPES)
+    arr_dir = []
+    for name, image in FILES.items():
+        file_name = default_storage.save(PATH_TYPES + image.name, image)
+        arr_dir.append({
+            "name": image.name,
+            "path": PATH_TYPES + image.name
+        })
+
+    return True

@@ -411,7 +411,7 @@ function SelectShow() {
          "porcentagem": porcentagem,
          "fixo": fixo,
       };
-
+      
       fetchRequest("{% url 'ApiCadastrePrePartners' %}", "POST", "JSON", btnprecadastro, function(re){
          if(re["response"] == "true"){
             $("#btn_precadastro").attr("disabled", true);

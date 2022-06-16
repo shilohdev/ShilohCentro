@@ -71,7 +71,7 @@ Acompanhe as últimas notícias!
                    <div class="input-field col s4">
                       <input id="date_nasc" type="date" >
                       <label for="date_nasc">Data de Nacimento</label>
-                   </div>
+                   </div> 
                 </div>
                 <div class="col s12">
                    <div class="input-field col s8">
@@ -153,20 +153,10 @@ Acompanhe as últimas notícias!
    </div>
    <div class="modal-footer">
       <!--BUTTON-->
-      <div class="col s12 ">
-         <div class="col s8"></div>
-         
-       <div class="col s2">
-          <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-
-       </div>
-       <div class="col s2">
-          <button onclick="changeUserModal(this)" id="btn_atualizar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
-          <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Atualizar</spanpx>
-          </button>
-       </div>
-
-    </div>
+      <div class="col s12 m12">
+         <a onclick="changeUserModal(this)" id="btn_atualizar" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>      
+         <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
+      </div>
 </div>
 </div>
 <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
@@ -201,9 +191,7 @@ Acompanhe as últimas notícias!
                                     </div>
                                  </div>
                                  <div class="col s2" style="margin-top: 22px">
-                                    <button id="anx_file" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%;background-color: #ffa726; ">
-                                        <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar</span>
-                                    </button>
+                                    <a data-target="#CompanyProfile" id="anx_file" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #ffa726;">Anexar</a>
                                 </div>
                            </div>
                         </div>
@@ -248,16 +236,8 @@ Acompanhe as últimas notícias!
    </div>
    <div class="modal-footer">
       <!--BUTTON-->
-      <div class="col s12 ">
-         <div class="col s8"></div>
-       <div class="col s2">
-          <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-       </div>
-       <div class="col s2">
-          <button onclick="SlvAnx(this)" id="btn_salvar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
-          <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Salvar</spanpx>
-          </button>
-       </div>
+      <div class="col s12 m12">
+         <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
     </div>
 </div>
 </div>
@@ -361,19 +341,15 @@ $('.modal').css({
 
 function PesquisarFilter() {
    var tp_category = $("#tp_category").val();
-   console.log(tp_category)
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "tp_category": tp_category,   
    };    
    fetchRequest("{% url 'ApiListPartnes' %}", "POST", "JSON", formpost, function(re) {
       var dados = re["message"];
-         console.log(dados);
          $("#tb_append").html("");
       for (k in dados) {
          var key = dados[k];
-         console.log(k);
-         console.log(key);
          var append = '<tr> <td>'+ key["nome"] +'</td> <td style="text-align: center;">'+ key["categoria"] +'</td> <td style="text-align: center">'+ key["status"] +'</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="'+ key["id"] +'" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button> </a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
 
           $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
@@ -384,7 +360,6 @@ function PesquisarFilter() {
             var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append").append(appende); 
             }
-      console.log(teste)
    });
 }
 
@@ -512,7 +487,6 @@ $("#modal3").hide();
          var ap = "";
      
                $.map(docs, function(n, i){
-            console.log(n, i);
              ap += `
                <tr id="tr_${n.id}"> 
                   <td>${n.name}</td>
@@ -578,7 +552,7 @@ function viewUserModal(object){//FUNCTION DO ONCLICK
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
    $("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
 
-$("#modal2").hide();
+   $("#modal2").hide();
      $(object).prop("disabled", true);
      var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -738,7 +712,7 @@ function AnxDoc(object) {
         {
             "name": "type_doc",
             "value": $("#tp_anx").val()
-        },
+        }, 
         {
             "name": "data",
             "value": JSON.stringify(formpost2)

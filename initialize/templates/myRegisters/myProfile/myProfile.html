@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Shiloh | Meu Perfil{% endblock %}
+
+{% block icon-page %}
+   metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+
+{% block title-page %}
+    Página inicial
+{% endblock %}
+
+{% block description-page %}
+   Acompanhe as últimas notícias!
+{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+    .capitalize{
+        text-transform: capitalize;
+    }
+    .lower{
+        text-transform: lowercase;
+    }
+    .corfont{
+        color: #641108;
+        font-weight: bold;
+    }
+   
+   .image_meuperfil {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 220px;
+        width: 220px;
+        background-size: 250px 250px;
+        position: relative;
+        border: 2px solid #ce93d8;
+        border-radius: 100%;
+    }
+    .image_meuperfil img {
+
+        position: absolute;
+        width: 100%;
+        height:100%;
+        border-radius: 100%;
+    }
+    input[type="file"]{
+        display:none;
+    }
+    .btn {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        background:#ce93d8;
+        width: 220px;
+        position: relative;
+    }
+
+</style>
+
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="card">
+            <div class="card-content" style="margin-top: -40px;">
+                <h5 class="corfont">Meu Perfil</h5>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" id="userint" >        
+            <div class="row">{% for k in arr_SearchProfile %}               
+                <!-- UPLOAD FOTO -->
+                <div class="col m4 s12"> 
+                    <div class="input-field col m12 s12" style="margin-top: 22px;">
+                        <div class="image_meuperfil">
+                            <img id="preview_images" name="foto_perfil" src="https://jamesrmoro.me/wp-content/uploads/2021/02/profile.png" alt="" /> 
+                        </div>
+                    </div>
+                    <div class="col m12 s12">
+                        <label for="btn_file" class="btn">Adicionar Foto</label>
+                        <input onchange="AnxFoto()" type="file" id="btn_file" required accept="image/jpeg"/>
+                    </div>    
+                </div>
+                <!--INICIO DO FORM-->
+                <div class="col m8 s12">
+                    <div class="col m12 s12" style="margin-top: 30px;">
+                        <div class="input-field col m4 s12">
+                            <input id="cpf" value="{{ k.cpf }}" type="text"  data-required="true">
+                            <label for="cpf">
+                            <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
+                        </div>
+                        <div class="input-field col m4 s12">
+                            <input id="name" value="{{ k.frist_name }}" type="text" class="capitalize" data-required="true"  autocomplete="off">
+                            <label for="name">
+                            <i class="material-icons"  style="font-size: 15px">person</i>&nbsp;Nome</label>
+                        </div>
+                        <div class="input-field col m4 s12">
+                            <input id="last_name" value="{{ k.name }}" type="text" class="capitalize" data-required="true"  autocomplete="off">
+                            <label for="last_name">
+                            <i class="material-icons"  style="font-size: 15px"></i>&nbsp;Sobrenome</label>
+                        </div>
+                    </div>
+                    <div class="col m12 s12" style="margin-top: 30px;">
+                        <div class="input-field col m4 s12">
+                            <input id="date_nasc" value="{{ k.birthday }}" type="text"  data-required="true">
+                            <label for="date_nasc">Data de Nacimento</label>
+                        </div>
+                        <div class="input-field col m8 s12">
+                            <input id="email" value="{{ k.email }}" type="email" class="lower" data-required="true">
+                            <label for="email" >
+                            <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                        </div>                                    
+                    </div>
+                    <div class="col m12 s12" style="margin-top: 30px;">
+                        <div class="input-field col m4 s12">
+                            <input id="tel1" value="{{ k.tel1 }}" type="tel"  data-required="true">
+                            <label for="tel1">
+                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                        </div>
+                        <div class="input-field col m4 s12">
+                            <input id="tel2" value="{{ k.tel2 }}" type="tel">
+                            <label for="tel2">
+                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                        </div>                                    
+                    </div>
+                </div>
+                <div class="col m12 s12" style="margin-top: -20px;">
+                    <div class="col m12 s12" style="margin-top: 30px;">
+                        <div class="input-field col m4 s12">
+                            <input id="zipcode" value="{{ k.zipcode }}" type="text"  maxlength="9" onblur="pesquisacep(this.value)"  data-required="true">
+                            <label for="zipcode">
+                            <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                        </div>
+                        <div class="input-field col m7 s12">
+                            <input id="addres" value="{{ k.addres }}" type="text" data-required="true" >
+                            <label for="addres">Logradouro </label>
+                        </div>
+                        <div class="input-field col m1 s12">
+                            <input id="number" value="{{ k.number }}" type="text" data-required="true"  >
+                            <label for="number">Número </label>
+                        </div>
+                    </div>
+                    <div class="col m12 s12" style="margin-top: 30px;">
+                        <div class="input-field col m6 s12">
+                            <input id="complement" value="{{ k.complement }}" type="text" >
+                            <label for="complement">Complemento</label>
+                        </div>
+                        <div class="input-field col m3 s12">
+                            <input id="district" value="{{ k.district }}" type="text" data-required="true" >
+                            <label for="district">Bairro</label>
+                        </div>
+                        <div class="input-field col m2 s12">
+                            <input id="city" value="{{ k.city }}" type="text" data-required="true" >
+                            <label for="city">Cidade</label>
+                        </div>
+                        <div class="input-field col m1 s12">
+                            <input id="uf" value="{{ k.uf }}" type="text"  maxlength="2" data-required="true">
+                            <label for="uf">UF</label>
+                        </div>
+                    </div>
+                </div>
+                <!--BUTTON-->
+                <div class="col m12 s12" style="margin-top: 30px;">
+                    <div class="col m12 s12 mb-2">
+                        <button onclick="SaveProfile(this)" id="btn_salvar" disabled class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" >
+                            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Salvar</spanpx>
+                        </button>
+                    </div>
+                </div>{% endfor %}
+            </div>                
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(() => {
+        $("#btn_file").change(function () {
+            const file = this.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    $("#preview_images")
+                      .prop("src", event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    $("#btn_salvar").attr("disabled", false);
+    
+    function primeiraLetraMaiuscula(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+        
+        $("#date_nasc").mask("99/99/9999");            
+        $("#cpf").mask("999.999.999-99");
+        $("#tel1").mask("(99) 99999-9999");
+        $("#tel2").mask("(99) 99999-9999");
+        $("#zipcode").mask("99999-999");
+
+        
+    function capitalizeString() { 
+        var input = document.getElementById("name");        
+        let string = input.value; 
+        headingElement.innerHTML = string[0].toUpperCase() +  
+            string.slice(1); 
+    } 
+
+    // CEP 
+    function pesquisacep(valor) {
+        var cep = valor.replace(/\D/g, '');
+            if (cep != "") {
+        var validacep = /^[0-9]{8}$/;
+            if(validacep.test(cep)) {
+        var end_addres = $("#addres").val("...");
+        var end_district = $("#district").val("...");
+        var end_city = $("#city").val("...");
+        var end_state = $("#uf").val("...");
+        var script = document.createElement('script');
+        script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=bsccep';
+        document.body.appendChild(script);
+            }else{
+                limocamp();
+                alert("Formato de CEP inválido.");
+            }
+            }else {
+                limocamp();
+            }
+    };
+
+    function bsccep(val) {
+            if (!("erro" in val)) {
+        var end_addres = $("#addres").val(val.logradouro);
+        var end_district = $("#district").val(val.bairro);
+        var end_city = $("#city").val(val.localidade);
+        var end_state = $("#uf").val(val.uf);
+            }else{
+                limocamp();
+                alert("CEP não encontrado no CORREIOS. Entre no site: https://www.correios.com.br/ e pesquise um cep válido.");
+            }
+    }
+
+    function limocamp() {
+        var end_zipcode = $("#zipcode").val("");
+        var end_addres = $("#addres").val("");
+        var end_number = $("#number").val("");
+        var end_district = $("#district").val("");
+        var end_city = $("#city").val("");
+        var end_state = $("#uf").val("");
+    }
+      
+
+
+
+    function SaveProfile(object){
+
+        var files = $("#btn_file")[0].files[0];
+            if ($("#btn_file").val() != "") {    //verificação para preencher o tipo do arquivo.
+                if ($("#btn_file").prop("files") != undefined) {
+                    files = document.querySelector("#btn_file").files[0];
+                } else {
+                    files = "";
+                }
+            } else {
+                files = "";
+            }
+        
+        //$("#btn_salvar").attr("disabled", true);
+
+        var cpf = $("#cpf").val();
+        var name1 = $("#name").val();
+        var name2 = $("#last_name").val();
+        var fullname = name1 + ' ' + name2;
+        var date_nasc = $("#date_nasc").val();
+        var email = $("#email").val();
+        var tel1 = $("#tel1").val();
+        var tel2 = $("#tel2").val();
+        var zipcode = $("#zipcode").val();
+        var addres = $("#addres").val();
+        var number = $("#number").val();
+        var complement = $("#complement").val();
+        var district = $("#district").val();
+        var city = $("#city").val();
+        var uf = $("#uf").val();
+
+
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),           
+            "cpf": cpf,
+            "fullname": fullname,
+            "date_nasc": date_nasc,
+            "email": email,
+            "tel1": tel1,
+            "tel2": tel2,
+            "zipcode": zipcode,
+            "addres": addres,
+            "number": number,
+            "complement": complement,
+            "district": district,
+            "city": city,
+            "uf": uf,
+
+        };
+
+        fetchRequest("{% url 'ApichangeUserProfile' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+           if(re["response"] == false){ 
+              alert("Não foi possível prosseguir.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+              $("#btn_salvar").attr("disabled", false);
+
+            } else { //SE FOR VERDADDEIRA, PROSSEGUE
+              alert(re["message"]);
+              location.reload();
+     
+           }
+        });
+    }
+
+
+    function AnxFoto(){
+
+    alert("anexo inserido")
+
+    var files = $("#btn_file")[0].files[0];
+    if ($("#btn_file").val() != "") {    //verificação para preencher o tipo do arquivo.
+        if ($("#btn_file").prop("files") != undefined) {
+            if ($("#btn_file").val() == "") {
+                return alert("Preencha o tipo de anexo para prosseguir.");
+            } else {
+                files = document.querySelector("#btn_file").files[0];
+            }
+        } else {
+            files = "";
+        }
+    } else {
+        files = "";
+    }
+    
+   console.log(files)
+ 
+    var formpost = [{
+            "name": "csrfmiddlewaretoken",
+            "value": $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        {
+            "name": "file",
+            "value": files
+        },
+    ];
+
+    fetchRequestFiles("{% url 'ApiPhotoProfile'  %}", "POST", "JSON", formpost, function(re) {
+        if (re["response"] == false) {
+            $("#anx_file").attr("disabled", false);
+
+            alert("Nenhum dado encontrado.");
+        }else{
+            $("#anx_file").attr("disabled", false);
+
+          var append = `
+            <tr> 
+                <td>${name_file}</td>
+                <td>${data}</td>
+                <td>${typeFile}</td>
+                <td style="text-align: center;">
+                    <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
+                        <i class="material-icons right">delete</i>
+                    </a>
+                </td>
+            </tr>
+            `;
+
+            $("#tb_appendAnx").append(append);
+            alert("Anexado")
+
+          }
+
+    });
+
+
+
+    }
+
+</script>
+{% endblock %}

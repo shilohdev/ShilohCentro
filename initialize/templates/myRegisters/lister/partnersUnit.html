@@ -104,20 +104,20 @@ Acompanhe as últimas notícias!
             <div class="card" >
                <!-- Externo -->
                <div id="modalint" class="row" >
-                  <div class="col s12"  style="margin-top: 30px;">
-                     <div class="input-field col s5">
-                        <input id="name" type="text" placeholder="">
+                  <div class="col s12 m12"  style="margin-top: 30px;">
+                     <div class="input-field col m5 s12 ">
+                        <input id="name" type="text" data-required='true'>
                         <label for="name" class="active">
                         <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento</label>
                      </div>
-                     <div class="input-field col s3">
-                        <input id="rn" type="text" >
+                     <div class="input-field col s12 m3">
+                        <input id="rn" type="text" data-required='true'>
                         <label for="rn">
                         <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NR</label>
                      </div>
-                     <div class="input-field col s3" >
+                     <div class="input-field col s12 m3" >
                         <div class="select-wrapper">
-                           <select name="select" id="categoria" onchange="SelectShow()" class="error " required="">
+                           <select name="select" id="categoria" onchange="SelectShow()" class="error" data-required='true'>
                               <option value="8">Categoria</option>
                               {% for k in arr_SearchCategoria %}
                               <option value="{{ k.id }}">{{ k.categoria }}</option>
@@ -126,107 +126,107 @@ Acompanhe as últimas notícias!
                         </div>
                      </div>
                   </div>
-                  <div class="col s12">
-                     <div class="input-field col s8">
+                  <div class="col s12 m12">
+                     <div class="input-field col s12 m8">
                         <input id="email" type="email" >
                         <label for="email">
                         <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
                      </div>
-                     <div class="input-field col s2">
-                        <input id="tel1" type="tel" >
+                     <div class="input-field col s12 m2">
+                        <input id="tel1" type="tel" data-required='true'>
                         <label for="tel1">
                         <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
                      </div>
-                     <div class="input-field col s2">
+                     <div class="input-field col s12 m2">
                         <input id="tel2" type="tel" >
                         <label for="tel2">
                         <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
                      </div>
                   </div>
-                  <div class="col s12">
-                     <div class="input-field col s3">
-                        <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
+                  <div class="col s12 m12">
+                     <div class="input-field col s12 m3">
+                        <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required='true'>
                         <label for="zipcode">
                         <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
                      </div>
-                     <div class="input-field col s7">
+                     <div class="input-field col 12 m7">
                         <input id="addres" type="text" >
                         <label for="addres">Logradouro </label>
                      </div>
-                     <div class="input-field col s2">
+                     <div class="input-field col s12 m2">
                         <input id="number" type="text" >
                         <label for="number">Número </label>
                      </div>
                   </div>
-                  <div class="col s12">
-                     <div class="input-field col s3">
+                  <div class="col s12 m12">
+                     <div class="input-field col s12 m3">
                         <input id="complement" type="text" >
                         <label for="complement">Complemento</label>
                      </div>
-                     <div class="input-field col s5">
+                     <div class="input-field col m5 s12 ">
                         <input id="district" type="text" >
                         <label for="district">Bairro</label>
                      </div>
-                     <div class="input-field col s2">
+                     <div class="input-field col s12 m2">
                         <input id="city" type="text" >
                         <label for="city">Cidade</label>
                      </div>
-                     <div class="input-field col s2">
-                        <input id="uf" type="text"  maxlength="2">
+                     <div class="input-field col s12 m2">
+                        <input id="uf" type="text" maxlength="2">
                         <label for="uf">UF</label>
                      </div>
                   </div>
-                  <div class="input-field col s12">
-                     <div class="input-field col s12">
+                  <div class="input-field col s12 m12">
+                     <div class="input-field col s12 m12">
                         <input id="obs" type="text" >
                         <label for="obs">
                         <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
                      </div>
                   </div>
                   <!--FINANCEIRO-->
-                  <div class="col s12">
+                  <div class="col s12 m12">
                      <div class="active">
-                        <div class="collapsible-header col s4" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
+                        <div class="collapsible-header col s12 m4" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
                         </div>
                      </div>
                   </div>
                   <div id="financeiro">
-                     <div class="col s12" >
-                        <div class="col s6">
-                           <div class="input-field col s3">
+                     <div class="col s12 m12" >
+                        <div class="col m6 s12">
+                           <div class="input-field col s12 m3">
                               <label>
                               <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
                               <span>Valor Padrão:</span>
                               </label>
                            </div>
-                           <div class="input-field col s5">
+                           <div class="input-field col m5 s12 ">
                               <input readonly="readonly" type="text" id="val_p_fixo" class="checkgroup" style="color:black;">
                            </div>
                         </div>
                      </div>
-                     <div class="col s12">
-                        <div class="col s6">
-                           <div class="input-field col s3">
+                     <div class="col s12 m12">
+                        <div class="col m6 s12">
+                           <div class="input-field col s12 m3">
                               <label>
                               <input type="checkbox" id="val_p_check" class="checkgroup2" onclick="porcentagem()">
                               <span>Porcentagem:</span>
                               </label>
                            </div>
-                           <div class="input-field col s5">
+                           <div class="input-field col m5 s12 ">
                               <input type="text" id="val_p" class="checkgroup2" onchange="porcentagem()">
                            </div>
                         </div>
                      </div>
-                     <div class="col s12">
-                        <div class="col s6">
-                           <div class="input-field col s3">
+                     <div class="col s12 m12">
+                        <div class="col m6 s12">
+                           <div class="input-field col s12 m3">
                               <label>
                               <input type="checkbox" id="val_fixo_check" class="checkgroup3" onclick="fixo()" >
                               <span>Valor Fixo:</span>
                               </label>
                            </div>
-                           <div class="input-field col s5">
+                           <div class="input-field col m5 s12 ">
                               <input type="text" id="val_fixo" class="checkgroup3" onchange="fixo()">
                            </div>
                         </div>
@@ -239,19 +239,11 @@ Acompanhe as últimas notícias!
    </div>
    <div class="modal-footer">
       <!--BUTTON--> 
-      <div class="col s12 m8" id="modal3">
-         <div class="col s2 m2"> 
-            <button class=" btn modal-trigger modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></button>
-         </div>
-         <div class="col s2 m2"  id="btn_cancelar">
-            <a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-actionwaves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #c74d4d; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Cancelar</span></a>
-         </div>
-         <div class="col s2 m2">
-            <button onclick="updatePartnersModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-action waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #ff4081; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Atualizar</span></button>
-         </div>
-         <div class="col s2 m2" id="btn_cadastrar2">
-            <button onclick="CadastrePartners(this)" id="btn_cadastrar" data-id_user="{{ k.id }}" class=" btn modal-trigger modal-actionwaves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #76c076da; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px; color: #fff">Cadastrar</span></button>
-         </div>
+      <div class="col s12 m12" id="modal3">
+         <a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #c74d4d">Cancelar</a>
+         <a onclick="updatePartnersModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>
+         <a onclick="CadastrePartners(this)" id="btn_cadastrar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #76c076da;">Cadastrar</a>
+         <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
       </div>
    </div>
 </div>
@@ -268,7 +260,7 @@ Acompanhe as últimas notícias!
 <div class="card" >
    <!-- Externo -->
    <div id="userint" class="row" >
-      <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
+      <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
          <div class="input-field col s12 m4">
             <input id="busc" type="text" onkeyup="searchPatients(this)">
             <label for="busc">
@@ -297,7 +289,7 @@ Acompanhe as últimas notícias!
                      <td style="text-align: center;">{{ k.status }}</td>
                      <td style="text-align: center;">
                         <div class="col s12 m12">
-                           <div class="col s6 m6">
+                           <div class="col m6 s12 m6">
                               <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
                                  <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
                                  <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
@@ -305,7 +297,7 @@ Acompanhe as últimas notícias!
                                  </button>
                               </a>
                            </div>
-                           <div class="col s6 m6 m-0 p-0" style="display: none;">
+                           <div class="col m6 s12 m6 m-0 p-0" style="display: none;">
                               <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
                               <i class="material-icons right">check</i>
                               </button>
@@ -510,7 +502,6 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
          var status = key["obs"];
          var status_partners = status["status"];
 
-
          if (status_partners == "Ativo") {
             $("#btn_cancelar").hide();
             $("#btn_cadastrar2").hide();
@@ -644,7 +635,7 @@ function CadastrePartners(object) {
 
    //VALIDAÇÃO DE CAMPO NULL  
    var i = 0;
-   $("#userint input[data-required='true']").each(function () {
+   $("#modalint input[data-required='true'], select[data-required='true']").each(function () {
       if ($(this).val() == "") {
          alert("Preencha os campos obrigatórios.");
          $(this).focus();
@@ -652,6 +643,7 @@ function CadastrePartners(object) {
          return false;
       }
    });
+
    if (i == 1) {
       return false;
    }
@@ -693,12 +685,12 @@ function CadastrePartners(object) {
          "obs": $('#obs').val(),
          "padrao": val_p_fixo,
          "porcentagem": checkbox_porcentagem,
-         "fixo": checkbox_fixo,
+         "fixo": checkbox_fixo, 
          "id_user": id_user,
       };
 
 
-      fetchRequest("{% url 'PartnersCadFunctionBNT' %}", "POST", "JSON", btncadastrar, function (re) {
+      fetchRequest("{% url 'ApiCadastrePartnes' %}", "POST", "JSON", btncadastrar, function (re) {
          if (re["response"] == "true") {
             alert(re["message"]);
             $("#btn_cadastrar").attr("disabled", true);
