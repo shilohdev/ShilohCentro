@@ -2505,6 +2505,7 @@ def FunctionDashGeralFinalizados(request):
 #DASHBOARD FINANCEIRO - REEMBOLSO -- CARD ALVARO
 def FunctionDashCardAlvaro(request):
     monthCount = int(datetime.now().strftime("%m"))
+
     with connections['auth_finances'].cursor() as cursor:
         CardAlvaro = "SELECT COUNT(DISTINCT id_agendamento_f), SUM(val_alvaro_f), MONTH(data_registro_f) FROM auth_finances.completed_exams WHERE MONTH(data_registro_f) LIKE %s AND identification LIKE 'Externo' AND status_exame_f != 8 group by MONTH(data_registro_f);"
         cursor.execute(CardAlvaro, (monthCount,))
@@ -2512,14 +2513,17 @@ def FunctionDashCardAlvaro(request):
         ArrCardAlvaro = []
         if dados:
             for qtd, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qtd": qtd,
-                    "val": val,
-                    "mes": mes,
-                    })
-                ArrCardAlvaro.append(newinfoa)
+                if val == None:
+                    val = 0
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qtd": qtd,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    ArrCardAlvaro.append(newinfoa)
+
         else:
             qtd = 0
             val = 0
@@ -2531,6 +2535,7 @@ def FunctionDashCardAlvaro(request):
                 "mes": mes,
                 })
             ArrCardAlvaro.append(newinfoa)
+            
         return ArrCardAlvaro
 
 

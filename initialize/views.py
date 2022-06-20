@@ -16,6 +16,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
+from auth_users.decorator import FilePhotoViewFunction
 from datetime import datetime
 import base64
 import json
@@ -29,5 +30,8 @@ def csrf_failure(request, reason=""):
 
 @login_required
 def home(request):
-    return render(request, 'pages/home.html')
-
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'pages/home.html',
+    {
+        "arr_ViewFoto": ViewFoto,
+    })

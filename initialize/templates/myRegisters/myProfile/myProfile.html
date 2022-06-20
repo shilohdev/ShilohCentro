@@ -72,20 +72,23 @@
     </div>
     <div class="container">
         <div class="card" id="userint" >        
-            <div class="row">{% for k in arr_SearchProfile %}               
+            <div class="row">              
                 <!-- UPLOAD FOTO -->
                 <div class="col m4 s12"> 
                     <div class="input-field col m12 s12" style="margin-top: 22px;">
-                        <div class="image_meuperfil">
-                            <img id="preview_images" name="foto_perfil" src="https://jamesrmoro.me/wp-content/uploads/2021/02/profile.png" alt="" /> 
+                        <div id="ft" class="image_meuperfil">
+                            {% for k in arr_ViewFoto %}  
+                            <img id="foto_atual" name="foto_perfil" src="{{ k.url }}" /> 
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col m12 s12">
-                        <label for="btn_file" class="btn">Adicionar Foto</label>
+                        <label id="btn_ft" for="btn_file" class="btn">Adicionar Foto</label>
                         <input onchange="AnxFoto()" type="file" id="btn_file" required accept="image/jpeg"/>
-                    </div>    
+                    </div>
                 </div>
                 <!--INICIO DO FORM-->
+                {% for k in arr_SearchProfile %}  
                 <div class="col m8 s12">
                     <div class="col m12 s12" style="margin-top: 30px;">
                         <div class="input-field col m4 s12">
@@ -163,6 +166,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
                 <!--BUTTON-->
                 <div class="col m12 s12" style="margin-top: 30px;">
                     <div class="col m12 s12 mb-2">
@@ -170,7 +174,7 @@
                             <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Salvar</spanpx>
                         </button>
                     </div>
-                </div>{% endfor %}
+                </div>
             </div>                
         </div>
     </div>
@@ -187,13 +191,14 @@
             if (file) {
                 let reader = new FileReader();
                 reader.onload = function (event) {
-                    $("#preview_images")
-                      .prop("src", event.target.result);
+                    $("#preview_images").prop("src", event.target.result);
                 };
                 reader.readAsDataURL(file);
             }
         });
     });
+
+    
     $("#btn_salvar").attr("disabled", false);
     
     function primeiraLetraMaiuscula(string) {
@@ -261,20 +266,6 @@
 
 
     function SaveProfile(object){
-
-        var files = $("#btn_file")[0].files[0];
-            if ($("#btn_file").val() != "") {    //verificação para preencher o tipo do arquivo.
-                if ($("#btn_file").prop("files") != undefined) {
-                    files = document.querySelector("#btn_file").files[0];
-                } else {
-                    files = "";
-                }
-            } else {
-                files = "";
-            }
-        
-        //$("#btn_salvar").attr("disabled", true);
-
         var cpf = $("#cpf").val();
         var name1 = $("#name").val();
         var name2 = $("#last_name").val();
@@ -325,67 +316,48 @@
 
 
     function AnxFoto(){
-
-    alert("anexo inserido")
-
-    var files = $("#btn_file")[0].files[0];
-    if ($("#btn_file").val() != "") {    //verificação para preencher o tipo do arquivo.
-        if ($("#btn_file").prop("files") != undefined) {
-            if ($("#btn_file").val() == "") {
-                return alert("Preencha o tipo de anexo para prosseguir.");
+        var files = $("#btn_file")[0].files[0];
+        if ($("#btn_file").val() != "") {    //verificação para preencher o tipo do arquivo.
+            if ($("#btn_file").prop("files") != undefined) {
+                if ($("#btn_file").val() == "") {
+                    return false;
+                } else {
+                    files = document.querySelector("#btn_file").files[0];
+                }
             } else {
-                files = document.querySelector("#btn_file").files[0];
+                files = "";
             }
         } else {
             files = "";
         }
-    } else {
-        files = "";
-    }
+        
+    console.log(files)
     
-   console.log(files)
- 
-    var formpost = [{
-            "name": "csrfmiddlewaretoken",
-            "value": $('input[name="csrfmiddlewaretoken"]').val()
-        },
-        {
-            "name": "file",
-            "value": files
-        },
-    ];
+        var formpost = [{
+                "name": "csrfmiddlewaretoken",
+                "value": $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            {
+                "name": "file",
+                "value": files
+            },
+        ];
 
-    fetchRequestFiles("{% url 'ApiPhotoProfile'  %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == false) {
-            $("#anx_file").attr("disabled", false);
+        fetchRequestFiles("{% url 'ApiPhotoProfile'  %}", "POST", "JSON", formpost, function(re) {
+            if (re["response"] == false) {
+                $("#btn_ft").attr("disabled", false);
 
-            alert("Nenhum dado encontrado.");
-        }else{
-            $("#anx_file").attr("disabled", false);
+                alert("Não foi possível prosseguir.");
+            }else{
+                $("#btn_ft").attr("disabled", true);
+                alert("Foto atualizada.");
+                location.reload();
+            }
 
-          var append = `
-            <tr> 
-                <td>${name_file}</td>
-                <td>${data}</td>
-                <td>${typeFile}</td>
-                <td style="text-align: center;">
-                    <a onclick=\"removeFileExists(this)\" style="cursor: pointer; width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;" href="#" data-path="/patients/process/111/2/Detran (1).pdf" class="btn mb-1 waves-effect waves-light ativ">
-                        <i class="material-icons right">delete</i>
-                    </a>
-                </td>
-            </tr>
-            `;
-
-            $("#tb_appendAnx").append(append);
-            alert("Anexado")
-
-          }
-
-    });
-
-
-
+        });
     }
+
+
 
 </script>
 {% endblock %}

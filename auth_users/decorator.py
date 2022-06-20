@@ -28,6 +28,9 @@ import base64
 import json
 import time
 from re import A
+import os
+import re
+import shutil
 from django.contrib.auth.models import User
 from functions.connection.models import Connection
 from functions.general.decorator import convertDate, checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
@@ -75,7 +78,7 @@ def searchTPerfil(request):
 def CadastreUser(request):
     tp_perfil = request.POST.get("tp_perfil")
     cpf = request.POST.get("cpf")
-    name = request.POST.get("name")
+    name = request.POST.get("name").title()
     date_nasc = request.POST.get("date_nasc")
     email = request.POST.get("email")
     tel1 = request.POST.get("tel1")
@@ -148,7 +151,7 @@ def CadastreUser(request):
 
 #CADASTRAR PARCEIROS
 def CadastrePartners(request):
-    name = request.POST.get("name")
+    name = request.POST.get("name").title()
     email = request.POST.get("email")
     tel1 = request.POST.get("tel1")
     tel2 = request.POST.get("tel2")
@@ -1383,7 +1386,7 @@ def ApiCadastrePatienteFunction(request):
     lead = request.POST.get("select_leads")
     data_nasc = request.POST.get("date_nasc")
     cpf = request.POST.get("cpf")
-    name = request.POST.get("name")
+    name = request.POST.get("name").title()
     medico_resp = request.POST.get("medico_resp")
     email = request.POST.get("email")
     tel1 = request.POST.get("tel1")
@@ -3774,6 +3777,8 @@ def ApichangeUserProfileFunction(request):
 
 
 
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 def PhotoProfileFunction(request):
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
@@ -3790,6 +3795,8 @@ def PhotoProfileFunction(request):
                 "message": "Login expirado, faça login novamente para continuar."
             }
 
+
+    RemoveProfile(id_usuario)
     ApiPhotoProfileFunction(id_usuario, request.FILES)
     return {
         "response": True,
@@ -3801,13 +3808,13 @@ def PhotoProfileFunction(request):
 
 #GET FILE >> FOTO DO MEU PERFIL
 def ApiPhotoProfileFunction(id, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
-    id = str(id)
-    print("FILES", FILES)
+    id = int(id)
+
     PATH = settings.BASE_DIR_DOCS + "/FotoPerfil/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
     PATH_USER = PATH.format(id) # ADICIONANDO ID NO {} DE CIMA /\
 
-    PATH_TYPES = PATH_USER + "/" + id + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
-    print(PATH_TYPES)
+    PATH_TYPES = PATH_USER + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
+
     arr_dir = []
     for name, image in FILES.items():
         file_name = default_storage.save(PATH_TYPES + image.name, image)
@@ -3817,3 +3824,77 @@ def ApiPhotoProfileFunction(id, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
         })
 
     return True
+
+
+
+#GET FILE REMOVE >>> REMOVE FOTO DE PERFIL
+def RemoveProfile(id_usuario):
+    try: 
+        id_usuario = str(id_usuario)
+    except:
+        return {
+            "response": "false",
+            "message": "Não foi possível encontrar este arquivo."
+        }
+    
+    PATH = settings.BASE_DIR_DOCS + f"/FotoPerfil/{id_usuario}"
+
+    if default_storage.exists(PATH):
+        try:
+            shutil.rmtree(PATH) # <<<<< exclui o diretório da imagem
+        except:
+            pass
+
+    else:
+        print("deu ruim lk")
+        return {
+            "response": "true",
+            "message": "Arquivo excluido com sucesso."
+        }
+    
+    return {
+        "response": "false",
+        "message": "Não foi possível encontrar ou remover este arquivo."
+    } 
+
+
+
+
+def FilePhotoViewFunction(request): #aqi
+    with connections['auth_users'].cursor() as cursor:
+        searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
+        params = (request.user.username,)                       
+        cursor.execute(searchID, params)        
+        dados = cursor.fetchall()
+        
+        if dados:         
+            for id_usuario, nome, unity  in dados:
+                pass               
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+    try:
+        keysLIST = []
+        id = id_usuario
+        PATH = settings.BASE_DIR_DOCS + f"/FotoPerfil/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+        PATH_ORIGIN = f"/FotoPerfil/{id}"
+        DS = default_storage #objeto
+        if DS.exists(PATH): #se o o bjeto existe
+            LIST_TYPES = DS.listdir(PATH) #lista tudo que esta dentro do meu objeto (pasta)
+            if LIST_TYPES:
+                a = len(LIST_TYPES) > 0
+                if a:
+                    for paths in LIST_TYPES[1]: #aqui pego o nome do arquivo
+                            keysLIST.append({
+                                "url": settings.SHORT_PLATAFORM + f"/docs/FotoPerfil/{id}/{paths}"
+                            })
+
+        return keysLIST
+        
+    except Exception as err:
+        return {
+            "response": False,
+            "message": "Não foi possível encontrar este usuário."
+        }

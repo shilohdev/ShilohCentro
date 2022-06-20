@@ -20,7 +20,7 @@ from django.http import HttpResponseForbidden
 from datetime import datetime
 
 from requests import request
-from auth_users.decorator import PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_users.decorator import FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
 from auth_finances.functions.exams.models import AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchNotAtingeClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
@@ -29,6 +29,15 @@ import base64
 import json
 import time
 from re import A
+
+
+def FotoProfile(request):
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'pages/home.html',
+    {
+        "arr_ViewFoto": ViewFoto,
+    })
+
 
 
 def csrf_failure(request, reason=""):
@@ -49,7 +58,14 @@ def cadastreUserViews(request):
         return error(request)
     searchPerfil = searchTPerfil(request)
     searchUnity = searchUnit(request)
-    return render(request, 'manage/cadastre/Perfis/cadastreUser.html', {"arr_SearchPerfil": searchPerfil,  "arr_SearchUnit": searchUnity})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'manage/cadastre/Perfis/cadastreUser.html', 
+    {"arr_SearchPerfil": searchPerfil,  
+    "arr_SearchUnit": searchUnity,
+    "arr_ViewFoto": ViewFoto,
+
+    })
 
     
 #ATUALIZAR USUARIO INTERNO
@@ -68,7 +84,9 @@ def cadastrePartnesViews(request):
         return error(request)
     SsearchCategoria = searchCategoria(request)
     searchUnity = searchUnit(request)
-    return render(request, 'manage/cadastre/Perfis/cadastrePartnes.html', {"arr_SearchCategoria": SsearchCategoria,  "arr_SearchUnit": searchUnity})
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/cadastre/Perfis/cadastrePartnes.html', 
+    {"arr_SearchCategoria": SsearchCategoria,  "arr_SearchUnit": searchUnity, "arr_ViewFoto": ViewFoto,})
 
 
 #API CADASTRAR USUARIOS
@@ -90,7 +108,8 @@ def cadastreIndicationViews(request):
     if allowPage(request, "register_indication") == False:
         return error(request)
     sSelect_conv =  SelectConvenio(request)
-    return render(request, 'manage/cadastre/Perfis/cadastreIndication.html', {"arr_SelectConvenio": sSelect_conv})
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/cadastre/Perfis/cadastreIndication.html', {"arr_ViewFoto": ViewFoto, "arr_SelectConvenio": sSelect_conv})
 
     
 #API CADASTRAR INDICAÇÃO
@@ -120,7 +139,8 @@ def cadastreConvenioViews(request):
     if allowPage(request, "register_convenio") == False:
         return error(request)
     SsearchConvenio =  searchConvenio(request)
-    return render(request, 'manage/cadastre/Convenio/cadastreConvenio.html', {"arr_SearchConvenio": SsearchConvenio,})
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/cadastre/Convenio/cadastreConvenio.html', { "arr_ViewFoto": ViewFoto, "arr_SearchConvenio": SsearchConvenio,})
 
     
 #API CADASTRAR CONVENIO
@@ -154,7 +174,17 @@ def schedulePickupViews(request):
     SsearchExame = searchExame(request)
     SsearchService = searchService(request)
     SsearchPacienteSe = SearchSelectSchedule(request)
-    return render(request, 'manage/agenda/schedulePickup.html', {"arr_SearchNurse": SsearchNurse, "arr_SearchService": SsearchService, "arr_SearchDriver": SsearchDriver, "arr_SelectConvenio": sSelect_conv, "arr_SearchExame": SsearchExame, "arr_SearchPacienteSe": SsearchPacienteSe})
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/agenda/schedulePickup.html',
+     {
+        "arr_ViewFoto": ViewFoto,
+         "arr_SearchNurse": SsearchNurse,
+         "arr_SearchService": SsearchService, 
+         "arr_SearchDriver": SsearchDriver, 
+         "arr_SelectConvenio": sSelect_conv, 
+         "arr_SearchExame": SsearchExame, 
+         "arr_SearchPacienteSe": SsearchPacienteSe
+    })
 
 #API AGENDAR COLETA
 @login_required
@@ -191,6 +221,7 @@ def ScheduledPickupViews(request):
     CountAgendamentsConcl = CountAgendamentsCSFunction(request)
     CountAgendamentsCanc = CountAgendamentsCFunction(request)
     CountAgendamentsAtras = CountAgendamentAtrasadosFunction(request)
+    ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'manage/agenda/ScheduledPickup.html', {
         "arr_SearchDoctor": SsearchDoctor, 
@@ -207,6 +238,8 @@ def ScheduledPickupViews(request):
         "arr_CountAgendamentsFrustrados": CountAgendamentsFrust,  
         "arr_CountAgendamentsCancelados": CountAgendamentsCanc,
         "arr_CountAgendamentsAtrasados": CountAgendamentsAtras,
+        "arr_ViewFoto": ViewFoto,
+
         })
 
 
@@ -231,7 +264,15 @@ def listUsersViews(request):
     searchPerfil = searchTPerfil(request)
     arrSearchUsersFull = SearchUsersFull(request)
     searchUnity = searchUnit(request)
-    return render(request, 'manage/listers/users/listUsers.html', { "arr_SearchPerfil": searchPerfil, "arr_SearchUsersFull": arrSearchUsersFull, "arr_SearchUnit": searchUnity})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'manage/listers/users/listUsers.html', 
+    {
+        "arr_ViewFoto": ViewFoto,
+        "arr_SearchPerfil": searchPerfil,
+        "arr_SearchUsersFull": arrSearchUsersFull,
+        "arr_SearchUnit": searchUnity
+    })
 
 
 #API LISTAR USUARIOS
@@ -269,12 +310,15 @@ def listPartnesViews(request):
     SsearchPartiners = TabelaPartners(request)
     searchUnity = searchUnit(request)
     SearchComercial = searchComercialFunction(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'manage/listers/partners/listPartners.html', 
     {
         "arr_SearchCategoria": SsearchCategoria, 
         "arr_SearchPartiners": SsearchPartiners,
         "arr_SearchUnit": searchUnity,
         "arr_SearchComercial": SearchComercial,
+        "arr_ViewFoto": ViewFoto,
     })
 
 
@@ -310,7 +354,8 @@ def listIndicationViews(request):
     SsearchConvenio =  searchConvenio(request)
     SsearchConvenio =  searchConvenio(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
-    return render(request, 'manage/listers/indication/listIndication.html', {"arr_SearchIndication": SsearchIndication, "arr_SearchConvenio": SsearchConvenio, "arr_SearchTypeAnexo": SearchTypeAnexo,})
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/listers/indication/listIndication.html', {"arr_ViewFoto": ViewFoto,"arr_SearchIndication": SsearchIndication, "arr_SearchConvenio": SsearchConvenio, "arr_SearchTypeAnexo": SearchTypeAnexo,})
 
 
 
@@ -320,7 +365,8 @@ def listLeadsViews(request):
     if allowPage(request, "list_indication") == False:
         return error(request) 
     SsearchLeads = searchLead(request)
-    return render(request, 'manage/listers/lead/listLead.html', {"arr_SearchLeads": SsearchLeads, })
+    ViewFoto = FilePhotoViewFunction(request)
+    return render(request, 'manage/listers/lead/listLead.html', {"arr_ViewFoto": ViewFoto, "arr_SearchLeads": SsearchLeads, })
 
 
 #LISTAR PACIENTES SEARCH
@@ -331,10 +377,13 @@ def CadastrePatientViews(request):
     SsearchPatients = searchLeads(request)  
     SsearchConvenio =  searchConvenio(request)
     SsearchDoctorL =  searchDoctorLead(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'manage/cadastre/Perfis/cadastrePatient.html', 
     {"arr_SearchPatients": SsearchPatients,
     "arr_SearchConvenio": SsearchConvenio,
     "arr_SearchDoctorL": SsearchDoctorL,
+    "arr_ViewFoto": ViewFoto,
     })
     
     
@@ -431,6 +480,7 @@ def FinancialExamsViews(request):
     PendingFinance = CountPendingFinanceFunction(request)
     AnalityFinance = CountAnalityFinanceFunction(request)
     PayFinance = CountPayFinanceFunction(request)
+    ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'finances/exams/exams-concl.html', 
     {"arr_SearchCompletedExams": SearchCompletedExams, 
@@ -440,7 +490,7 @@ def FinancialExamsViews(request):
     "arr_PendingFinance": PendingFinance, 
     "arr_AnalityFinance": AnalityFinance, 
     "arr_PayFinance": PayFinance, 
-    
+    "arr_ViewFoto": ViewFoto,
 })
 
 # MODAL FINANCES
@@ -504,24 +554,52 @@ def RefundCompletedViews(request):
         return error(request)
     SearchRefundCompleted = searchrRefundCompletedFunction(request)
     SearchStratusProgress = FunctionStatus(request)
-    return render(request, 'finances/exams/refund-completed.html',  {"arr_SearchRefundCompleted": SearchRefundCompleted, "arr_SearchStratusProgress": SearchStratusProgress} )
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-completed.html',  
+    {
+        "arr_SearchRefundCompleted": SearchRefundCompleted, 
+        "arr_SearchStratusProgress": SearchStratusProgress,
+        "arr_ViewFoto": ViewFoto,
+    })
 
 #INDIVIDUAL, MEUS REGISTROS
 def ListerPatientsUnitViews(request): #PACIENTES
     SsearchConvenio =  searchConvenio(request)
     SsearchIndication = searchPatientsUnit(request)
-    return render(request, 'myRegisters/lister/patientsUnit.html', {"arr_SearchConvenio": SsearchConvenio, "arr_SearchIndication": SsearchIndication,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'myRegisters/lister/patientsUnit.html', 
+    {"arr_ViewFoto": ViewFoto,
+    "arr_SearchConvenio": SsearchConvenio,
+    "arr_SearchIndication": SsearchIndication,
+    })
     
+
 #INDIVIDUAL, MEUS REGISTROS
 def ListerPartnersUnitViews(request): #PARCEIROS
     SsearchCategoria = searchCategoria(request)
     SsearchPartiners = TabelaPartnersUnit(request)
-    return render(request, 'myRegisters/lister/partnersUnit.html', {"arr_SearchCategoria": SsearchCategoria, "arr_SearchPartiners": SsearchPartiners})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'myRegisters/lister/partnersUnit.html', 
+    {
+        "arr_SearchCategoria": SsearchCategoria, 
+        "arr_SearchPartiners": SsearchPartiners,
+        "arr_ViewFoto": ViewFoto,
+
+    })
 
 #INDIVIDUAL, MEUS REGISTROS
 def ListerIndicationsUnitViews(request): #INDICAÇÕES
     SsearchLeads = searchIndicationUnit(request)
-    return render(request, 'myRegisters/lister/indicationsUnit.html', {"arr_SearchLeads": SsearchLeads,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'myRegisters/lister/indicationsUnit.html', 
+    {
+        "arr_ViewFoto": ViewFoto,
+        "arr_SearchLeads": SsearchLeads,
+    })
 
     
 #LISTAR TODOS OS LEADS 
@@ -534,12 +612,16 @@ def LeadsViews(request): #INDICAÇÕES
     CountLeadsMes = CountLeadsMesFunction(request)
     CountLeadsDay = CountLeadsDayFunction(request)
     SearchStatusLead = FunctionSearchStatusLead(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'manage/listers/lead/LEADS.html', 
     {"arr_SearchLeadsAll": SsearchLeadsAll,
     "arr_SearchCountLeadsAll": CountLeadsAll,
     "arr_SearchCountLeadsMes": CountLeadsMes,
     "arr_SearchCountLeadsDay": CountLeadsDay, 
     "arr_SearchStatusLead": SearchStatusLead,
+    "arr_ViewFoto": ViewFoto,
+
     })
 
     
@@ -550,7 +632,13 @@ def CadatsreLeadViews(request): #INDICAÇÕES
         return error(request)
     SsearchDoctorL =  searchDoctorLead(request)
     sSelect_conv =  SelectConvenio(request)
-    return render(request, 'manage/cadastre/Perfis/cadastreLead.html', {"arr_SearchDoctorL": SsearchDoctorL, "arr_SelectConvenio": sSelect_conv})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'manage/cadastre/Perfis/cadastreLead.html', 
+    {"arr_SearchDoctorL": SsearchDoctorL, 
+    "arr_SelectConvenio": sSelect_conv, 
+    "arr_ViewFoto": ViewFoto,
+    })
  
 #API CADASTRAR LEAD
 @login_required
@@ -558,13 +646,6 @@ def ApiCadatsreLeadViews(request):
     array = CadastreLead(request)
     return JsonResponse(array, safe=False, status=200)
 
-    
-#API LISTAR PARCEIROS
-'''@ensure_csrf_cookie
-@login_required
-def HistoricoViews(request):
-    array = historicExamConclFunction(request)
-    return JsonResponse(array, safe=False, status=200)'''
 
 
 # CADASTRAR UNIDADES
@@ -573,7 +654,13 @@ def cadastreUnitViews(request): #INDICAÇÕES
     if allowPage(request, "cadastre_unit") == False:
         return error(request)
     SearchUnidade = searchUnidadeTabela(request)
-    return render(request, 'manage/cadastre/unidade/CadastreUnit.html',  {"arr_SearchUnidade": SearchUnidade})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'manage/cadastre/unidade/CadastreUnit.html',  
+    {
+        "arr_SearchUnidade": SearchUnidade,
+        "arr_ViewFoto": ViewFoto,
+    })
 
 #API CADASTRAR UNIDADES
 @login_required
@@ -602,7 +689,14 @@ def refundNotReachedViews(request): #INDICAÇÕES
         return error(request)
     SearchStatusN = FunctionStatusN(request)
     SearchNotReached=searchNotReached(request)
-    return render(request, 'finances/exams/refund-notReached.html', {"arr_SearchStatusN": SearchStatusN, "arr_SearchNotReached": SearchNotReached,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-notReached.html', 
+    {
+        "arr_SearchStatusN": SearchStatusN, 
+        "arr_SearchNotReached": SearchNotReached,
+        "arr_ViewFoto": ViewFoto,
+        })
 
 
 
@@ -613,7 +707,13 @@ def refundGlossesViews(request): #INDICAÇÕES
         return error(request)
     SearchStatusN = FunctionStatusN(request)
     SearchGlosses=searchGlosses(request)
-    return render(request, 'finances/exams/refund-glosses.html', {"arr_SearchStatusN": SearchStatusN, "arr_SearchSearchGlosses": SearchGlosses,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-glosses.html', 
+    {"arr_SearchStatusN": SearchStatusN, 
+    "arr_SearchSearchGlosses": SearchGlosses,
+    "arr_ViewFoto": ViewFoto,
+    })
 
 #AGENDAR COLETA INTERNA
 @login_required
@@ -626,7 +726,19 @@ def schedulePickupIntViews(request):
     SsearchExame = searchExame(request)
     SsearchService = searchService(request)
     SsearchPacienteSelect = SearchSelectInterno(request)
-    return render(request, 'internalProcedure/schedulePickup-Int.html', {"arr_SearchNurse": SsearchNurse, "arr_SearchService": SsearchService, "arr_SearchDriver": SsearchDriver, "arr_SelectConvenio": sSelect_conv, "arr_SearchExame": SsearchExame, "arr_SearchPacienteSelect": SsearchPacienteSelect})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'internalProcedure/schedulePickup-Int.html', 
+    {
+        "arr_SearchNurse": SsearchNurse, 
+        "arr_SearchService": SsearchService, 
+        "arr_SearchDriver": SsearchDriver, 
+        "arr_SelectConvenio": sSelect_conv, 
+        "arr_SearchExame": SsearchExame, 
+        "arr_SearchPacienteSelect": SsearchPacienteSelect,
+        "arr_ViewFoto": ViewFoto,
+
+    })
 
 
 #CONSULTAR COLETA AGENDADA INTERNA
@@ -642,6 +754,8 @@ def ScheduledPickupIntViews(request):
     SsearchConvenio =  searchConvenio(request)
     SsearchScheduledPickupInt =  searchScheduledPickupInt(request)
     SsearchStatus =  FunctionStatusSelect(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'internalProcedure/ScheduledPickup-Int.html', {
         "arr_SearchDoctor": SsearchDoctor, 
         "arr_SearchExame": SsearchExame, 
@@ -650,6 +764,8 @@ def ScheduledPickupIntViews(request):
         "arr_SearConvenio": SsearchConvenio, 
         "arr_SearchScheduledPickupInt": SsearchScheduledPickupInt,  
         "arr_SearchStatus": SsearchStatus,
+        "arr_ViewFoto": ViewFoto,
+
         })
 
 #FILTRO MES COLETA INTERNA
@@ -681,11 +797,13 @@ def SolicitationsRetfund(request):
     SearchExams =  RetfundFConcl(request)
     SearchStratusProgress = FunctionStatus(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
+    ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'internalProcedure/SolicitationsRefund.html', 
     {"arr_SearchInicioExams": SearchExams, 
     "arr_SearchStratusProgress": SearchStratusProgress, 
-    "arr_SearchTypeAnexo": SearchTypeAnexo, 
+    "arr_SearchTypeAnexo": SearchTypeAnexo,
+    "arr_ViewFoto": ViewFoto,
     })
 
 
@@ -698,10 +816,13 @@ def RefundCompletedInternoViews(request):
     SearchExamsFim =  RetfundFFinalizado(request)
     SearchStratusProgress = FunctionStatus(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'internalProcedure/refund-completed-int.html', 
     {"arr_SearchCompletedExamsFinalizado": SearchExamsFim,
      "arr_SearchStratusProgress": SearchStratusProgress,
-      "arr_SearchTypeAnexo": SearchTypeAnexo, 
+      "arr_SearchTypeAnexo": SearchTypeAnexo,
+      "arr_ViewFoto": ViewFoto, 
       })
 
     
@@ -731,12 +852,16 @@ def ClosingPartnersViews(request): #INDICAÇÕES
     valTotalPartiners = valTotalPartinersF(request)
     valPartinersP = valPartinersPending(request)
     valPartinersPayy = valPartinersPay(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'finances/closure/ClosingPartners.html', 
     {
         "arr_SearchClosingPartners": ClosingPartners, 
         "arr_valTotalPartiners": valTotalPartiners,
         "arr_valPartinersPending": valPartinersP,
         "arr_valPartinersPay": valPartinersPayy,
+        "arr_ViewFoto": ViewFoto,
+
     })
 
 @login_required
@@ -775,7 +900,16 @@ def ClosingCommercialViews(request): #INDICAÇÕES
         return error(request)
     ClosingCommercial = TableClosingCommercial(request)
     valTotalCommercial = valTotalCommercialFunction(request)
-    return render(request, 'finances/closure/ClosingCommercial.html',  {"arr_SearchClosingCommercial": ClosingCommercial, "arr_valTotalCommercial": valTotalCommercial,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+
+    return render(request, 'finances/closure/ClosingCommercial.html',  
+    {
+        "arr_SearchClosingCommercial": ClosingCommercial,
+    "arr_valTotalCommercial": valTotalCommercial,
+    "arr_ViewFoto": ViewFoto,
+
+    })
 
 #FILTRO MES FECHAMENTO COMERCIAL
 @login_required
@@ -810,7 +944,14 @@ def CollectionRouteViews(request):
         return error(request)
     SearchTypeAnexo =  FunctionSearchTypeAnexo(request)
     SsearchRoute =  searchRouteNurse(request)
-    return render(request, 'manage/agenda/collectionRoute.html', {"arr_SearchTypeAnexo": SearchTypeAnexo , "arr_SearchRoute": SsearchRoute})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'manage/agenda/collectionRoute.html', 
+    {
+        "arr_SearchTypeAnexo": SearchTypeAnexo , 
+        "arr_SearchRoute": SsearchRoute,
+        "arr_ViewFoto": ViewFoto,
+        })
 
 
 
@@ -835,7 +976,13 @@ def closingInt(request):
     if allowPage(request, "fechamento_interno") == False:
         return error(request)
     ClosingInt = TableClosingInt(request)
-    return render(request, 'finances/closure/ClosingInt.html', {"arr_SearchClosingInt": ClosingInt,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/closure/ClosingInt.html', 
+    {   
+        "arr_SearchClosingInt": ClosingInt,
+        "arr_ViewFoto": ViewFoto,
+    })
 
 
 
@@ -855,12 +1002,19 @@ def ClosingFinanceUnit(request):
     ClosingUnitAN = ClosingUnitAnalise(request)
     SearchFinanceIntGNA = SearchFinanceIntGlosa(request)
     ClosingUnitResultPG = ClosingUnitResult(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
     return render(request, 'myRegisters/lister/closingUnit.html', 
-    {"arr_SearchClosingUnit": ClosingUnit, 
-    "arr_SearchClosingUnitAG": ClosingUnitAG, 
-    "arr_SearchClosingUnitAN": ClosingUnitAN, 
-    "arr_SearchClosingUnitGNA": SearchFinanceIntGNA,
-    "arr_SearchClosingUnitResultPG": ClosingUnitResultPG,})
+    {
+        "arr_SearchClosingUnit": ClosingUnit, 
+        "arr_SearchClosingUnitAG": ClosingUnitAG, 
+        "arr_SearchClosingUnitAN": ClosingUnitAN, 
+        "arr_SearchClosingUnitGNA": SearchFinanceIntGNA,
+        "arr_SearchClosingUnitResultPG": ClosingUnitResultPG,
+        "arr_ViewFoto": ViewFoto,
+    
+    })
+
 
 
 
@@ -869,7 +1023,9 @@ def ClosingFinanceUnit(request):
 @login_required
 def LogUser(request):
     InfoLog = iInfoLog(request)
-    return render(request, 'templates/base.html', {"arr_SearchInfoLog": InfoLog,})
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'templates/base.html', {"arr_SearchInfoLog": InfoLog, "arr_ViewFoto": ViewFoto,})
 
 
 
@@ -978,7 +1134,6 @@ def RemoveFilePartners(request):
 
 
 
-#Informações do Login
 @login_required
 def DashboardsRefunds(request):
     if allowPage(request, "dash_reimbursement") == False:
@@ -996,6 +1151,7 @@ def DashboardsRefunds(request):
     DashFinanceTable = FunctionDashFinanceTable(request)
     DashFinanceTableYear = FunctionDashFinanceTableYear(request)
     DashCardNFs = FunctionDashCardNFs(request)
+    ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'dashboards/dash_finances/dash_management.html', 
     {
@@ -1012,6 +1168,8 @@ def DashboardsRefunds(request):
         "arr_DashCardReembolsado": DashCardReembolsado,
         "arr_DashFinanceTable": DashFinanceTable,
         "arr_DashFinanceTableYear": DashFinanceTableYear,
+        "arr_ViewFoto": ViewFoto,
+
     })
 
 
@@ -1052,9 +1210,12 @@ def ApiAnexarFiles(request):
 @login_required
 def MyProfileViews(request):
     SsearchProfile = DataMyProfileViews(request)
+    ViewFoto = FilePhotoViewFunction(request)
     return render(request, 'myRegisters/myProfile/myProfile.html', 
     {
         "arr_SearchProfile": SsearchProfile,
+        "arr_ViewFoto": ViewFoto,
+
     })
 
 
@@ -1072,5 +1233,12 @@ def ApiPhotoProfile(request):
     return JsonResponse(array, safe=False, status=200)
 
 
+#FOTO MEU PERFIL
+@login_required
+def FilePhotoView(request):
+    array = FilePhotoViewFunction(request)
+    return JsonResponse(array, safe=False, status=200)
 
+
+    
     

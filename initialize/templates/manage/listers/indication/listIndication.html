@@ -11,6 +11,8 @@ Página inicial
 Acompanhe as últimas notícias!
 {% endblock %}
 
+
+
 {% block content %}
 
 <style type="text/css">
@@ -486,7 +488,7 @@ $("#modal3").hide();
          var docs = dados["docs"];
          var ap = "";
      
-               $.map(docs, function(n, i){
+            $.map(docs, function(n, i){
              ap += `
                <tr id="tr_${n.id}"> 
                   <td>${n.name}</td>
@@ -712,7 +714,7 @@ function AnxDoc(object) {
         {
             "name": "type_doc",
             "value": $("#tp_anx").val()
-        }, 
+        },
         {
             "name": "data",
             "value": JSON.stringify(formpost2)
