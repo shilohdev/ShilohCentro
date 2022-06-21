@@ -1497,17 +1497,17 @@ def searchNotAtingeClosingPartners(request):
                 })
             arrayOutros.append(newinfoa)
 
-    return {
-        "response": "true",
-        "message": array,
-        "message2": arrayNot,
-        "messageAnalise": arrayAnalise,
-        "messagePago": arrayPago,
-        "messageCount": arrayPagoCount,
-        "messageOutros": arrayOutros,
-        "files": json.dumps(files),
+        return {
+            "response": "true",
+            "message": array,
+            "message2": arrayNot,
+            "messageAnalise": arrayAnalise,
+            "messagePago": arrayPago,
+            "messageCount": arrayPagoCount,
+            "messageOutros": arrayOutros,
+            "files": json.dumps(files),
 
-    }
+        }
 
 
 

@@ -362,9 +362,14 @@ function searchMonth() {
       "month": month //DICT COM O VALOR DO ID
    };
    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
-      var dados = re["response"]
-
-      if (dados == "true"){
+      var dados = re["table"]
+      console.log(dados)
+      if (dados == ""){
+         var appende = ' <tr> <td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+         
+         $("#tb_appendTable").append(appende);     
+      }
+      else{
          //TABELA
          var dados = re["table"];
          $("#tb_appendTable").html("");
@@ -435,6 +440,9 @@ function searchMonth() {
 
 
       }
+    
+
+      
    });
 }
 
@@ -581,11 +589,13 @@ function viewAgenModal(object) {
       "id_user": id_user,
       "month": month,
    };
-   $("#modal2").hide();
+   $("#modal2").hide(); 
    $(object).prop("disabled", true);
+   
    fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
       if (re["response"] == false) {
          alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      
       } else {
          $("#modal2").show();
          var dados = re["message2"];
