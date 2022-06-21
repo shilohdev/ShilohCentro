@@ -315,8 +315,8 @@ ASGI_APPLICATION = "initialize.asgi.application"
 
 # BASE DOCS
 BASE_DIR_DOCS = str(BASE_DIR).replace("\\", "/") + "/docs"
-SHORT_PLATAFORM = "http://127.0.0.1:8000"
-#SHORT_PLATAFORM = "https://shilohcentro.com.br" 
+#SHORT_PLATAFORM = "http://127.0.0.1:8000"
+SHORT_PLATAFORM = "https://shilohcentro.com.br" 
 LISTPATHTYPE = {
     "1": "Comprovante de Pagamento",
     "2": "Nota Fiscal",
