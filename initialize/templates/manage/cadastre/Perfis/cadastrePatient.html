@@ -70,7 +70,7 @@ Acompanhe as últimas notícias!
                      <select id="select_leads" class="select2 browser-default" data-required="true">
                         <option value="">Selecione</option>
                         {% for k in arr_SearchPatients %}
-                        <option  data-conv_medico="{{ k.conv_medico }}" data-medico_resp="{{ k.medico_resp }}" data-cpf="{{ k.cpf }}" data-name="{{ k.nome }}" data-phone="{{ k.phone }}" data-phone_aux="{{ k.phone_aux }}" data-email="{{ k.email }}" value="{{ k.id }}">[{{ k.id }}] - {{ k.nome }}</option>
+                        <option  data-conv_medico="{{ k.conv_medico }}" data-medico_resp="{{ k.medico_resp }}" data-cpf="{{ k.cpf }}" data-name="{{ k.nome }}" data-phone="{{ k.phone }}" data-phone_aux="{{ k.phone_aux }}" data-email="{{ k.email }}" data-company="{{ k.company }}" value="{{ k.id }}">{{ k.nome }} - [{{ k.cpf }}] -</option>
                         {% endfor %}
                      </select>
                   </div>
@@ -79,13 +79,18 @@ Acompanhe as últimas notícias!
                      <label for="medico_resp">
                      <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Indicação de:</label>
                   </div>
-                  <div id="conv" class="input-field col s4" style="display: none; ">
+                  <div id="conv" class="input-field col s12 m2" style="display: none; ">
                      <select name="select" id="conv_medico"  class="error " data-required="true">
                         <option value="">Selecione</option>
                         {% for k in arr_SearchConvenio %}
                         <option value="{{ k.id }}">{{ k.nome_conv }}</option>
                         {% endfor %}
                      </select>
+                  </div>
+                  <div id="empresa" class="input-field col m2 s12" style="display: none;">
+                     <input readonly="readonly" style="color: black;"  id="company" type="text">
+                     <label for="company">
+                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Relação:</label>
                   </div>
                </div>
             </div>
@@ -207,7 +212,7 @@ Acompanhe as últimas notícias!
                         </select>
                      </div>
                   </div>
-                  <div id="conv2" class="input-field col m3 s12" style="display: none; margin-top: 0px;">
+                  <div id="conv2" class="input-field col m4 s12" style="display: none; margin-top: 0px;">
                      <span>Convênio:</span>
                      <select name="select" id="conv_medico_new"  class="error" data-required="true">
                         <option value="">Selecione</option>
@@ -331,7 +336,7 @@ Acompanhe as últimas notícias!
 
    
 
-      
+// cadastrar paciente lead
 function CadastrePatient() {
 
    var select_leads = $("#select_leads").val();
@@ -353,6 +358,8 @@ function CadastrePatient() {
    var obs = $("#obs").val();
    var login = $("#login").val();
    var senha = $("#senha").val();
+
+   var company = $("#company").val();
 
    var anoNasc = document.getElementById("date_nasc").value.split("-")[0];
    var data = new Date();
@@ -414,6 +421,7 @@ function CadastrePatient() {
          "obs": obs,
          "login": login,
          "senha": senha,
+         "company": company,
       };
 
       $("#btn_cadastrar").attr("disabled", true);
@@ -493,6 +501,7 @@ $("#select_leads").change(function(){
       "email": object.data("email"),
       "tel1": object.data("phone"),
       "tel2": object.data("phone_aux"),
+      "company": object.data("company"),
      
    }
        
@@ -509,6 +518,7 @@ $("#select_leads").change(function(){
          }); 
          $("#resp").show();
          $("#conv").show();
+         $("#empresa").show();
       
 
    var conv_medico = $("#conv_medico").val();
@@ -651,7 +661,6 @@ function CadastrePartients_NewRegis(){
          location.reload();
    }else{
       alert(re["message"]);
-      console.log("n foi")
 
       $("#btn_cadastrar_new").attr("disabled", false);
 
@@ -666,7 +675,7 @@ function SelectShow() {
   var show = $("#doctor_new").val();      
   var conevnio = $("#conv2").val();      
       if(show != ""){
-       $("#conv2").css("display", "block");
+       $("#conv2, #empresa2").css("display", "block");
       }
      if (conevnio != ""){
       $("#btn_cadastrar_new").attr("disabled", true);

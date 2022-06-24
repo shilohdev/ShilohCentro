@@ -756,11 +756,17 @@ function searchPatients(object){
 //FUNCTION CONCLUIR
 function StatusIniciarColeta(e){ 
    var id = $(e).data("id");
+   var convenio = $("#tp_conv").val();
+   var agendamento = $("#date_age").val();
+   
    
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id": id,
+      "convenio": convenio,
+      "agendamento": agendamento,
 }
+
    fetchRequest("{% url 'ApiIniciarColeta' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
    
       //"true" -> STRING

@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/manage/cadastrar/user/', views.ApiCadastreUser, name='ApiCadastreUser'),
 
     #API CADASTRAR PARCEIROS
-    path('api/manage/cadastrar/parceiros/', views.ApiCadastrePartners, name='ApiCadastrePartnes'),
+    path('api/manage/cadastrar/parceiros/', views.ApiCadastrePartners, name='ApiCadastrePartners'),
     path('api/manage/cadastrar/parceiros/cancel', views.PrePartnerCancel, name='PrePartnerCancel'),
 
     #CADASTRAR INDICAÇÃO

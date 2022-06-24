@@ -355,7 +355,11 @@ def listIndicationViews(request):
     SsearchConvenio =  searchConvenio(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
     ViewFoto = FilePhotoViewFunction(request)
-    return render(request, 'manage/listers/indication/listIndication.html', {"arr_ViewFoto": ViewFoto,"arr_SearchIndication": SsearchIndication, "arr_SearchConvenio": SsearchConvenio, "arr_SearchTypeAnexo": SearchTypeAnexo,})
+    return render(request, 'manage/listers/indication/listIndication.html', 
+    {"arr_ViewFoto": ViewFoto,
+    "arr_SearchIndication": SsearchIndication, 
+    "arr_SearchConvenio": SsearchConvenio, 
+    "arr_SearchTypeAnexo": SearchTypeAnexo,})
 
 
 
@@ -566,13 +570,13 @@ def RefundCompletedViews(request):
 #INDIVIDUAL, MEUS REGISTROS
 def ListerPatientsUnitViews(request): #PACIENTES
     SsearchConvenio =  searchConvenio(request)
-    SsearchIndication = searchPatientsUnit(request)
+    SsearchIndicationUnit = searchPatientsUnit(request)
     ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'myRegisters/lister/patientsUnit.html', 
     {"arr_ViewFoto": ViewFoto,
     "arr_SearchConvenio": SsearchConvenio,
-    "arr_SearchIndication": SsearchIndication,
+    "arr_SearchIndication": SsearchIndicationUnit,
     })
     
 

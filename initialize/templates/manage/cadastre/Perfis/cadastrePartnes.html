@@ -29,8 +29,31 @@ Acompanhe as últimas notícias!
 </div>
 <div class="container">
    <div class="card" >
+      <div class="row">
+         <div class="container">
+            <div class="col s12 m12 m-b10" style="padding-left: 10px;">
+               <div class="active">
+                  <div class="collapsible-header col m6 s12 " style="height: 40px; margin-top: 10px; background-color: #581848; color: white;" tabindex="0">
+                     <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Selecione:</labe>
+                  </div>
+               </div>
+            </div>
+            <div class=" col s3 m3 mb-5" style="margin-top: 30px;">
+               <label>
+               <input id="shiloh_lab" value="1" class="with-gap" type="radio" name="option" />
+               <span style="padding-left: 25px;">ShilohLab</span>
+               </label>
+            </div>
+            <div class="container col s3 m3" style="margin-top: 30px;">
+               <label>
+               <input id="lab_movel" value="2" class="with-gap" type="radio" name="option" />
+               <span style="padding-left: 25px;">LabMovel</span>
+               </label>
+            </div>
+         </div>
+      </div>
          <!-- Externo -->
-      <div id="userint" class="row" >
+      <div id="card_partnerss" class="row"  style="display: none;">
         <div class="col s12 s12"  style="margin-top: 0px;">
           <div class="input-field col m6 s12">
              <input id="name" type="text" class="upper">
@@ -214,25 +237,33 @@ function SelectShow() {
    function CadastrePartners(){
 
       //VALIDAÇÃO DE CAMPO NULL  
-   var i = 0;
-      $("#userint input[data-required='true']").each(function(){
-      if($(this).val() == ""){
-         alert("Preencha os campos obrigatórios.");
-         $(this).focus();
-         i = 1;
+      var i = 0;
+         $("#card_partnerss input[data-required='true']").each(function(){
+         if($(this).val() == ""){
+            alert("Preencha os campos obrigatórios.");
+            $(this).focus();
+            i = 1;
+            return false;
+         }
+      });
+      if(i == 1){
          return false;
       }
-   });
-   if(i == 1){
-      return false;
-   }
+      
+      shiloh = $("#shiloh_lab").prop("checked")
+      movel = $("#lab_movel").prop("checked")
 
-
+      if (shiloh){
+         empresa = shiloh = $("#shiloh_lab").val()
+      }else{
+         empresa = movel = $("#lab_movel").val()
+      }
 
       //validação dofinanceiro
       var val_p_fixo = $("#val_p_fixo").val();
       var checkbox_porcentagem = $("#val_p").val();
       var checkbox_fixo = $("#val_fixo").val();
+
       if(val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo ==""){
          alert("Por favor, insira um valor válido ao Financeiro.")
          return false
@@ -242,6 +273,7 @@ function SelectShow() {
          var val_p_fixo = $("#val_p_fixo").val();
          var checkbox_porcentagem = $("#val_p").val();
          var checkbox_fixo = $("#val_fixo").val();
+
          var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 
             "categoria": $('#categoria').val(), 
             "name": $('#name').val(),
@@ -261,13 +293,17 @@ function SelectShow() {
             "padrao": val_p_fixo,
             "porcentagem": checkbox_porcentagem,
             "fixo": checkbox_fixo,
+            "empresa": empresa,
+
             };
             console.log(btncadastrar)
 
-         fetchRequest("{% url 'ApiCadastrePartnes' %}", "POST", "JSON", btncadastrar, function(re){
+         fetchRequest("{% url 'ApiCadastrePartners' %}", "POST", "JSON", btncadastrar, function(re){
             if(re["response"] == "true"){
                alert(re["message"]);
                $("#btn_cadastrar").attr("disabled", true);
+               $("#btn_precadastro").attr("disabled", true);
+
                location.reload();
             }   
          });
@@ -364,6 +400,13 @@ function SelectShow() {
    var end_state = $("#uf").val("");
    }
 
+         
+//APARECE CARD
+$(".with-gap").click(function() {
+   $("#card_partnerss").show();
+
+});
+
 
    function CadastrePrePartners(){
 
@@ -384,7 +427,19 @@ function SelectShow() {
       var padrao = $('#val_p_fixo').val();
       var porcentagem = $('#val_p').val();
       var fixo = $('#val_fixo').val();
-      
+      var shiloh = $('#shiloh_lab').val();
+      var movel = $('#lab_movel').val();
+
+      shiloh = $("#shiloh_lab").prop("checked")
+      movel = $("#lab_movel").prop("checked")
+
+      if (shiloh){
+         empresa = shiloh = $("#shiloh_lab").val()
+      }else{
+         empresa = movel = $("#lab_movel").val()
+      }
+
+
       if(name == "" || tel1 == ""){
          alert("Preencha os campos obrigatórios.");
          $("#btn_precadastro").attr("disabled", false);
@@ -410,22 +465,21 @@ function SelectShow() {
          "padrao": padrao,
          "porcentagem": porcentagem,
          "fixo": fixo,
+         "empresa": empresa,
       };
       
       fetchRequest("{% url 'ApiCadastrePrePartners' %}", "POST", "JSON", btnprecadastro, function(re){
          if(re["response"] == "true"){
             $("#btn_precadastro").attr("disabled", true);
+            $("#btn_cadastrar").attr("disabled", true);
             alert(re["message"]);
             location.reload();
          }
       });
    }
 };
-         
-            
-           
-      
 
-   </script>
+
+</script>
 
 {% endblock %}
