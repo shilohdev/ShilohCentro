@@ -987,12 +987,12 @@ def TabelaPartnersUnit(request):
                 "message": "Login expirado, faça login novamente para continuar."
             }
 
-        query= "SELECT  a.id, a.nome, c.categoria, a.rn, a.status, rc.nome, a.data_regis FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id WHERE a.resp_comerce LIKE %s ORDER BY a.status DESC"
+        query= "SELECT  a.id, a.nome, c.categoria, a.rn, a.status, rc.nome, a.data_regis, comp.company FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id INNER JOIN auth_users.company_lab comp ON a.company = comp.id WHERE a.resp_comerce LIKE %s ORDER BY a.status DESC"
         params = (id_usuario,)
         cursor.execute(query, params)
         dados = cursor
         array = []
-        for id, nome, categoria, rn, status, resp_comercial, data_cad in dados:
+        for id, nome, categoria, rn, status, resp_comercial, data_cad, company in dados:
             newinfoa = ({
                 "id": id,
                 "nome": nome,
@@ -1001,6 +1001,7 @@ def TabelaPartnersUnit(request):
                 "status": status,
                 "data_cad": convertDate(data_cad),
                 "rn": rn,
+                "company": company,
                 "btn_status": "#76c076da" if status.upper() == "ATIVO" else "#c74d4d"
 
                 })
