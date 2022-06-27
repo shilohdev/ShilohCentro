@@ -366,6 +366,15 @@ function CadastrePatient() {
    var anoatual = data.getFullYear()
    var Calc = (anoatual - anoNasc)
 
+   //VALIDAÇÃO DE CAMPO EMAIL
+            
+   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+   if(!filter.test(email) && email != ""){
+      alert('Insira um email válido.');
+      $("#email").focus(); 
+      return false;
+   } 
+
    if (conv_medico == '') {
       alert("Selecione um convênio válido.")
       $("#conv_medico").focus();
@@ -382,7 +391,7 @@ function CadastrePatient() {
    if (cpf == "" && Calc >= 10) {
       $("#cpf").attr("class", "data-required='true'");
       alert("CPF obrigatório acima de 10 anos.")
-      console.log(cpf)
+
       return false
    } else {
       //VALIDAÇÃO DE CAMPO NULL
@@ -596,6 +605,16 @@ function CadastrePartients_NewRegis(){
    var anoatual = data.getFullYear()
    var Calc = (anoatual - anoNasc)
    
+   //VALIDAÇÃO DE CAMPO EMAIL
+            
+   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+   if(!filter.test(email) && email != ""){
+      alert('Insira um email válido.');
+      $("#email").focus();
+      return false;
+   }
+
+
    if(conv_medico == ''){
       alert("Selecione um convênio válido.")
       $("#conv_medico_new").focus();
@@ -612,7 +631,6 @@ function CadastrePartients_NewRegis(){
    if (cpf == "" && Calc >= 10 ){
       $("#cpf_new").attr("class", "data-required='true'");
       alert("CPF obrigatório acima de 10 anos.")
-      console.log(cpf)
       return false
    }
    else{
@@ -650,20 +668,16 @@ function CadastrePartients_NewRegis(){
       "login": login,
       "senha": senha,
       };
-      console.log(btncadastrar)
-
       $("#btn_cadastrar_new").attr("disabled", true);
 
    fetchRequest("{% url 'ApiNewRegisPatient' %}", "POST", "JSON", btncadastrar, function(re){
    if(re["response"] == true){
-         console.log("foi")
+      $("#btn_cadastrar_new").attr("disabled", true);
          alert(re["message"]);
          location.reload();
    }else{
       alert(re["message"]);
-
       $("#btn_cadastrar_new").attr("disabled", false);
-
    } 
    });
 }

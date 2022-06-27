@@ -363,7 +363,7 @@ function searchMonth() {
    };
    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
       var dados = re["table"]
-      console.log(dados)
+
       if (dados == ""){
          var appende = ' <tr> <td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
          
@@ -548,7 +548,7 @@ function removeFile(object) {
    var id_partners = $(object).data("id_partners");
    var name_file = $(object).data("name");
    var type_file = $(object).data("type");
-   console.log(name_file)
+
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "name_file": name_file,
@@ -569,9 +569,8 @@ function removeFile(object) {
 function viewFile(object) {
    var path = $(object).data("path");
    var filename = $(object).data("name");
-   console.log(path)
-   console.log(filename)
    var a = document.createElement("a");
+
    a.href = "/docs/" + path;
    a.download = filename;
    document.body.appendChild(a);
@@ -581,7 +580,7 @@ function viewFile(object) {
 
 function viewAgenModal(object) {
    var id_user = $(object).data("id_user");
-   console.log(id_user)
+
    var month = $("#mes_search").val();
 
    var formpost = {
@@ -695,7 +694,7 @@ function viewAgenModal(object) {
          var docs = dados["docs"];
          div = ""
          div2 = ""
-         console.log(docs)
+
          if (docs.length > 0) {
             $.map(docs, function (n, i) {
                $("#docss").css("display", "block");
@@ -794,7 +793,7 @@ function GetFile(object) {
    var month = $("#mes_search").val();
 
    var files = $("#doc_anx").val();
-   console.log(files)
+
 
    if (files == "" || ($("#doc_anx").prop("files") == undefined)) {
       alert("Por favor, insira a Nota Fiscal para esse mês.")
@@ -820,7 +819,7 @@ function GetFile(object) {
             "value": month
          },
       ];
-      console.log(files)
+
       fetchRequestFiles("{% url 'ApiNfPartners' %}", "POST", "JSON", formpost, function (re) {
          if (re["response"] == false) {
             alert("Nenhum dado encontrado.");

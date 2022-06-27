@@ -927,7 +927,7 @@ function UpdateModal(object) {
                 "value": JSON.stringify(formpost2)
             },
         ];
-            console.log(formpost)
+
         fetchRequestFiles("{% url 'SaveEditionsFinances' %}", "POST", "JSON", formpost, function(re) {
             if (re["response"] == false) {
                 alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE

@@ -563,7 +563,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
             //AQUI INICIA FUNCTION APPEND FILE
             var ap = "";
             var filesResponse = JSON.parse(re["message"]["filesInt"]);
-            console.log(filesResponse)
+
             $.map(filesResponse, function(n, i) {
                 ap += `
                   <tr>
@@ -642,7 +642,7 @@ function removeFileExists(object){
 function checkAnexo(){
    var objectFile = $("#doc_anx");
    var typeFile = $("#tp_anx");
-   console.log(objectFile.val());
+
    if(objectFile.val() != "" && typeFile.val() != ""){
       var nameFile = ($(objectFile)[0].files[0]).name;
       var typeFile = $("#tp_anx option:selected").text();
@@ -683,7 +683,7 @@ function changeUserModal(object) {
     var statusProgresso = $("#statusProgresso").val();
     var obsF = $("#obsF").val();
     var files = $("#doc_anx")[0].files[0];
-    console.log(porcentagem)
+
     if ($("#doc_anx").val() != "") {
         if ($("#doc_anx").prop("files") != undefined) {
             if ($("#tp_anx").val() == "") {
@@ -712,7 +712,7 @@ function changeUserModal(object) {
         "statusProgresso": statusProgresso,
         "obsF": obsF,
     };
-    console.log(formpost2)
+
     //data.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
 
     var formpost = [{
@@ -837,7 +837,7 @@ function FinalizeProcess(object) {
     var date_repass = $("#date_repass").val();
     var date_age = $("#date_age").val();
     var tp_exame = $("#tp_exame").val();
-    console.log(date_age)
+
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user, //DICT COM O VALOR DO ID
@@ -851,7 +851,7 @@ function FinalizeProcess(object) {
         "tp_exame": tp_exame,
         
     };
-    console.log(id_user)
+
     fetchRequest("{% url 'ApiFinalizeProcess' %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == "true") {
             alert(re["message"]);

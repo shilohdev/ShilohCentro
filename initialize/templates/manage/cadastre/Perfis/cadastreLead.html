@@ -198,20 +198,21 @@ function SelectShow() {
          var obs = $("#obs").val();
          var teste = $('#combo').val();
          var teste2 = $('.checkgroup').val();
-         console.log(name)
-   //VALIDAÇÃO DE CAMPO NULL
-   var i = 0;
-   $("#userint input[data-required='true']").each(function(){
-      if($(this).val() == ""){
-         alert("Preencha os campos obrigatórios.");
-         $(this).focus();
-         i = 1;
-         return false;
-      }
-   });
-   if(i == 1){
-      return false;
-   }
+
+
+         //VALIDAÇÃO DE CAMPO NULL
+         var i = 0;
+         $("#userint input[data-required='true']").each(function(){
+            if($(this).val() == ""){
+               alert("Preencha os campos obrigatórios.");
+               $(this).focus();
+               i = 1;
+               return false;
+            }
+         });
+         if(i == 1){
+            return false;
+         }
 
          
          var btncadastrar = {"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), 

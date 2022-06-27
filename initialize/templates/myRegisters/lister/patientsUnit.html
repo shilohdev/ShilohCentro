@@ -328,6 +328,16 @@ fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(r
 
 
 function changeUserModal(object){
+   email = $("#email").val()
+
+   //VALIDAÇÃO DE CAMPO EMAIL
+   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+   if(!filter.test(email) && email != ""){
+      alert('Insira um email válido.');
+      $("#email").focus();
+      return false;
+   }
+   
    $("#btn_atualizar").attr("disabled", true);   
 
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user

@@ -456,7 +456,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "porcentagem": key["dados"]["por_paga"],
 
             }
-            console.log(dictKeys)
+
             $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div

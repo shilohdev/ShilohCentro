@@ -291,10 +291,10 @@ function searchMonth() {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "month": month //DICT COM O VALOR DO ID
     };
-    console.log(month)
+
     fetchRequest("{% url 'SearchClosingIntFilter' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         var dados = re["message"];
-        console.log(dados) 
+
         var restable = !dados.length;
         if  (restable === true){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
             $("#tb_append2").html("");
@@ -337,7 +337,7 @@ function viewAgenModal(object){
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user ,
     };
-    console.log(id_user)
+
     $("#modal2").hide();
     $(object).prop("disabled", true);
     fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
@@ -432,7 +432,7 @@ function PartnersPago(object) {
         "id_user": id_user, //DICT COM O VALOR DO ID
         
     };
-    console.log(formpost)
+
     fetchRequest("{% url 'payCommercial' %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == "true") {
             alert(re["message"]);
@@ -467,7 +467,7 @@ function SearchInfo(object) { //FUNCTION DO ONCLICK
                 "status_pagamento": key["teste"]["status_pagamento"],
 
             }
-            console.log(dictKeys)
+
             $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
                 $(`#${i}`).val(n);
                 var findLabel = $(`#${i}`).closest("div");
@@ -511,7 +511,7 @@ function SearchInfo(object) { //FUNCTION DO ONCLICK
                 "status_pagamento": key["teste"]["status_pagamento"],
 
             }
-            console.log(dictKeys)
+
             $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
                 $(`#${i}`).val(n);
                 var findLabel = $(`#${i}`).closest("div");

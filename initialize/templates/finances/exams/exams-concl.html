@@ -515,6 +515,7 @@ Acompanhe as últimas notícias!
                                        <th data-field="id" style="text-align: center;">Data Coletado</th>
                                        <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
                                        <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
+                                       <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
                                        <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
                                        <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                                    </tr> 
@@ -526,6 +527,7 @@ Acompanhe as últimas notícias!
                                         <td style="text-align: center;">{{ k.dataconc }}</td>
                                         <td style="text-align: center;">{{ k.exame }}</td>
                                         <td style="text-align: center;">{{ k.unidade }}</td>
+                                        <td style="text-align: center;">{{ k.company }}</td>
                                         <td style="text-align: center;">{{ k.status_p }}</td>
                                        <td style="text-align: center;">
                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
@@ -816,7 +818,7 @@ function removeFileExists(object){
 
 //BTN ATUALIZAR - SALVAR
 function UpdateModal(object) {
-    console.log("passei aqui")
+
     var id_user = $(object).data("id_user");
     var cust_alv = $("#cust_alv").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");
     var val_w_lab = $("#val_w_lab").val().replace(",", "|").replace(".", "").replace("|", ".").replace("R$", "");

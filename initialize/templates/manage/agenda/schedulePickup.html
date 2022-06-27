@@ -317,13 +317,14 @@ $(".select2").select2({
                "val_pago": $('#val_pago').val(),
                "obs": $('#obs').val(),
                };
-               console.log(btncadastrar)
-         fetchRequest("{% url 'ApiSchedulePickup' %}", "POST", "JSON", btncadastrar, function(re){
+
+               fetchRequest("{% url 'ApiSchedulePickup' %}", "POST", "JSON", btncadastrar, function(re){
                if(re["response"] == "true"){
                   alert(re["message"]);
                   location.reload();
-            }else{
-               $("#btn_cadastrar").attr("disabled", false);
+            
+               }else{
+                  $("#btn_cadastrar").attr("disabled", false);
             }
          });
       }

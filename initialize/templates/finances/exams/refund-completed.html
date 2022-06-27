@@ -515,7 +515,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 
     // MODAL FINANCEIRO
     var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-    console.log(id_user)
+
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user //DICT COM O VALOR DO ID
@@ -542,7 +542,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "porcentagem": key["dados"]["por_paga"],
 
             }
-            console.log(dictKeys)
+
             $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
             $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
             var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
@@ -553,7 +553,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                var valueObject = $("#statusProgresso option:selected").text();
                var ob1 = $(`#${i}`).closest("div");
                var ob2 = ob1[0];
-               console.log(n);
+
                $(ob2).find("input").val(valueObject);
             }
                 
@@ -675,9 +675,8 @@ function searchMonth() {
         "data2": data2, //DICT COM O VALOR DO ID
         "statusProgressoF": statusProgressoF, //DICT COM O VALOR DO ID
     };
-    console.log(data1)
-    console.log(data2)
-    console.log(statusProgressoF)
+    
+
     fetchRequest("{% url 'SearchMonthExamsConcl' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         var dados = re["message"];
         $("#tb_append2").html("");

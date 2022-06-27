@@ -253,8 +253,8 @@ function searchMonth() {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "month": month //DICT COM O VALOR DO ID
     };
-    console.log(month)
 
+    
     fetchRequest("{% url 'SearchMonthClosingCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         var dados = re["message"]
         if (dados == false) {
@@ -282,8 +282,8 @@ function searchMonth() {
                     </tr>
                     `;
                 $("#tb_appendTable").append(a);
-            console.log(dados)    
 
+                
             var dados = re["messages"];
             $("#valF").html(""); 
             $("#val1").hide();
@@ -392,10 +392,7 @@ function viewAgenModal(object){
             `;
             $("#pago").append(a);
         });
-        console.log("pagos>>")
-        console.log(dados)
-
-
+        
     
         var dados = re["messageCount"];
         $("#Count").html("");

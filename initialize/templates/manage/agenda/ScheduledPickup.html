@@ -495,14 +495,12 @@ function filterAgenda() {
       "search": JSON.stringify(searchFileds)
    };
 
-   console.log(formpost);
    fetchRequest("{% url 'ApiScheduledPickup' %}", "POST", "JSON", formpost, function(re) {
       if (re["response"] == false) {
          alert(re["message"]);
       } else {
          $("#tb_append").html("");
          var dados = re["message"];
-         console.log(dados);
          for(k in dados){
                var key = dados[k];
                var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["tel"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
@@ -541,7 +539,6 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
    
 	var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
 	//$("#btn_atualizar").data("id_user", id_user); // att status
-   console.log(id_user)
 
 	var formpost = {
 		"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -799,7 +796,7 @@ function ReagendarAge(e){
       "motivo_status": motivo_status,
       "nurse": nurse,
 }
-console.log(formpost)
+
  
    fetchRequest("{% url 'ApiReagendarAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
       //"true" -> STRING

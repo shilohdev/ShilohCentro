@@ -298,8 +298,8 @@ $(document).ready(function() {
 //MAP 
 function viewAgenModal(object) {
     var id_user = $(object).data("id_user");
-    console.log(id_user)
 
+    
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user
@@ -330,7 +330,7 @@ function viewAgenModal(object) {
                 "perfil": key["obs"]["perfil"],
 
             }
-            console.log(dictKeys)
+
             $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
                 $(`#${i}`).val(n); // n simboliza o valor e i simboliza a key
                 var findLabel = $(`#${i}`).closest("div"); // essa variavel serve para procurar um valor e atribuir o módulo closest div
@@ -508,8 +508,8 @@ function ReagendarAge(e) {
         "obs": obs,
         "motivo_status": motivo_status,
     }
-    console.log(formpost)
 
+    
     fetchRequest("{% url 'ApiReagendarAgendaConc' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
         //"true" -> STRING
         //true -> BOOLEAN
@@ -528,7 +528,7 @@ function searchMonth() {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "month": month //DICT COM O VALOR DO ID
     };
-    console.log(month)
+
     fetchRequest("{% url 'ScheduledMonthIntViews' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
         var dados = re["message"];
         $("#tb_append").html("");

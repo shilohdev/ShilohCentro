@@ -202,8 +202,8 @@ Realize um agendamento
                "unity": $('#unity').val(),
                "obs": $('#obs').val(),
                };
-               console.log(unity)
-               console.log(perfil)
+               
+               
          fetchRequest("{% url 'ApiSchedulePickupInt' %}", "POST", "JSON", btncadastrar, function(re){
                if(re["response"] == "true"){
                   alert(re["message"]);

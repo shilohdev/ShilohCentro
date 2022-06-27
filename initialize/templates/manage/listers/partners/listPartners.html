@@ -362,12 +362,9 @@ function PesquisarFilter() {
    };
    fetchRequest("{% url 'ApiListPartnes' %}", "POST", "JSON", formpost, function (re) {
       var dados = re["message"];
-      console.log(dados);
       $("#tb_append").html("");
       for (k in dados) {
          var key = dados[k];
-         console.log(k);
-         console.log(key);
          var append = '<tr> <td>' + key["nome"] + '</td> <td style="text-align: center;">' + key["categoria"] + '</td> <td style="text-align: center;">' + key["unity"] + '</td> <td style="text-align: center">' + key["status"] + '</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="' + key["id"] + '" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button> </a> <button id="btn_status_' + key["id"] + '" onclick=\"changeStatusUser(this)\" data-id_user="' + key["id"] + '" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: ' + key["btn_status"] + ';"><i class="material-icons right">check</i> </button> </td> </tr>'
 
          $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
@@ -500,6 +497,17 @@ function changeStatusUser(object) {
 
 
 function updateModal(object) {
+      email = $("#email").val()
+
+      //VALIDAÇÃO DE CAMPO EMAIL
+      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+      if(!filter.test(email) && email != ""){
+         alert('Insira um email válido.');
+         $("#email").focus();
+         return false;
+      }
+
+   
    $("#btn_atualizar").attr("disabled", true);
 
    var val_p_fixo = $("#val_p_fixo").val();
@@ -508,9 +516,6 @@ function updateModal(object) {
    var NewComerce = $("#nome_commerce").val();
    var oldCommerce = $("#old_commerce").val();
 
-   console.log(val_p_fixo)
-   console.log(checkbox_porcentagem)
-   console.log(checkbox_fixo)
 
    if (NewComerce == "") {
       NewComerce = oldCommerce
@@ -537,7 +542,6 @@ function updateModal(object) {
       $("#modalint input, #modalint select").each(function () {
          formpost[$(this).attr("id")] = $(this).val();
       });
-      console.log(formpost)
       fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
          if (re["response"] == false) {
             alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE

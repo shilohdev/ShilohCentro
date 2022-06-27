@@ -299,19 +299,15 @@ $('#modal1').modal('open');
 function PesquisarFilter() {
 
 var Stp_perfil = $("#tp_user").val();
-console.log(Stp_perfil)
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "Stp_perfil": Stp_perfil,   
    };    
    fetchRequest("{% url 'ApiListUsers' %}", "POST", "JSON", formpost, function(re) {
       (dados = re["message"])
-         console.log(dados);
       var exibir= $("#tb_append").html(" ");
       for (k in dados) {
          var key = dados[k];
-         console.log(k);
-         console.log(key);
          var append = '<tr id="tr_'+key["id"]+'"> <td> '+ key["nome"] +' </td> <td style="text-align: center;"> '+ key["descriptions"] +' </td> <td style="text-align: center;"> '+ key["unity"] +' </td> <td style="text-align: center;"> '+ key["status"] +' </td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" > <button onclick=\"viewUserModal(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button></a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
          $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
          
@@ -321,7 +317,6 @@ console.log(Stp_perfil)
             var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append").append(appende); 
             }
-      console.log(teste)
    });
 
 }

@@ -1325,17 +1325,18 @@ def searchIndication(request):
             request.user.username,
         )
 
-        query= "SELECT a.id_p, a.nome_p, b.nome, c.unit_s  FROM customer_refer.patients a INNER JOIN auth_users.users b ON a.medico_resp_p = b.id INNER JOIN admins.units_shiloh c ON a.unity_p = c.id_unit_s" #cortei  WHERE b.login LIKE %s
+        query= "SELECT a.id_p, a.nome_p, b.nome, c.unit_s, comp.company FROM customer_refer.patients a INNER JOIN auth_users.users b ON a.medico_resp_p = b.id INNER JOIN admins.units_shiloh c ON a.unity_p = c.id_unit_s INNER JOIN auth_users.company_lab comp ON a.company_p = comp.id" #cortei  WHERE b.login LIKE %s
         cursor.execute(query, )
         dados = cursor.fetchall()
         array = []
             
-        for id, nome, medico_resp, unity in dados:
+        for id, nome, medico_resp, unity, company in dados:
             newinfoa = ({
                 "nome": nome,
                 "id": id,
                 "medico_resp": medico_resp,
                 "unity": unity,
+                "company": company,
                 })
             array.append(newinfoa)
 
@@ -1561,13 +1562,13 @@ def ApiViewDataPatientsModalFunction(request):
         }
 
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "customer_refer.patients a INNER JOIN admins.health_insurance b ON b.id = a.convenio_p INNER JOIN auth_users.users d ON a.medico_resp_p = d.id INNER JOIN auth_users.users e ON a.atendente_resp_p = e.id" #VAR COM CONEEXAO TABLE
+    db.table = "customer_refer.patients a INNER JOIN admins.health_insurance b ON b.id = a.convenio_p INNER JOIN auth_users.users d ON a.medico_resp_p = d.id INNER JOIN auth_users.users e ON a.atendente_resp_p = e.id INNER JOIN auth_users.company_lab comp ON a.company_p = comp.id" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE a.id_p = %s" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
-    dados = db.fetch(["a.id_p, a.id_l_p, a.cpf_p, a.nome_p, a.email_p, a.data_nasc_p, a.tel1_p, a.tel2_p, a.cep_p, a.rua_p, a.numero_p, a.complemento_p, a.bairro_p, a.cidade_p, a.uf_p, b.id, d.nome, e.nome, a.obs, a.login_conv, a.senha_conv"], True)
+    dados = db.fetch(["a.id_p, a.id_l_p, a.cpf_p, a.nome_p, a.email_p, a.data_nasc_p, a.tel1_p, a.tel2_p, a.cep_p, a.rua_p, a.numero_p, a.complemento_p, a.bairro_p, a.cidade_p, a.uf_p, b.id, d.nome, e.nome, a.obs, a.login_conv, a.senha_conv, comp.company"], True)
    
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for id_p, id_l_p, cpf_p, nome_p, email_p, data_nasc_p, tel1_p, tel2_p, cep_p, rua_p, numero_p, complemento_p, bairro_p, cidade_p, uf_p, id, nome_m, nome_a, obs_a, login_a, senha_a  in dados:
+        for id_p, id_l_p, cpf_p, nome_p, email_p, data_nasc_p, tel1_p, tel2_p, cep_p, rua_p, numero_p, complemento_p, bairro_p, cidade_p, uf_p, id, nome_m, nome_a, obs_a, login_a, senha_a, company in dados:
             dict_response = { #VARIAVEL COM OS DICTS
                 "id_p": id_p,
                 "id_lead": id_l_p,
@@ -1593,7 +1594,8 @@ def ApiViewDataPatientsModalFunction(request):
                 "med": {
                     "conv": id,
                     "name_doctor": nome_m,
-                    "name_responsable": nome_a 
+                    "name_responsable": nome_a ,
+                    "company": company,
                     },
                 "obs": {
                     "obs": obs_a,
@@ -2143,13 +2145,13 @@ def searchConcluidosF(request):
             }
 
         if perfil == "1":
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, comp.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p INNER JOIN auth_users.company_lab comp ON pa.company_p = comp.id WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query)
             dados = cursor
 
             array = []
 
-            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente in dados:
+            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente, company in dados:
                 newinfoa = ({
                     "id": id_agendamento,
                     "paciente": nome_paciente,
@@ -2159,16 +2161,17 @@ def searchConcluidosF(request):
                     "unidade": unidade,
                     "id_unidade": id_unidade,
                     "regis": regis,
+                    "company": company,
                     })
                 array.append(newinfoa)
 
         else:
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p, comp.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p INNER JOIN auth_users.company_lab comp ON pa.company_p = comp.id WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query, (unityY,))
             dados = cursor
             array = []
                 
-            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente in dados:
+            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente, company in dados:
                 newinfoa = ({
                     "id": id_agendamento,
                     "paciente": nome_paciente,
@@ -2178,6 +2181,7 @@ def searchConcluidosF(request):
                     "unidade": unidade,
                     "id_unidade": id_unidade,
                     "regis": regis,
+                    "company": company,
                     })
                 array.append(newinfoa)
 

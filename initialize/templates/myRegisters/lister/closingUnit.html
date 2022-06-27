@@ -231,53 +231,6 @@ function searchPatients(object) {
         });
     }
 }
-/*
-function searchMonth() {
-    var data1 = $("#data1").val();
-    var data2 = $("#data2").val();
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "data1": data1, //DICT COM O VALOR DO ID
-        "data2": data2 //DICT COM O VALOR DO ID
-    };
-    console.log(month)
-    fetchRequest(" # ", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-        var dados = re["message"];
-        console.log(dados)
-        var restable = !dados.length;
-        console.log(teste)
-        if  (restable === true){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-            $("#pago").html("");
-            var appende = ' <tr> <td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
-               $("#pago").append(appende); 
-               }
-        else{
-             $("#pago").html("");
-        $.map(dados, function(n, i) {
-            var a = `
-                <tr id="tr_${n.id}">
-                            <td style="text-align: center;">${n.nome} </td>
-                            <td style="text-align: center;">${n.status}</td>
-                            <td style="text-align: center;">${n.valor}</td>s
-                            <td style="text-align: center;">
-                                <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick="viewAgenModal(this)">
-                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                                </a>
-                            </td>
-                        </tr>
-                        `;
-                    $("#tb_append2").append(a);
-                });          
-              
-        }
-    });
-}
-
-$("#pesq_agenda").click(function() {
-    searchMonth();
-});
-
-*/
 
 </script>
 {% endfor %}

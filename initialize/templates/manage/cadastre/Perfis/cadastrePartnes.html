@@ -58,7 +58,7 @@ Acompanhe as últimas notícias!
           <div class="input-field col m6 s12">
              <input id="name" type="text" class="upper">
              <label for="name">
-             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento<span style="color: red;">*</span></label>
+             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Completo<span style="color: red;">*</span></label>
           </div>
           <div class="input-field col m2 s12">
             <input id="rn" type="text" >
@@ -235,6 +235,15 @@ function SelectShow() {
    
    
    function CadastrePartners(){
+      email = $("#email").val()
+
+      //VALIDAÇÃO DE CAMPO EMAIL
+      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+      if(!filter.test(email) && email != ""){
+         alert('Insira um email válido.'); 
+         $("#email").focus(); 
+         return false;
+      }
 
       //VALIDAÇÃO DE CAMPO NULL  
       var i = 0;
@@ -296,8 +305,6 @@ function SelectShow() {
             "empresa": empresa,
 
             };
-            console.log(btncadastrar)
-
          fetchRequest("{% url 'ApiCadastrePartners' %}", "POST", "JSON", btncadastrar, function(re){
             if(re["response"] == "true"){
                alert(re["message"]);
@@ -432,6 +439,16 @@ $(".with-gap").click(function() {
 
       shiloh = $("#shiloh_lab").prop("checked")
       movel = $("#lab_movel").prop("checked")
+
+      
+      //VALIDAÇÃO DE CAMPO EMAIL
+      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+      if(!filter.test(email) && email != ""){
+         alert('Insira um email válido.');
+         $("#email").focus();
+         return false;
+      }
+
 
       if (shiloh){
          empresa = shiloh = $("#shiloh_lab").val()

@@ -140,9 +140,6 @@ Acompanhe as últimas notícias!
    $("#tel2").mask("(99) 99999-9999");
    $("#zipcode").mask("99999-999");
 
-
-
-
    function SelectShow() {
       var show = document.getElementById("tp_perfil").value;
       $("#btn_cadastrar").attr("disabled", true);
@@ -154,7 +151,6 @@ Acompanhe as últimas notícias!
    }
 
    function CadastreUser() {
-
       var tp_perfil = $("#tp_perfil").val();
       var cpf = $("#cpf").val();
       var name = $("#name").val();
@@ -170,6 +166,14 @@ Acompanhe as últimas notícias!
       var city = $("#city").val();
       var uf = $("#uf").val();
       var unit = $("#unit").val();
+
+       //VALIDAÇÃO DO EMAIL
+       var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/;
+         if(!filter.test(email) && email != ""){
+            alert('Insira um e-mail válido.');  
+            return false;
+      }
+
 
       //VALIDAÇÃO DE CAMPO NULL
       var i = 0;

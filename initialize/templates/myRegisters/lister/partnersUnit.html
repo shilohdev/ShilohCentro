@@ -440,7 +440,6 @@ $(document).ready(function () {
 function viewUserModal(object) { //FUNCTION DO ONCLICK
    //para ter o data, precisa conter os seguintes parametros: elemento, key, value
    var id_user = $(object).data("id_user");
-   console.log(id_user)
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -583,8 +582,6 @@ function updatePartnersModal(object) {
       var porcentagem = $("#val_p").val();
       var fixo = $("#val_fixo").val();
 
-      console.log(id_user)
-
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
          "id_user": id_user,
@@ -660,7 +657,7 @@ function CadastrePartners(object) {
    } else {
 
       var id_user = $(object).data("id_user");
-      console.log(id_user)
+  
 
       var val_p_fixo = $("#val_p_fixo").val();
       var checkbox_porcentagem = $("#val_p").val();
@@ -688,9 +685,9 @@ function CadastrePartners(object) {
          "fixo": checkbox_fixo, 
          "id_user": id_user,
       };
+ 
 
-
-      fetchRequest("{% url 'ApiCadastrePartnes' %}", "POST", "JSON", btncadastrar, function (re) {
+      fetchRequest("{% url 'ApiCadastrePartners' %}", "POST", "JSON", btncadastrar, function (re) {
          if (re["response"] == "true") {
             alert(re["message"]);
             $("#btn_cadastrar").attr("disabled", true);
