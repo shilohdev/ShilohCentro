@@ -1003,8 +1003,8 @@ def TabelaPartnersUnit(request):
                 "rn": rn,
                 "company": company,
                 "btn_status": "#76c076da" if status.upper() == "ATIVO" else "#c74d4d"
-
                 })
+                
             array.append(newinfoa)
 
         return array
