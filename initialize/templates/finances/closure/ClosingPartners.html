@@ -149,9 +149,9 @@ Acompanhe as últimas notícias!
        </div>
     </div>
  </div>
- <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+ <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
     <!--FIM DO MODAL-->
-    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
        <div class="container">
           <div class="card">
              <div class="card-content" style="margin-top: -93px;">
@@ -595,7 +595,7 @@ function viewAgenModal(object) {
       if (re["response"] == false) {
          alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       
-      } else {
+      } else { 
          $("#modal2").show();
          var dados = re["message2"];
          $("#tb_naoAtingido").html("");

@@ -344,29 +344,22 @@ Acompanhe as últimas notícias!
        </div>
    </div>
    <div class="modal-footer">
-       <!--BUTTON-->
-       <div class="col s12 ">
-           <div class="col s8"></div>
-
-           <div class="col s2">
-               <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-
-           </div>
-           <div class="col s2">
-               <button onclick="UpdateModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; ">
-                   <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">SALVAR</span>
-                </button>
-           </div>
-       </div>
-   </div>
+    <!--BUTTON-->
+        <div class="col s12 ">
+        <div class="col s12 m12 m12">
+            <a onclick="UpdateModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>      
+            <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
+        </div>
+        </div>
+    </div>
 </div>
 
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <!--FIM DO MODAL-->
-   <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+   <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
        <div class="container">
            <div class="card">
-               <div class="card-content" style="margin-top: -93px;">
+               <div class="card-content" style="margin-top: -40px;">
                    <h5 class="corfont">SOLICITAÇÕES DE REEMBOLSO</h5>
                </div>
            </div>
@@ -955,6 +948,8 @@ function CalVal(valor) {
 
 //FINALIZAR PROCESSO
 function FinalizeProcess(object) {
+    $("#btn_end").attr("disabled", true);
+
     //VALIDAÇÃO DE CAMPO NULL
     var i = 0;
     $("#cardFinance input[data-required='true']").each(function() {
@@ -1003,6 +998,8 @@ function FinalizeProcess(object) {
             location.reload();
         }else{
             alert(re["message"]);
+            $("#btn_end").attr("disabled", false);
+
         }
     });
 }

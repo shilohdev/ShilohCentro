@@ -153,31 +153,6 @@ Acompanhe as últimas notícias!
                      </div>
                   </div>
                </li>
-               <!--<li class="active" style="margin-top: 30px;" >
-                  <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
-                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS FINANCEIROS</labe>
-                  </div>
-                  <div class="row" >
-                     <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col s3">
-                           <input id="cust_alv" type="tel" placeholder="R$">
-                           <label for="cust_alv">
-                           <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Custo Alvaro</label>
-                        </div>
-                        <div class="input-field col s3">
-                           <input id="val_w_lab" type="tel" placeholder="R$">
-                           <label for="val_w_lab">
-                           <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor WorkLab</label>
-                        </div>
-                        <div class="input-field col s3">
-                           <input id="val_pago" type="tel" placeholder="R$">
-                           <label for="val_pago">
-                           <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor Pago</label>
-                        </div>
-                     </div>
-                  </div>
-               </li>-->
-               
                <li class="active" style="margin-top: 30px;" >
                   <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
                      <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
@@ -209,25 +184,14 @@ Acompanhe as últimas notícias!
             </ul>
          </div>
          <!--BUTTON-->
-            <div class="col s2" >
-            </div>
-            <div class="col m8 s12 mt-2 mb-2">
-               <button id="btn_conc" onclick="StatusConc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #76c076da;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Concluir</span>
-               </button>
-               <button id="btn_reag"  onclick="ReagendarAge(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style=" margin-top: 10px; background-color: #ddc34eda;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Reagendar</span>
-               </button>
-               <button id="btn_frust"  onclick="StatusFrust(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #e97a1fda;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Frustrar</span>
-               </button>
-               <button id="btn_canc" onclick="StatusCanc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #c74d4d;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cancelar</span>
-               </button>
-            </div>
-            <div class="col s2" >
-            </div>
-
+         <div class="col s2" ></div>
+         <div class="col m8 s12 mt-2 mb-2">
+            <a id="btn_conc" onclick="StatusConc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #76c076da;">Concluir</a>
+            <a id="btn_reag"  onclick="ReagendarAge(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style=" margin-top: 10px; background-color: #ddc34eda;">Reagendar</a>
+            <a id="btn_frust"  onclick="StatusFrust(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #e97a1fda;">Frustrar</a>
+            <a id="btn_canc" onclick="StatusCanc(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="margin-top: 10px; background-color: #c74d4d;">Cancelar</a>
+         </div>
+         <div class="col s2" ></div>
       </div>
    </div>
    <div class="modal-footer">
@@ -240,12 +204,12 @@ Acompanhe as últimas notícias!
       </div>
    </div>
 </div>
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
-<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <div class="container">
       <div class="card" >
-         <div class="card-content" style="margin-top: -40px;">
+         <div class="card-content ">
             <h5 class="corfont">CONSULTAR AGENDAMENTOS</h5>
          </div>
       </div>
@@ -299,7 +263,7 @@ Acompanhe as últimas notícias!
                <div class="input-field col s2" >
                   <div class="select-wrapper"></div>
                </div>
-               <div class="col m6 s12" >&nbsp;
+               <div class="col m4 s12" >&nbsp;
                   <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
                   <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
                   </button>

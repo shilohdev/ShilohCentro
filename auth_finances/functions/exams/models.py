@@ -591,6 +591,7 @@ def FinalizeProcessFunction(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
+
         #atualização de status
         param = ( repasse, statusProgresso, date_create, id_usuario, id_agendamento,)
         query = "UPDATE `auth_finances`.`completed_exams` SET `data_repasse` = %s,  `status_exame_f` = %s, `data_final_f` = %s,  `resp_final_p_f` = %s, `regis` = '1' WHERE (`id_agendamento_f` = %s);"
@@ -599,7 +600,7 @@ def FinalizeProcessFunction(request):
         query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Finalizar Processo',  %s, 'Finalizou o processo de reembolso', %s);"
         params2 = (
             id_agendamento, nome, date_create, 
-        )
+        ) 
         cursor.execute(query2, params2)
 
 
@@ -650,36 +651,37 @@ def FinalizeProcessFunction(request):
                                     })
                                 array2.append(newinfoa)
                             
-                                if perfil == '7':
-                                    if val_porcentagem:
-                                    
-                                        val_porcentagem = float(val_porcentagem)
-                                        ValorPago = float(ValorPago)
-                                        porcentagem = float(val_porcentagem / 100) * float(ValorPago)
-                                        porcentagem = f'{porcentagem:.2f}'
-
-                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                                        val_comercial = float(porcentagem) * float(0.10)
-                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
-                                        cursor.execute(queryFinance, paramsFinance)
+                            if perfil == '7':
+                                if val_porcentagem:
                                 
-                                    elif val_padrao:
-                                        val_padrao = float(val_padrao)
-                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                                        val_comercial = float(val_padrao) * float(0.10)
-                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
-                                        cursor.execute(queryFinance, paramsFinance)
-                                    
-                                    else:
-                                        val_fixo = float(val_fixo)
-                                        queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                                        val_comercial = float(val_fixo) * float(0.10)
-                                        paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
-                                        cursor.execute(queryFinance, paramsFinance)
-                                else:
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
+                                    val_porcentagem = float(val_porcentagem)
+                                    ValorPago = float(ValorPago)
+                                    porcentagem = float(val_porcentagem / 100) * float(ValorPago)
+                                    porcentagem = f'{porcentagem:.2f}'
+
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    val_comercial = float(porcentagem) * float(0.10)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
                                     cursor.execute(queryFinance, paramsFinance)
+                            
+                                elif val_padrao:
+                                    val_padrao = float(val_padrao)
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    val_comercial = float(val_padrao) * float(0.10)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
+                                    cursor.execute(queryFinance, paramsFinance)
+                                
+                                else:
+                                    val_fixo = float(val_fixo)
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    val_comercial = float(val_fixo) * float(0.10)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
+                                    cursor.execute(queryFinance, paramsFinance)
+                            else:
+                                queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
+                                cursor.execute(queryFinance, paramsFinance)
+                    
                     else:
                         return {"message":"Insira Nota Fiscal."}
 
@@ -1393,11 +1395,10 @@ def fetchFilePartners(id):
 
 
 #TABELAS FECHAMENTO PARCEIROS - MODAL
-def searchNotAtingeClosingPartners(request):
+def searchClosingPartners(request):
     id_medico = request.POST.get('id_user')
     monthCount = request.POST.get('month')
     monthF = int(datetime.now().strftime("%m"))
-    
 
     files = fetchFilePartners(id_medico) #CHAMA A FUNÇÃO, LOCALIZA MEU DIRETÓRIO.
     with connections['auth_agenda'].cursor() as cursor:
@@ -1440,19 +1441,23 @@ def searchNotAtingeClosingPartners(request):
 
 
      
-        queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
+        queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s"
         if monthCount == "" or monthCount == None:
             cursor.execute(queryPago, (monthF, id_medico,))
+
         else:
             cursor.execute(queryPago, (monthCount, id_medico,))
+
         dados = cursor.fetchall()
         arrayPago = []
-        for idP, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
+        
+
+        for iDmedico, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
             valor_uniP = f"R$ {valor_uniP:_.2f}"
             valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
 
             newinfoa = ({
-                "idP": idP,
+                "iDmedico": iDmedico,
                 "pacienteP": pacienteP,
                 "dataColetaP": convertDate(dataColetaP),
                 "dataRepasseP": convertDate(dataRepasseP),
@@ -1462,11 +1467,12 @@ def searchNotAtingeClosingPartners(request):
             arrayPago.append(newinfoa)
 
 
-        queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s "
+        queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s "
         if monthCount == "" or monthCount == None:
             cursor.execute(queryCount, (monthF, id_medico,))
         else:
             cursor.execute(queryCount, (monthCount, id_medico,))
+        
         dados = cursor.fetchall()
         arrayPagoCount = []
         for contagem, valor in dados:

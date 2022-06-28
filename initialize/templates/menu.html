@@ -5,7 +5,7 @@
 {% block contentmenu %}
 
 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
-    <!-- Titulo -->
+    <!-- DASHBOARD --> 
     <li class="navigation-header" data-permission="dashboard_control">
         <a class="navigation-header-text">DASHBOARDS</a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
@@ -20,9 +20,7 @@
             </ul>
         </div>
     </li>
-
-
-
+    <!-- GESTÃO --> 
     <li class="navigation-header" data-permission="register">
         <a class="navigation-header-text">GESTÃO</a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
@@ -84,9 +82,21 @@
             </ul>
         </div>
     </li>
-    <!-- Titulo -->
+
+    <!--LEADS -->
+    <li data-chapter="main" data-permission="leads_all" style="display: none" class="navigation-header">
+        <a class="navigation-header-text">LEADS</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <ul data-chapter="view" data-permission="leads_all" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
+        <li>
+            <a href="{% url 'LeadsViews' %}"><i class="material-icons" style="font-size: 15px;">view_headline</i><span data-i18n="Range Slider">Leads</span></a>
+        </li>
+    </ul>
+    
+    <!-- ATENDIMENTO --> 
     <li class="navigation-header" data-permission="scheduled" data-chapter="main" style="display: none">
-        <a class="navigation-header-text">Atendimento </a>
+        <a class="navigation-header-text">ATENDIMENTO </a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
     </li>
     <li class="bold" data-permission="scheduled" data-chapter="main" style="display: none">
@@ -105,7 +115,7 @@
             </ul>
         </div>
     </li>
-    <!-- Titulo AQUI --> 
+    <!-- FINANCEIRO --> 
     <li class="navigation-header" data-permission="agend_reverse" data-chapter="main" style="display: none">
         <a class="navigation-header-text">FINANCEIRO</a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
@@ -145,34 +155,8 @@
             </ul>
         </div>
     </li>
-    <li data-permission="meus_registros" data-chapter="main" style="display: none" class="navigation-header">
-        <a class="navigation-header-text">MEUS REGISTROS</a>
-        <i class="navigation-header-icon material-icons">more_horiz</i>
-    </li>
-    <ul data-permission="meus_registros" data-chapter="main" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
-        <li data-chapter="view" data-permission="meus_registros_pacientes" style="display: none">
-            <a href="{% url 'ListerPatientsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
-        </li>
-        <li data-chapter="view" data-permission="meus_registros_parceiros" style="display: none">
-            <a href="{% url 'ListerPartnersUnitViews' %}"><i class="material-icons" style="font-size: 18px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
-        </li>
-        <li data-chapter="view" data-permission="meus_registros_indicacao" style="display: none">
-            <a href="{% url 'ListerIndicationsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
-        </li>
-        <li data-permission="meu_fechamento" data-chapter="view" style="display: none">
-            <a href="{% url 'ClosingFinanceUnit' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Financeiro</span></a>
-        </li>
-    </ul>
-    <li data-chapter="main" data-permission="leads_all" style="display: none" class="navigation-header">
-        <a class="navigation-header-text">LEADS</a>
-        <i class="navigation-header-icon material-icons">more_horiz</i>
-    </li>
-    <ul data-chapter="view" data-permission="leads_all" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
-        <li>
-            <a href="{% url 'LeadsViews' %}"><i class="material-icons" style="font-size: 15px;">view_headline</i><span data-i18n="Range Slider">Leads</span></a>
-        </li>
-    </ul>
 
+    <!--PROCEDIMENTO INTERNO-->
     <li class="navigation-header" data-permission="internal_procedure" data-chapter="main" style="display: none">
         <a class="navigation-header-text">PROCEDIMENTO INTERNO</a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
@@ -190,6 +174,26 @@
         </li>
         <li data-permission="reverse_finished_int" data-chapter="view" style="display: none">
             <a href="{% url 'RefundCompletedInterno' %}"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
+        </li>
+    </ul>
+
+    <!--MEUS REGISTROS-->
+    <li data-permission="meus_registros" data-chapter="main" style="display: none" class="navigation-header">
+        <a class="navigation-header-text">MEUS REGISTROS</a>
+        <i class="navigation-header-icon material-icons">more_horiz</i>
+    </li>
+    <ul data-permission="meus_registros" data-chapter="main" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
+        <li data-chapter="view" data-permission="meus_registros_pacientes" style="display: none">
+            <a href="{% url 'ListerPatientsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
+        </li>
+        <li data-chapter="view" data-permission="meus_registros_parceiros" style="display: none">
+            <a href="{% url 'ListerPartnersUnitViews' %}"><i class="material-icons" style="font-size: 18px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+        </li>
+        <li data-chapter="view" data-permission="meus_registros_indicacao" style="display: none">
+            <a href="{% url 'ListerIndicationsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+        </li>
+        <li data-permission="meu_fechamento" data-chapter="view" style="display: none">
+            <a href="{% url 'ClosingFinanceUnit' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Financeiro</span></a>
         </li>
     </ul>
 
