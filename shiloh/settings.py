@@ -144,6 +144,7 @@ INSTALLED_APPS = [
     'functions',
     'auth_finances',
     'auth_permissions',
+    'auth_dash',
 ]
 
 MIDDLEWARE = [
