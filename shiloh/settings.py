@@ -129,7 +129,6 @@ EMAIL_USE_SSL: bool(int(os.environ.get("EMAIL_USE_SSL", default=1)))
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
