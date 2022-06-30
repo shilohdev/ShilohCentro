@@ -21,7 +21,8 @@ from datetime import datetime
 
 from requests import request
 from auth_users.decorator import FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_finances.functions.exams.models import valTotalIntF, valIntPending, valIntPay, valCommercialPay, valCommercialPending, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_dash.functions import RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
 
@@ -905,13 +906,18 @@ def ClosingCommercialViews(request): #INDICAÇÕES
     ClosingCommercial = TableClosingCommercial(request)
     valTotalCommercial = valTotalCommercialFunction(request)
     ViewFoto = FilePhotoViewFunction(request)
+    valCommercialP = valCommercialPending(request)
+    valCommercialPayy = valCommercialPay(request)
 
 
     return render(request, 'finances/closure/ClosingCommercial.html',  
     {
         "arr_SearchClosingCommercial": ClosingCommercial,
-    "arr_valTotalCommercial": valTotalCommercial,
-    "arr_ViewFoto": ViewFoto,
+        "arr_valTotalCommercial": valTotalCommercial,
+        "arr_ViewFoto": ViewFoto,
+        "arr_valCommercialPending": valCommercialP,
+        "arr_valCommercialPay": valCommercialPayy,
+        
 
     })
 
@@ -974,18 +980,25 @@ def SaveAnexo(request):
 
 
 
-#FECHAMENTO ENFERMEIRAS - OUTROS
+#FECHAMENTO INTERNO 
 @login_required
 def closingInt(request):
     if allowPage(request, "fechamento_interno") == False:
         return error(request)
     ClosingInt = TableClosingInt(request)
     ViewFoto = FilePhotoViewFunction(request)
+    valIntPayy = valIntPay(request)
+    valIntP = valIntPending(request)
+    valTotalInt = valTotalIntF(request)
 
     return render(request, 'finances/closure/ClosingInt.html', 
     {   
         "arr_SearchClosingInt": ClosingInt,
         "arr_ViewFoto": ViewFoto,
+        "arr_valIntPay": valIntPayy,
+        "arr_valIntPending": valIntP,
+        "arr_valTotalInt": valTotalInt,
+
     })
 
 
@@ -1244,5 +1257,66 @@ def FilePhotoView(request):
     return JsonResponse(array, safe=False, status=200)
 
 
-    
-    
+'''
+#DASHBOARD COLETAS
+@login_required
+def DashCollectionsViews(request): 
+    #if allowPage(request, "dash_reimbursement") == False:
+        #return error(request)
+    CountDashPendDay = CountDashPendDayFunction(request)
+    CountDashAndDay = CountDashAndDayFunction(request)
+    DashColetasConclDay = DashColetasConclDayFunction(request)
+    CountDashConclmonth = CountDashConclmonthFunction(request)
+    RankingDashConclDay = RankingDashConclDayFunction(request)
+    RankingDashConclmonth = RankingDashConclmonthFunction(request)
+    return render(request, 'dashboard/DashCollections.html', 
+    {
+        "arr_SearchCountDashPendDay": CountDashPendDay, 
+        "arr_SearchCountDashAndlDay": CountDashAndDay, 
+        "arr_SearchDashColetasConclDay": DashColetasConclDay, 
+        "arr_SearchCountDashConclmonth": CountDashConclmonth, 
+        "arr_SearchRankingDashConclDay": RankingDashConclDay, 
+        "arr_SearchRankingDashConclmonth": RankingDashConclmonth, 
+    })
+
+#DASHBOARD COMERCIAL
+@login_required
+def DashCommercialViews(request): 
+    #if allowPage(request, "dash_reimbursement") == False:
+        #return error(request)
+    CountDashTotal = CountDashTotalFunction(request)
+    CountDashMonth = CountDashMonthFunction(request)
+    CountDashDay = CountDashDayFunction(request)
+    RankingDashDay = RankingDashDayFunction(request)
+    RankingDashmonth = RankingDashmonthFunction(request)
+    return render(request, 'dashboard/DashCommercial.html', {"arr_SearchCountDashTotal": CountDashTotal, "arr_SearchCountDashMonth": CountDashMonth, "arr_SearchCountDashDay": CountDashDay, "arr_SearchRankingDashDay": RankingDashDay, "arr_SearchRankingDashmonth": RankingDashmonth, } )
+'''
+
+#DASHBOARD ATENDIMENTO
+@login_required
+def DashServiceViews(request): 
+    #if allowPage(request, "dash_reimbursement") == False:
+        #return error(request)
+   # CountDashPendTotal = CountDashPendTotalFunction(request)
+   # CountDashConclDay = CountDashConclDayFunction(request)
+   # CountDashConclMonth = CountDashConclMonthFunction(request)
+    RankingDashAtenDay = RankingDashAtenDayFunction(request)
+    print(RankingDashAtenDay)
+    ViewFoto = FilePhotoViewFunction(request)#foto perfil
+    print(ViewFoto)
+    PhotoRanking = PhotoRankFunction(request)#foto ranking
+    print(PhotoRanking)
+   # RankingDashAtenMonth = RankingDashAtenMonthFunction(request)
+    return render(request, 'dashboards/ranking/DashService.html',
+    {
+       # "arr_SearchCountDashPendTotal": CountDashPendTotal,
+       # "arr_SearchCountDashConclDay": CountDashConclDay, 
+       # "arr_SearchCountDashConclMonth": CountDashConclMonth, 
+       "arr_SearchRankingDashAtenDay": RankingDashAtenDay,
+        "arr_ViewFotoPerfil": PhotoRanking,
+        "arr_ViewFoto": ViewFoto,
+ 
+       # "arr_SearchRankingDashAtenMonth": RankingDashAtenMonth, 
+    } 
+     )
+

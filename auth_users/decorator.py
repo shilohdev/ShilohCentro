@@ -126,11 +126,11 @@ def CadastreUser(request):
          
         #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
         arrayPermission = { 
-            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48', '49', '51', '50,' ],  #ADMINISTRADOR
-            "2": ['11', '16', '14', '22', '43', '9', '8', '48', '20' ], #ATENDIMENTO
-            "3": ["46", "16", '48', '20'], #ENFERMAGEM
-            "5": ['16', '25', '31', '32', '26', '44', '45', '47', '48', '20', '39', '40', '41', '42', ], #FINANCEIRO
-            "6": ['15', '16','11', '20','21', '48'], #COMERCIAL
+            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48', '49', '51', '50', '52', ],  #ADMINISTRADOR
+            "2": ['11', '16', '14', '22', '43', '9', '8', '48', '20', '52', ], #ATENDIMENTO
+            "3": ["46", "16", '48', '20', '52',], #ENFERMAGEM
+            "5": ['16', '25', '31', '32', '26', '44', '45', '47', '48', '20', '39', '40', '41', '42', '52',], #FINANCEIRO
+            "6": ['15', '16','11', '20','21', '48', '52',], #COMERCIAL
             "7": ["20", "16", '48', '19'], #PARCEIRO
             #"8": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '17', ], #MOTORISTA
         }
@@ -235,11 +235,11 @@ def CadastrePartners(request):
 
             user.save()
         else:
-           user = User.objects.create_user(username=rn, email=email, first_name=name, last_name='', password=year)
-        
+            user = User.objects.create_user(username=rn, email=email, first_name=name, last_name='', password=year)
+            print(user)
          #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
         arrayPermission = {
-           "7":  ["20", "16",], #PARCEIRO(RETIRAR ALGUMAS PERMISSOES)
+           "7": ["20", "16", '48', '19'], #PARCEIRO
         }
         try:
             dictP = arrayPermission[str("7")]
@@ -3686,41 +3686,30 @@ def ApiNewRegisPatientFunction(request):
                 "response": False,
                 "message": "Verifique se já é um paciente ou cadastre através dos Leads"
             } #verifica se tem lead cadastrado
-        
+
         else:
-            queryExists = "SELECT cpf_p, id_p FROM customer_refer.patients WHERE cpf_p LIKE %s"
-            cursor.execute(queryExists, (cpf,))
-            dados = cursor.fetchall() #Verifica se tem cadastro nos pacientes
+            params = (cpf, name, email, tel1, tel2, conv_medico, obs, medico_resp, data_atual, unity, )
+            query = "INSERT INTO `customer_refer`.`leads` (`id_lead`, `cpf_lead`, `nome_lead`, `email_lead`, `tel1_lead`, `tel2_lead`, `convenio_lead`, `tp_exame`, `obs_l`, `medico_resp_l`, `resp_cadastro`, `register`, `data_regis_l`, `unity_l`, `status_l`) VALUES (NULL, %s, %s, %s, %s, %s, %s,'' , %s, %s,'' , 0, %s, %s, 'Em Contato');"
+            cursor.execute(query, params) #insere nos lads
 
-            if dados:
-                return {"response": False, "message": "Paciente já cadastrado em sistema!"}
+            searchLead = "SELECT id_lead, cpf_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE nome_lead like %s;"
+            cursor.execute(searchLead, (name,))
+            dados = cursor.fetchall()
 
-            else:
-                
-                params = (cpf, name, email, tel1, tel2, conv_medico, obs, medico_resp, data_atual, unity, )
-                query = "INSERT INTO `customer_refer`.`leads` (`id_lead`, `cpf_lead`, `nome_lead`, `email_lead`, `tel1_lead`, `tel2_lead`, `convenio_lead`, `tp_exame`, `obs_l`, `medico_resp_l`, `resp_cadastro`, `register`, `data_regis_l`, `unity_l`, `status_l`) VALUES (NULL, %s, %s, %s, %s, %s, %s,'' , %s, %s,'' , 0, %s, %s, 'Em Contato');"
-                cursor.execute(query, params) #insere nos lads
-                dados = cursor
+            for id_lead, cpf_lead, nome_lead, tel1_lead in dados:
+                searchCompany = "SELECT id, nome, company FROM auth_users.users WHERE id LIKE %s"
+                cursor.execute(searchCompany, (medico_resp,))
+                dados = cursor.fetchall()
 
-                if dados:
-                    searchLead = "SELECT id_lead, cpf_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE cpf_lead like %s;"
-                    cursor.execute(searchLead, (cpf,))
-                    dados = cursor.fetchall()
+                for id_resp, nome_resp, company_resp in dados:
+                    param = (id_lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, company_resp,)
+                    queryPaciente="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    cursor.execute(queryPaciente, param) #cadastra o paciente
 
-                    for id_lead, cpf_lead, nome_lead, tel1_lead in dados:
-                        searchCompany = "SELECT id, nome, company FROM auth_users.users WHERE id LIKE %s"
-                        cursor.execute(searchCompany, (medico_resp,))
-                        dados = cursor.fetchall()
-
-                        for id_resp, nome_resp, company_resp in dados:
-                            param = (id_lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, company_resp,)
-                            queryPaciente="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                            cursor.execute(queryPaciente, param) #cadastra o paciente
-
-                        return {
-                            "response": True,
-                            "message": "Cadastrado com sucesso!"
-                        }
+                return {
+                    "response": True,
+                    "message": "Cadastrado com sucesso!"
+                }
     
 
 
@@ -3743,11 +3732,14 @@ def DataMyProfileViews(request):
         query= "SELECT id, cpf, nome, data_nasc, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf FROM auth_users.users WHERE id LIKE %s ORDER BY data_nasc desc"
         params = (id_usuario,)
         cursor.execute(query, params)
-        dados = cursor        
+        dados = cursor
         array = []    
         for id, cpf, nome, data_nasc, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf in dados:
-            birthday = datetime.strftime(data_nasc, "%d/%m/%Y")
-             
+            if data_nasc == None:
+                birthday = None
+            else:
+                birthday = datetime.strftime(data_nasc, "%d/%m/%Y")
+
             nomes = nome.split(None, 1)
             frist_name = nomes[0]
             last_name = nomes[1]
@@ -3787,12 +3779,6 @@ def ApichangeUserProfileFunction(request):
     bairro = request.POST.get("district")
     city = request.POST.get("city")
     uf = request.POST.get("uf")
-    
-    bodyData = json.loads(request.POST.get('data'))
-    
-    file = bodyData.get('file')
-
-    print(file)
 
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, unity FROM auth_users.users WHERE login LIKE %s"
@@ -3812,13 +3798,15 @@ def ApichangeUserProfileFunction(request):
         tel1 = formatTEL(tel1)
         tel2 = formatTEL(tel2)
         cep = cep.replace("-", "")   
-        birthday = data_nasc.replace("/", "-")
-
-        date2 = birthday.split('-')
-        d1 = date2[0]
-        d2 = date2[1]
-        d3 = date2[2]
-        birthday = d3 + "-" + d2 + "-" + d1
+        try:
+            birthday = data_nasc.replace("/", "-")
+            date2 = birthday.split('-')
+            d1 = date2[0]
+            d2 = date2[1]
+            d3 = date2[2]
+            birthday = d3 + "-" + d2 + "-" + d1
+        except:
+            birthday = None
 
         param2 = (cpf, nome, birthday, email, tel1, tel2, cep, rua, numero, complemento, bairro, city, uf, id_usuario,)
         
@@ -3953,3 +3941,8 @@ def FilePhotoViewFunction(request): #aqi
             "response": False,
             "message": "Não foi possível encontrar este usuário."
         }
+
+
+
+
+

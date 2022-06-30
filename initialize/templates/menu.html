@@ -6,7 +6,7 @@
 
 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
     <!-- DASHBOARD --> 
-    <li class="navigation-header" data-permission="dashboard_control">
+    <li class="navigation-header" data-permission="dashboard_control" style="display: none">
         <a class="navigation-header-text">DASHBOARDS</a>
         <i class="navigation-header-icon material-icons">more_horiz</i>
     </li>
@@ -20,6 +20,17 @@
             </ul>
         </div>
     </li>
+    <li class="bold" data-permission="ranking" data-chapter="main" style="display: none">
+        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)" tabindex="0"><i class="material-icons">stars</i><span class="menu-title" data-i18n="Extra Components">Ranking</span></a>
+        <div class="collapsible-body">
+            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                <li data-permission="ranking_atendimento" data-chapter="view" style="display: none">
+                    <a href="{% url 'DashService' %}"><i class="material-icons" style="font-size: 15px;">star_border</i><span data-i18n="Range Slider">Atendimento</span></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
     <!-- GESTÃO --> 
     <li class="navigation-header" data-permission="register">
         <a class="navigation-header-text">GESTÃO</a>
@@ -215,6 +226,7 @@ let dictPages = {
     "meus_registros": ["meus_registros_pacientes", "meus_registros_parceiros", "meus_registros_indicacao", "meu_fechamento"],
     "internal_procedure": ["schedule_collection_int", "scheduled_collection_int", "refund_int","reverse_finished_int" ], //PROCEDIMENTO INTERNO 
     "dashboard_control": ["dash_reimbursement" ], //PROCEDIMENTO INTERNO 
+    "ranking": ["ranking_atendimento" ], //PROCEDIMENTO INTERNO 
 
 
 }

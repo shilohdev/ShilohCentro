@@ -1572,59 +1572,40 @@ def SearchInfoFunction(request):
         
 
 
-
 #TABELA FECHAMENTO COMERCIAL
 def TableClosingCommercial(request):
     monthF = int(datetime.now().strftime("%m"))
+    print(monthF)
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s AND  b.nome NOT LIKE 'Tosyn Lopes' GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
+        query = "SELECT b.id, b.nome, month( a.data_repasse), a.status_comercial, SUM(a.valor_comercial) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE a.valor_comercial NOT LIKE '0' AND MONTH( a.data_repasse) = %s AND b.nome NOT LIKE 'Tosyn Lopes'  GROUP BY b.id, b.nome, MONTH( a.data_repasse), a.status_comercial, a.valor_comercial;"
         cursor.execute(query, (monthF,))
         dados = cursor.fetchall()
         array = [] 
-        for id_comercial, comercial, status, valor in dados:
+        for id_comercial, comercial, mes, status, valor in dados:
             valor = f"R$ {valor:_.2f}"
             valor = valor.replace(".", ",").replace("_", ".")
             newinfoa = ({
                 "id": id_comercial,
                 "nome": comercial,
                 "status": status,
+                "mes": mes,
                 "valor": valor
                 })
             array.append(newinfoa)
         return array
 
-
-
-#TABELA FILTRO MES FECHAMENTO COMERCIAL estou aqui
-def FilterMonthClosingCommercial(request):
-    month = request.POST.get('month')
-    monthCount = (datetime.now().strftime("%m"))
-    
+#MÊS ATUAL DASH FECHAMENTO COMERCIAL - PENDENTE
+def valCommercialPending(request):
+    monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_comercial, b.nome, a.status_comercial, SUM(a.valor_comercial) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE MONTH( a.data_repasse) LIKE %s AND b.nome NOT LIKE 'Tosyn Lopes' GROUP BY a.nome_comercial, b.nome, a.status_comercial, MONTH(a.data_repasse)"
-        cursor.execute(query, (month,))
-        dados = cursor.fetchall()
-        array = []
-        if dados:
-            for idC, comercial, status, valor in dados:
-                valor = (valor) if valor not in ["", None] else None
-                valor = f"R$ {valor:_.2f}"
-                valor = valor.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "idC": idC,
-                    "comercial": comercial,
-                    "status": status,
-                    "valor": valor,
-                    })
-                array.append(newinfoa)
-            
-        querys = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial NOT LIKE 193 group by MONTH(data_repasse)"
-        cursor.execute(querys, (month,))
+
+        querys = "SELECT COUNT(DISTINCT nome_comercial) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE valor_comercial NOT LIKE 0 AND status_comercial LIKE 'Pendente' AND nome_comercial NOT LIKE '193' AND MONTH(data_repasse) LIKE %s group by MONTH(data_repasse);"
+        cursor.execute(querys, (monthCount,))
         dados = cursor.fetchall()
         array2 = []
         if dados:
             for qdt, val, mes in dados:
-                val = f"R${val:_.2f}"
+                val = f"R$ - {val:_.2f}"
                 val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdt,
@@ -1632,15 +1613,150 @@ def FilterMonthClosingCommercial(request):
                     "mes": mes,
                     })
                 array2.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": "0",
+                "val": "R$ 00,00",
+                "mes": "0",
+                })
+            array2.append(newinfoa)
+        return array2
+
+
+
+#MÊS ATUAL DASH FECHAMENTO COMERCIAL - PAGO
+def valCommercialPay(request):
+    monthCount = int(datetime.now().strftime("%m"))
+
+    with connections['auth_finances'].cursor() as cursor:
+        querys = "SELECT COUNT(DISTINCT nome_comercial) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE valor_comercial NOT LIKE 0 AND status_comercial LIKE 'Pago' AND nome_comercial NOT LIKE '193' AND MONTH(data_repasse) = %s group by MONTH(data_repasse);"
+        cursor.execute(querys, (monthCount,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": "0",
+                "val": "R$ 00,00",
+                "mes": "0",
+                })
+            array2.append(newinfoa)
+        return array2
+
+#TABELA FILTRO DATA FECHAMENTO COMERCIAL
+def FilterMonthClosingCommercial(request):
+    month = request.POST.get('month') 
+    param = (month,)
+    with connections['auth_finances'].cursor() as cursor:
+        query = "SELECT b.id, b.nome, month( a.data_repasse), a.status_comercial, SUM(a.valor_comercial) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE a.valor_comercial NOT LIKE '0' AND MONTH( a.data_repasse) = %s AND nome_comercial NOT LIKE '193' GROUP BY b.id, b.nome, MONTH( a.data_repasse), a.status_comercial, a.valor_comercial;"
+        cursor.execute(query, param)
+        dados = cursor.fetchall()  
+        array = []
+        if dados:
+            for id_comercial, comercial, data_repasse, status, valor in dados:
+                valor = (valor) if valor not in ["", None] else None     
+                valor = int(valor or 0)                               
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "id": id_comercial,
+                    "nome": comercial,
+                    "data_repasse": data_repasse,
+                    "status": status,
+                    "valor": valor
+                    })
+                array.append(newinfoa)
+                
+        #FILTRO DATA DASH FECHAMENTO COMERCIAL - TOTAL        
+        querys = "SELECT COUNT(DISTINCT nome_comercial) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_comercial NOT LIKE '193' AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse);"
+        cursor.execute(querys, (month,))
+        dados = cursor.fetchall()
+        arrayTotal = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                arrayTotal.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayTotal.append(newinfoa)
+        
+        #FILTRO DATA DASH FECHAMENTO COMERCIAL - PAGO
+        queryPago = "SELECT COUNT(DISTINCT nome_comercial) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE status_comercial LIKE 'Pago' AND MONTH(data_repasse) = %s AND nome_comercial NOT LIKE '193' AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse);"
+        cursor.execute(queryPago, (month,))
+        dados = cursor.fetchall()
+        arrayPago = []
+        if dados:
+            for qdts, vals, mes in dados:
+                vals = f"R$ {vals:_.2f}"
+                vals = vals.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdts,
+                    "val": vals,
+                    "mes": mes,
+                    })
+                arrayPago.append(newinfoa)
+                
+        else:
+            qdts = 0
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayPago.append(newinfoa)
+
+        #FILTRO DATA DASH FECHAMENTO COMERCIAL - PENDENTE
+        querysA = "SELECT COUNT(DISTINCT nome_comercial) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND valor_comercial NOT LIKE '0' AND nome_comercial NOT LIKE '193' AND status_comercial LIKE 'Pendente' group by MONTH(data_repasse);"
+        cursor.execute(querysA, (month,))
+        dados = cursor.fetchall()
+        arrayA_pagar = []
+        if dados:
+            for qdt, vals, mes in dados: 
+                vals = f"R$ -{vals:_.2f}"
+                vals = vals.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": vals,
+                    "mes": mes,
+                    })
+                arrayA_pagar.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayA_pagar.append(newinfoa)
 
     return { 
         "response": "true",
-        "messages": array2,
-        "message": array,
+        "table": array,
+        "Pago": arrayPago,
+        "messageApagar": arrayA_pagar,
+        "messages": arrayTotal,
     }
 
 
-#estou aqui
+
 #TABELA FECHAMENTO COMERCIAL - TABELAS
 def searchNotAtingeClosingCommercial(request):
     id_comercial = request.POST.get('id_user')
@@ -1716,10 +1832,6 @@ def searchNotAtingeClosingCommercial(request):
                 "status": status,
                 })
             Outros.append(newinfoa)
-        
-        
-    #----------------------------- aqui
-
 
     return {
         "response": "true",
@@ -1871,8 +1983,96 @@ def fetchFileInt(id):
 
     return arr_files
 
+# ------------------------------------------------ FECHAMENTO INTERNO
 
-#TABELA FECHAMENTO INTERNO estou aqui
+#MÊS ATUAL DASH FECHAMENTO INTERNO - TOTAL
+def valTotalIntF(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s AND b.perfil <> 7 AND a.valor_uni_partners NOT LIKE '0' group by MONTH(a.data_repasse);"
+        cursor.execute(querys, (monthCount,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": "0",
+                "val": "R$ 00,00",
+                "mes": "0",
+                })
+            array2.append(newinfoa)
+        return array2
+
+
+#MÊS ATUAL DASH FECHAMENTO INTERNO - PENDENTE
+def valIntPending(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+
+        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pendente' AND MONTH(a.data_repasse) = %s AND b.perfil != 7 group by MONTH(a.data_repasse), b.perfil;"
+        cursor.execute(querys, (monthCount,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ - {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": "0",
+                "val": "R$ 00,00",
+                "mes": "0",
+                })
+            array2.append(newinfoa)
+        return array2
+
+
+#MÊS ATUAL DASH FECHAMENTO INTERNO - PAGO
+def valIntPay(request):
+    monthCount = int(datetime.now().strftime("%m"))
+    with connections['auth_finances'].cursor() as cursor:
+
+        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pago' AND MONTH(a.data_repasse) LIKE %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse)"
+        cursor.execute(querys, (monthCount,))
+        dados = cursor.fetchall()
+        array2 = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                array2.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": "0",
+                "val": "R$ 00,00",
+                "mes": "0",
+                })
+            array2.append(newinfoa)
+
+        return array2
+
+
+#TABELA FECHAMENTO INTERNO
 def TableClosingInt(request):
     month = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
@@ -1893,32 +2093,109 @@ def TableClosingInt(request):
         return array
 
 
+#FILTRO DATA DASH FECHAMENTO INTERNO
 def TableClosingIntFilter(request):
     month = request.POST.get('month')
     with connections['auth_finances'].cursor() as cursor:
-        params = (month,)
-        query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s AND a.valor_comercial LIKE '0' GROUP BY a.nome_medico, b.nome, a.status_partners"
-        cursor.execute(query, params)
-        dados = cursor.fetchall()
+        query = "SELECT b.id, b.nome, b.perfil, month( a.data_repasse) AS mes_repasse, a.status_partners, SUM(a.valor_uni_partners) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE valor_uni_partners != 0 AND perfil != 7 AND MONTH( a.data_repasse) = %s GROUP BY b.id, b.nome, b.perfil, MONTH( a.data_repasse),  a.status_partners;"
+        cursor.execute(query, (month,))
+        dados = cursor
         array = []
-        for id_comercial, comercial, status, valor in dados:
+        for id, medico, perfil, data_repasse, status, valor in dados:
+            valor = (valor) if valor not in ["", None] else None     
+            valor = int(valor or 0)
             valor = f"R$ {valor:_.2f}"
             valor = valor.replace(".", ",").replace("_", ".")
             newinfoa = ({
-                "id": id_comercial,
-                "nome": comercial,
-                "status": status, 
+                "id": id,
+                "nome": medico,
+                "data_repasse": data_repasse,
+                "status": status,
                 "valor": valor
                 })
             array.append(newinfoa)
-            
-    return{
-        "response": "true", 
-        "message": array
-        }
+        #FILTRO DATA DASH FECHAMENTO INTERNO - TOTAL    
+        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
+        cursor.execute(querys, (month,))
+        dados = cursor.fetchall()
+        arrayTotal = []
+        if dados:
+            for qdt, val, mes in dados:
+                val = f"R$ {val:_.2f}"
+                val = val.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": val,
+                    "mes": mes,
+                    })
+                arrayTotal.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayTotal.append(newinfoa)
+        
+        #FILTRO DATA DASH FECHAMENTO INTERNO - PAGO
+        queryPago = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pago' AND MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
+        cursor.execute(queryPago, (month,))
+        dados = cursor.fetchall()
+        arrayPago = []
+        if dados:
+            for qdts, vals, mes in dados:
+                vals = f"R$ {vals:_.2f}"
+                vals = vals.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdts,
+                    "val": vals,
+                    "mes": mes,
+                    })
+                arrayPago.append(newinfoa)
+                
+        else:
+            qdts = 0
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayPago.append(newinfoa)
+            print(arrayPago)
+    #FILTRO DATA DASH FECHAMENTO INTERNO - PENDENTE
+        querysA = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND a.status_partners LIKE 'Pendente' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
+        cursor.execute(querysA, (month,))
+        dados = cursor.fetchall()
+        arrayA_pagar = []
+        if dados:
+            for qdt, vals, mes in dados: 
+                vals = f"R$ -{vals:_.2f}"
+                vals = vals.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "qdt": qdt,
+                    "val": vals,
+                    "mes": mes,
+                    })
+                arrayA_pagar.append(newinfoa)
+        else:
+            newinfoa = ({
+                "qdt": 0,
+                "val": "R$ 00,00",
+                "mes": 0,
+                })
+            arrayA_pagar.append(newinfoa)
 
+    return { 
+        "response": "true",
+        "table": array,
+        "Pago": arrayPago,
+        "messageApagar": arrayA_pagar,
+        "messages": arrayTotal,
+    }
 
+ # -------------------------------------------------------------
 
+ 
 #MEU FECHAMENTO FINANCEIRO
 def SearchFinanceInt(request):
     monthCount = int(datetime.now().strftime("%m"))

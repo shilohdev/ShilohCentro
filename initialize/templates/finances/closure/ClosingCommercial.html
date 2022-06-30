@@ -27,497 +27,702 @@ Acompanhe as últimas notícias!
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
     <div class="modal-content" id="modal2">
-       <div class="card-content">
-          <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_comercial" type="text" >
-          <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
-       </div>
-       <!--PAGO-->
-       <div class="container col s12 m8" style="margin-top:20px">
-          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-             <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
-                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO </labe>
-             </div>
-             <thead>
-                <tr role="row">
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Médico</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
-                </tr>
-             </thead>
-             <tbody id="pago">
-             </tbody>
-             <tfoot id="Count"></tfoot>
-          </table>
-       </div>
-       <!--EM ANÁLISE-->
-       <div class="container col m8 s12" style="margin-top:80px">
-          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-             <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
-                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">EM ANÁLISE</labe>
-             </div>
-             <thead>
-                <tr role="row">
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Médico</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Exame</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                </tr>
-             </thead>
-             <tbody id="analise">
-             </tbody>
-          </table>
-       </div>
-       <!--GLOSA-->
-       <div class="container col s12 m8" style="margin-top:80px">
-          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-             <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
-                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >GLOSA E NÃO ATINGIDO</labe>
-             </div>
-             <thead>
-                <tr role="row">
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Médico</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
-                </tr>
-             </thead>
-             <tbody id="glosa">
-             </tbody>
-          </table>
-       </div>
-       <!-- OUTROS -->
-       <div class="container col s8" style="margin-top:80px">
-          <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
-             <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
-          </div>
-          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-             <thead>
-                <tr role="row">
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Médico</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
-                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
-                </tr>
-             </thead>
-             <tbody id="outros"></tbody>
-          </table>
-       </div>
-       <div class="col col s12 m11 mt-2 ml-4">
-          <button id="btn_pay" data-id_user="" onclick="PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 20px; background-color: #76c076da;">
-          <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
-          </span></button>
-       </div>
-    </div>
-    <div class="modal-footer">
-       <!--BUTTON-->
-       <div class="col s12 m12">
-          <div class="col s10 m10"></div>
-          <div class="col s2 m2">
-             <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
-          </div>
-       </div>
-    </div>
- </div>
- <!--FIM DO MODAL-->
-
- <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-       <div class="container">
-          <div class="card">
-             <div class="card-content" style="margin-top: -93px;">
-                <h5 class="corfont">FECHAMENTO DO COMERCIAL</h5>
-             </div>
-          </div>
-       </div>
-       <div class="container">
-          <div class="card">
-             <!-- Externo -->
-             <div id="userint" class="row">
-                <div class="col s12 m12" style="margin-top: 30px; margin-bottom: 30px;">
-                   <div class="input-field col s12 m4">
-                      <input  id="cpf" type="text" onkeyup="searchPatients(this)">
-                      <label for="cpf">
-                      <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                   </div>
-                   <div class="input-field col m2 s12">
-                      <select name="select" id="mes_search" class="error">
-                         <option value="">Selecione um mês</option>
-                         <option value="1">Janeiro</option>
-                         <option value="2">Fevereiro</option>
-                         <option value="3">Março</option>
-                         <option value="4">Abril</option>
-                         <option value="5">Maio</option>
-                         <option value="6">Junho</option>
-                         <option value="7">Julho</option>
-                         <option value="8">Agosto</option>
-                         <option value="9">Setembro</option>
-                         <option value="10">Outubro</option>
-                         <option value="11">Novembro</option>
-                         <option value="12">Dezembro</option>
-                      </select>
-                   </div>
-                   <div class="col s12 m3">&nbsp;
-                      <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                      <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                      </button>
-                   </div>
-                   {% for k in arr_valTotalCommercial %}
-                   <div id="val1" class="col s12 m2" style="margin-top: 18px ;text-align: center;">
-                      <label style="font-size: 30px; font-weight: bold;">{{ k.val }}</label>
-                   </div>
-                   {% endfor %}
-                   <div id="valF" class="col s12 m2" style="margin-top: 18px ;text-align: center;"></div>
-                   <!-- COMEÇO DA TABLE -->
-                   <div class="col s12 m12 scroll">
-                      <table id="page-length-option" class="bordered" style="overflow-x: auto">
-                         <thead style="background-color: #581848; color: white; font-size: 15px">
-                            <tr>
-                               <th data-field="id" style="text-align: center;">Nome</th>
-                               <th data-field="id" style="text-align: center;">Status</th>
-                               <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
-                               <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                            </tr>
-                         </thead>
-                         <tbody id="tb_appendTable">
-                            {% for k in arr_SearchClosingCommercial %}
-                            <tr id="tr_{{ k.id }}">
-                               <td style="text-align: center;">{{ k.nome }} </td>
-                               <td style="text-align: center;">{{ k.status}}</td>
-                               <td style="text-align: center;">{{ k.valor}}</td>
-                               <td style="text-align: center;">
-                                  <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                                  <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                                  </a>
-                               </td>
-                            </tr>
-                            {% endfor %}
-                         </tbody>
-                      </table>
-                   </div>
-                   <!-- FIM DA TABLE -->
+        <div class="card-content">
+            <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_comercial" type="text" >
+            <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
+        </div>
+        <!--PAGO-->
+        <div class="container col s12 m8" style="margin-top:20px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO </labe>
                 </div>
-             </div>
-          </div>
-       </div>
+                <thead>
+                    <tr role="row">
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Médico</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Data Repasse</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
+                    </tr>
+                </thead>
+                <tbody id="pago">
+                </tbody>
+                <tfoot id="Count"></tfoot>
+            </table>
+        </div>
+        <!--EM ANÁLISE-->
+        <div class="container col m8 s12" style="margin-top:80px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">EM ANÁLISE</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Paciente</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Médico</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Exame</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    </tr>
+                </thead>
+                <tbody id="analise">
+                </tbody>
+            </table>
+        </div>
+        <!--GLOSA-->
+        <div class="container col s12 m8" style="margin-top:80px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <div class="collapsible-header col s12 m12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
+                    <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >GLOSA E NÃO ATINGIDO</labe>
+                </div>
+                <thead>
+                    <tr role="row">
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Médico</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="glosa">
+                </tbody>
+            </table>
+        </div>
+        <!-- OUTROS -->
+        <div class="container col s8" style="margin-top:80px">
+            <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
+            </div>
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+                <thead>
+                    <tr role="row">
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Médico</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="outros"></tbody>
+            </table>
+        </div>
+        <div class="col col s12 m11 mt-2 ml-4">
+            <button id="btn_pay" data-id_user="" onclick="ComercialPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 20px; background-color: #76c076da;">
+            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
+            </span></button>
+        </div>
+        </div>
+        <div class="modal-footer">
+        <!--BUTTON-->
+        <div class="col s12 m12">
+            <div class="col s10 m10"></div>
+            <div class="col s2 m2">
+                <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" style="border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+            </div>
+        </div>
     </div>
- </div>
+</div>
+<!--FIM DO MODAL-->
 
 
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+        <div class="container">
+            <div class="card">
+                <div class="card-content" style="margin-top: -93px;">
+                    <h5 class="corfont">FECHAMENTO DO COMERCIAL</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row container m-0">
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Pago</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #76c076da!important;"></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>                            
+                        <div class="col s4 m4 left-align p-0">
+                            {% for k in arr_valCommercialPay %} 
+                            <p id="regisPay" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
+                            {% endfor %}
+                            <p id="regisPayf" class="mb-0 pt-8"></p>
+                        </div>
+                        <div class="col s8 m8 right-align">
+                            {% for k in arr_valCommercialPay %} 
+                            <h5 id="valPay" class="mb-0">{{ k.val }}</h5>
+                            {% endfor %}
+                            <h5 id="hPay" class="mb-0"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">À Pagar</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                        <div class="indeterminate" style="background-color:  #ff0303!important;"></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="col s4 m4 left-align p-0">
+                            {% for k in arr_valCommercialPending %}  
+                            <p id="regisPending" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
+                            {% endfor %}
+                            <p id="regisPendingf" class="mb-0 pt-8"></p>
+                        </div>
+                        <div class="col s8 m8 right-align">
+                            {% for k in arr_valCommercialPending %}  
+                            <h5 id="valPending" class="mb-0">{{ k.val }}</h5>
+                            {% endfor %}
+                            <h5 id="hPending" class="mb-0"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Total</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #00bcd4!important; width: 0.24%; "></div>
+                        </div>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="col s4 m4 left-align p-0">
+                            {% for k in arr_valTotalCommercial %}
+                            <p id="regisAll" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
+                            {% endfor %}
+                            <p id="regisAllf" class="mb-0 pt-8"></p>
+                        </div>
+                        <div class="col s8 m8 right-align">
+                            {% for k in arr_valTotalCommercial %}
+                            <h5 id="valAll" class="mb-0">{{ k.val }}</h5>
+                            {% endfor %}
+                            <h5 id="hAll" class="mb-0"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <!-- Externo -->
+            <div id="userint" class="row">
+                <div class="col s12 m12" style="margin-top: 30px; margin-bottom: 30px;">
+                    <div class="input-field col s12 m4">
+                        <input  id="cpf" type="text" onkeyup="searchPatients(this)">
+                        <label for="cpf">
+                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+                    </div>
+                    <div class="input-field col m2 s12">
+                        <select name="select" id="mes_search" class="error">
+                            <option value="">Selecione um mês</option>
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                    <div class="col s12 m3">&nbsp;
+                        <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                        </button>
+                    </div>
+                    <!-- COMEÇO DA TABLE -->
+                    <div class="col s12 m12 scroll">
+                        <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                            <thead style="background-color: #581848; color: white; font-size: 15px">
+                                <tr>
+                                <th data-field="id" style="text-align: center;">Nome</th>
+                                <th data-field="id" style="text-align: center;">Status</th>
+                                <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb_appendTable">
+                                {% for k in arr_SearchClosingCommercial %}
+                                <tr id="tr_{{ k.id }}">
+                                <td style="text-align: center;">{{ k.nome }} </td>
+                                <td style="text-align: center;">{{ k.status }}</td>
+                                <td style="text-align: center;">{{ k.valor }}</td>
+                                <td style="text-align: center;">
+                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                    </a>
+                                </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- FIM DA TABLE -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+
 <script type = "text/javascript" >
 
-//FUNCTION BUSCAR
-function searchPatients(object) {
-    var e = $(object).val().toUpperCase();
-    if (e == "") {
-        $('#tb_appendTable > tr').each(function() {
-            $(this).show();
-        });
-    } else {
-        $('#tb_appendTable > tr').each(function() {
-            var trs = $(this).find("td");
-            var tr1 = $(trs[0]).text().toUpperCase();
-            var check = (tr1.indexOf(e) != -1);
-            if (check == true) {
+    //FUNCTION BUSCAR
+    function searchPatients(object) {
+        var e = $(object).val().toUpperCase();
+        if (e == "") {
+            $('#tb_appendTable > tr').each(function() {
                 $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-}
-
-//CONFIG MODAL
-$(document).ready(function() {
-    $('.modal').modal();
-    $('.modal').css({
-        "width": "80%",
-    });
-});
-
-
-function searchMonth() {    
-    var month = $("#mes_search").val();
-
-        if (month == ""){
-            alert("Selecione um mês válido" )
-                return false
+            });
+        } else {
+            $('#tb_appendTable > tr').each(function() {
+                var trs = $(this).find("td");
+                var tr1 = $(trs[0]).text().toUpperCase();
+                var check = (tr1.indexOf(e) != -1);
+                if (check == true) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
         }
+    }
+
+        //CONFIG MODAL
+        $(document).ready(function() {
+            $('.modal').modal();
+            $('.modal').css({
+                "width": "80%",
+            });
+        });
+
+    function searchMonth() {  
+
+        //VALIDAÇÃO DE CAMPO
+        var month = $("#mes_search").val();
+        if (month == "") {
+            alert("Selecione um mês válido")
+            return false
+        }
+                
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "month": month //DICT COM O VALOR DO ID
+        };
             
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "month": month //DICT COM O VALOR DO ID
-    };
-
-    
-    fetchRequest("{% url 'SearchMonthClosingCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-        var dados = re["message"]
-        if (dados == false) {
-            $("#tb_appendTable").html(""); 
-            $("#valF").html(""); 
-            $("#val1").html("");
-
-            var appende = '<td colspan="4" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
-            $("#tb_appendTable").append(appende); 
-
-		} else{
-            var dados = re["message"];
-            $("#tb_appendTable").html(""); 
-            $.map(dados, function(n, i) {
+        fetchRequest("{% url 'SearchMonthClosingCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+            var dados = re["response"]            
+            //TABELA
+            var dados = re["table"];
+            $("#tb_appendTable").html("");
+            $.map(dados, function (n, i) {
                 var a = `
-                    <tr id="tr_${n.idC}">
-                        <td style="text-align: center;">${n.comercial} </td>
-                        <td style="text-align: center;">${n.status}</td>
-                        <td style="text-align: center;">${n.valor}</td>s
-                        <td style="text-align: center;">
-                            <a href="#modal1" class="modal-trigger" data-id_user="${n.idC}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
-                                <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                            </a>
-                        </td>
-                    </tr>
-                    `;
+                <tr id="tr_${n.id}">
+                    <td style="text-align: center;">${n.nome}</td>
+                    <td style="text-align: center;">${n.status}</td>
+                    <td style="text-align: center;">${n.valor}</td>
+                    <td style="text-align: center;">
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
+                        <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                        </a>
+                    </td>
+                </tr>
+                `;
                 $("#tb_appendTable").append(a);
+                    
+                // DASH PAGO
+                var dados = re["Pago"];
+                console.log(dados);
+                $("#hPay").html("");
+                $("#valPay").hide();
+                $("#regisPayf").html("");
+                $("#regisPay").hide();
+    
+                $.map(dados, function (n, i) {
+                var d = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hPay").append(d);
+    
+                var d2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisPayf").append(d2);
+                });
+                console.log(dados)
 
                 
-            var dados = re["messages"];
-            $("#valF").html(""); 
-            $("#val1").hide();
-            $.map(dados, function(n, i) {
-                var b = `
-                    <div class="col s12 m2" style=" text-align: center;">
-                        <label style="font-size: 30px; font-weight: bold;">${n.val}</label>
-                    </div>        
-                `;
-                $("#valF").append(b);
+                // DASH A PAGAR
+                var dados = re["messageApagar"];
+                $("#hPending").html("");
+                $("#valPending").hide();
+                $("#regisPending").hide();
+                $("#regisPendingf").html("");
+                $.map(dados, function (n, i) {
+                var c = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hPending").append(c);
+    
+                var c2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisPendingf").append(c2);
+    
                 });
+    
+                // DASH TOTAL
+                var dados = re["messages"];
+                $("#valAll").hide();
+                $("#hAll").html("");
+                $("#regisAll").hide();
+                $("#regisAllf").html("");
+                $.map(dados, function (n, i) {
+                var b = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hAll").append(b);
+    
+                var b2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisAllf").append(b2);
+    
+                }); 
+            });
+        
+            if (dados == "") {  
+                // DASH PAGO
+                var dados = re["Pago"];
+                $("#hPay").html("");
+                $("#valPay").hide();
+                $("#regisPayf").html("");
+                $("#regisPay").hide();
+    
+                $.map(dados, function (n, i) {
+                var d = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hPay").append(d);
+    
+                var d2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisPayf").append(d2);
+                });
+    
+                // DASH A PAGAR
+                var dados = re["messageApagar"];
+                $("#hPending").html("");
+                $("#valPending").hide();
+                $("#regisPending").hide();
+                $("#regisPendingf").html("");
+                $.map(dados, function (n, i) {
+                var c = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hPending").append(c);
+    
+                var c2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisPendingf").append(c2);
+    
+                });
+    
+                // DASH TOTAL
+                var dados = re["messages"];
+                $("#valAll").hide();
+                $("#hAll").html("");
+                $("#regisAll").hide();
+                $("#regisAllf").html("");
+                $.map(dados, function (n, i) {
+                var b = `<h5 class="mb-0">${n.val}</h5>`;
+                $("#hAll").append(b);
+    
+                var b2 = `<p>(${n.qdt} registros)</p>`;
+                $("#regisAllf").append(b2);
+    
+                });
+                var appendTable = '<td colspan="4" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>';
+                $("#tb_appendTable").append(appendTable); 
+            }    
+        });
+    }       
+
+
+        $("#pesq_agenda").click(function() {
+            searchMonth();
+        });
+
+    class request {
+        constructor(token) {
+            this.token = token;
+        }
+        body(to, method, typeMethod, formdata, sucess) {
+            $.ajax({
+                url: to + "?csrfmiddlewaretoken=" + this.token,
+                type: method,
+                dataType: typeMethod,
+                data: JSON.stringify(formdata),
+                success: function (response) {
+                    sucess(response);
+                },
+                error: function (request, status, error) {
+                    sucess(error);
+                }
             });
         }
-        
-        
-       
-    });
-}
-
-$("#pesq_agenda").click(function() {
-    searchMonth();
-});
-
-
-
-
-
-function viewAgenModal(object){
-    var id_user = $(object).data("id_user");
-    var month = $("#mes_search").val();
+        put(to, formdata, sucess) {
+            $.ajax({
+                url: to,
+                type: "PUT",
+                dataType: "JSON",
+                headers: {
+                    'X-CSRFToken': this.token
+                },
+                mode: 'same-origin',
+                data: formdata,
+                success: function (response) {
+                    sucess(response);
+                },
+                error: function (request, status, error) {
+                    sucess(error);
+                }
+            });
+        }
+        get(to, formdata, sucess) {
+            $.ajax({
+                url: to,
+                type: "GET",
+                dataType: "JSON",
+                headers: {
+                    'X-CSRFToken': this.token
+                },
+                mode: 'same-origin',
+                data: formdata,
+                success: function (response) {
+                    sucess(response);
+                },
+                error: function (request, status, error) {
+                    sucess(error);
+                }
+            });
+        }
+        post(to, formdata, sucess) {
+            $.ajax({
+                url: to,
+                type: "POST",
+                dataType: "JSON",
+                headers: {
+                    'X-CSRFToken': this.token
+                },
+                mode: 'same-origin',
+                data: formdata,
+                success: function (response) {
+                    sucess(response);
+                },
+                error: function (request, status, error) {
+                    sucess(error);
+                }
+            });
+        }
+        delete(to, formdata, sucess) {
+            $.ajax({
+                url: to,
+                type: "DELETE",
+                dataType: "JSON",
+                headers: {
+                    'X-CSRFToken': this.token
+                },
+                mode: 'same-origin',
+                data: formdata,
+                success: function (response) {
+                    sucess(response);
+                },
+                error: function (request, status, error) {
+                    sucess(error);
+                }
+            });
+        }
+    }
     
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user ,
-        "month": month ,
-    };
-    
-
-    $("#modal2").hide();
-    $(object).prop("disabled", true);
-
-    fetchRequest("{% url 'paymentDetailsCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-        if (re["response"] == false) {
-			alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-		} else { 
-        $("#modal2").show();
-
-        var dados = re["ArrayAnalise"];
-        $("#analise").html("");
-        $.map(dados, function(n, i) {
-            var Tanalise = `
-                <tr id="tr_${n.idC}" role="row" class="odd">
-                    <td>${n.paciente}</td>
-                    <td>${n.medico}</td>
-                    <td>${n.exame}</td>
-                    <td>${n.dataAgemdamento}</td>
-                </tr>
-            `;
-            $("#analise").append(Tanalise);
-        });
-
-
-        var dados = re["Glosa"];
-        $("#glosa").html("");
-        $.map(dados, function(n, i) {
-            var a = `
-                <tr id="tr_${n.id}" role="row" class="odd">
-                    <td>${n.paciente}</td>
-                    <td>${n.medico}</td>
-                    <td>${n.exame}</td>
-                    <td>${n.agendamento}</td>
-                    <td>${n.status}</td>
-                </tr>
-            `;
-            $("#glosa").append(a);
-        });
-
-
-        var dados = re["Outros"];
-        $("#outros").html("");
-        $.map(dados, function(n, i) {
-            var a = `
-                <tr id="tr_${n.idC}" role="row" class="odd">
-                    <td>${n.paciente}</td>
-                    <td>${n.medico}</td>
-                    <td>${n.dataIndicacao}</td>
-                    <td>${n.status}</td>
-                </tr>
-            `;
-            $("#outros").append(a);
-        });
-
-
-        var dados = re["arrayPago"];
-        $("#pago").html("");
-        $.map(dados, function(n, i) {
-            var a = `
-                <tr id="tr_${n.idC}" role="row" class="odd">
-                    <td>${n.paciente}</td>
-                    <td>${n.medico}</td>
-                    <td>${n.dataColeta}</td>
-                    <td>${n.dataRepasse}</td>
-                    <td>${n.exame}</td>
-                    <td>${n.valor_uni}</td>
-                </tr>
-            `;
-            $("#pago").append(a);
-        });
-        
-    
-        var dados = re["messageCount"];
-        $("#Count").html("");
-        $.map(dados, function(n, i) {
-            var a = `
-                <tr id="tr_${n.id}">
-                    <th rowspan="1" colspan="1"> TOTAL: </th>
-                    <th rowspan="1" colspan="1"></th>
-                    <th rowspan="1" colspan="1"></th>
-                    <th rowspan="1" colspan="1"></th>
-                    <th rowspan="1" colspan="1">${n.valor}</th>
-                </tr>
-            `;
-            $("#Count" ).append(a);
-        });
-
-    
+    //VISUALIZA O APPEND
+    function viewFile(object) {
+        var path = $(object).data("path");
+        var filename = $(object).data("name");
+        console.log(path)
+        console.log(filename)
+        var a = document.createElement("a");
+        a.href = "/docs/" + path;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
     }
 
-    });
-}
-
-//FINALIZAR PROCESSO
-function PartnersPago(object) {
-    var id_user = $(object).data("id_user");
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user, //DICT COM O VALOR DO ID
+    function viewAgenModal(object){
+        var id_user = $(object).data("id_user");
+        var month = $("#mes_search").val();
         
-    };
-    fetchRequest("{% url 'payCommercial' %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == "true") {
-            alert(re["message"]);
-            $("#btn_end").attr("disabled", true);
-            location.reload();
-        }
-    });
-}
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user ,
+            "month": month ,
+        };
+        
 
+        $("#modal2").hide();
+        $(object).prop("disabled", true);
 
-
-
-function SearchInfo(object) { //FUNCTION DO ONCLICK
-    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-    //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
-    //$("#btn_start").data("id_user", id_user);
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user //DICT COM O VALOR DO ID
-    };
-
-    fetchRequest("{% url 'SearchInfoCommercial' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-        if (re["response"] == false) { 
-            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-        } else { //SE FOR VERDADDEIRA, PROSSEGUE
+        fetchRequest("{% url 'paymentDetailsCommercial' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+            if (re["response"] == false) {
+                alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            } else { 
             $("#modal2").show();
-            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
-            var dictKeys = { // nome id / nome do grupo/ nome do value
-                "btn_pay": key["teste"]["btn_pay"],
-                "nome_comercial": key["teste"]["nome_comercial"],
-                "status_pagamento": key["teste"]["status_pagamento"],
+
+            var dados = re["ArrayAnalise"];
+            $("#analise").html("");
+            $.map(dados, function(n, i) {
+                var Tanalise = `
+                    <tr id="tr_${n.idC}" role="row" class="odd">
+                        <td>${n.paciente}</td>
+                        <td>${n.medico}</td>
+                        <td>${n.exame}</td>
+                        <td>${n.dataAgemdamento}</td>
+                    </tr>
+                `;
+                $("#analise").append(Tanalise);
+            });
+
+
+            var dados = re["Glosa"];
+            $("#glosa").html("");
+            $.map(dados, function(n, i) {
+                var a = `
+                    <tr id="tr_${n.id}" role="row" class="odd">
+                        <td>${n.paciente}</td>
+                        <td>${n.medico}</td>
+                        <td>${n.exame}</td>
+                        <td>${n.agendamento}</td>
+                        <td>${n.status}</td>
+                    </tr>
+                `;
+                $("#glosa").append(a);
+            });
+
+
+            var dados = re["Outros"];
+            $("#outros").html("");
+            $.map(dados, function(n, i) {
+                var a = `
+                    <tr id="tr_${n.idC}" role="row" class="odd">
+                        <td>${n.paciente}</td>
+                        <td>${n.medico}</td>
+                        <td>${n.dataIndicacao}</td>
+                        <td>${n.status}</td>
+                    </tr>
+                `;
+                $("#outros").append(a);
+            });
+
+
+            var dados = re["arrayPago"];
+            $("#pago").html("");
+            $.map(dados, function(n, i) {
+                var a = `
+                    <tr id="tr_${n.idC}" role="row" class="odd">
+                        <td>${n.paciente}</td>
+                        <td>${n.medico}</td>
+                        <td>${n.dataColeta}</td>
+                        <td>${n.dataRepasse}</td>
+                        <td>${n.exame}</td>
+                        <td>${n.valor_uni}</td>
+                    </tr>
+                `;
+                $("#pago").append(a);
+            });
+            console.log("pagos>>")
+            console.log(dados)
+
+
+        
+            var dados = re["messageCount"];
+            $("#Count").html("");
+            $.map(dados, function(n, i) {
+                var a = `
+                    <tr id="tr_${n.id}">
+                        <th rowspan="1" colspan="1"> TOTAL: </th>
+                        <th rowspan="1" colspan="1"></th>
+                        <th rowspan="1" colspan="1"></th>
+                        <th rowspan="1" colspan="1"></th>
+                        <th rowspan="1" colspan="1">${n.valor}</th>
+                    </tr>
+                `;
+                $("#Count" ).append(a);
+            });
+
+        
+        }
+
+        });
+    }
+
+    //FINALIZAR PROCESSO
+    function ComercialPago(object) {
+        var id_user = $(object).data("id_user");
+
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user, //DICT COM O VALOR DO ID
+            
+        };
+        fetchRequest("{% url 'payCommercial' %}", "POST", "JSON", formpost, function(re) {
+            if (re["response"] == "true") {
+                alert(re["message"]);
+                $("#btn_end").attr("disabled", true);
+                location.reload();
+            }
+        });
+    }
+
+    function SearchInfo(object) { //FUNCTION DO ONCLICK
+        var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+        //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+        //$("#btn_start").data("id_user", id_user);
+
+        var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user //DICT COM O VALOR DO ID
+        };
+
+        fetchRequest("{% url 'SearchInfoCommercial' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+            if (re["response"] == false) { 
+                alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            } else { //SE FOR VERDADDEIRA, PROSSEGUE
+                $("#modal2").show();
+                var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+                var dictKeys = { // nome id / nome do grupo/ nome do value
+                    "btn_pay": key["teste"]["btn_pay"],
+                    "nome_comercial": key["teste"]["nome_comercial"],
+                    "status_pagamento": key["teste"]["status_pagamento"],
+
+                }
+                $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+                    $(`#${i}`).val(n);
+                    var findLabel = $(`#${i}`).closest("div");
+                    $(findLabel).find("label").attr("class", "active");
+                });
+                
+                $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
+
 
             }
-            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
-                $(`#${i}`).val(n);
-                var findLabel = $(`#${i}`).closest("div");
-                $(findLabel).find("label").attr("class", "active");
-            });
-            
-            $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
+        });
 
+    }
 
-        }
-    });
-
-}
-
-
-
-
-
-
-
-
-function SearchInfo(object) { //FUNCTION DO ONCLICK
-    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-    //$("#btn_salvar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
-    //$("#btn_start").data("id_user", id_user);
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user //DICT COM O VALOR DO ID
-    };
-
-    fetchRequest("{% url 'SearchInfoCommercial' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-        if (re["response"] == false) {
-            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-        } else { //SE FOR VERDADDEIRA, PROSSEGUE
-            $("#modal2").show();
-            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
-            var dictKeys = { // nome id / nome do grupo/ nome do value
-                "btn_pay": key["teste"]["btn_pay"],
-                "nome_comercial": key["teste"]["nome_comercial"],
-                "status_pagamento": key["teste"]["status_pagamento"],
-
-            }
-            $.map(dictKeys, function(n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
-                $(`#${i}`).val(n);
-                var findLabel = $(`#${i}`).closest("div");
-                $(findLabel).find("label").attr("class", "active");
-            });
-            
-            $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
-
-
-        }
-    });
-
-}
-
-
-
-
-
+  
+    
 </script>
 {% endblock %}      
