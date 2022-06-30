@@ -186,14 +186,13 @@
                         </div>
                    </div>
                    <div class="col m6 s12 l12" style="margin-top: 30px;" >
+                    <!-- CAMPO PARA FOTO DO RANKING -->
                     <div id="view-tap-target" style="display:block ;">
-                    {% for k in arr_ViewFotoPerfil %}
+                    {% for k in arr_SearchRankingDashAtenDay %}
                     <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
                         <div class="col m2 s12">
                             <div class="imagerank">
-                                {% for k in arr_ViewFotoPerfil %}  
-                                <img id="preview_image" src="{{ k.url }}" /> 
-                                {% endfor %}
+                                <img id="preview_image" src="{{ k.photo }}" /> 
                             </div>
                         </div>
                         <div class="col m4 s12" style="margin-top: 40px;">
@@ -207,6 +206,7 @@
                     </div>
                     {% endfor %}
                     </div>
+                    <!-- FIM -->
 
                     <div id="222" style="display:none ;">
                         <p>teset22</p>

@@ -37,7 +37,6 @@ from django.core.files.storage import default_storage
 import re
 
 
-
 def RankingDashAtenDayFunction(request):
     with connections['auth_users'].cursor() as cursor:
         query = "SELECT b.id, a.resp_atendimento, COUNT(a.status) AS qtd_day FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON a.resp_atendimento = b.nome WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' GROUP BY a.resp_atendimento, b.id ORDER BY qtd_day DESC LIMIT 10;"
@@ -56,33 +55,23 @@ def RankingDashAtenDayFunction(request):
                     "qtd_day": qtd_day                    
                     })                
                 array.append(newinfoa)
-                
-                PhotoRankFunction(id)
 
             return array
 
 
-def PhotoRankFunction(ID):
+def PhotoRankFunction(request):
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT b.id, a.resp_atendimento, COUNT(a.status) AS qtd_day FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON a.resp_atendimento = b.nome WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' GROUP BY a.resp_atendimento, b.id ORDER BY qtd_day DESC LIMIT 10;"
+        query = "SELECT b.id, a.resp_atendimento FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON a.resp_atendimento = b.nome WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' GROUP BY a.resp_atendimento, b.id;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
         if dados:
-            for id, resp_atendimento, qtd_day in dados:
-                nomes = resp_atendimento.split()
-                n1 = nomes[0]
-                n2 = nomes[1]
-                nome = n1 + " " + n2              
+            for id, nome in dados:             
                 newinfoa = ({
                     "id": id,
-                    "nome": nome,
-                    "qtd_day": qtd_day                    
+                    "nome": nome,                  
                     })                
                 array.append(newinfoa)
-                
-                PhotoRankFunction(id)
-
             return array
 
         try:
@@ -108,3 +97,23 @@ def PhotoRankFunction(ID):
                 "response": False,
                 "message": "Não foi possível encontrar este usuário."
             }
+
+def PhotoRankByArrayFunction(data):
+    from auth_dash.models import PhotoServices
+    
+    PHOTO_SERVICES = PhotoServices()
+    arr_response = {}
+    for key in data:
+        id = str(key.get('id'))
+        
+        msg = PHOTO_SERVICES._get_photo_perfil(id)
+        arr_response[id] = msg.get('message') if msg.get('response', None) else ""
+    
+    return arr_response
+
+
+def _treating_data(ranking=None, photo=None):
+    for key in ranking:
+        key["photo"] = photo.get(str(key.get('id'))).get('message')
+
+    return key

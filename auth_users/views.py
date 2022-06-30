@@ -22,7 +22,7 @@ from datetime import datetime
 from requests import request
 from auth_users.decorator import FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, IniciarColetaFunction, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
 from auth_finances.functions.exams.models import valTotalIntF, valIntPending, valIntPay, valCommercialPay, valCommercialPending, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
-from auth_dash.functions import RankingDashAtenDayFunction, PhotoRankFunction
+from auth_dash.functions import PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
 
@@ -1300,23 +1300,23 @@ def DashServiceViews(request):
    # CountDashPendTotal = CountDashPendTotalFunction(request)
    # CountDashConclDay = CountDashConclDayFunction(request)
    # CountDashConclMonth = CountDashConclMonthFunction(request)
-    RankingDashAtenDay = RankingDashAtenDayFunction(request)
-    print(RankingDashAtenDay)
-    ViewFoto = FilePhotoViewFunction(request)#foto perfil
-    print(ViewFoto)
-    PhotoRanking = PhotoRankFunction(request)#foto ranking
-    print(PhotoRanking)
    # RankingDashAtenMonth = RankingDashAtenMonthFunction(request)
+   
+    RankingDashAtenDay = RankingDashAtenDayFunction(request)
+    ViewFoto = FilePhotoViewFunction(request)#foto perfil
+    PhotoRanking = PhotoRankByArrayFunction(RankingDashAtenDay)#foto ranking
+    
+    data_ranking = _treating_data(ranking=RankingDashAtenDay, photo=PhotoRanking)
+    print(data_ranking)
+
     return render(request, 'dashboards/ranking/DashService.html',
     {
+        "arr_SearchRankingDashAtenDay": RankingDashAtenDay,
+        "arr_ViewFotoPerfil": PhotoRanking,
+        "arr_ViewFoto": ViewFoto,
        # "arr_SearchCountDashPendTotal": CountDashPendTotal,
        # "arr_SearchCountDashConclDay": CountDashConclDay, 
        # "arr_SearchCountDashConclMonth": CountDashConclMonth, 
-       "arr_SearchRankingDashAtenDay": RankingDashAtenDay,
-        "arr_ViewFotoPerfil": PhotoRanking,
-        "arr_ViewFoto": ViewFoto,
- 
        # "arr_SearchRankingDashAtenMonth": RankingDashAtenMonth, 
     } 
      )
-

@@ -83,3 +83,17 @@ def fetchQueryDashUnity(column, perfil, unity=None):
     if str(perfil) == "1":
         return f"{column} IS NOT NULL"
     return f"{column} = {unity}"
+
+
+def json_with_success(message):
+    return {
+        "response": True,
+        "message": message
+    }
+
+
+def json_without_success(message):
+    return {
+        "response": False,
+        "message": message
+    }

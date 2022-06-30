@@ -10,6 +10,7 @@ cd /home/devs_shiloh/shiloh
 sudo unzip shiloh.zip
 cd
 cd /usr/local/shilohcentro
+sudo rm -rf auth_dash
 sudo rm -rf auth_access
 sudo rm -rf auth_users
 sudo rm -rf initialize
@@ -19,6 +20,9 @@ sudo rm -rf accounts
 sudo rm -rf auth_finances
 sudo rm -rf functions
 sudo rm -rf templates
+sudo rm -rf module_file_storage
+sudo mv /home/devs_shiloh/shiloh/module_file_storage /usr/local/shilohcentro
+sudo mv /home/devs_shiloh/shiloh/auth_dash /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/auth_access /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/auth_users /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/initialize /usr/local/shilohcentro
