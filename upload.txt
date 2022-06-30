@@ -10,7 +10,6 @@ cd /home/devs_shiloh/shiloh
 sudo unzip shiloh.zip
 cd
 cd /usr/local/shilohcentro
-sudo mkdir auth_dash
 sudo rm -rf auth_access
 sudo rm -rf auth_users
 sudo rm -rf initialize
