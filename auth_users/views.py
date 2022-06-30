@@ -1307,7 +1307,6 @@ def DashServiceViews(request):
     PhotoRanking = PhotoRankByArrayFunction(RankingDashAtenDay)#foto ranking
     
     data_ranking = _treating_data(ranking=RankingDashAtenDay, photo=PhotoRanking)
-    print(data_ranking)
 
     return render(request, 'dashboards/ranking/DashService.html',
     {
