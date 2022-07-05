@@ -143,6 +143,9 @@ INSTALLED_APPS = [
     'functions',
     'auth_finances',
     'auth_permissions',
+    'auth_dash',
+    'module_file_storage',
+    'module_clicksign',
 ]
 
 MIDDLEWARE = [
@@ -215,7 +218,7 @@ DATABASE_OPTIONS = {
         "admins":"admins",
         "customer_refer":"customer_refer",
         "auth_finances":"auth_finances",
-        
+        "clicksigndb":"clicksign_services",
     }
 }
 
@@ -271,6 +274,22 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
 ]
 
+# AUTHENTICATIONS
+CLICKSIGN_DEBUG = 1
+
+CLICKSIGN_TEMPLATES_KEY = {
+    1: "98fe3957-5dce-4d71-8451-23d5e91ca79b",
+    2: ""
+}
+
+CLICKSIGN_SANDBOX_SEND_MESSAGE = "Assine o documento abaixo"
+CLICKSIGN_SANDBOX_URL = "https://sandbox.clicksign.com"
+CLICKSIGN_SANDBOX_TOKEN = "4be82108-84c9-4632-830f-50cfa98f1b69"
+
+CLICKSIGN_SEND_MESSAGE = "Assine o documento abaixo"
+CLICKSIGN_URL = "https://app.clicksign.com"
+CLICKSIGN_TOKEN = "4be82108-84c9-4632-830f-50cfa98f1b69"
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -314,8 +333,11 @@ ASGI_APPLICATION = "initialize.asgi.application"
 
 # BASE DOCS
 BASE_DIR_DOCS = str(BASE_DIR).replace("\\", "/") + "/docs"
-#SHORT_PLATAFORM = "http://127.0.0.1:8000"
-SHORT_PLATAFORM = "https://shilohcentro.com.br" 
+
+BASE_DIR_PHOTO = str(BASE_DIR).replace("\\", "/") + "/docs/FotoPerfil"
+
+SHORT_PLATAFORM = "http://127.0.0.1:8000"
+#SHORT_PLATAFORM = "https://shilohcentro.com.br" 
 LISTPATHTYPE = {
     "1": "Comprovante de Pagamento",
     "2": "Nota Fiscal",

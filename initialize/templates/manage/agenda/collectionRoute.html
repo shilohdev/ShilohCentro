@@ -549,31 +549,32 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          $("#btn_frust").data("id", key["agendamento"]["id"]);
          $("#btnIniciar").data("id", key["agendamento"]["id"]);
          $("#btn_salvar").data("id_user", key["id"])
-         $("#statusM").css({
+         A = $("#statusM").css({
             "color": key["obs"]["color"], "font-size": "30px", "border-bottom": "none",
 
          }); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
 
-         
+         val_btn = $("#statusM").val()
+         console.log(val_btn)
+
          ///verifica se está concluído para desabilitar os botoes
-         if ($("#statusM").val() != "Pendente" &&  $("#statusM").val() != "Em Andamento") {
-            $("#btn_end").hide();
+         if (val_btn == "Concluído") {
             $("#btn_conc").attr("disabled", true);
             $("#btn_reag").attr("disabled", true);
             $("#btn_frust").attr("disabled", true);
-
          }else{
-            $("#btn_end").show();
             $("#btn_conc").attr("disabled", false);
             $("#btn_reag").attr("disabled", false);
             $("#btn_frust").attr("disabled", false);
          }
 
-         if ($("#statusM").val() != "Pendente"){
+         if (val_btn != "Pendente"){
             $("#btnIniciar").hide();
+         }else{
+            $("#btnIniciar").show();
          }
 
-            //AQUI INICIA FUNCTION APPEND FILE
+         //AQUI INICIA FUNCTION APPEND FILE
          var ap = "";
             var filesResponse = JSON.parse(re["message"]["files"]);
             $.map(filesResponse, function(n, i) {
@@ -750,21 +751,24 @@ function searchPatients(object){
 }
 
 
-//FUNCTION CONCLUIR
+//FUNCTION INICAR COLETA
 function StatusIniciarColeta(e){ 
    var id = $(e).data("id");
-   var convenio = $("#tp_conv").val();
    var agendamento = $("#date_age").val();
-   
-   
+   var nome_paciente = $("#namePaciente").val();
+   var phone = "11972112009"
+   var email ="stephaniesouza.b@gmail.com"
+   var templatekey = "98fe3957-5dce-4d71-8451-23d5e91ca79b"
+
    var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id": id,
-      "convenio": convenio,
-      "agendamento": agendamento,
+      "data": agendamento,
+      "email": email,
+      "phone": phone,
+      "name": nome_paciente,
 }
 
-   fetchRequest("{% url 'ApiIniciarColeta' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+   fetchRequest("{% url 'ApiIniciarColeta' %}", "GET", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
    
       //"true" -> STRING
       //true -> BOOLEAN

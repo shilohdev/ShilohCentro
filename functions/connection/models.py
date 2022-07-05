@@ -1,7 +1,7 @@
 from django.db import connections
 from django.db import models
 from functions.general.decorator import dealStrignify
-from functions.connection.db import DB, DBAdmins
+from functions.connection.db import DB, DBAdmins, DBCollection, DBCustomerRefer
 
 
 class Exams(DB):
@@ -163,3 +163,29 @@ class Connection:
             self.conn.execute("INSERT {} ({}) VALUES ({})".format(table, column, condition), params)
 
         return self.conn.rowcount
+
+
+class CollectionScheduleDB(DBCollection):
+    id = models.AutoField("ID", primary_key=True, auto_created=True)
+    nome_p = models.IntegerField(null=True, blank=True, default=None)
+    
+    class Meta:
+        db_table = "collection_schedule"
+        indexes = [
+            models.Index(fields=[
+                "id",
+            ])
+        ]
+
+
+class PatientsDB(DBCustomerRefer):
+    id_p = models.IntegerField(null=True, blank=True, default=None)
+    company_p = models.IntegerField(null=True, blank=True, default=None)
+
+    class Meta:
+        db_table = "patients"
+        indexes = [
+            models.Index(fields=[
+                "id_p",
+            ])
+        ]

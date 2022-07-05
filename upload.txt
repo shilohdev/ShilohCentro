@@ -14,7 +14,6 @@ sudo rm -rf auth_dash
 sudo rm -rf auth_access
 sudo rm -rf auth_users
 sudo rm -rf initialize
-sudo rm -rf shiloh
 sudo rm -rf static
 sudo rm -rf accounts
 sudo rm -rf auth_finances
@@ -26,7 +25,6 @@ sudo mv /home/devs_shiloh/shiloh/auth_dash /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/auth_access /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/auth_users /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/initialize /usr/local/shilohcentro
-sudo mv /home/devs_shiloh/shiloh/shiloh /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/accounts /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/auth_finances /usr/local/shilohcentro
 sudo mv /home/devs_shiloh/shiloh/functions /usr/local/shilohcentro

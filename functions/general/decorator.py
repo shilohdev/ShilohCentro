@@ -1,4 +1,5 @@
 from datetime import timedelta
+import json
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from functions.general.models import Struct
@@ -97,3 +98,30 @@ def json_without_success(message):
         "response": False,
         "message": message
     }
+
+
+def ExcludeCaractersByArray(value, data):
+    if value in ["", None]:
+        return ""
+
+    for key in data:
+        value = str(value).replace(key, "")
+
+    return value
+
+
+def is_json(value):
+    try:
+        json.loads(value)
+    except ValueError as ExceptionValue:
+        return False
+    
+    return True
+
+
+def dealStringify(value):
+    d = is_json(value)
+    if d:
+        return json.loads(value)
+
+    return False

@@ -103,17 +103,44 @@ def PhotoRankByArrayFunction(data):
     
     PHOTO_SERVICES = PhotoServices()
     arr_response = {}
-    for key in data:
-        id = str(key.get('id'))
-        
-        msg = PHOTO_SERVICES._get_photo_perfil(id)
-        arr_response[id] = msg.get('message') if msg.get('response', None) else ""
+    if data:
+        for key in data:
+            id = str(key.get('id'))
+            
+            msg = PHOTO_SERVICES._get_photo_perfil(id)
+            arr_response[id] = msg.get('message') if msg.get('response', None) else ""
+    else: 
+        arr_response = 0
     
     return arr_response
 
 
 def _treating_data(ranking=None, photo=None):
-    for key in ranking:
-        key["photo"] = photo.get(str(key.get('id'))).get('message')
-
+    if ranking:
+        for key in ranking:
+            key["photo"] = photo.get(str(key.get('id'))).get('message')
+    else:
+        key = 0
     return key
+
+
+
+#RANKING DASHBOARD ATENDIMENTO > MÊS
+def RankingDashAtenMonthFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT resp_atendimento, COUNT(status) AS qtd_mes FROM auth_agenda.collection_schedule WHERE Month(data_agendamento) = Month(CURRENT_DATE()) AND status = 'Concluído' GROUP BY resp_atendimento ORDER BY qtd_mes DESC LIMIT 10;"
+        cursor.execute(query )
+        dados = cursor.fetchall()        
+        array = []
+        if dados:            
+            for resp_atendimento, qtd_mes in dados:   
+                nomes = resp_atendimento.split()
+                n1 = nomes[0]
+                n2 = nomes[1]
+                nome = n1 + " " + n2            
+                newinfoa = ({
+                    "nome": nome,
+                    "qtd_mes": qtd_mes                    
+                    })                
+                array.append(newinfoa)
+            return array

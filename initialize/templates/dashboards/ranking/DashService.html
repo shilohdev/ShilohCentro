@@ -184,34 +184,50 @@
                                 <li class="tab col s4 p-0"><a class="p-0"  onclick="teste2()" style="color: black; font-size: 20px;">MÊS</a></li>
                             </ul>
                         </div>
-                   </div>
-                   <div class="col m6 s12 l12" style="margin-top: 30px;" >
+                    </div>
+                    <div class="col m6 s12 l12" style="margin-top: 30px;" >
                     <!-- CAMPO PARA FOTO DO RANKING -->
-                    <div id="view-tap-target" style="display:block ;">
-                    {% for k in arr_SearchRankingDashAtenDay %}
-                    <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
-                        <div class="col m2 s12">
-                            <div class="imagerank">
-                                <img id="preview_image" src="{{ k.photo }}" /> 
+                        <div id="view-tap-target" style="display:block ;">
+                        {% for k in arr_SearchRankingDashAtenDay %}
+                            <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                                <div class="col m2 s12">
+                                    <div class="imagerank">
+                                        <img id="preview_image" src="{{ k.photo }}" /> 
+                                    </div>
+                                </div>
+                                <div class="col m4 s12" style="margin-top: 40px;">
+                                    <h6 class="mb-0">{{ k.nome }}</h6>
+                                </div>
+                                <div class="col m2 s12 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                    <h5 class="mb-0">{{ k.qtd_day }}</h5>
+                                </div>
+                                <div class="col m4 s12">
+                                </div>
                             </div>
+                        {% endfor %}
                         </div>
-                        <div class="col m4 s12" style="margin-top: 40px;">
-                            <h6 class="mb-0">{{ k.nome }}</h6>
-                        </div>
-                        <div class="col m2 s12 right-align" style="padding:5px 45px; margin-top: 24px;">
-                            <h5 class="mb-0">{{ k.qtd_day }}</h5>
-                        </div>
-                        <div class="col m4 s12">
-                        </div>
-                    </div>
-                    {% endfor %}
-                    </div>
-                    <!-- FIM -->
+                        <!-- FIM -->
 
-                    <div id="222" style="display:none ;">
-                        <p>teset22</p>
+                        <div id="222" style="display:none ;">
+                        {% for k in arr_SearchRankingDashAtenMonth %}
+                            <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                                <div class="col m2 s12">
+                                    <div class="imagerank">
+                                        <img id="preview_image" src="{{ k.photo }}" /> 
+                                    </div>
+                                </div>
+                                <div class="col m4 s12" style="margin-top: 40px;">
+                                    <h6 class="mb-0">{{ k.nome }}</h6>
+                                </div>
+                                <div class="col m2 s12 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                    <h5 class="mb-0">{{ k.qtd_mes }}</h5>
+                                </div>
+                                <div class="col m4 s12">
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
                     </div>
-                </div>
                 </div>
             
 <!--

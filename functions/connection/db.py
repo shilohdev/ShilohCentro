@@ -5,6 +5,9 @@ from enum import Enum
 class BancoDeDados(str, Enum):
     DB = 'auth_finances'
     DBA = 'admins'
+    DBCLICKSIGN = 'clicksigndb'
+    DBCOLLECTION = 'auth_agenda'
+    DBCUSTOMERREFER = 'customer_refer'
 
 
 class DbManager(models.Manager):
@@ -28,6 +31,30 @@ class DB(models.Model):
 
 class DBAdmins(models.Model):
     use_db = BancoDeDados.DBA.value
+    objects = DbManager()
+
+    class Meta:
+        abstract = True
+
+
+class DBClickSign(models.Model):
+    use_db = BancoDeDados.DBCLICKSIGN.value
+    objects = DbManager()
+
+    class Meta:
+        abstract = True
+
+
+class DBCollection(models.Model):
+    use_db = BancoDeDados.DBCOLLECTION.value
+    objects = DbManager()
+
+    class Meta:
+        abstract = True
+
+
+class DBCustomerRefer(models.Model):
+    use_db = BancoDeDados.DBCUSTOMERREFER.value
     objects = DbManager()
 
     class Meta:
