@@ -89,7 +89,7 @@ def fetchQueryDashUnity(column, perfil, unity=None):
 def json_with_success(message):
     return {
         "response": True,
-        "message": message
+        "message": message,
     }
 
 

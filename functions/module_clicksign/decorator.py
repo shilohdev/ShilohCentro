@@ -1,6 +1,7 @@
 from django.conf import settings
 import os
 import urllib.request
+from auth_users.decorator import StartCollectionFunction
 from functions.connection.models import CollectionScheduleDB, PatientsDB
 from functions.general.decorator import json_with_success, json_without_success, dealStringify
 from module_clicksign.models import ClickSignDB, ClickSignServices
@@ -12,6 +13,7 @@ def ModuleSendClickSignFunction(request):
         return json_without_success("Nenhum parâmetro via get enviado.")
 
     id_coleta = bodyData.get('id', None)
+
     if not id_coleta:
         return json_without_success("Nenhum id de coleta enviado.")
 
@@ -24,6 +26,8 @@ def ModuleSendClickSignFunction(request):
     )
     print(id_coleta)
     print(my_template_key)
+    
+    StartCollectionFunction(id_coleta) # FAZ A ATUALIZAÇÃO DE STATUS
 
     ClickSignOBJ = ClickSignServices()
     return ClickSignOBJ.send(
@@ -31,8 +35,12 @@ def ModuleSendClickSignFunction(request):
        id=bodyData.get('id'),
        name=bodyData.get('name'),
        email=bodyData.get('email'),
-       phone=bodyData.get('phone'), 
-       data={}
+       phone=bodyData.get('phone'),
+       data={
+        "CONTRATANTE_RG": "53266655545",
+        "CONTRATANTE_TELEFONE": "phone",
+        # AQUI COLOCA TODOS OS PARAMETROS DO CONTRATO
+       }
     )
 
 

@@ -49,19 +49,19 @@ Acompanhe as últimas notícias!
                                    </label>
                                </div>
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tp_exame" type="tel" id>
+                                   <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
                                    <label for="tp_exame" class="active">
                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame </label>
                                </div>
                            </div>
                            <div class="input-field col s12">
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tp_conv" type="tel" id>
+                                   <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
                                    <label for="tp_conv" class="active">
                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio </label>
                                </div>
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="nurse" type="tel" id>
+                                   <input readonly="readonly" style="color: black;" id="nurse" type="tel">
                                    <label for="nurse" class="active">
                                        <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro </label>
                                </div>
@@ -76,22 +76,22 @@ Acompanhe as últimas notícias!
                        <div id="userint" class="row">
                            <div class="col s12" style="margin-top: 10px;">
                                <div class="input-field col s6">
-                                   <input readonly="readonly" id="namePaciente" type="tel" id style="color: black;">
+                                   <input readonly="readonly" id="namePaciente" type="tel" style="color: black;">
                                    <label for="namePaciente" class="active">
                                        <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente </label>
                                </div>
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tel1" type="tel" id>
+                                   <input readonly="readonly" style="color: black;" id="tel1" type="tel">
                                    <label for="tel1">
                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
                                </div>
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="perfil" type="text" id>
+                                   <input readonly="readonly" style="color: black;" id="perfil" type="text">
                                    <label for="perfil">
                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial </label>
                                </div>
                                <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="unity" type="text" id>
+                                   <input readonly="readonly" style="color: black;" id="unity" type="text">
                                    <label for="unity">
                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Unidade </label>
                                </div>
@@ -280,7 +280,7 @@ Acompanhe as últimas notícias!
    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
        <div class="container">
            <div class="card">
-               <div class="card-content" style="margin-top: -40px;">
+               <div class="card-content" style="margin-top: -25px;">
                    <h5 class="corfont">SOLICITAÇÕES DE REEMBOLSO</h5>
                </div>
            </div>
@@ -463,7 +463,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "tp_service": key["agendamento"]["tipo_servico"],
                 "tp_exame": key["agendamento"]["tipo_exame"],
                 "tp_conv": key["agendamento"]["convenio"],
-                "nurse": key["agendamento"]["nurse"],
+                "nurse": key["agendamento"]["NomeNurse"],
                 "id": key["agendamento"]["id"],
                 "tel1": key["pessoal"]["phone1"],
                 "namePaciente": key["pessoal"]["paciente"],

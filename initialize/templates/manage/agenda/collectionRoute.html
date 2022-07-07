@@ -23,7 +23,8 @@ Acompanhe as últimas notícias!
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
       <div class="card-content" style="margin-top: 50px;">
-         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
+         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text">
+         <label readonly="readonly" style="color: black; font-size: 30px; border-bottom: none; display: none;" id="statusAtt" type="text">Em Andamento</label>
          <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="motivo_S" type="text" >
          
          <button id="btnIniciar" onclick="StatusIniciarColeta(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="width:100%; background-color: #89c889;">
@@ -56,7 +57,7 @@ Acompanhe as últimas notícias!
                               
                            </div>
                            <div class="input-field col m3  s12" >
-                              <input readonly="readonly" style="color: black;" id="tp_exame" type="tel" id>
+                              <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
                               <label for="tp_exame" class="active">
                               <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                            </div>
@@ -65,20 +66,14 @@ Acompanhe as últimas notícias!
                         <div class="input-field col s12" >
                            <div class="row">
                               <div class="input-field col m3  s12" >
-                                 <input readonly="readonly" style="color: black;" id="tp_conv" type="tel" id>
+                                 <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
                                  <label for="tp_conv" class="active">
                                  <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                               </div>
-                              <div class="input-field col m3  s12" >
-                                 <input readonly="readonly" style="color: black;" id="nurse" type="tel" id>
+                              <div class="input-field col m6  s12" >
+                                 <input readonly="readonly" style="color: black;" id="nurse" type="tel">
                                  <label for="nurse" class="active">
                                  <i class="material-icons" style="font-size: 15px">person</i>Enfermeiro <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
-                              </div>
-                              <div class="input-field col m3  s12" >
-                                 <input readonly="readonly" style="color: black;" id="driver" type="tel" id>
-                                 <label for="driver" class="active">
-                                    <i class="material-icons" style="font-size: 15px">person</i>Motorista <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a>
-                                 </label>
                               </div>
                            </div>
                         </div>
@@ -89,35 +84,58 @@ Acompanhe as últimas notícias!
                   <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
                      <labe style="margin-top: 0.9em; font-size: 15px; font-weight: bold;">PACIENTE</labe>
                   </div>
-                  <div id="userint" class="row" >
-                     <div class="col s12"  style="margin-top: 10px;">
-                        <div class="input-field col m6  s12">
-                           <input readonly="readonly" id="namePaciente" type="text" id style="color: black;">
-                           <label for="namePaciente" class="active">
-                           <i class="material-icons" style="font-size: 15px">person</i>Nome do Paciente <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                  <div id="userint">
+                     <div class="row" >
+                        <div class="col s12"  style="margin-top: 10px;">
+                           <div class="input-field col m6  s12">
+                              <input readonly="readonly" id="namePaciente" type="text" style="color: black;">
+                              <label for="namePaciente" class="active">
+                              <i class="material-icons" style="font-size: 15px">person</i>Nome do Paciente <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                           </div>
+                           <div class="input-field col m3  s12">
+                              <input id="tel1" type="tel">
+                              <label for="tel1">
+                              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                           </div>
+                           <div class="input-field col m3  s12">
+                              <input id="tel2" type="tel">
+                              <label for="tel2">
+                              <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                           </div>
                         </div>
-                        <div class="input-field col m3  s12">
-                           <input id="tel1" type="tel" id>
-                           <label for="tel1">
-                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                     </div>
+                     <div class="row" >
+                        <div class="col s12"  style="margin-top: 10px;">
+                           <div class="input-field col m6  s12">
+                              <input id="email" type="text" style="color: black;">
+                              <label for="email" class="active"><i class="material-icons" style="font-size: 15px">email</i>Email</label>
+                           </div>
+                           <div class="input-field col m3  s12">
+                              <input id="login" type="text">
+                              <label for="login">
+                              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Login</label>
+                           </div>
+                           <div class="input-field col m3  s12">
+                              <input id="senha" type="text">
+                              <label for="senha">
+                              <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                           </div>
                         </div>
-                        <div class="input-field col m3  s12">
-                           <input id="tel2" type="tel" id>
-                           <label for="tel2">
-                           <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
-                        </div>
-                        <div class="input-field col m3  s12">
-                           <input readonly="readonly" style="color: black;" id="doctor" type="tel" id>
-                           <label for="doctor" >
-                           <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico  <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
-                        </div>
-                        <div class="input-field col m3  s12" >
-                           <input readonly="readonly" style="color: black;" id="attendance" type="tel" id>
-                           <label for="attendance">
-                           <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento  <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                     </div>
+                     <div class="row" >
+                        <div class="col s12"  style="margin-top: 10px;">
+                           <div class="input-field col m6  s12">
+                              <input readonly="readonly" style="color: black;" id="doctor" type="text">
+                              <label for="doctor" >
+                              <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico  <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                           </div>
                         </div>
                      </div>
                   </div>
+                  
+
+                  
+                 
                </li>
                <!--CARD 3-->
                <li class="active" style="margin-top: 30px;" >
@@ -213,7 +231,7 @@ Acompanhe as últimas notícias!
                      </div>
                   </div>
                </li>
-               <!--IMAGEM-->
+               <!--ANEXOSS
                <li class="active" style="margin-top: 30px;">
                   <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
                       <labe style="margin-top: 0.9em; font-size: 15px; font-weight: bold;">ANEXOS</labe>
@@ -258,6 +276,8 @@ Acompanhe as últimas notícias!
                       </div>
                   </div>
               </li>
+              
+              IMAGEM-->
             </ul>
          </div>
         
@@ -293,7 +313,7 @@ Acompanhe as últimas notícias!
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <div class="container">
    <div class="card" >
-      <div class="card-content" style="margin-top: -40px;">
+      <div class="card-content" style="margin-top: -25px;">
          <h5 class="corfont">ROTA DE AGENDAMENTOS</h5>
       </div>
    </div>
@@ -312,53 +332,25 @@ Acompanhe as últimas notícias!
          <!-- COMEÇO DA TABLE -->
          <div class="col s12" style="margin-bottom: 50px; overflow-x: auto; margin-left: 0; margin-top: 0;">
             <table class=" bordered">
-             <!-- <div class="col s10">
-               <div class="col s3">
-                  {% for k in arr_CountAgendamentsConlcuidos%}
-                     Concluídos: <b>{{ k.qtd_concl}}</b>
-                  {% endfor %}
-               </div>
-
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsCancelados%}
-                        Cancelados: <b>{{ k.qtd_canc }}  </b> 
-                  {% endfor %}
-               </div>
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsFrustrados%}
-                     Frustrados:  <b>{{ k.qtd_frust }}</b>
-                  {% endfor %}
-               </div>
-
-               <div class="col s2">
-                  {% for k in arr_CountAgendaments%}
-                     Pendentes:  <b>{{ k.qtd_geral }}</b>
-                  {% endfor %}
-               </div>
-               <div class="col s2">
-                  {% for k in arr_CountAgendamentsAtrasados%}
-                     Atrasados:  <b>{{ k.qtd_atr }}</b>
-                  {% endfor %}
-               </div>-->
                <thead style="background-color: #581848; color: white; font-size: 15px" >
                   <tr>
                      <th data-field="namet">Paciente</th>
                      <th data-field="telt">Telefone</th>
                      <th data-field="doctort">Horário</th>
                      <th data-field="schedulingt">Agendamento</th>
-                     <th data-field="examt">Unidade</th>
+                     <th data-field="examt">Relação</th>
                      <th data-field="status">Status</th>
                      <th data-field="actiont">Ação</th>
                   </tr>
                </thead>
                <tbody id="tb_append">
                   {% for k in arr_SearchRoute%}
-                  <tr>
+                  <tr id="tr_{{ k.id }}">
                      <td>{{ k.paciente}}</td>
                      <td>{{ k.phone}}</td>
                      <td>{{ k.hr_age}}</td>
                      <td>{{ k.date_age}}</td>
-                     <td>{{ k.unity}}</td>
+                     <td>{{ k.company}}</td>
                      <td>{{ k.status}}</td>
                      <td>
                         <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
@@ -381,7 +373,7 @@ Acompanhe as últimas notícias!
 </div>
 
 
-
+{% for k in arr_SearchRoute%}
 <script type = "text/javascript" >
 
 //VISUALIZA O APPEND
@@ -516,10 +508,13 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"tp_conv": key["agendamento"]["convenio"],
 				"driver": key["agendamento"]["motoristaNome"],
 				"doctor": key["agendamento"]["doctor"],
-				"nurse": key["agendamento"]["nurse"],
+				"nurse": key["agendamento"]["NomeNurse"],
 				"id": key["agendamento"]["id"],
 				"tel1": key["pessoal"]["phone1"],
 				"tel2": key["pessoal"]["phone2"],
+				"email": key["pessoal"]["email"],
+				"login": key["pessoal"]["login"],
+				"senha": key["pessoal"]["senha"],
 				"namePaciente": key["pessoal"]["paciente"],
 				"attendance": key["pessoal"]["atendimento"],
 				"zipcode": key["endereco"]["cep"],
@@ -549,16 +544,16 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          $("#btn_frust").data("id", key["agendamento"]["id"]);
          $("#btnIniciar").data("id", key["agendamento"]["id"]);
          $("#btn_salvar").data("id_user", key["id"])
+         $("#statusAtt").hide()
+         $("#statusM").show()
          A = $("#statusM").css({
             "color": key["obs"]["color"], "font-size": "30px", "border-bottom": "none",
-
          }); // AQUI QUE SETA O ID DO PACIENTE NOS BOTÕES
 
          val_btn = $("#statusM").val()
-         console.log(val_btn)
 
          ///verifica se está concluído para desabilitar os botoes
-         if (val_btn == "Concluído") {
+         if (val_btn == "Concluído" || val_btn == "Pendente") {
             $("#btn_conc").attr("disabled", true);
             $("#btn_reag").attr("disabled", true);
             $("#btn_frust").attr("disabled", true);
@@ -603,9 +598,18 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 //FUNCTION CONCLUIR
 function StatusConc(e){ 
    var id = $(e).data("id");
+   var obs = $("#obs").val()
+   var email = $("#email").val()
+   var login = $("#login").val()
+   var senha = $("#senha").val()
+   
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id": id,
+      "obs": obs,
+      "email": email,
+      "login": login,
+      "senha": senha,
 }
    fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
    
@@ -758,7 +762,6 @@ function StatusIniciarColeta(e){
    var nome_paciente = $("#namePaciente").val();
    var phone = "11972112009"
    var email ="stephaniesouza.b@gmail.com"
-   var templatekey = "98fe3957-5dce-4d71-8451-23d5e91ca79b"
 
    var formpost = {
       "id": id,
@@ -769,13 +772,22 @@ function StatusIniciarColeta(e){
 }
 
    fetchRequest("{% url 'ApiIniciarColeta' %}", "GET", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
-   
-      //"true" -> STRING
-      //true -> BOOLEAN
-      if(re["response"] == "true"){ 
-         alert("Coleta Iniciada com Sucesso!");
-         location.reload();
-      } 
+      if(re["response"] == true){ 
+         alert(re["message"]);
+         $(`#tr_${id} > td`).eq(5).text("Em Andamento");
+         $("#btnIniciar").attr("disabled", true);
+         $("#statusAtt").show();
+         $("#statusM").hide();
+         $("#btn_conc").attr("disabled", false);
+         $("#btn_reag").attr("disabled", false);
+         $("#btn_frust").attr("disabled", false);
+         
+      }else{
+         $("#btnIniciar").attr("disabled", false);
+         $("#btn_conc").attr("disabled", true);
+         $("#btn_reag").attr("disabled", true);
+         $("#btn_frust").attr("disabled", true);
+      }
    });
 }
 
@@ -851,6 +863,7 @@ function anxDoc(object){
 
 
 </script>
+{% endfor %}
 {% endblock %}
 
 
