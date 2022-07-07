@@ -11,7 +11,6 @@ sudo unzip shiloh.zip
 cd
 cd /usr/local/shilohcentro
 sudo rm -rf module_file_storage
-sudo rm -rf module_clicksign
 sudo rm -rf auth_dash
 sudo rm -rf auth_access
 sudo rm -rf auth_users
