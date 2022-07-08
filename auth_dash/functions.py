@@ -58,8 +58,9 @@ def RankingDashAtenDayFunction(request):
                     })                
                 array.append(newinfoa)
         else:
-            array= 0
-        
+            array.append({
+                "qtd_day": '0',
+            })
         return array
 
 
@@ -132,7 +133,6 @@ def _treating_data(ranking=None, photo=None):
 #RANKING DASHBOARD ATENDIMENTO > MÊS
 def RankingDashAtenMonthFunction(request):
     data_atual = str(datetime.now().strftime('%m/%Y'))
-    print(data_atual, "data_atual")
     with connections['auth_users'].cursor() as cursor:
         query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC LIMIT 5"
         cursor.execute(query, (data_atual,))
@@ -153,15 +153,16 @@ def RankingDashAtenMonthFunction(request):
                     })                
                 array.append(newinfoa)
         else:
-            array= 0
-        
+            array.append({
+                "qtd_month": '0',
+            })
         return array
 
 
 #RANKING DASHBOARD COMERCIAL > DIA
 def RankingEnfermagemDayFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 5;"
+        query = "SELECT b.id, b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.id, b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
@@ -187,14 +188,14 @@ def RankingEnfermagemMonthFunction(request):
         dados = cursor.fetchall()        
         array = []
         if dados:            
-            for nome, id_enfermeira, qtd_mes in dados:   
+            for nome, id, qtd_mes in dados:   
                 nomes = nome.split()
                 n1 = nomes[0]
                 n2 = nomes[1]
                 nome = n1 + " " + n2            
                 newinfoa = ({
                     "nome": nome,
-                    "id_enfermeira": id_enfermeira,
+                    "id": id,
                     "qtd_month": qtd_mes                    
                     })                
                 array.append(newinfoa)
@@ -314,7 +315,7 @@ def DashProdutividadeAgendamentoFunction(request):
                 array.append(newinfoa)
         else:
             array.append({
-                "qtd": 0,
+                "qtd": '0',
             })
         return array
 
@@ -334,13 +335,59 @@ def DashProdutividadePacienteFunction(request):
                 array.append(newinfoa)
         else:
             array.append({
-                "qtd": 0,
+                "qtd": '0',
             })
         return array
 
 
+def RankingCommerceDayFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_day FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE DATE(a.data_regis) = CURRENT_DATE() AND a.perfil = '7' GROUP BY  b.id, b.nome, a.resp_comerce ORDER BY qtd_day DESC LIMIT 10;"
+        cursor.execute(query )
+        dados = cursor.fetchall()        
+        array = []
+        if dados:
+            for id, nome, resp_comerce, qtd_day in dados: 
+                nomes = nome.split()
+                n1 = nomes[0]
+                n2 = nomes[1]
+                nome = n1 + " " + n2              
+                newinfoa = ({
+                    "id": id,
+                    "nome": nome,
+                    "resp_comerce": resp_comerce,
+                    "qtd_day": qtd_day                    
+                    })                
+                array.append(newinfoa)
+        else:
+            array.append({
+                "qtd_day": '0',
+            })
+        return array
 
 
-
-
-
+#RANKING DASHBOARD COMERCIAL > MÊS
+def RankingCommerceMonthFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_mes FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE Month(a.data_regis) = Month(CURRENT_DATE()) AND a.perfil = '7' GROUP BY b.nome, a.resp_comerce ORDER BY qtd_mes DESC LIMIT 10;"
+        cursor.execute(query )
+        dados = cursor.fetchall()        
+        array = []
+        if dados:            
+            for id, nome, resp_comerce, qtd_mes in dados:   
+                nomes = nome.split()
+                n1 = nomes[0]
+                n2 = nomes[1]
+                nome = n1 + " " + n2            
+                newinfoa = ({
+                    "id": id,
+                    "nome": nome,
+                    "resp_comerce": resp_comerce,
+                    "qtd_month": qtd_mes                    
+                    })                
+                array.append(newinfoa)
+        else:
+            array.append({
+                "qtd_month": '0',
+            })
+        return array

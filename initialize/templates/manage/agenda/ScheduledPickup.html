@@ -61,19 +61,6 @@ Acompanhe as últimas notícias!
                            <label for="tp_conv" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
-                        <div class="input-field col m3 s12" >
-                           <select class="error" name="select" id="nurse" required="true" data-required='true'>
-                                 <option value="">Motorista</option>
-                                 {% for k in arr_SearchNurse %}
-                                 <option value="{{ k.id }}">{{ k.nome }}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="input-field col m3 s12" >
-                              <input readonly="readonly" style="color: black;" id="driver" type="tel">
-                              <label for="driver" class="active">
-                              <i class="material-icons" style="font-size: 15px">phone</i>Motorista <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
-                           </div>
                      </div>
                   </div>
                </li>
@@ -271,46 +258,18 @@ Acompanhe as últimas notícias!
             </div>
          </div>
          <div class="row">
-            <div class=" container">
+            <div class=" container scroll" >
                <!-- COMEÇO DA TABLE -->
                <div class=" row container col s12" style="margin-bottom: 50px; overflow-x: auto">
                   <table class=" bordered">
-                  <!-- <div class="col s10">
-                     <div class="col s3">
-                        {% for k in arr_CountAgendamentsConlcuidos%}
-                           Concluídos: <b>{{ k.qtd_concl}}</b>
-                        {% endfor %}
-                     </div>
-      
-                     <div class="col s2">
-                        {% for k in arr_CountAgendamentsCancelados%}
-                              Cancelados: <b>{{ k.qtd_canc }}  </b> 
-                        {% endfor %}
-                     </div>
-                     <div class="col s2">
-                        {% for k in arr_CountAgendamentsFrustrados%}
-                           Frustrados:  <b>{{ k.qtd_frust }}</b>
-                        {% endfor %}
-                     </div>
-      
-                     <div class="col s2">
-                        {% for k in arr_CountAgendaments%}
-                           Pendentes:  <b>{{ k.qtd_geral }}</b>
-                        {% endfor %}
-                     </div>
-                     <div class="col s2">
-                        {% for k in arr_CountAgendamentsAtrasados%}
-                           Atrasados:  <b>{{ k.qtd_atr }}</b>
-                        {% endfor %}
-                     </div>-->
                   </div>
                      <thead style="background-color: #581848; color: white; font-size: 15px" >
                         <tr>
                            <th data-field="namet">Paciente</th>
-                           <th data-field="telt">Telefone</th>
                            <th data-field="nurset">Enfermeiro</th>
                            <th data-field="doctort">Horário</th>
-                           <th data-field="schedulingt">Agendamento</th>
+                           <th data-field="telt">Exame</th>
+                           <th data-field="schedulingt">Data</th>
                            <th data-field="examt">Unidade</th>
                            <th data-field="status">Status</th>
                            <th data-field="actiont">Ação</th>
@@ -320,9 +279,9 @@ Acompanhe as últimas notícias!
                         {% for k in arr_SearchScheduledPickup%}
                         <tr>
                            <td>{{ k.paciente}}</td>
-                           <td>{{ k.phone}}</td>
                            <td>{{ k.nurse}}</td>
                            <td>{{ k.hr_age}}</td>
+                           <td>{{ k.exame}}</td>
                            <td>{{ k.date_age}}</td>
                            <td>{{ k.unity}}</td>
                            <td>{{ k.status}}</td>
@@ -467,7 +426,7 @@ function filterAgenda() {
          var dados = re["message"];
          for(k in dados){
                var key = dados[k];
-               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["tel"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
+               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["exame"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
                $("#tb_append").append(append);
          }
       }
@@ -770,6 +729,9 @@ function ReagendarAge(e){
          location.reload();
 
          }
+      else{
+         alert(re["message"]);
+      }
       });
    }
 }

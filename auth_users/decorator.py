@@ -484,9 +484,11 @@ def FschedulePickup(request):
             searchID = "SELECT id, nome_conv FROM admins.health_insurance WHERE nome_conv = %s"
             cursor.execute(searchID, (convenio,))
             dados = cursor.fetchall()
-            
+            nurse = 489
+            driver = 488
+            hr_age = '00:00'
             for id_conv, nome_conv  in dados:
-                params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number,complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente,)
+                params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number, complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente,)
                 query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_registro`, `unity`, `identification`, `perfil_int`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '');"
                 cursor.execute(query, params)
 
@@ -1955,7 +1957,7 @@ def FunctionStatusAgendaConc(request):
         param2= ( id, data_atual,)
         query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s WHERE (`id` = %s);"
         cursor.execute(query, param)
-
+        '''
         querySet = "SELECT id, nome_p FROM auth_agenda.collection_schedule where id = %s"
         cursor.execute(querySet, (id,))
         dados = cursor.fetchall()
@@ -1963,7 +1965,7 @@ def FunctionStatusAgendaConc(request):
         for id_coleta, id_paciente in dados:
             queryUp = "UPDATE `customer_refer`.`patients` SET `email_p` = %s, `login_conv` = %s, `senha_conv` = %s WHERE (`id_p` = %s);"
             cursor.execute(queryUp, (email, login, senha, id_paciente,))
-        
+        '''
         paramver = (id,)
         queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
         cursor.execute(queryver, paramver)
@@ -1980,7 +1982,7 @@ def FunctionStatusAgendaConc(request):
                             "response": "true", 
                             "message": "Coleta já concluída."
                             }
-                    else:
+                    else: 
                         pass
                         query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
                         cursor.execute(query2, param2)
@@ -3953,7 +3955,7 @@ def StartCollectionFunction(id_coleta):
 #TABELA AJUSTAR ROTA DAS ENFERMEIRAS
 def searchAdjustRouteNurse(request):    
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT ag.id as agendamento, ag.data_agendamento, pa.nome_p, ag.cep, ag.status FROM  auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON pa.id_p = ag.nome_p WHERE ag.hr_agendamento IS NULL AND ag.resp_enfermeiro IS NULL AND ag.status LIKE 'Pendente' AND ag.data_agendamento <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY ag.data_agendamento, ag.hr_agendamento ASC"
+        query = "SELECT ag.id as agendamento, ag.data_agendamento, pa.nome_p, ag.cep, ag.status FROM  auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON pa.id_p = ag.nome_p WHERE ag.hr_agendamento LIKE '00:00' AND ag.resp_enfermeiro LIKE '489' AND ag.status LIKE 'Pendente' AND ag.data_agendamento <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY ag.data_agendamento, ag.hr_agendamento ASC"
         cursor.execute(query)
         dados = cursor.fetchall()
         array = []
