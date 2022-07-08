@@ -342,7 +342,7 @@ def DashProdutividadePacienteFunction(request):
 
 def RankingCommerceDayFunction(request):
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_day FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE DATE(a.data_regis) = CURRENT_DATE() AND a.perfil = '7' GROUP BY  b.id, b.nome, a.resp_comerce ORDER BY qtd_day DESC LIMIT 10;"
+        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_day FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE DATE(a.data_regis) = CURRENT_DATE() AND a.perfil = '7' GROUP BY  b.id, b.nome, a.resp_comerce ORDER BY qtd_day DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
@@ -369,7 +369,7 @@ def RankingCommerceDayFunction(request):
 #RANKING DASHBOARD COMERCIAL > MÊS
 def RankingCommerceMonthFunction(request):
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_mes FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE Month(a.data_regis) = Month(CURRENT_DATE()) AND a.perfil = '7' GROUP BY b.nome, a.resp_comerce ORDER BY qtd_mes DESC LIMIT 10;"
+        query = "SELECT b.id, b.nome, a.resp_comerce, COUNT(a.perfil) AS qtd_mes FROM auth_users.users a INNER JOIN auth_users.users b ON b.id = a.resp_comerce WHERE Month(a.data_regis) = Month(CURRENT_DATE()) AND a.perfil = '7' GROUP BY b.nome, a.resp_comerce ORDER BY qtd_mes DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
@@ -390,4 +390,59 @@ def RankingCommerceMonthFunction(request):
             array.append({
                 "qtd_month": '0',
             })
+        return array
+
+#CONTAGEM DASHBOARD COMERCIAL > DIA
+def DashCommerceDayFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT count(perfil) AS qtd_day FROM auth_users.users WHERE DATE(data_regis) = CURRENT_DATE() AND perfil = '7';"
+        cursor.execute(query)
+        dados = cursor.fetchall()
+        array = []
+        for qtd_day in dados:
+            if qtd_day == 0: 
+                qtd_day = '0'
+            else:
+                qtd_day = int(qtd_day[0])
+                newinfoa = ({
+                    "qtd_day": qtd_day
+                    })
+                array.append(newinfoa)
+        return array
+
+#CONTAGEM DASHBOARD COMERCIAL > MÊS
+def DashCommerceMonthFunction(request): 
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT count(perfil) AS qtd_mes FROM auth_users.users WHERE Month(data_regis) = Month(CURRENT_DATE()) AND perfil = '7';"
+        cursor.execute(query)
+        dados = cursor.fetchall()
+        array = []
+        for qtd_mes in dados:
+            if qtd_mes == 0: 
+                qtd_mes = '0'
+            else:
+                qtd_mes = int(qtd_mes[0])        
+                newinfoa = ({
+                    "qtd_month": qtd_mes
+                    })
+                array.append(newinfoa)
+    return array
+
+
+#CONTAGEM DASHBOARD COMERCIAL > TOTAL
+def CountDashTotalFunction(request):
+    with connections['auth_users'].cursor() as cursor:
+        query = "SELECT count(id) AS parc_total FROM auth_users.users WHERE perfil = '7';"
+        cursor.execute(query)
+        dados = cursor.fetchall()
+        array = []
+        for qtd_all in dados:
+            if qtd_all == 0:
+                qtd_all = "0"
+            else:
+                qtd_all = int(qtd_all[0])
+                newinfoa = ({
+                    "qtd_all": qtd_all
+                    })
+                array.append(newinfoa)
         return array

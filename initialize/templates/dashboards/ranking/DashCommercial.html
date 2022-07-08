@@ -50,72 +50,57 @@
                 <h5 class="corfont">Dashboard Comercial</h5>
             </div>
         </div>
-    </div>    
+    </div>
+   
     <div class="row container m-0">
         <div class="col s12 m4">
             <div class="card padding-4 animate fadeLeft">
                 <div class="row">
                     <div class="col s12 m12">
-                        <h5 class="mb-0">Total</h5>
+                        <h5 class="mb-0" style="text-align: center">Parcerias do Dia</h5>
                         <p class="no-margin">&nbsp;</p>
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="indeterminate" style="background-color: #794c8a!important"></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">&nbsp;</p>
-                        </div>
-                        {% for k in arr_SearchCountDashTotal %}
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{ k.parc_total }}</h4>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m4">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">Mês</h5>
-                        <p class="no-margin">&nbsp;</p>                        
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="indeterminate" style="background-color: #ffa726!important"></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        {% for k in arr_SearchCountDashMonth %}
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">&nbsp;</p>
-                        </div>
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{ k.qtd_mes }}</h4>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m4">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">Dia</h5>
-                        <p class="no-margin">&nbsp;</p>
-                        
                         <div class="progress" style="background-color: #ffebee;">
                             <div class="indeterminate" style="background-color: #00bcd4!important; width: 49%;"></div>
                         </div>
                         <p class="no-margin">&nbsp;</p>
-                        <div class="col s5 m5 left-align">
-                            {% for k in arr_SearchCountDashDay %}
-                            <p class="mb-0 pt-8">&nbsp;</p>
+                        {% for k in arr_DashCommerceDay %}
+                        <h4 class="mb-0" style="text-align: center">{{k.qtd_day}}</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0" style="text-align: center">Parcerias do Mês</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #4caf50!important; width: 49%;"></div>
                         </div>
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{ k.qtd_day }}</h4>
-                            {% endfor %}
+                        <p class="no-margin">&nbsp;</p>
+                        {% for k in arr_DashCommerceMonth %}
+                        <h4 class="mb-0" style="text-align: center">{{k.qtd_month}}</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div> 
+        
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0" style="text-align: center">Total</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #794c8a!important; width: 49%;"></div>
                         </div>
+                        <p class="no-margin">&nbsp;</p>
+                        {% for k in arr_SearchCountDashTotal %}
+                        <h4 class="mb-0" style="text-align: center">{{k.qtd_all}}</h4>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

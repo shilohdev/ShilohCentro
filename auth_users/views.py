@@ -22,7 +22,7 @@ from datetime import datetime
 from requests import request
 from auth_users.decorator import ApiAdjustRouteFunction, searchAdjustRouteNurse, StartCollectionFunction, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
 from auth_finances.functions.exams.models import valTotalIntF, valIntPending, valIntPay, valCommercialPay, valCommercialPending, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valPartinersPay, valPartinersPending, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
-from auth_dash.functions import RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
+from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatepermissionMyFinance, allowPermission
 
@@ -1267,14 +1267,12 @@ def DashCommercialViews(request):
         return error(request)
     ViewFoto = FilePhotoViewFunction(request)#foto perfil parte superior
 
-    #CountDashTotal = CountDashTotalFunction(request)
-    #CountDashMonth = CountDashMonthFunction(request)
-    #CountDashDay = CountDashDayFunction(request)
+    CountDashTotal = CountDashTotalFunction(request)
+    DashCommerceMonth = DashCommerceMonthFunction(request)
+    DashCommerceDay = DashCommerceDayFunction(request)
     RankingCommerceDay = RankingCommerceDayFunction(request)
     RankingCommerceMonth = RankingCommerceMonthFunction(request)
     
-    #RankingDashmonth = RankingDashmonthFunction(request)
-
     PhotoRankingday = PhotoRankByArrayFunction(RankingCommerceDay)
     PhotoRankingMonth = PhotoRankByArrayFunction(RankingCommerceMonth)
 
@@ -1286,12 +1284,11 @@ def DashCommercialViews(request):
     return render(request, 'dashboards/ranking/DashCommercial.html', 
     {
         "arr_ViewFoto": ViewFoto,
-         #"arr_SearchCountDashTotal": CountDashTotal,
-         #"arr_SearchCountDashMonth": CountDashMonth,
-         #"arr_SearchCountDashDay": CountDashDay,
+         "arr_SearchCountDashTotal": CountDashTotal,
+         "arr_DashCommerceMonth": DashCommerceMonth,
+         "arr_DashCommerceDay": DashCommerceDay,
          "arr_RankingCommerceDay": RankingCommerceDay,
          "arr_RankingCommerceMonth": RankingCommerceMonth,
-        # "arr_SearchRankingDashmonth": RankingDashmonth,
     } )
  
 
@@ -1315,9 +1312,6 @@ def DashServiceViews(request):
     DashCollectionPendenteMes= DashCollectionPendenteMesFunction(request)
     DashCollectioAndamentoMes = DashCollectioAndamentoMesFunction(request)
     DashCollectioConcluidoMes = DashCollectionConcluidoMesFunction(request)
-    
-   # CountDashConclDay = CountDashConclDayFunction(request)
-   # CountDashConclMonth = CountDashConclMonthFunction(request)
 
     PhotoRankingAtendimento_dia = PhotoRankByArrayFunction(RankingDashAtenDay)
     PhotoRankingAtendimento_mes = PhotoRankByArrayFunction(RankingDashAtenMonth)
@@ -1344,12 +1338,7 @@ def DashServiceViews(request):
         "arr_DashCollectioAndamentoMes": DashCollectioAndamentoMes, 
         "arr_DashCollectioConcluidoMes": DashCollectioConcluidoMes, 
         "arr_DashProdutividadeAgendamento": DashProdutividadeAgendamento, 
-        "arr_DashProdutividadePaciente": DashProdutividadePaciente, 
-        
-        
-       # "arr_SearchCountDashPendTotal": CountDashPendTotal,
-       # "arr_SearchCountDashConclDay": CountDashConclDay, 
-       # "arr_SearchCountDashConclMonth": CountDashConclMonth, 
+        "arr_DashProdutividadePaciente": DashProdutividadePaciente,
     } 
      )
 
