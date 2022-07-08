@@ -162,7 +162,7 @@ def RankingDashAtenMonthFunction(request):
 #RANKING DASHBOARD COMERCIAL > DIA
 def RankingEnfermagemDayFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.id, b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 5;"
+        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.id, b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []

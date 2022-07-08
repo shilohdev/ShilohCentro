@@ -1929,7 +1929,7 @@ def SearchModalScheduled(request):
     }
 
 
-#ATUALIZAR STATUS DO AGENDAMENTO CONCLUIDO
+#CONCLUIR COLETA AGENDADA
 def FunctionStatusAgendaConc(request):
     id = request.POST.get("id")
     obs = request.POST.get("obs")
@@ -1941,11 +1941,12 @@ def FunctionStatusAgendaConc(request):
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
    
     with connections['auth_users'].cursor() as cursor:
-        searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+        searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
         if dados:
-            for id_usuario, nome in dados:
+            for id_usuario, nome, perfil in dados:
+                print(type(perfil))
                 pass
         else:
             return {
@@ -1998,6 +1999,10 @@ def FunctionStatusAgendaConc(request):
                 query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
                 cursor.execute(query3, params3)
         
+        if perfil == '2':
+            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Atendimento Concluiu Coleta', %s);"
+            cursor.execute(queryRank, (id_usuario, data_atual,))
+
         return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
 
 
