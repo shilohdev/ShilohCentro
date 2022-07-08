@@ -75,7 +75,9 @@
                                 <p class="mb-0 " style="font-size: 16px;">Agendamento</p>
                             </div>
                             <div class="col s6 m4 right-align">
-                                <h5 class="mb-0">1</h5>
+                                {% for k in arr_DashProdutividadeAgendamento %}
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="row">
@@ -83,7 +85,9 @@
                                 <p class="mb-0 " style="font-size: 16px;">Pacientes</p>
                             </div>
                             <div class="col s6 m6 right-align">
-                                <h5 class="mb-0">1</h5>
+                                {% for k in arr_DashProdutividadePaciente %}
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -94,7 +98,7 @@
             <div class="card padding-4 animate fadeLeft">
                 <div class="row">
                     <div class="col s12 m12">
-                        <h5 class="mb-0">Coletas do dia</h5>
+                        <h5 class="mb-0">Coletas do Dia</h5>
                         <p class="no-margin">&nbsp;</p>
                         <div class="progress" style="background-color: #ffebee;">
                             <div class="indeterminate" style="background-color: #794c8a !important"></div>

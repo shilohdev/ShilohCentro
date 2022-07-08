@@ -126,8 +126,8 @@ def CadastreUser(request):
          
         #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
         arrayPermission = { 
-            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48', '49', '51', '50', '52', ],  #ADMINISTRADOR
-            "2": ['11', '16', '14', '22', '43', '9', '8', '48', '20', '52', ], #ATENDIMENTO
+            "1": ['1','2', '3', '4', '8','9', '10','11', '12', '14', '15','16', '18','19','20','21','22', '23', '48', '49', '51', '50', '52', '53'],  #ADMINISTRADOR
+            "2": ['11', '16', '14', '22', '43', '9', '8', '48', '20', '52', '53' ], #ATENDIMENTO
             "3": ["46", "16", '48', '20', '52',], #ENFERMAGEM
             "5": ['16', '25', '31', '32', '26', '44', '45', '47', '48', '20', '39', '40', '41', '42', '52',], #FINANCEIRO
             "6": ['15', '16','11', '20','21', '48', '52',], #COMERCIAL
@@ -476,7 +476,7 @@ def FschedulePickup(request):
         print(id_paciente)
         dados = cursor.fetchall()
         if dados:
-            for idPaciente, idLeadPaciente, nomePaciente, unityPaciente in dados:
+            for idPaciente, idLeadPaciente, unityPaciente, nomePaciente in dados:
                 pass
             queryLead= "UPDATE `customer_refer`.`leads` SET `register` = '1', `status_l` = 'Paciente'  WHERE (`id_lead` = %s);"
             cursor.execute(queryLead, (idLeadPaciente,))
@@ -493,13 +493,18 @@ def FschedulePickup(request):
             params2 = (id_paciente, date_create, nomeUser,)
             query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s);"
             cursor.execute(query2, params2)
+
+            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Agendou Coleta', %s);"
+            cursor.execute(queryRank, (id_usuario, date_create,))
+
+
         else:
             return {
                 "response": "false",
                 "message": "Por favor tente novamente."
             }
     
-    return {"response": "true", "message": "Agendado com sucesso!"}
+        return {"response": "true", "message": "Agendado com sucesso!"}
 
 
 
@@ -1416,6 +1421,7 @@ def ApiCadastrePatienteFunction(request):
     senha = request.POST.get("senha")
     nome_company = request.POST.get("company")
     data_atual = str(datetime.now().strftime('%Y-%m-%d'))
+    date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     name = str(name).title()
 
@@ -1472,6 +1478,10 @@ def ApiCadastrePatienteFunction(request):
                 #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
                 query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
                 cursor.execute(query, (lead,))
+
+                queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Cadastrou Paciente', %s);"
+                cursor.execute(queryRank, (id_usuario, date_create,))
+
         else:
             param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, id_company, data_atual,)
             query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -1480,7 +1490,9 @@ def ApiCadastrePatienteFunction(request):
             #INSERIR QUANDO FIZER CADASTRO DO PACIENTE
             query= "UPDATE `customer_refer`.`leads` SET `register` = '1' WHERE (`id_lead` = %s);"
             cursor.execute(query, (lead,))
-
+            
+            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Cadastrou Paciente', %s);"
+            cursor.execute(queryRank, (id_usuario, date_create,))
 
         return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -3935,3 +3947,60 @@ def StartCollectionFunction(id_coleta):
         dados =  cursor.fetchall()
     
     return True
+
+
+
+#TABELA AJUSTAR ROTA DAS ENFERMEIRAS
+def searchAdjustRouteNurse(request):    
+    with connections['auth_agenda'].cursor() as cursor:
+        query = "SELECT ag.id as agendamento, ag.data_agendamento, pa.nome_p, ag.cep, ag.status FROM  auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON pa.id_p = ag.nome_p WHERE ag.hr_agendamento IS NULL AND ag.resp_enfermeiro IS NULL AND ag.status LIKE 'Pendente' AND ag.data_agendamento <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY ag.data_agendamento, ag.hr_agendamento ASC"
+        cursor.execute(query)
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for id_agendamento, data, nome_paciente, cep, status in dados:
+                dataFormatada = datetime.strptime(str(data), "%Y-%m-%d").strftime("%d/%m/%Y") if data not in ["", None] else ""
+                newinfoa = ({
+                    "id": id_agendamento,
+                    "date_age": dataFormatada,
+                    "paciente": nome_paciente,
+                    "cep": cep,
+                    "nurse": status,              
+                    })
+                array.append(newinfoa)
+            return array 
+
+#UPDATE AJUSTAR ROTA
+def ApiAdjustRouteFunction(request):
+    id = request.POST.get("id")
+    nurse = request.POST.get("nurse")    
+    hr_agenda = request.POST.get("hr_agenda") 
+    with connections['auth_agenda'].cursor() as cursor:
+        param1 = (hr_agenda,)
+        query1= "SELECT data_agendamento, COUNT(hr_agendamento), hr_agendamento FROM auth_agenda.collection_schedule WHERE data_agendamento = DATE_ADD(CURDATE(), INTERVAL 1 DAY) AND hr_agendamento = %s GROUP BY data_agendamento, hr_agendamento ;"
+        cursor.execute(query1, param1)
+        dados = cursor.fetchall()
+        if dados:
+            
+            for data, qtd, hora in dados:
+                if qtd > 8:
+                    
+                    return {
+                        "response": True, 
+                        "message": "Horário selecionado indisponível."
+                    } 
+                     
+                else:              
+                    param = (hr_agenda, nurse, id,)              
+                    query = "UPDATE auth_agenda.collection_schedule SET hr_agendamento = %s, resp_enfermeiro = %s WHERE id = %s;"
+                    cursor.execute(query, param)      
+        
+        else:              
+            param = (hr_agenda, nurse, id,)              
+            query = "UPDATE auth_agenda.collection_schedule SET hr_agendamento = %s, resp_enfermeiro = %s WHERE id = %s;"
+            cursor.execute(query, param)
+                    
+        return {
+            "response": True,    
+            "message": "Dados salvos com sucesso."
+        }

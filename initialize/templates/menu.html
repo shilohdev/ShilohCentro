@@ -123,6 +123,9 @@
                 <li data-permission="collection_route" data-chapter="view" style="display: none">
                     <a href="{% url 'CollectionRouteViews' %}"><i class="material-icons" style="font-size: 15px;">location_on</i><span data-i18n="Range Slider">Rota</span></a>
                 </li>
+                <li data-permission="adjust_route" data-chapter="view" style="display: none">
+                    <a href="{% url 'AdjustRouteViews' %}"><i class="material-icons" style="font-size: 15px;">map</i><span data-i18n="Range Slider">Fazer Rota</span></a>
+                </li>
             </ul>
         </div>
     </li>
@@ -186,7 +189,7 @@
         <li data-permission="reverse_finished_int" data-chapter="view" style="display: none">
             <a href="{% url 'RefundCompletedInterno' %}"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
         </li>
-    </ul>
+    </ul> 
 
     <!--MEUS REGISTROS-->
     <li data-permission="meus_registros" data-chapter="main" style="display: none" class="navigation-header">
@@ -215,10 +218,10 @@
 <script type="text/javascript">
 var permissions = {{ infoUser|safe }};
 let dictPages = { 
-    "register": ["register_user", "register_partners", "register_indication", "cadastre_patients", "register_convenio", "register_lead"],
+    "register": ["register_user", "register_partners", "register_indication", "cadastre_patients", "register_convenio", "register_lead", ],
     "list": ["list_users", "list_partners", "list_patients", "list_indication" ],
     "settings": ["insert_permission"],
-    "scheduled": ["agendar_coleta", "consult_agenda", "collection_route"],
+    "scheduled": ["agendar_coleta", "consult_agenda", "collection_route", "adjust_route"],
     "agend_reverse": ["agend_concluidos", "reverse_finished", "not_reached", "glosses"],//FINANCEIRO
     "closure": ["fechamento_parceiro", "fechamento_comercial", "fechamento_interno"],
     "view_agenda_all": ["consult_agenda_all"],

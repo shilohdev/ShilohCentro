@@ -44,11 +44,6 @@ Realize um agendamento
                      <input id="date_age" type="date" data-required='true'>
                      <label for="date_age">Data Agendamento</label>
                   </div>
-                  <div class="input-field col m3 s6">
-                     <input id="hr_age" type="text" placeholder="00:00">
-                     <label for="hr_age">
-                     <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
-                  </div>
                   <div class="input-field col m3 s12" >
                      <div class="select-wrapper">
                         <select name="select" id="tp_service" onchange="SelectShow()" class="error " data-required='true'>
@@ -70,12 +65,10 @@ Realize um agendamento
                      </div>
                   </div>
                </div>
+               <!--
                <div class="input-field col s12 m12" >
-                  <div class="input-field col m3 s12">
-                     <input readonly="readonly" style="color: black;" id="convenio" type="text" value="{{ k.convenio}}">
-                     <label for="convenio" class="active">
-                     <i class="material-icons" style="font-size: 15px"></i>&nbsp;Convênio</label>
-                  </div>
+                  
+                  
                   <div class="input-field col m3 s12" >
                      <div class="select-wrapper">
                         <select name="select" id="nurse" onchange="SelectShow()" class="error" data-required='true'>
@@ -97,6 +90,7 @@ Realize um agendamento
                      </div>
                   </div>
                </div>
+                2-->
             </div>
          </li>
          <!--CARD 2-->
@@ -128,6 +122,11 @@ Realize um agendamento
                  
                </div>
                   <div class="col s12 m12">
+                     <div class="input-field col m3 s12">
+                        <input readonly="readonly" style="color: black;" id="convenio" type="text" value="{{ k.convenio}}">
+                        <label for="convenio" class="active">
+                        <i class="material-icons" style="font-size: 15px"></i>&nbsp;Convênio</label>
+                     </div>
                      <div class="input-field col m3 s12">
                         <input disabled id="doctor" type="text">
                         <label for="doctor">

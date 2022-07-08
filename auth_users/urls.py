@@ -52,6 +52,9 @@ urlpatterns = [
 
     #AGENDAR COLETA
     path('agendar/coleta/paciente', views.schedulePickupViews, name='schedulePickup'),
+    #AJUSTAR ROTA COLETA PACIENTE
+    path('consultar/coletas/ajustar/rota', views.AdjustRouteViews, name='AdjustRouteViews'),#AJUSTAR ROTA DE AGENDAMENTOS
+    path('api/consultar/coletas/ajustar/rota', views.ApiAdjustRoute, name='ApiAdjustRoute'), #API AJUSTAR ROTA
 
     #API AGENDAR COLETA
     path('api/agendar/coleta/paciente', views.ApiSchedulePickupViews, name='ApiSchedulePickup'),

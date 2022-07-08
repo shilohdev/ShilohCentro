@@ -36,28 +36,15 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 import re
 
-
+ 
 def RankingDashAtenDayFunction(request):
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT DATE_FORMAT(a.data_regis,'%d/%m/%Y') as data, a.atendente_resp_p, COUNT(a.id_p), b.nome FROM customer_refer.patients a INNER JOIN auth_users.users b ON a.atendente_resp_p = b.id WHERE DATE_FORMAT(a.data_regis,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') GROUP BY DATE_FORMAT(a.data_regis,'%d/%m/%Y'), a.atendente_resp_p, b.nome UNION SELECT DATE_FORMAT(a.data_registro,'%d/%m/%Y') as data,  b.id, COUNT(a.id), b.nome FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON a.resp_atendimento = b.nome WHERE DATE_FORMAT(data_registro,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') GROUP BY DATE_FORMAT(a.data_registro,'%d/%m/%Y'),  b.id, b.nome"
+        query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%d/%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE DATE_FORMAT(a.data_registro,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%d/%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC LIMIT 5"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
-
-        queryPontos = "SELECT b.id, COUNT(a.id), a.resp_atendimento FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON a.resp_atendimento = b.nome WHERE DATE_FORMAT(data_registro,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') GROUP BY b.id, DATE_FORMAT(data_registro,'%d/%m/%Y')"
-        cursor.execute(queryPontos)
-        dados = cursor.fetchall()
-        if dados: 
-            for id_pontos, qtd_regis, nome in dados:
-                pass
-
         if dados:
-            for data, id, qtd_day, nome in dados:
-                if id_pontos == id:
-                    qtd_day = qtd_day +  qtd_regis
-                    pass
-                else:
-                    pass
+            for qtd, id, nome, data  in dados:
                 nomes = nome.split()
                 n1 = nomes[0]
                 n2 = nomes[1]
@@ -66,7 +53,7 @@ def RankingDashAtenDayFunction(request):
                     "data": data,
                     "id": id,
                     "nome": nome,
-                    "qtd_day": qtd_day,
+                    "qtd_day": qtd,
                     "nome": nome,
                     })                
                 array.append(newinfoa)
@@ -147,12 +134,12 @@ def RankingDashAtenMonthFunction(request):
     data_atual = str(datetime.now().strftime('%m/%Y'))
     print(data_atual, "data_atual")
     with connections['auth_users'].cursor() as cursor:
-        query = "SELECT DATE_FORMAT(a.data_regis,'%m/%Y') as data, a.atendente_resp_p, COUNT(a.id_p), b.nome FROM customer_refer.patients a INNER JOIN auth_users.users b ON a.atendente_resp_p = b.id WHERE DATE_FORMAT(a.data_regis,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) GROUP BY DATE_FORMAT(a.data_regis,'%m/%Y'), a.atendente_resp_p, b.nome ORDER BY COUNT(a.id_p) DESC LIMIT 10"
+        query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC LIMIT 5"
         cursor.execute(query, (data_atual,))
         dados = cursor.fetchall()        
         array = []
         if dados:            
-            for data, id, qtd_month, nome in dados:
+            for qtd, id, nome, data  in dados:
                 nomes = nome.split()
                 n1 = nomes[0]
                 n2 = nomes[1]
@@ -161,7 +148,7 @@ def RankingDashAtenMonthFunction(request):
                     "data": data,
                     "id": id,
                     "nome": nome,
-                    "qtd_month": qtd_month,
+                    "qtd_month": qtd,
                     "nome": nome,
                     })                
                 array.append(newinfoa)
@@ -174,7 +161,7 @@ def RankingDashAtenMonthFunction(request):
 #RANKING DASHBOARD COMERCIAL > DIA
 def RankingEnfermagemDayFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 10;"
+        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_concl FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE DATE(a.data_agendamento) = CURRENT_DATE() AND a.status = 'Concluído' group by b.nome, a.resp_enfermeiro ORDER BY qtd_concl DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
@@ -195,7 +182,7 @@ def RankingEnfermagemDayFunction(request):
 #RANKING DASHBOARD ENFERMEIRAS > MÊS
 def RankingEnfermagemMonthFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_mes FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE Month(a.data_agendamento) = Month(CURRENT_DATE()) AND a.status = 'Concluído' GROUP BY b.nome, a.resp_enfermeiro ORDER BY qtd_mes DESC LIMIT 10;"
+        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_mes FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE Month(a.data_agendamento) = Month(CURRENT_DATE()) AND a.status = 'Concluído' GROUP BY b.nome, a.resp_enfermeiro ORDER BY qtd_mes DESC LIMIT 5;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []
@@ -310,3 +297,50 @@ def DashCollectionConcluidoMesFunction(request):
                 })                
             array.append(newinfoa)
         return array
+
+
+def DashProdutividadeAgendamentoFunction(request):
+    with connections['auth_agenda'].cursor() as cursor:
+        query = "SELECT COUNT(a.id), DATE_FORMAT(a.data_registro,'%d/%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE acao = 'Agendou Coleta' AND DATE_FORMAT(a.data_registro,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') group by DATE_FORMAT(a.data_registro,'%d/%m/%Y')"
+        cursor.execute(query, )
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for qtd, data in dados:
+                newinfoa = ({
+                    "qtd": qtd,
+                    "data": data,                
+                    })                
+                array.append(newinfoa)
+        else:
+            array.append({
+                "qtd": 0,
+            })
+        return array
+
+
+def DashProdutividadePacienteFunction(request):
+    with connections['auth_agenda'].cursor() as cursor:
+        query = "SELECT COUNT(a.id), DATE_FORMAT(a.data_registro,'%d/%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE acao = 'Cadastrou Paciente' AND DATE_FORMAT(a.data_registro,'%d/%m/%Y') = DATE_FORMAT(CURRENT_DATE(),'%d/%m/%Y') group by DATE_FORMAT(a.data_registro,'%d/%m/%Y')"
+        cursor.execute(query, )
+        dados = cursor.fetchall()
+        array = []
+        if dados:
+            for qtd, data in dados:
+                newinfoa = ({
+                    "qtd": qtd,
+                    "data": data,                
+                    })                
+                array.append(newinfoa)
+        else:
+            array.append({
+                "qtd": 0,
+            })
+        return array
+
+
+
+
+
+
+
