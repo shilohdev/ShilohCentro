@@ -50,16 +50,27 @@ Acompanhe as últimas notícias!
                            
                         </div>
                         <div class="input-field col m3 s12" >
-                           <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
+                           <input readonly="readonly" style="color: black;" id="tp_exame" type="text">
                            <label for="tp_exame" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
                         </div>
                      </div>
                      <div class="input-field col s12" >
-                        <div class="input-field col m3 s12" >
-                           <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
+                        <div class="input-field col m3 s12" style="margin-top: 37px;">
+                           <input readonly="readonly" style="color: black;" id="tp_conv" type="text">
                            <label for="tp_conv" class="active">
                            <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio <a class="btn tooltipped btn-floating mb-1 btn-flat waves-effect accent-2 white-text" data-position="right" data-tooltip="Esse campo não pode ser editado." style="border-radius: 100%;width: 7px;height: 7px; background: rgb(184, 182, 182);"></a></label>
+                        </div>
+                        <div class="input-field col m3 s12" >
+                           <div class="select-wrapper">
+                              <label class="active">Enfermeiro</label>
+                              <select name="select" id="nurse" class="error " required="true" data-show="search">
+                                 <option value="">Enfermeiro</option>
+                                 {% for k in arr_SearchNurse%}
+                                 <option value="{{ k.id }}">{{ k.nome }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -485,7 +496,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 				"tp_conv": key["agendamento"]["convenio"],
 				"driver": key["agendamento"]["motoristaNome"],
 				"doctor": key["agendamento"]["doctor"],
-				"nurse": key["agendamento"]["NomeNurse"], 
+				"nurse": key["agendamento"]["nurse"], 
 				"id": key["agendamento"]["id"],
 				"tel1": key["pessoal"]["phone1"],
 				"tel2": key["pessoal"]["phone2"],
