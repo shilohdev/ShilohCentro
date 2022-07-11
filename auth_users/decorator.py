@@ -4053,22 +4053,7 @@ def fetchHistoryIndication(id):
                 "user_resp": user_resp,
             })
             return arr_response
-
     else:
-        db = Connection('customer_refer', '', '', '', '')
-        db.table = "FROM customer_refer.leads"
-        db.condition = "WHERE id_lead = %s"
-        db.params = (
-            id,
-        )
-        dados = db.fetch(["nome_lead, data_regis_l, status_l"], True)
-        if dados:
-            for nome, data, status in dados:
-                data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
-                arr_response.append({
-                    "nome": nome,
-                    "data": data,
-                    "status": status,
-                })
-
-        return arr_response
+        arr_response = 0
+    
+    return arr_response

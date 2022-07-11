@@ -31,7 +31,7 @@
                   <div class="col s12" style="margin-top: 10px;">
                      <div id="activity" class="col s12 active" style="display: block;">
                         <div class="activity">
-                           <ul id="historico" class="widget-timeline mb-0">
+                           <ul id="historico" class="widget-timeline mb-0" style="display: none;">
                            </ul>
                         </div>
                      </div>
@@ -140,26 +140,39 @@ function viewHistoricoModal(object){
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_lead": id_lead ,
-   };
-        
+   }; 
+   
+   $("#historico").hide();
+   $(object).prop("disabled", true);
+   
    fetchRequest("{% url 'ApiHistoryMyIndications' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
       if (re["response"] == false) {
          alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
       }
       else {
-         alert("aqui2")
-         var ap = "";
-            var historyResponse = re["message"]["history"];
-            $.map(historyResponse, function(n, i) {
-               ap += `
-                  <li class="timeline-items timeline-icon-green active">
-                     <div id="data_f" class="timeline-time">${n.data}</div>
-                     <h5 id="name_u" class="timeline-title">${n.nome}</h5>
-                     <p id="action_f" class="timeline-text">${n.operacao}</p>
-                  </li>
-               `;
-            });
-            $("#historico").html(ap);
+         $("#historico").show();
+         if (re["message"]["history"] == 0){
+            $("#historico").html("");
+            var append = ""
+            var append = '<div class="activity" style="height:30px; text-align: center; background: #ededeb">Nenhum Registro Encontrado</div>';
+            $("#historico").append(append); 
+         }
+         else{
+            $("#historico").show();
+            $("#historico").html("");
+            var ap = ""; 
+               var historyResponse = re["message"]["history"];
+               $.map(historyResponse, function(n, i) {
+                  ap += `
+                     <li class="timeline-items timeline-icon-green active">
+                        <div id="data_f" class="timeline-time">${n.data}</div>
+                        <h5 id="name_u" class="timeline-title">${n.nome}</h5>
+                        <p id="action_f" class="timeline-text">${n.operacao}</p>
+                     </li>
+                  `;
+               });
+               $("#historico").html(ap);
+            }
          }
       })
 }
