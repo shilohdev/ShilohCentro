@@ -32,7 +32,6 @@
                      <div id="activity" class="col s12 active" style="display: block;">
                         <div class="activity">
                            <ul id="historico" class="widget-timeline mb-0">
-                              <td id="null" class="col s12 mb-8" colspan="5" style="text-align: center;">Nenhum Registro Encontrado</td>
                            </ul>
                         </div>
                      </div>
@@ -78,7 +77,6 @@
                            <th data-field="id" >Nome</th>
                            <th data-field="id" style="text-align: center; width: 150px;">Data Indicação</th>
                            <th data-field="id" style="text-align: center; width: 250px;">Setor Atual</th>
-                           <th data-field="id" style="text-align: center; width: 250px;">Barra de Progresso</th>
                            <th data-field="id" style="text-align: center; width: 100px;">Ação</th>
                         </tr>
                      </thead>
@@ -89,15 +87,11 @@
                            <td style="text-align: center;">{{ k.data }}</td> <!--COLOCAR DATA QUE FOI REGISTRADO O LEAD-->
                            <td style="text-align: center;">{{ k.medico_resp }}</td>
                            <td style="text-align: center;">
-                              <label for="file"></label>
-                              <progress background="#76c076da" id="file" max="100" value="70"> 70% </progress></td>
-                           <td style="text-align: center;">
-                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoricoModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                              <a href="#modal1" class="modal-trigger" data-id_lead="{{ k.id }}" onclick="viewHistoricoModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
                                  <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
                                     <i class="material-icons right">remove_red_eye</i>
                                  </button>
                               </a>
-                              
                            </td>
                         </tr>
                         {% endfor %}<!-- FIM DO ARRAY -->
@@ -140,6 +134,35 @@ $(document).ready(function() {
 });
       
 
-
+function viewHistoricoModal(object){
+   var id_lead = $(object).data("id_lead");
+   console.log(id_lead)
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_lead": id_lead ,
+   };
+        
+   fetchRequest("{% url 'ApiHistoryMyIndications' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+      if (re["response"] == false) {
+         alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+      }
+      else {
+         alert("aqui2")
+         var ap = "";
+            var historyResponse = re["message"]["history"];
+            $.map(historyResponse, function(n, i) {
+               ap += `
+                  <li class="timeline-items timeline-icon-green active">
+                     <div id="data_f" class="timeline-time">${n.data}</div>
+                     <h5 id="name_u" class="timeline-title">${n.nome}</h5>
+                     <p id="action_f" class="timeline-text">${n.operacao}</p>
+                  </li>
+               `;
+            });
+            $("#historico").html(ap);
+         }
+      })
+}
+ 
    </script>
 {% endblock %}

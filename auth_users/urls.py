@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [ 
     #API MEU FINANCEIRO EM MASSA 
-    path('create/access/meu-financeiro/', views.ApiMyFinanceAll, name='ApiMyFinanceAll'),
+    path('create/access/all/', views.ApiCreatePermissionAll, name='ApiCreatePermissionAll'),
 
     #CADASTRAR USUARIO
     path('manage/cadastrar/usuarios/', views.cadastreUserViews, name='cadastreUser'),
@@ -141,8 +141,10 @@ urlpatterns = [
     path('listar/pacientes/meus-registros/', views.ListerPatientsUnitViews, name='ListerPatientsUnitViews'),#PACIENTES
     path('listar/parceiros/meus-registros/', views.ListerPartnersUnitViews, name='ListerPartnersUnitViews'),#PARCEIROS
     path('listar/indicacoes/meus-registros/', views.ListerIndicationsUnitViews, name='ListerIndicationsUnitViews'),#INDICAÇÕES
+    path('api/indicacoes/meus-registros/', views.ApiHistoryMyIndications, name='ApiHistoryMyIndications'),#INDICAÇÕES
     path('meu/fechamento/financeiro/', views.ClosingFinanceUnit, name='ClosingFinanceUnit'),#INDICAÇÕES
     path('api/meus/parceiros/atualizacao/', views.ApiAttPartners, name='ApiAttPartners'),#INDICAÇÕES
+    
     #MEU PERFIL
     path('meu/perfil/', views.MyProfileViews, name='myProfile'),
     #API MEU PERFIL

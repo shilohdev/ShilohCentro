@@ -154,7 +154,7 @@ Acompanhe as últimas notícias!
                      </div>
                   </div>
                </li>
-               <li id="divMotivo" class="active" style="margin-top: 30px; display: none;" >
+               <li id="divMotivo" class="active" style="margin-top: 30px;" >
                   <div class="collapsible-header col m12 s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;" >
                      <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">MOTIVO</labe>
                   </div>
@@ -265,7 +265,7 @@ Acompanhe as últimas notícias!
                   </div>
                      <thead style="background-color: #581848; color: white; font-size: 15px" >
                         <tr>
-                           <th data-field="namet">Paciente</th>
+                           <th data-field="namet">Paciente - [Telefone]</th>
                            <th data-field="nurset">Enfermeiro</th>
                            <th data-field="doctort">Horário</th>
                            <th data-field="telt">Exame</th>
@@ -278,7 +278,7 @@ Acompanhe as últimas notícias!
                      <tbody id="tb_append">
                         {% for k in arr_SearchScheduledPickup%}
                         <tr>
-                           <td>{{ k.paciente}}</td>
+                           <td>{{ k.paciente}} - [{{k.phone}}] </td>
                            <td>{{ k.nurse}}</td>
                            <td>{{ k.hr_age}}</td>
                            <td>{{ k.exame}}</td>
@@ -615,11 +615,8 @@ function StatusFrust(e){
 }
 
 //FUNCTION CANCELAR
-function StatusCanc(e){ 
-   $("#divMotivo").show();
-   //VALIDAÇÃO DE CAMPO NULL
+function StatusCanc(e){
    var i = 0;
-   
    $("#divMotivo input[data-required='true']").each(function(){
       if($(this).val() == ""){
          alert("Preencha o obrigatório.");
@@ -666,8 +663,6 @@ function ReagendarAge(e){
    }
    else{
 
-
-   $("#divMotivo").show();
    //VALIDAÇÃO DE CAMPO NULL
    var i = 0;
    

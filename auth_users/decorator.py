@@ -493,7 +493,7 @@ def FschedulePickup(request):
                 cursor.execute(query, params)
 
             params2 = (id_paciente, date_create, nomeUser,)
-            query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s);"
+            query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s);"
             cursor.execute(query2, params2)
 
             queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Agendou Coleta', %s);"
@@ -822,7 +822,7 @@ def ApiChangeStatusFunction(request):
         }
 
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "auth_users.users u" #VAR COM CONEEXAO TAVLE
+    db.table = "auth_users.users u" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE u.id = %s" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM 
     dados = db.fetch(["u.id, u.login, u.status"], True)
@@ -1035,7 +1035,7 @@ def ApiViewDataPartnersModalFunction(request):
             "message": "Nenhum usuário encontrado com este id."
         }
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "auth_users.users p INNER JOIN auth_users.users rc ON p.resp_comerce = rc.id INNER JOIN auth_users.company_lab comp ON p.company = comp.id" #VAR COM CONEEXAO TAVLE
+    db.table = "auth_users.users p INNER JOIN auth_users.users rc ON p.resp_comerce = rc.id INNER JOIN auth_users.company_lab comp ON p.company = comp.id" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
     dados = db.fetch(["rc.nome, p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, comp.company "], True)
@@ -1111,7 +1111,7 @@ def ApiViewDataPartnersModalFunctionINT(request):
             "message": "Nenhum usuário encontrado com este id."
         }
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "auth_users.users p" #VAR COM CONEEXAO TAVLE
+    db.table = "auth_users.users p" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
     dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, p.status"], True)
@@ -1188,7 +1188,7 @@ def ApiChangeStatusConvenioFunction(request):
         }
 
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "admins.health_insurance ad" #VAR COM CONEEXAO TAVLE
+    db.table = "admins.health_insurance ad" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE ad.id = %s" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_convenio,) #VAR COM O PARAM 
     dados = db.fetch(["ad.id, ad.status"], True)
@@ -1548,17 +1548,20 @@ def searchIndicationUnit(request):
         params = (
             request.user.username,
         )
-        query= "SELECT a.nome_lead, a. data_regis_l, b.nome FROM customer_refer.leads a INNER JOIN auth_users.users b ON a.medico_resp_l = b.id WHERE b.login LIKE %s;"
+        query= "SELECT a.id_lead, a.nome_lead, a.data_regis_l, b.nome, a.status_l FROM customer_refer.leads a INNER JOIN auth_users.users b ON a.medico_resp_l = b.id WHERE b.login LIKE %s;;"
         cursor.execute(query, params)
         dados = cursor
         array = []
 
-        for nome, data, medico_resp in dados:
+        for id, nome, data, medico_resp, status in dados:
             dataFormatada = datetime.strptime(str(data), "%Y-%m-%d").strftime("%d/%m/%Y") if data not in ["", None] else ""
             newinfoa = ({
+                "id": id,
                 "nome": nome,
                 "data": dataFormatada,
+                "nome": nome,
                 "medico_resp": medico_resp,
+                "status": status,
                 })
             array.append(newinfoa)
         
@@ -1680,12 +1683,12 @@ def fetchHistoryPatient(id):
     arr_response = []
 
     db = Connection('customer_refer', '', '', '', '')
-    db.table = "customer_refer.register_paciente history_patient INNER JOIN customer_refer.patients patients ON patients.id_p = history_patient.id_paciente" #VAR COM CONEEXAO TAVLE
+    db.table = "customer_refer.register_paciente history_patient INNER JOIN customer_refer.patients patients ON patients.id_p = history_patient.id_paciente" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE history_patient.id_paciente = %s"
     db.params = (
         id,
     )
-    dados = db.fetch(["patients.nome_p, history_patient.id_register, history_patient.id_paciente, history_patient.tp_operacao, history_patient.descrição, history_patient.data_registro"], True)
+    dados = db.fetch(["patients.nome_p, history_patient.id_register, history_patient.id_paciente, history_patient.tp_operacao, history_patient.descricao, history_patient.data_registro"], True)
     if dados:
         for name_patient, id_r, id_patient, type_operation, description, date_register in dados:
             date_register = str(datetime.strptime(str(date_register), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
@@ -1697,7 +1700,6 @@ def fetchHistoryPatient(id):
                 "description": description,
                 "date_register": date_register,
             })
-
     return arr_response
 
 
@@ -1972,7 +1974,7 @@ def FunctionStatusAgendaConc(request):
         cursor.execute(queryver, paramver)
         dados = cursor.fetchall()
         for tp_serviço, id, conv in dados:
-            if  tp_serviço != 5:
+            if  tp_serviço != 5 and tp_serviço != 6:
                 if conv !=  '72':
                     queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
                     cursor.execute(queryVerif, (id,))
@@ -1996,7 +1998,7 @@ def FunctionStatusAgendaConc(request):
                 pass
 
                 params3 = (id_paciente, data_atual, data_atual, nome,)
-                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
+                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
                 cursor.execute(query3, params3)
         
         if perfil == '2':
@@ -2055,7 +2057,7 @@ def ApiReagendarAgendaConcFunction(request):
                 pass
 
         params2 = (id_paciente, motivo_status, data_atual, nome)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Reagendada', 'Motivo: ' %s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Reagendada', 'Motivo: ' %s, %s, %s);"
         cursor.execute(query2, params2)
     return {
         "response": "true",
@@ -2097,7 +2099,7 @@ def FunctionStatusAgendaFrustrar(request):
                 pass
         
         params2 = (id_paciente, motivo_status, data_atual, nome,)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Frustrada', 'Motivo: ' %s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Frustrada', 'Motivo: ' %s, %s, %s);"
         cursor.execute(query2, params2)
     #"true" -> STRING
     #true -> BOOLEAN
@@ -2138,7 +2140,7 @@ def FunctionStatusAgendaCancel(request):
                 pass
         
         params2 = (id_paciente, motivo_status, data_atual, nome,)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Cancelada', 'Motivo: '%s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Cancelada', 'Motivo: '%s, %s, %s);"
         cursor.execute(query2, params2)
     #"true" -> STRING
     #"true" -> STRING
@@ -2545,7 +2547,7 @@ def ApiChangeStatusUnitFunction(request):
         }
 
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
-    db.table = "admins.units_shiloh ad" #VAR COM CONEEXAO TAVLE
+    db.table = "admins.units_shiloh ad" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE ad.id_unit_s = %s" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_unit,) #VAR COM O PARAM 
     dados = db.fetch(["ad.id_unit_s, ad.status_s"], True)
@@ -3241,7 +3243,7 @@ def StatusNegative(request):
         if dados:
             for idPaciente, idLead, cpfPaciente, nomePaciente  in dados:
                 params2 = (idPaciente, checkbox,  date_create, nomeU,)
-                query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descrição`, `data_registro`, `user_resp`) VALUES (NULL, '01' , %s, 'Tabulação de Lead', %s, %s, %s);"
+                query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '01' , %s, 'Tabulação de Lead', %s, %s, %s);"
                 cursor.execute(query2, params2)
         else: 
             pass
@@ -4011,3 +4013,62 @@ def ApiAdjustRouteFunction(request):
             "response": True,    
             "message": "Dados salvos com sucesso."
         }
+
+
+#historico da indicação
+def HistoryIndicationFunction(request):
+    id = request.POST.get("id_lead")
+
+    return {
+        "response": True,
+        "message": {
+            "history": fetchHistoryIndication(id),
+            }
+        }
+
+def fetchHistoryIndication(id):
+    try:
+        id = int(id)
+    except:
+        return []
+    
+    arr_response = []
+
+    db = Connection('customer_refer', '', '', '', '')
+    db.table = "customer_refer.register_paciente a INNER JOIN customer_refer.patients pa ON a.id_paciente = pa.id_p"
+    db.condition = "WHERE pa.id_l_p = %s"
+    db.params = (
+        id,
+    )
+    dados = db.fetch(["a.id_paciente, pa.nome_p, a.tp_operacao,  a.descricao, a.data_registro, a.user_resp"], True)
+    if dados:
+        for id_paciente, nome, operacao, descricao, data, user_resp in dados:
+            data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
+            arr_response.append({
+                "id": id_paciente,
+                "nome": nome,
+                "operacao": operacao,
+                "descricao": descricao,
+                "data": data,
+                "user_resp": user_resp,
+            })
+            return arr_response
+
+    else:
+        db = Connection('customer_refer', '', '', '', '')
+        db.table = "FROM customer_refer.leads"
+        db.condition = "WHERE id_lead = %s"
+        db.params = (
+            id,
+        )
+        dados = db.fetch(["nome_lead, data_regis_l, status_l"], True)
+        if dados:
+            for nome, data, status in dados:
+                data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
+                arr_response.append({
+                    "nome": nome,
+                    "data": data,
+                    "status": status,
+                })
+
+        return arr_response

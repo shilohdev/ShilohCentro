@@ -105,6 +105,6 @@ class Connection:
 
 db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
 
-db.table = "auth_users.users p" #VAR COM CONEEXAO TAVLE
+db.table = "auth_users.users p" #VAR COM CONEEXAO TABLE
 db.condition = "WHERE p.id = %s AND JFKSJAFNAOJSDFHASHUJ" #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
 db.params = (id_user,) #VAR COM O PARAM

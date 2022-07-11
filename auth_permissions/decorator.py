@@ -24,16 +24,16 @@ def allowPermission(request, idPermission):
 
 
 
-def CreatepermissionMyFinance(request):
+def CreatePermissionAll(request):
     with connections['auth_permissions'].cursor() as cursor:
-
-        query = "SELECT id, perfil FROM auth_users.users where perfil LIKE 7 OR perfil LIKE 6 ;"
+ 
+        query = "SELECT id, perfil FROM auth_users.users where perfil LIKE 1;"
         cursor.execute(query)
         dados = cursor.fetchall()
         if dados:
             print(dados)
             for id, perfil in dados:
-                queryCreate = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES ('48',  %s, '');"
+                queryCreate = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES ('52',  %s, '');"
                 cursor.execute(queryCreate, (id,))
 
         return {
