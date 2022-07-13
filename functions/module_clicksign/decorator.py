@@ -61,9 +61,11 @@ def save_doc_clicksign(documentKey=None):
     #if not path:
     #    return json_without_success("Nenhum documento encontrado.")
 
-    time.sleep(2)
+    time.sleep(10)
 
     data, httpRequest = ClickSignServices().view(documentKey=documentKey)
+
+    print(data, httpRequest, documentKey)
 
     if httpRequest not in [200, 201]:
         return json_without_success("Nenhum documento encontrado.")
