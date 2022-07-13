@@ -57,8 +57,8 @@ def _get_path_by_doc_key(documentKey):
 
 
 def save_doc_clicksign(documentKey=None, path=None):
-    if not path:
-        return json_without_success("Nenhum documento encontrado.")
+    #if not path:
+    #    return json_without_success("Nenhum documento encontrado.")
 
     data, httpRequest = ClickSignServices().view(documentKey=documentKey)
 
@@ -70,11 +70,14 @@ def save_doc_clicksign(documentKey=None, path=None):
         return json_without_success("Nenhum documento encontrado.")
 
     filename = "termo.pdf"
-    local_path = f"{path}"
-    local_file =  settings.BASE_DIR_DOCS + f"{path}/{filename}"
+    p = ClickSignDB.objects.get(document_key=documentKey).document_path
+    local_path = settings.BASE_DIR_DOCS + "/contracts" + p
+    local_path_v = settings.BASE_DIR_DOCS + "/contracts" + p + "/"
+    local_file =  f"{local_path_v}/{filename}"
 
     try:
         os.makedirs(local_path)
+        os.makedirs(local_path_v)
     except OSError:
         pass
     
@@ -97,7 +100,7 @@ def saveContractClickSign(documentKey=None):
     sign_document_by_doc_key(documentKey)
 
     # FUNCAO PARA SALVAR O PDF NA MAQUINA VIRTUAL
-    save_doc_clicksign(documentKey=documentKey, path=_get_path_by_doc_key(documentKey))
+    save_doc_clicksign(documentKey=documentKey, path=None)
 
     return json_with_success("Documento salvo com sucesso.")
 
