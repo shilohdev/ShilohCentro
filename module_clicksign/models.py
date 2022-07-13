@@ -13,12 +13,13 @@ class ClickSignDB(DBClickSign):
     document_name = models.CharField("Document Key", max_length=75, null=True, blank=True, default=None)
     status = models.BooleanField(default=False)
     timestamp_created = models.DateTimeField(auto_now_add=True)
+    coleta_id = models.IntegerField(default=None)
     
     class Meta:
         db_table = "registros_documents"
         indexes = [
             models.Index(fields=[
-                "document_key",
+                "coleta_id",
             ])
         ]
 
@@ -171,8 +172,36 @@ class ClickSignServices:
             data = json.dumps(r.text)
         
         return data, 500
+    
+    def cancel(self, documentKey=None):
+        if not documentKey:
+            return json_without_success("Documento não encontrado.")
 
-    def save_document_in_db(self, documentKey=None, fileName=None, path=None):
+        payload_qs = self._connect_ex()
+        domain_url = self.url + "/api/v1/documents/{}/cancel?{}".format(documentKey, payload_qs)
+
+        payload = {}
+
+        alternate_headers = {
+            "Host": "sandbox.clicksign.com",
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+
+        r = requests.patch(domain_url, data = json.dumps(payload), headers=alternate_headers)
+        print(r.text)
+        print(r.content)
+        if r.status_code in [200, 201]:
+            return r.json(), 200
+
+        try:
+            data = r.json()
+        except Exception as ExceptionValue:
+            data = json.dumps(r.text)
+        
+        return data, 500
+
+    def save_document_in_db(self, coletaId=None, documentKey=None, fileName=None, path=None):
         if documentKey and path in ["", None]:
             return False
         
@@ -181,8 +210,23 @@ class ClickSignServices:
                 document_key=documentKey,
                 document_name=fileName,
                 document_path=path,
-                status=0
+                status=0,
+                coleta_id=coletaId
             )
+    
+    def cancel_document_by_id(self, id=None):
+        if not id:
+            return False
+        
+        data = ClickSignDB.objects.filter(coleta_id=id).all()
+        for key in data:
+            document_key = key.document_key
+            try:
+                self.cancel(documentKey=document_key)
+            except Exception as ExceptionValue:
+                continue
+        
+        return True
 
     def send(self, templateKey=None, id=None, name=None, email=None, phone=None, data=None):
         data = data if data else {}
@@ -196,6 +240,9 @@ class ClickSignServices:
             return json_without_success("[2] Não foi possível criar um assinante para o documento.")
 
         id = str(id)
+
+        self.cancel_document_by_id(id=id)
+
         dateNow = str(datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
         path_signer_folder = f"/{name}/{dateNow}"
         path_signer = f"/{name}/{dateNow}/Termo_de_Coleta.docx"
@@ -216,6 +263,6 @@ class ClickSignServices:
         
         notify, httpRequest = self._notify_signature(requestSignatureKey=request_signature_key)
 
-        self.save_document_in_db(documentKey=document_key, path=path_signer_folder)
+        self.save_document_in_db(coletaId=id, documentKey=document_key, path=path_signer_folder)
 
         return json_with_success("Documento enviado com sucesso.")

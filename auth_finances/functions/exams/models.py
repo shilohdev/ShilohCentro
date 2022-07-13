@@ -2196,9 +2196,10 @@ def TableClosingIntFilter(request):
  # -------------------------------------------------------------
 
  
-#MEU FECHAMENTO FINANCEIRO
+#MEU FECHAMENTO FINANCEIRO - PAGO
 def SearchFinanceInt(request):
     monthCount = int(datetime.now().strftime("%m"))
+    year = int(datetime.now().strftime("%Y"))
 
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
@@ -2207,14 +2208,14 @@ def SearchFinanceInt(request):
         if dados:
             for id_usuario, nome, perfil in dados:
                 pass
-        else:#aqui
+        else:
             return {
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
         if perfil == "7":
-            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
-            cursor.execute(queryPago, (monthCount, id_usuario,))
+            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_medico = %s"
+            cursor.execute(queryPago, (monthCount, year, id_usuario,))
             dados = cursor.fetchall()
             array = []
             if dados in ["", None]:
@@ -2234,8 +2235,8 @@ def SearchFinanceInt(request):
                     array.append(newinfoa)
 
         elif perfil == "6": 
-            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_comercial FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
-            cursor.execute(queryPago, (monthCount, id_usuario,))
+            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_comercial FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_comercial = %s"
+            cursor.execute(queryPago, (monthCount, year, id_usuario,))
             dados = cursor.fetchall()
             array = []
             for pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
@@ -2251,8 +2252,8 @@ def SearchFinanceInt(request):
                     })
                 array.append(newinfoa)
         else:
-            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
-            cursor.execute(queryPago, (monthCount, id_usuario,))
+            queryPago = "SELECT nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_comercial = %s"
+            cursor.execute(queryPago, (monthCount, year, id_usuario,))
             dados = cursor.fetchall()
             array = []
             for pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
@@ -2456,6 +2457,8 @@ def ClosingUnitAnalise(request):
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitResult(request):
     monthCount = int(datetime.now().strftime("%m"))
+    year = int(datetime.now().strftime("%Y"))
+
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -2463,15 +2466,15 @@ def ClosingUnitResult(request):
         if dados:
             for id_usuario, nome, perfil in dados:
                 pass
-        else:#aqui
+        else:
             return {
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
         if perfil == "7":
             
-            query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
-            cursor.execute(query, (monthCount, id_usuario, ))
+            query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_medico = %s"
+            cursor.execute(query, (monthCount, year, id_usuario, ))
             dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:
@@ -2486,8 +2489,8 @@ def ClosingUnitResult(request):
 
 
         elif perfil == "6": 
-            query = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_comercial = %s"
-            cursor.execute(query, (monthCount, id_usuario, ))
+            query = "SELECT COUNT(*) AS contagem, SUM(valor_comercial) AS total FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_comercial = %s"
+            cursor.execute(query, (monthCount, year, id_usuario, ))
             dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:
@@ -2501,8 +2504,8 @@ def ClosingUnitResult(request):
                     array.append(newinfoa)
 
         else:
-            query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) LIKE %s AND nome_medico = %s"
-            cursor.execute(query, (monthCount, id_usuario, ))
+            query = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = %s AND EXTRACT(YEAR FROM data_repasse) = %s AND nome_medico = %s"
+            cursor.execute(query, (monthCount, year, id_usuario, ))
             dados = cursor.fetchall()
             array = []
             for contagem, valor in dados:

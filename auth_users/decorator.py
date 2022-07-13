@@ -1,4 +1,5 @@
 #from asyncio.windows_events import NULL
+from sqlite3 import Cursor
 from unicodedata import category
 from django.http import QueryDict
 from email import message
@@ -269,6 +270,7 @@ def CadastreIndication(request):
     convenio = request.POST.get("convenio")
     checkbox = request.POST.get("checkbox")
     data_atual = str(datetime.now().strftime('%Y-%m-%d'))
+    date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     user_resp = request.user.username
 
     with connections['customer_refer'].cursor() as cursor:
@@ -284,14 +286,23 @@ def CadastreIndication(request):
                 "message": "Não foi possivel cadastrar esta indicação, recarregue a página."
             }
 
-        for id_usuario, nome, unity in dados:
+        for id_usuario, nomeUser, unity in dados:
             cpf = formatcpfcnpj(cpf)
             tel1 = formatTEL(tel1)
             tel2 = formatTEL(tel2)
             param = (cpf, name, email, tel1, tel2, convenio, checkbox, obs, id_usuario, id_usuario, data_atual, unity, )
+            
             query = "INSERT INTO `customer_refer`.`leads` (`id_lead`, `cpf_lead`, `nome_lead`, `email_lead`, `tel1_lead`, `tel2_lead`, `convenio_lead`, `tp_exame`, `obs_l`, `medico_resp_l`, `resp_cadastro`, `register`, `data_regis_l`, `unity_l`, `status_l`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s, %s, 'Sem Contato' );"
             cursor.execute(query, param)
 
+            querySet = "SELECT id_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE nome_lead LIKE %s;"
+            cursor.execute(querySet, (name,))
+            dados = cursor.fetchall()
+
+            for id_lead, nome, tel in dados:
+                queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', NULL, 'Indicação Realizada', 'Indicado dia: ' %s, %s, %s, %s);"
+                cursor.execute(queryRegis, (data_atual, date_create, nomeUser, id_lead, ))
+                print(data_atual, date_create, nomeUser, id_lead)
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -493,7 +504,7 @@ def FschedulePickup(request):
                 cursor.execute(query, params)
 
             params2 = (id_paciente, date_create, nomeUser,)
-            query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s);"
+            query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s, NULL);"
             cursor.execute(query2, params2)
 
             queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Agendou Coleta', %s);"
@@ -1439,7 +1450,7 @@ def ApiCadastrePatienteFunction(request):
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
         if dados:
-            for id_usuario, nome, unity in dados:
+            for id_usuario, nomeUser, unity in dados:
                 pass
         else:
             return {
@@ -1484,6 +1495,19 @@ def ApiCadastrePatienteFunction(request):
                 queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Cadastrou Paciente', %s);"
                 cursor.execute(queryRank, (id_usuario, date_create,))
 
+                QuerySet = "SELECT id_p, id_l_p FROM customer_refer.patients where id_l_p LIKE %s;"
+                cursor.execute(QuerySet, (lead,))
+                dados = cursor.fetchall()
+                if dados:
+                    for id_p, id_l_p in dados:
+                        queryUp = "UPDATE `customer_refer`.`register_paciente` SET `id_paciente` = %s WHERE (`id_lead` = %s);"
+                        cursor.execute(queryUp, (id_p, lead, ))
+                else:
+                    pass
+                
+                queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
+                cursor.execute(queryRegis, (id_p, data_atual, date_create, nomeUser, ))
+
         else:
             param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, id_company, data_atual,)
             query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -1495,6 +1519,19 @@ def ApiCadastrePatienteFunction(request):
             
             queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Cadastrou Paciente', %s);"
             cursor.execute(queryRank, (id_usuario, date_create,))
+
+            QuerySet = "SELECT id_p, id_l_p FROM customer_refer.patients where id_l_p LIKE %s;"
+            cursor.execute(QuerySet, (lead,))
+            dados = cursor.fetchall()
+            if dados:
+                for id_p, id_l_p in dados:
+                    queryUp = "UPDATE `customer_refer`.`register_paciente` SET `id_paciente` = %s WHERE (`id_lead` = %s);"
+                    cursor.execute(queryUp, (id_p, lead, ))
+            else:
+                pass
+            
+            queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
+            cursor.execute(queryRegis, (id_p, data_atual, date_create, nomeUser, ))
 
         return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -1998,7 +2035,7 @@ def FunctionStatusAgendaConc(request):
                 pass
 
                 params3 = (id_paciente, data_atual, data_atual, nome,)
-                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s);"
+                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s, NULL);"
                 cursor.execute(query3, params3)
         
         if perfil == '2':
@@ -2057,7 +2094,7 @@ def ApiReagendarAgendaConcFunction(request):
                 pass
 
         params2 = (id_paciente, motivo_status, data_atual, nome)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Reagendada', 'Motivo: ' %s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Reagendada', 'Motivo: ' %s, %s, %s, NULL);"
         cursor.execute(query2, params2)
     return {
         "response": "true",
@@ -2099,7 +2136,7 @@ def FunctionStatusAgendaFrustrar(request):
                 pass
         
         params2 = (id_paciente, motivo_status, data_atual, nome,)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Frustrada', 'Motivo: ' %s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Frustrada', 'Motivo: ' %s, %s, %s, NULL);"
         cursor.execute(query2, params2)
     #"true" -> STRING
     #true -> BOOLEAN
@@ -2140,7 +2177,7 @@ def FunctionStatusAgendaCancel(request):
                 pass
         
         params2 = (id_paciente, motivo_status, data_atual, nome,)
-        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '2', %s, 'Coleta Cancelada', 'Motivo: '%s, %s, %s);"
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Cancelada', 'Motivo: '%s, %s, %s, NULL);"
         cursor.execute(query2, params2)
     #"true" -> STRING
     #"true" -> STRING
@@ -3214,7 +3251,7 @@ def iInfoLog(request):
 
 
 
-#CADASTRAR PARCEIROS
+# TABULAR STATUS NEGATIVO NO LEAD 
 def StatusNegative(request):
     checkbox = request.POST.get("checkbox")
     id_lead = request.POST.get("id_lead")
@@ -3236,17 +3273,9 @@ def StatusNegative(request):
         query = "UPDATE `customer_refer`.`leads` SET `status_l` = %s WHERE (`id_lead` = %s);"
         cursor.execute(query, (checkbox, id_lead,))
 
-        querVerif = "SELECT paciente.id_p, ll.id_lead, paciente.cpf_p, paciente.nome_p FROM customer_refer.patients paciente inner join customer_refer.leads ll ON ll.id_lead LIKE paciente.id_l_p WHERE ll.id_lead LIKE %s;"
-        cursor.execute(querVerif, (id_lead,))
-        dados = cursor.fetchall()
-
-        if dados:
-            for idPaciente, idLead, cpfPaciente, nomePaciente  in dados:
-                params2 = (idPaciente, checkbox,  date_create, nomeU,)
-                query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`) VALUES (NULL, '01' , %s, 'Tabulação de Lead', %s, %s, %s);"
-                cursor.execute(query2, params2)
-        else: 
-            pass
+        params2 = (checkbox,  date_create, nomeU, id_lead,)
+        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '01' , NULL, 'Tabulação de Lead', 'Observação sobre a indicação: ' %s, %s, %s, %s);"
+        cursor.execute(query2, params2)
         
     return {"response": "true", "message": "Atualizado com sucesso!"}
 
@@ -3661,7 +3690,9 @@ def ApiNewRegisPatientFunction(request):
         senha = request.POST.get("senha")
         data_atual = str(datetime.now().strftime('%Y-%m-%d'))
         name = str(name).title()
-        
+        date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+
         cpf = formatcpfcnpj(cpf)
         tel1 = formatTEL(tel1)
         tel2 = formatTEL(tel2)
@@ -3707,11 +3738,18 @@ def ApiNewRegisPatientFunction(request):
                     queryPaciente="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(queryPaciente, param) #cadastra o paciente
 
-                return {
-                    "response": True,
-                    "message": "Cadastrado com sucesso!"
-                }
-    
+                    QuerySet = "SELECT id_p, id_l_p FROM customer_refer.patients WHERE id_l_p LIKE %s;"
+                    cursor.execute(QuerySet, (id_lead,))
+                    dados = cursor.fetchall()
+                    for id_p, id_l_p in dados:
+                        queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
+                        cursor.execute(queryRegis, (id_p, data_atual, date_create, nome_user, ))
+                    
+                    return {
+                        "response": True,
+                        "message": "Cadastrado com sucesso!"
+                    }
+        
 
 
 
@@ -4040,20 +4078,37 @@ def fetchHistoryIndication(id):
     db.params = (
         id,
     )
-    dados = db.fetch(["a.id_paciente, pa.nome_p, a.tp_operacao,  a.descricao, a.data_registro, a.user_resp"], True)
+    dados = db.fetch(["a.id_paciente, pa.nome_p, a.tp_operacao,  a.descricao, a.data_registro, a.user_resp, a.id_lead"], True)
     if dados:
-        for id_paciente, nome, operacao, descricao, data, user_resp in dados:
-            data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
-            arr_response.append({
-                "id": id_paciente,
-                "nome": nome,
-                "operacao": operacao,
-                "descricao": descricao,
-                "data": data,
-                "user_resp": user_resp,
-            })
-            return arr_response
+        for id_paciente, nomePaciente, operacao, descricao, data, user_resp, id_lead in dados:
+            if id_paciente != None:
+                data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
+                arr_response.append({
+                    "id": id_paciente,
+                    "nomePaciente": nomePaciente,
+                    "operacao": operacao,
+                    "descricao": descricao,
+                    "data": data,
+                    "user_resp": user_resp,
+                    "id_lead": id_lead,
+                })
+        return arr_response
     else:
-        arr_response = 0
-    
+        db = Connection('customer_refer', '', '', '', '')
+        db.table = "customer_refer.register_paciente a"
+        db.condition = "WHERE a.id_lead = %s"
+        db.params = (
+            id,
+        )
+        dados = db.fetch(["a.tp_operacao, a.descricao, a.data_registro, a.user_resp"], True)
+        if dados:
+            for tp_operacao, descricao, data, user_resp in dados:
+                data = str(datetime.strptime(str(data), "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S"))
+                arr_response.append({
+                    "operacao": descricao,
+                    "data": data,
+                    "user_resp": user_resp,
+                })
+        else:
+            arr_response = 0        
     return arr_response

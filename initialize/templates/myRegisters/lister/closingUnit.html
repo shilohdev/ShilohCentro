@@ -140,36 +140,6 @@ Acompanhe as últimas notícias!
                           </table>
                         </div>
                     </div>
-
-                    <div class="container col s11" style="margin-left: 15px; margin-top: 30px">
-                        <!--AGENDADO-->
-                        <div class="collapsible-header col m9 s12" style=" height: 40px; background-color: #e9a52a; color: white;" tabindex="0">
-                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >AGENDADO</labe>
-                        </div>
-                        <div class="container col m8 s12 scroll">
-                           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-                              <thead>
-                                  <tr role="row">
-                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">Paciente</th>
-                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Agendamento</th>
-                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
-                                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Status</th>
-                                  </tr>
-                              </thead>
-                              <tbody id="agendado">
-                               {% for k in arr_SearchClosingUnitAG %}
-                               <tr>
-                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.pacienteAG }}</td>
-                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.agendamentoAG }}</td>
-                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exameAG }}</td>
-                                  <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.statusAG }}</td>
-                                </tr>
-                            {% endfor %}
-                              </tbody>
-                              <tfoot id="Count"></tfoot>
-                          </table>
-                        </div>
-                    </div>
                </div>
            </div>
       </div>
