@@ -78,7 +78,7 @@ def save_doc_clicksign(documentKey=None):
     p = ClickSignDB.objects.get(document_key=documentKey).document_path
     local_path = settings.BASE_DIR_DOCS + "/contracts" + p
     local_path_v = settings.BASE_DIR_DOCS + "/contracts" + p + "/"
-    local_file =  f"{local_path_v}/{filename}"
+    local_file =  f"{local_path}/{filename}"
 
     try:
         os.makedirs(local_path)
