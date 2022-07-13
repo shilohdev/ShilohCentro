@@ -56,9 +56,12 @@ def _get_path_by_doc_key(documentKey):
     return None
 
 
-def save_doc_clicksign(documentKey=None, path=None):
+def save_doc_clicksign(documentKey=None):
+    import time
     #if not path:
     #    return json_without_success("Nenhum documento encontrado.")
+
+    time.sleep(2)
 
     data, httpRequest = ClickSignServices().view(documentKey=documentKey)
 
@@ -78,9 +81,12 @@ def save_doc_clicksign(documentKey=None, path=None):
     try:
         os.makedirs(local_path)
         os.makedirs(local_path_v)
-    except OSError:
-        pass
-    
+    except OSError as ExceptionValue:
+        print(ExceptionValue)
+
+    print(signed_file_url)
+    print(local_file)
+
     urllib.request.urlretrieve(signed_file_url, local_file)
     return True
 
@@ -100,7 +106,11 @@ def saveContractClickSign(documentKey=None):
     sign_document_by_doc_key(documentKey)
 
     # FUNCAO PARA SALVAR O PDF NA MAQUINA VIRTUAL
-    save_doc_clicksign(documentKey=documentKey, path=None)
+    try:
+        r = save_doc_clicksign(documentKey=documentKey)
+        print(r)
+    except Exception as ExceptionValue:
+        print(ExceptionValue)
 
     return json_with_success("Documento salvo com sucesso.")
 
@@ -115,7 +125,9 @@ def WHookSendClickSignFunction(request):
     event = data.get('event', {}).get('name')
     document_key = data.get('document', {}).get('key')
 
+    print(event)
     if event == "auto_close":
+        print(document_key)
         saveContractClickSign(documentKey=document_key)
         return json_with_success("Dados recebidos com sucesso.")
 
