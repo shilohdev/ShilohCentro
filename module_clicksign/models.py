@@ -162,7 +162,7 @@ class ClickSignServices:
 
         payload = {}
 
-        r = requests.post(domain_url, data = json.dumps(payload), headers=self.headers)
+        r = requests.get(domain_url, data = payload, headers=self.headers)
         if r.status_code in [200, 201]:
             return r.json(), 200
 
@@ -189,8 +189,6 @@ class ClickSignServices:
         }
 
         r = requests.patch(domain_url, data = json.dumps(payload), headers=alternate_headers)
-        print(r.text)
-        print(r.content)
         if r.status_code in [200, 201]:
             return r.json(), 200
 
