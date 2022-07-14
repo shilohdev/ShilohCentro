@@ -338,6 +338,7 @@ BASE_DIR_PHOTO = str(BASE_DIR).replace("\\", "/") + "/docs/FotoPerfil"
 
 #SHORT_PLATAFORM = "http://127.0.0.1:8000"
 SHORT_PLATAFORM = "https://shilohcentro.com.br" 
+
 LISTPATHTYPE = {
     "1": "Comprovante de Pagamento",
     "2": "Nota Fiscal",
