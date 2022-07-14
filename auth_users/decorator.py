@@ -3373,7 +3373,7 @@ def ApiNfPartnersFunction(request):
 
 
 
-def FetchPartnersFilesFunction(bodyData): #to aqui
+def FetchPartnersFilesFunction(bodyData):
     try:
         keysLIST = []
         month = bodyData.month
@@ -3421,7 +3421,6 @@ def FetchPartnersFilesFunction(bodyData): #to aqui
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
         }
-
 
 
 
@@ -4112,3 +4111,47 @@ def fetchHistoryIndication(id):
         else:
             arr_response = 0        
     return arr_response
+
+
+
+
+
+
+
+#--------------------------------------------------------------------------- FILE CONTRATO
+
+
+
+def ContractCollectionFunction(bodyData):
+    try:
+        keysLIST = []
+        id = bodyData.id_user
+        with connections['auth_agenda'].cursor() as cursor:
+            query = "SELECT document_path, coleta_id FROM clicksign_services.registros_documents WHERE status LIKE 1 and coleta_id like %s"
+            cursor.execute(query, (id,))
+            dados = cursor.fetchall()
+            if dados:
+                for document_path, coleta_id in dados:
+                    PATH_ORIGIN = document_path
+                    PATH2 = f"{coleta_id}"
+                    keysLIST.append({
+                        "type_desc": "" ,
+                        "name": "Contrato",
+                        "path": PATH_ORIGIN,
+                        "url": settings.SHORT_PLATAFORM + "/docs/contracts/" + PATH2 + document_path + "/" + "termo.pdf"
+                    })
+                    print(keysLIST)
+                return {
+                    "response": True,
+                    "message": {
+                        "docs": keysLIST,
+                    }
+                }
+            else:
+                print("deu erro")
+    except Exception as err:
+        print("EROOOOO>>", err)
+        return {
+            "response": False,
+            "message": "Não foi possível encontrar este parceiro."
+        }

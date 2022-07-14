@@ -1918,9 +1918,6 @@ def SaveAnexoFunction(request):
 
             }
             
-            #FAZER UM FOR PARA REETORNAR NO JS
-        
-   
     return {"response": "true", "message": "Ok"
     }
 

@@ -243,7 +243,7 @@ class ClickSignServices:
 
         dateNow = str(datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
         path_signer_folder = f"/{name}/{dateNow}"
-        path_signer = f"/{name}/{dateNow}/Termo_de_Coleta.docx"
+        path_signer = f"/{id}/{name}/{dateNow}/Termo_de_Coleta.docx"
 
         document_key, httpRequest = self.create_document(templateKey=templateKey, data=data, path=path_signer)
         if httpRequest not in [200, 201]:

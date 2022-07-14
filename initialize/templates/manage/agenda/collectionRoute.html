@@ -231,53 +231,14 @@ Acompanhe as últimas notícias!
                      </div>
                   </div>
                </li>
-               <!--ANEXOSS
                <li class="active" style="margin-top: 30px;">
                   <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
-                      <labe style="margin-top: 0.9em; font-size: 15px; font-weight: bold;">ANEXOS</labe>
+                      <labe style="margin-top: 0.9em; font-size: 15px; font-weight: bold;">CONTRATO</labe>
                   </div>
-                  <div class="row" id="div_files">
-                      <div class="col s12">
-                          <div class="col mt-2 ml-3 col m3  s12">
-                              <input class="col s12" id="doc_anx" type="file">
-                          </div>
-                          <div class="input-field col m3  s12">
-                              <div class="select-wrapper">
-                                  <select name="select" id="tp_anx" class="error" required="true">
-                                      <option value="">Tipo do Anexo</option>
-                                      {% for k in arr_SearchTypeAnexo%}
-                                      <option value="{{ k.id }}">{{ k.tipo_anexo }}</option>
-                                      {% endfor %}
-                                  </select>
-                              </div>
-                          </div>
-                          <div class="col m3  s12">
-                              <button onclick="anxDoc(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves dark btn next-step" type="submit" style="margin-top: 22px; background-color: #581848;">
-                                 <span style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Anexar
-                                 </span>
-                              </button>
-                           </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col s11 ml-4 scroll" style="overflow-x: auto;">
-                          <table class="bordered" style="margin-top: 20px; margin-bottom: 30px;">
-                              <thead style="background-color: #581848; color: white; font-size: 15px">
-                                  <tr>
-                                      <th data-field="id"> Arquivos Anexados</th>
-                                      <th data-field="id"> Data e hora</th>
-                                      <th data-field="id"> Tipo</th>
-                                      <th data-field="name" style="width: 120px;">Ação</th>
-                                  </tr>
-                              </thead>
-                              <tbody id="tb_append">
-                              </tbody>
-                          </table>
-                      </div>
+                  <div class="row" id="docss">
+
                   </div>
               </li>
-              
-              IMAGEM-->
             </ul>
          </div>
         
@@ -372,43 +333,13 @@ Acompanhe as últimas notícias!
    </div>
 </div>
 
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 
 {% for k in arr_SearchRoute%}
 <script type = "text/javascript" >
-
-//VISUALIZA O APPEND
-function viewFile(object) {
-    var path = $(object).data("url");
-    var filename = $(object).data("id");
-    var a = document.createElement("a");
-    a.href = "/docs/" + path;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-}
-//RETIRA O FILE 
-function removeFile(object) {
-    var id_patient = $(object).data("id_patient");
-    var id_file = $(object).data("id");
-    var type_file = $(object).data("type");
-
-    var formpost = {
-        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_file": id_file,
-        "type_file": type_file,
-        "id_patient": id_patient
-    };
-
-    fetchRequest("{% url 'ModalExamsFinanceFileRemove' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-        if (re["response"] == "true") {
-            $(object).closest("tr").remove();
-        }
-
-        alert(re["message"]);
-    });
-}
-
-
 	// CEP 
 	function pesquisacep(valor) {
 		var cep = valor.replace(/\D/g, '');
@@ -570,8 +501,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          }
 
          //AQUI INICIA FUNCTION APPEND FILE
-         var ap = "";
-            var filesResponse = JSON.parse(re["message"]["files"]);
+          /*  var filesResponse = JSON.parse(re["message"]["files"]);
             $.map(filesResponse, function(n, i) {
                 ap += `
                   <tr>
@@ -586,11 +516,54 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
                `;
             });
             $("#tb_append").html(ap);
-
+*/
 
 		}
 
 	});
+
+
+
+   var r = new request($('{% csrf_token %}').val());
+   r.get("{% url 'ContractCollection' %}", formpost, function (re) {
+      if (re["response"] == true) {
+         var dados = re["message"];
+         var docs = dados["docs"];
+         console.log(dados)
+         if (docs.length > 0) {
+            div = ""
+            $.map(docs, function (n, i) {
+               $("#docss").css("display", "block");
+               div += ` 
+                        <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0" data-down="${n.path}">
+                            <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
+                                <div class="dropify-errors-container">
+                                </div>
+                                <button type="button" class="dropify-clear" onclick=\"removeFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">Remover</button>
+                                <div id="display" class="dropify-preview" style="display: block;">
+                                    <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">NF</span></span>
+                                    <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
+                                        <div class="dropify-infos-inner">
+                                            </br>
+                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
+                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.type}</span></p>
+                                            <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+            });
+
+            $("#docss").html(div);
+
+         } else {
+            $("#docss").css("display", "none");
+         }
+      }
+
+   });
 
 }
 
@@ -653,9 +626,6 @@ function StatusFrust(e){
       "motivo_status": motivo_status,
 }
    fetchRequest("{% url 'ApiStatusAgendaFrustrado' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
-   
-      //"true" -> STRING
-      //true -> BOOLEAN
       if(re["response"] == "true"){ 
          alert("Agendamento Frustrado com sucesso!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
          location.reload();
@@ -664,8 +634,6 @@ function StatusFrust(e){
    });
 
 }
-
-
 
 //FUNCTION REAGENDAR
 function ReagendarAge(e){ 
@@ -792,74 +760,145 @@ function StatusIniciarColeta(e){
 }
 
 
-function anxDoc(object){
-   var id_user = $(object).data("id_user");
-   var files = $("#doc_anx")[0].files[0];
-   var obsF = $("#obsF").val();
-   if ($("#doc_anx").val() != "") {
-        if ($("#doc_anx").prop("files") != undefined) {
-            if ($("#tp_anx").val() == "") {
-                return alert("Preencha o tipo de anexo para salvar.");
-            } else {
-                files = document.querySelector("#doc_anx").files[0];
-            }
-        } else {
-            files = "";
-        }
-    } else {
-        files = "";
-    }
 
-
-    var formpost = [{
-            "name": "csrfmiddlewaretoken",
-            "value": $('input[name="csrfmiddlewaretoken"]').val()
-        },
-        {
-            "name": "id_user",
-            "value": id_user
-        },
-        {
-            "name": "file",
-            "value": files
-        },
-        {
-            "name": "type_doc",
-            "value": $("#tp_anx").val()
-        },
-    ];
-
-    fetchRequestFiles("{% url 'SaveAnexo' %}", "POST", "JSON", formpost, function(re) {
-      if (re["response"] == false) {
-            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-        } else {
-         var ap = "";
-            var filesResponse = JSON.parse(re["message"]["files"]) ;
-            $.map(filesResponse, function(n, i) {
-                ap += `
-                  <tr>
-                     <td>`+ type_doc +`</td>
-                     <td>${n.file.date_created.pt}</td>
-                     <td>${n.description_type}</td>
-                     <td style="text-align: center;">
-                        <button data-url="${n.file.path}" data-id="${n.file.name}" onclick=\"viewFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"><i class="material-icons right">cloud_download</i></button>
-                        <button data-url="${n.file.path}" data-id_patient="${id_user}" data-type="${n.type}" data-id="${n.file.name}" onclick=\"removeFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;"><i class="material-icons right">delete</i></button>
-                     </td>
-                  </tr>
-               `;
-            });
-            $("#tb_append").html(ap);
-        }
-
-         alert(re["message"]);
-
-            
-
-
-        
-    });
-
+// ------------------------------------------------------------------------------------
+class request {
+   constructor(token) {
+      this.token = token;
+   }
+   body(to, method, typeMethod, formdata, sucess) {
+      $.ajax({
+         url: to + "?csrfmiddlewaretoken=" + this.token,
+         type: method,
+         dataType: typeMethod,
+         data: JSON.stringify(formdata),
+         success: function (response) {
+            sucess(response);
+         },
+         error: function (request, status, error) {
+            sucess(error);
+         }
+      });
+   }
+   put(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "PUT",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
+            sucess(response);
+         },
+         error: function (request, status, error) {
+            sucess(error);
+         }
+      });
+   }
+   get(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "GET",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
+            sucess(response);
+         },
+         error: function (request, status, error) {
+            sucess(error);
+         }
+      });
+   }
+   post(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "POST",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
+            sucess(response);
+         },
+         error: function (request, status, error) {
+            sucess(error);
+         }
+      });
+   }
+   delete(to, formdata, sucess) {
+      $.ajax({
+         url: to,
+         type: "DELETE",
+         dataType: "JSON",
+         headers: {
+            'X-CSRFToken': this.token
+         },
+         mode: 'same-origin',
+         data: formdata,
+         success: function (response) {
+            sucess(response);
+         },
+         error: function (request, status, error) {
+            sucess(error);
+         }
+      });
+   }
 }
+
+//REMOVE O FILE 
+function removeFile(object) {
+   var id_partners = $(object).data("id_partners");
+   var name_file = $(object).data("name");
+   var type_file = $(object).data("type");
+
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "name_file": name_file,
+      "type_file": type_file,
+      "id_partners": id_partners
+   };
+
+   fetchRequest("{% url 'RemoveFilePartners' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+      if (re["response"] == "true") {
+         alert(re["message"]);
+         $(object).closest(".closests").remove();
+      }
+   });
+}
+
+
+//VISUALIZA O APPEND
+function viewFile(object) {
+   var id_partners = $(object).data("id_partners");
+   var path = $(object).data("path"); // >>>> /Adrielli Lima/2022-07-13 12.34.06
+
+   var filename = $(object).data("name");
+   var a = document.createElement("a");
+   
+   a.href = "/docs/contracts/" + id_partners + path + "/termo.pdf";
+   a.download = filename;
+   document.body.appendChild(a);
+   a.click();
+}
+
+ 
+
+$('.dropify').dropify(); //Ativar o dropify
+
+
+
+
+
+
 
 
 </script>
