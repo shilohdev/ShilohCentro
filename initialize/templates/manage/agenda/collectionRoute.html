@@ -884,7 +884,7 @@ function viewFile(object) {
    var filename = $(object).data("name");
    var a = document.createElement("a");
    
-   a.href = "/docs/contracts/" + id_partners + path + "/termo.pdf";
+   a.href = "/docs/contracts/" + path + "/termo.pdf";
    a.download = filename;
    document.body.appendChild(a);
    a.click();
