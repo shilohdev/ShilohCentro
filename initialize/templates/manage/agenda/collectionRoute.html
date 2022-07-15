@@ -290,46 +290,51 @@ Acompanhe as últimas notícias!
                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
             </div>
          </div>
-      <div class="row container container">
-         <!-- COMEÇO DA TABLE -->
-         <div class="col s12" style="margin-bottom: 50px; overflow-x: auto; margin-left: 0; margin-top: 0;">
-            <table class=" bordered">
-               <thead style="background-color: #581848; color: white; font-size: 15px" >
-                  <tr>
-                     <th data-field="namet">Paciente</th>
-                     <th data-field="telt">Telefone</th>
-                     <th data-field="doctort">Horário</th>
-                     <th data-field="schedulingt">Agendamento</th>
-                     <th data-field="examt">Relação</th>
-                     <th data-field="status">Status</th>
-                     <th data-field="actiont">Ação</th>
-                  </tr>
-               </thead>
-               <tbody id="tb_append">
-                  {% for k in arr_SearchRoute%}
-                  <tr id="tr_{{ k.id }}">
-                     <td>{{ k.paciente}}</td>
-                     <td>{{ k.phone}}</td>
-                     <td>{{ k.hr_age}}</td>
-                     <td>{{ k.date_age}}</td>
-                     <td>{{ k.company}}</td>
-                     <td>{{ k.status}}</td>
-                     <td>
-                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
-                        <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                        </a>
-                        <!--
-                           <a onclick="remove(this)" class="modal-trigger">
-                        <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
-                        </a>
-                        -->
-                     </td>
-                  </tr>
-                  {% endfor %}
-               </tbody>
-            </table>
+      </div>
+      <div class="row">
+         <div class="container">
+            <div class="container">
+               <!-- COMEÇO DA TABLE -->
+               <div class="col s12 m12" style="margin-bottom: 50px; overflow-x: auto; margin-left: 0; margin-top: 0;">
+                  <table class=" bordered">
+                     <thead style="background-color: #581848; color: white; font-size: 15px" >
+                        <tr>
+                           <th data-field="namet">Paciente</th>
+                           <th data-field="telt">Telefone</th>
+                           <th data-field="doctort">Horário</th>
+                           <th data-field="schedulingt">Agendamento</th>
+                           <th data-field="examt">Relação</th>
+                           <th data-field="status">Status</th>
+                           <th data-field="actiont">Ação</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tb_append">
+                        {% for k in arr_SearchRoute%}
+                        <tr id="tr_{{ k.id }}">
+                           <td>{{ k.paciente}}</td>
+                           <td>{{ k.phone}}</td>
+                           <td>{{ k.hr_age}}</td>
+                           <td>{{ k.date_age}}</td>
+                           <td>{{ k.company}}</td>
+                           <td>{{ k.status}}</td>
+                           <td>
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
+                              <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                              </a>
+                              <!--
+                                 <a onclick="remove(this)" class="modal-trigger">
+                              <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
+                              </a>
+                              -->
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+               <!-- FIM DA TABLE -->
+            </div>
          </div>
-         <!-- FIM DA TABLE -->
       </div>
    </div>
 </div>
