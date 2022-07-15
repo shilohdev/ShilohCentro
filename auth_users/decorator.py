@@ -35,11 +35,12 @@ import shutil
 from django.contrib.auth.models import User
 from numpy import true_divide
 from functions.connection.models import Connection
-from functions.general.decorator import convertDate, checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
+from functions.general.decorator import Contrato_nao_assinado, convertDate, checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
 from auth_finances.functions.exams.models import saveFileEditionsFinances, FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
 from django.conf import settings
 from django.core.files.storage import default_storage
 from auth_permissions.decorator import allowPermission, json_without_success
+from functions.module_clicksign.decorator import SignatureVerification
 
 
 #FUNCTION FORMATAR CPF
@@ -1979,70 +1980,76 @@ def FunctionStatusAgendaConc(request):
     convenio = request.POST.get("convenio")
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
    
-    with connections['auth_users'].cursor() as cursor:
-        searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_usuario, nome, perfil in dados:
-                print(type(perfil))
-                pass
-        else:
-            return {
-                "response": "false",
-                "message": "Login expirado, faça login novamente para continuar."
-            }
+    q = SignatureVerification(id)
 
-        param= (id_usuario, data_atual, obs, id,)
-        param2= ( id, data_atual,)
-        query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s WHERE (`id` = %s);"
-        cursor.execute(query, param)
-        '''
-        querySet = "SELECT id, nome_p FROM auth_agenda.collection_schedule where id = %s"
-        cursor.execute(querySet, (id,))
-        dados = cursor.fetchall()
+    if q == True:
+        with connections['auth_users'].cursor() as cursor:
+            searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
+            cursor.execute(searchID, (request.user.username,))
+            dados = cursor.fetchall()
+            if dados:
+                for id_usuario, nome, perfil in dados:
+                    print(type(perfil))
+                    pass
+            else:
+                return {
+                    "response": "false",
+                    "message": "Login expirado, faça login novamente para continuar."
+                }
 
-        for id_coleta, id_paciente in dados:
-            queryUp = "UPDATE `customer_refer`.`patients` SET `email_p` = %s, `login_conv` = %s, `senha_conv` = %s WHERE (`id_p` = %s);"
-            cursor.execute(queryUp, (email, login, senha, id_paciente,))
-        '''
-        paramver = (id,)
-        queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
-        cursor.execute(queryver, paramver)
-        dados = cursor.fetchall()
-        for tp_serviço, id, conv in dados:
-            if  tp_serviço != 5 and tp_serviço != 6:
-                if conv !=  '72':
-                    queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
-                    cursor.execute(queryVerif, (id,))
-                    dados = cursor.fetchall()
-                    if dados:
-                        for id, idagendamento in dados:
-                            return {
-                            "response": "true", 
-                            "message": "Coleta já concluída."
-                            }
-                    else: 
-                        pass
-                        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
-                        cursor.execute(query2, param2)
-        params7=(id,)
-        searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
-        cursor.execute(searchID2, params7)
-        dadoss = cursor.fetchall()
-        if dadoss:
-            for idc, id_paciente in dadoss:
-                pass
+            param= (id_usuario, data_atual, obs, id,)
+            param2= ( id, data_atual,)
+            query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s WHERE (`id` = %s);"
+            cursor.execute(query, param)
+            '''
+            querySet = "SELECT id, nome_p FROM auth_agenda.collection_schedule where id = %s"
+            cursor.execute(querySet, (id,))
+            dados = cursor.fetchall()
 
-                params3 = (id_paciente, data_atual, data_atual, nome,)
-                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s, NULL);"
-                cursor.execute(query3, params3)
-        
-        if perfil == '2':
-            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Atendimento Concluiu Coleta', %s);"
-            cursor.execute(queryRank, (id_usuario, data_atual,))
+            for id_coleta, id_paciente in dados:
+                queryUp = "UPDATE `customer_refer`.`patients` SET `email_p` = %s, `login_conv` = %s, `senha_conv` = %s WHERE (`id_p` = %s);"
+                cursor.execute(queryUp, (email, login, senha, id_paciente,))
+            '''
+            paramver = (id,)
+            queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
+            cursor.execute(queryver, paramver)
+            dados = cursor.fetchall()
+            for tp_serviço, id, conv in dados:
+                if  tp_serviço != 5 and tp_serviço != 6:
+                    if conv !=  '72':
+                        queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
+                        cursor.execute(queryVerif, (id,))
+                        dados = cursor.fetchall()
+                        if dados:
+                            for id, idagendamento in dados:
+                                return {
+                                "response": "true", 
+                                "message": "Coleta já concluída."
+                                }
+                        else: 
+                            pass
+                            query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
+                            cursor.execute(query2, param2)
+            params7=(id,)
+            searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
+            cursor.execute(searchID2, params7)
+            dadoss = cursor.fetchall()
+            if dadoss:
+                for idc, id_paciente in dadoss:
+                    pass
 
-        return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
+                    params3 = (id_paciente, data_atual, data_atual, nome,)
+                    query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s, NULL);"
+                    cursor.execute(query3, params3)
+            
+            if perfil == '2':
+                queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Atendimento Concluiu Coleta', %s);"
+                cursor.execute(queryRank, (id_usuario, data_atual,))
+
+            return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
+    else:
+        return Contrato_nao_assinado("Por favor, realize assinatura do termo.")
+
 
 
 #REGAENDAR
@@ -3981,21 +3988,6 @@ def FilePhotoViewFunction(request): #aqi
         }
 
 
-
-def StartCollectionFunction(id_coleta):
-    print("id_coleta", id_coleta)
-    with connections['auth_users'].cursor() as cursor:
-        query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Em Andamento' WHERE (`id` = %s);"
-        cursor.execute(query, (id_coleta,))
-
-        querySelect = "SELECT id, status FROM auth_agenda.collection_schedule where id = %s"
-        cursor.execute(querySelect, (id_coleta,))
-        dados =  cursor.fetchall()
-    
-    return True
-
-
-
 #TABELA AJUSTAR ROTA DAS ENFERMEIRAS
 def searchAdjustRouteNurse(request):    
     with connections['auth_agenda'].cursor() as cursor:
@@ -4148,7 +4140,7 @@ def ContractCollectionFunction(bodyData):
                     }
                 }
             else:
-                print("deu erro")
+                return False
     except Exception as err:
         print("EROOOOO>>", err)
         return {

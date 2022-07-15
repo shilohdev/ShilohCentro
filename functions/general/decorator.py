@@ -125,3 +125,15 @@ def dealStringify(value):
         return json.loads(value)
 
     return False
+
+def Contrato_Assinado(message):
+    return {
+        "response": True,
+        "message": message,
+    }
+
+def Contrato_nao_assinado(message):
+    return {
+        "response": False,
+        "message": message
+    }

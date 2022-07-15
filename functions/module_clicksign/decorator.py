@@ -1,11 +1,10 @@
 from django.conf import settings
 import os
+from django.db import connections
 import urllib.request
-from auth_users.decorator import StartCollectionFunction
 from functions.connection.models import CollectionScheduleDB, PatientsDB
-from functions.general.decorator import json_with_success, json_without_success, dealStringify
+from functions.general.decorator import json_with_success, json_without_success, dealStringify, Contrato_Assinado
 from module_clicksign.models import ClickSignDB, ClickSignServices
-
 
 def ModuleSendClickSignFunction(request):
     bodyData = request.GET
@@ -14,34 +13,38 @@ def ModuleSendClickSignFunction(request):
 
     id_coleta = bodyData.get('id', None)
 
-    if not id_coleta:
-        return json_without_success("Nenhum id de coleta enviado.")
+    q = SignatureVerification(id_coleta)
 
-    my_template_key = settings.CLICKSIGN_TEMPLATES_KEY.get(
-        int(
-            PatientsDB.objects.get(
-                id_p=CollectionScheduleDB.objects.get(id=id_coleta).nome_p
-            ).company_p
+    if q == True:
+        return Contrato_Assinado("Contrato já assinado.")
+
+    else:
+        if not id_coleta:
+            return json_without_success("Nenhum id de coleta enviado.")
+
+        my_template_key = settings.CLICKSIGN_TEMPLATES_KEY.get(
+            int(
+                PatientsDB.objects.get(
+                    id_p=CollectionScheduleDB.objects.get(id=id_coleta).nome_p
+                ).company_p
+            )
         )
-    )
-    print(id_coleta)
-    print(my_template_key)
-    
-    StartCollectionFunction(id_coleta) # FAZ A ATUALIZAÇÃO DE STATUS
 
-    ClickSignOBJ = ClickSignServices()
-    return ClickSignOBJ.send(
-       templateKey=my_template_key,
-       id=bodyData.get('id'),
-       name=bodyData.get('name'),
-       email=bodyData.get('email'),
-       phone=bodyData.get('phone'),
-       data={
-        "CONTRATANTE_RG": "53266655545",
-        "CONTRATANTE_TELEFONE": "phone",
-        # AQUI COLOCA TODOS OS PARAMETROS DO CONTRATO
-       }
-    )
+        StartCollectionFunction(id_coleta) # FAZ A ATUALIZAÇÃO DE STATUS
+
+        ClickSignOBJ = ClickSignServices()
+        return ClickSignOBJ.send(
+        templateKey=my_template_key,
+        id=bodyData.get('id'),
+        name=bodyData.get('name'),
+        email=bodyData.get('email'),
+        phone=bodyData.get('phone'),
+        data={
+            "CONTRATANTE_RG": "53266655545",
+            "CONTRATANTE_TELEFONE": "phone",
+            # AQUI COLOCA TODOS OS PARAMETROS DO CONTRATO
+        }
+        )
 
 
 def _get_path_by_doc_key(documentKey):
@@ -133,4 +136,29 @@ def WHookSendClickSignFunction(request):
         saveContractClickSign(documentKey=document_key)
         return json_with_success("Dados recebidos com sucesso.")
 
-    return json_without_success("Nmnhum evento condizente com o cadastrado.")
+    return json_without_success("Nenhum evento condizente com o cadastrado.")
+
+
+def SignatureVerification(id):
+    with connections['auth_users'].cursor() as cursor:
+        QueryVerif = "SELECT document_path, status, coleta_id FROM clicksign_services.registros_documents WHERE coleta_id LIKE %s AND status LIKE 1"
+        cursor.execute(QueryVerif, (id,))
+        dados = cursor.fetchall()
+        if dados:
+            return True
+        else:
+            return False
+
+
+
+def StartCollectionFunction(id_coleta):
+    with connections['auth_users'].cursor() as cursor:
+        query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Em Andamento' WHERE (`id` = %s);"
+        cursor.execute(query, (id_coleta,))
+
+        querySelect = "SELECT id, status FROM auth_agenda.collection_schedule where id = %s"
+        cursor.execute(querySelect, (id_coleta,))
+        dados =  cursor.fetchall()
+    
+    return True
+

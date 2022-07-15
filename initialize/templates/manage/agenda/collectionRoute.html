@@ -30,6 +30,9 @@ Acompanhe as últimas notícias!
          <button id="btnIniciar" onclick="StatusIniciarColeta(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="width:100%; background-color: #89c889;">
             <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Iniciar Coleta</span>
          </button>
+         <button id="btnReenviar" onclick="StatusIniciarColeta(this)" class="btn mb-1 waves-effect waves-light mr-1" type="submit" style="width:100%; background-color: #e97a1fda; display: none;">
+            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Reenviar termo</span>
+         </button>
 
          <div class="container ">
             <ul class="collapsible expandable " >
@@ -235,9 +238,7 @@ Acompanhe as últimas notícias!
                   <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
                       <labe style="margin-top: 0.9em; font-size: 15px; font-weight: bold;">CONTRATO</labe>
                   </div>
-                  <div class="row" id="docss">
-
-                  </div>
+                  <div class="row" id="docss"></div>
               </li>
             </ul>
          </div>
@@ -474,6 +475,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          $("#btn_reag").data("id", key["agendamento"]["id"]);
          $("#btn_frust").data("id", key["agendamento"]["id"]);
          $("#btnIniciar").data("id", key["agendamento"]["id"]);
+         $("#btnReenviar").data("id", key["agendamento"]["id"]);
          $("#btn_salvar").data("id_user", key["id"])
          $("#statusAtt").hide()
          $("#statusM").show()
@@ -496,8 +498,10 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
          if (val_btn != "Pendente"){
             $("#btnIniciar").hide();
+            $("#btnReenviar").show();
          }else{
             $("#btnIniciar").show();
+            $("#btnReenviar").hide();
          }
 
          //AQUI INICIA FUNCTION APPEND FILE
@@ -522,38 +526,35 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
 	});
 
-
-
    var r = new request($('{% csrf_token %}').val());
    r.get("{% url 'ContractCollection' %}", formpost, function (re) {
       if (re["response"] == true) {
          var dados = re["message"];
          var docs = dados["docs"];
-         console.log(dados)
+
          if (docs.length > 0) {
             div = ""
             $.map(docs, function (n, i) {
                $("#docss").css("display", "block");
                div += ` 
-                        <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0" data-down="${n.path}">
-                            <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
-                                <div class="dropify-errors-container">
-                                </div>
-                                <button type="button" class="dropify-clear" onclick=\"removeFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">Remover</button>
-                                <div id="display" class="dropify-preview" style="display: block;">
-                                    <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">NF</span></span>
-                                    <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
-                                        <div class="dropify-infos-inner">
-                                            </br>
-                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
-                                            <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.type}</span></p>
-                                            <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
-                                        </div>
+                  <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0;padding-top: 15px;padding-left: 25px;padding-bottom: 15px;" data-down="${n.path}">
+                        <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
+                           <div class="dropify-errors-container">
+                           </div>
+                           <div id="display" class="dropify-preview" style="display: block;">
+                              <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">PDF</span></span>
+                              <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
+                                    <div class="dropify-infos-inner">
+                                       </br>
+                                       <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
+                                       <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">&nbsp;</span></p>
+                                       <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
                                     </div>
-                                </div>
-                            </div>
+                              </div>
+                           </div>
                         </div>
-                    `
+                  </div>
+               `
             });
 
             $("#docss").html(div);
@@ -570,6 +571,8 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
 //FUNCTION CONCLUIR
 function StatusConc(e){ 
+   $("#btn_conc").attr("disabled", true);
+
    var id = $(e).data("id");
    var obs = $("#obs").val()
    var email = $("#email").val()
@@ -592,7 +595,11 @@ function StatusConc(e){
          alert("Agendamento Concluído com sucesso!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
          location.reload();
 
-      } 
+      }
+      else{
+         alert(re["message"]);
+         $("#btn_conc").attr("disabled", false);
+      }
    });
 }
 
@@ -725,6 +732,9 @@ function searchPatients(object){
 
 //FUNCTION INICAR COLETA
 function StatusIniciarColeta(e){ 
+   $("#btnIniciar").attr("disabled", true);
+   $("#btnReenviar").attr("disabled", true);
+
    var id = $(e).data("id");
    var agendamento = $("#date_age").val();
    var nome_paciente = $("#namePaciente").val();
@@ -743,15 +753,21 @@ function StatusIniciarColeta(e){
       if(re["response"] == true){ 
          alert(re["message"]);
          $(`#tr_${id} > td`).eq(5).text("Em Andamento");
-         $("#btnIniciar").attr("disabled", true);
+         $("#btnReenviar").show();
+         $("#btnReenviar").attr("disabled", false);
+
          $("#statusAtt").show();
+         $("#btnIniciar").hide();
          $("#statusM").hide();
          $("#btn_conc").attr("disabled", false);
          $("#btn_reag").attr("disabled", false);
          $("#btn_frust").attr("disabled", false);
          
       }else{
+         alert(re["message"]);
+         
          $("#btnIniciar").attr("disabled", false);
+         $("#btnReenviar").attr("disabled", false);
          $("#btn_conc").attr("disabled", true);
          $("#btn_reag").attr("disabled", true);
          $("#btn_frust").attr("disabled", true);
@@ -893,10 +909,6 @@ function viewFile(object) {
  
 
 $('.dropify').dropify(); //Ativar o dropify
-
-
-
-
 
 
 
