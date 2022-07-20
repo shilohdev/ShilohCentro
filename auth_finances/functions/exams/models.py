@@ -45,11 +45,11 @@ class FinancesExams:
         params = (
             id,
         )
-        query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, e.nome, f.nome, np.nome_p, a.tel1_p, a.tel2_p, a.resp_medico, a.resp_atendimento, a. resp_comercial, a.cep, a.rua, a.numero, a.complemento, a.bairro, a.cidade, a.uf, a.val_cust, a.val_work_lab, a.val_pag, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, np.login_conv, np.senha_conv FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN auth_users.users f ON a.motorista = f.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN customer_refer.patients np ON a.nome_p = np.id_p WHERE a.id = %s"
+        query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, e.nome, f.nome, np.nome_p, a.tel1_p, a.tel2_p, a.resp_medico, a.resp_atendimento, a. resp_comercial, a.cep, a.rua, a.numero, a.complemento, a.bairro, a.cidade, a.uf, a.val_cust, a.val_work_lab, a.val_pag, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, np.login_conv, np.senha_conv, lab.company FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN auth_users.users f ON a.motorista = f.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN customer_refer.patients np ON a.nome_p = np.id_p INNER JOIN auth_users.company_lab lab ON lab.id = e.company WHERE a.id = %s"
         cursor.execute(query, params)
         dados = cursor.fetchall()
         if dados:
-            for a_id, a_data_agendamento, a_hr_agendamento, b_tipo_servico, c_tipo_exame, g_nome_conv, e_nome, f_nome, a_nome_p, a_tel1_p, a_tel2_p, a_resp_medico, a_resp_atendimento, a_resp_comercial, a_cep, a_rua, a_numero, a_complemento, a_bairro, a_cidade, a_uf, a_val_cust, a_val_work_lab, a_val_pag, a_obs, b_tipo_servico, c_tipo_exame, a_status, a_msotivo_tatus, co_color, login, senhaC  in dados:
+            for a_id, a_data_agendamento, a_hr_agendamento, b_tipo_servico, c_tipo_exame, g_nome_conv, e_nome, f_nome, a_nome_p, a_tel1_p, a_tel2_p, a_resp_medico, a_resp_atendimento, a_resp_comercial, a_cep, a_rua, a_numero, a_complemento, a_bairro, a_cidade, a_uf, a_val_cust, a_val_work_lab, a_val_pag, a_obs, b_tipo_servico, c_tipo_exame, a_status, a_msotivo_tatus, co_color, login, senhaC, company  in dados:
                 return {
                     "agendamento": {
                         "data_agendamento": a_data_agendamento,
@@ -69,6 +69,7 @@ class FinancesExams:
                         "phone2": a_tel2_p,
                         "paciente": a_nome_p,
                         "atendimento": a_resp_atendimento,
+                        "company": company,
                     },
                     "endereco": {
                         "cep": a_cep,
@@ -578,6 +579,7 @@ def FinalizeProcessFunction(request):
     repasse = request.POST.get("date_repass")
     date_age = request.POST.get("date_age")
     tp_exame = request.POST.get("tp_exame")
+    companyParceiro = request.POST.get("company")
     
     with connections['admins'].cursor() as cursor:        
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
@@ -622,7 +624,6 @@ def FinalizeProcessFunction(request):
             dados = cursor.fetchall()
             if dados: 
                 for id_agendamento_f, anx_f in dados:
-                    print(anx_f)
                     if anx_f == '1':
 
                         queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
@@ -659,27 +660,27 @@ def FinalizeProcessFunction(request):
                                     porcentagem = float(val_porcentagem / 100) * float(ValorPago)
                                     porcentagem = f'{porcentagem:.2f}'
 
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s);"
                                     val_comercial = float(porcentagem) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create,)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create, companyParceiro,)
                                     cursor.execute(queryFinance, paramsFinance)
                             
                                 elif val_padrao:
                                     val_padrao = float(val_padrao)
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s);"
                                     val_comercial = float(val_padrao) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create,)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create, companyParceiro,)
                                     cursor.execute(queryFinance, paramsFinance)
                                 
                                 else:
                                     val_fixo = float(val_fixo)
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
+                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s);"
                                     val_comercial = float(val_fixo) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create,)
+                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create, companyParceiro,)
                                     cursor.execute(queryFinance, paramsFinance)
                             else:
-                                queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s);"
-                                paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create,)
+                                queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s);"
+                                paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create, companyParceiro,)
                                 cursor.execute(queryFinance, paramsFinance)
                     
                     else:
@@ -1128,11 +1129,11 @@ def TableClosingPartners(request):
 
     with connections['auth_finances'].cursor() as cursor:
         #query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_comercial != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
-        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_uni_partners != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
+        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE valor_uni_partners != 0 AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners, a.relacao_partners"
         cursor.execute(query, (month,))
         dados = cursor.fetchall()
         array = []
-        for id, medico, categoria, comercial, rn, data_repasse, valor, status in dados:
+        for id, medico, categoria, comercial, rn, data_repasse, valor, status, company in dados:
             if dados == empty:
                 array.append("nenhumm dado")
             else: 
@@ -1147,6 +1148,7 @@ def TableClosingPartners(request):
                     "data_repasse": data_repasse,
                     "valor": valor,
                     "status": status,
+                    "company": company,
                     })
                 array.append(newinfoa)
         return array
@@ -1186,18 +1188,19 @@ def valPartinersPending(request):
     monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
 
-        querys = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pendente' AND MONTH(data_repasse) LIKE %s  AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
+        querys = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse), relacao_partners FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pendente' AND MONTH(data_repasse) LIKE %s  AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse), relacao_partners"
         cursor.execute(querys, (monthCount,))
         dados = cursor.fetchall()
         array2 = []
         if dados:
-            for qdt, val, mes in dados:
+            for qdt, val, mes, relacao in dados:
                 val = f"R$ - {val:_.2f}"
                 val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdt,
                     "val": val,
                     "mes": mes,
+                    "relacao": relacao,
                     })
                 array2.append(newinfoa)
         else:
@@ -1205,6 +1208,7 @@ def valPartinersPending(request):
                 "qdt": "0",
                 "val": "R$ 00,00",
                 "mes": "0",
+                "relacao": "Sem Pagamentos",
                 })
             array2.append(newinfoa)
         return array2
@@ -1215,18 +1219,19 @@ def valPartinersPay(request):
     monthCount = int(datetime.now().strftime("%m"))
     with connections['auth_finances'].cursor() as cursor:
 
-        querys = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pago' AND MONTH(data_repasse) LIKE %s AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
+        querys = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse), relacao_partners FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pago' AND MONTH(data_repasse) LIKE %s AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse), relacao_partners"
         cursor.execute(querys, (monthCount,))
         dados = cursor.fetchall()
         array2 = []
         if dados:
-            for qdt, val, mes in dados:
+            for qdt, val, mes, relacao in dados:
                 val = f"R$ {val:_.2f}"
                 val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdt,
                     "val": val,
                     "mes": mes,
+                    "relacao": relacao,
                     })
                 array2.append(newinfoa)
         else:
@@ -1234,6 +1239,7 @@ def valPartinersPay(request):
                 "qdt": "0",
                 "val": "R$ 00,00",
                 "mes": "0",
+                "relacao": "Sem Pagamentos",
                 })
             array2.append(newinfoa)
 
@@ -1245,12 +1251,12 @@ def FilterMonthClosingPartners(request):
     month = request.POST.get('month')
     param =(month,)
     with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE MONTH( a.data_repasse) = %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners"
+        query = "SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE MONTH( a.data_repasse) = %s GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners, a.relacao_partners"
         cursor.execute(query, param)
         dadoss = cursor.fetchall()
         array = []
         if dadoss:
-            for id, medico, categoria, comercial, rn, data_repasse, valor, status in dadoss:
+            for id, medico, categoria, comercial, rn, data_repasse, valor, status, company in dadoss:
                 valor = (valor) if valor not in ["", None] else None
                 valor = f"R$ {valor:_.2f}"
                 valor = valor.replace(".", ",").replace("_", ".")
@@ -1263,6 +1269,7 @@ def FilterMonthClosingPartners(request):
                     "data_repasse": data_repasse,
                     "valor": valor,
                     "status": status,
+                    "company": company,
                     })
                 array.append(newinfoa)
 
@@ -1289,18 +1296,19 @@ def FilterMonthClosingPartners(request):
                 })
             arrayTotal.append(newinfoa)
         
-        queryPago = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pago' AND MONTH(data_repasse) = %s AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
+        queryPago = "SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse), relacao_partners FROM auth_finances.closing_finance WHERE status_partners LIKE 'Pago' AND MONTH(data_repasse) = %s AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse), relacao_partners"
         cursor.execute(queryPago, (month,))
         dados = cursor.fetchall()
         arrayPago = []
         if dados:
-            for qdts, vals, mes in dados:
+            for qdts, vals, mes, relacao in dados:
                 vals = f"R$ {vals:_.2f}"
                 vals = vals.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdts,
                     "val": vals,
                     "mes": mes,
+                    "relacao": relacao,
                     })
                 arrayPago.append(newinfoa)
                 
@@ -1310,22 +1318,24 @@ def FilterMonthClosingPartners(request):
                 "qdt": 0,
                 "val": "R$ 00,00",
                 "mes": 0,
+                "relacao": "Sem pagamentos",
                 })
             arrayPago.append(newinfoa)
 
 
-        querysA = "SELECT COUNT(DISTINCT nome_medico), SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND valor_comercial NOT LIKE '0' AND status_partners LIKE 'Pendente' group by MONTH(data_repasse)"
+        querysA = "SELECT COUNT(DISTINCT nome_medico), SUM(valor_uni_partners) AS total, MONTH(data_repasse), relacao_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND valor_comercial NOT LIKE '0' AND status_partners LIKE 'Pendente' group by MONTH(data_repasse), relacao_partners"
         cursor.execute(querysA, (month,))
         dados = cursor.fetchall()
         arrayA_pagar = []
         if dados:
-            for qdt, vals, mes in dados: 
+            for qdt, vals, mes, relacao in dados: 
                 vals = f"R$ -{vals:_.2f}"
                 vals = vals.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qdt": qdt,
                     "val": vals,
                     "mes": mes,
+                    "relacao": relacao,
                     })
                 arrayA_pagar.append(newinfoa)
         else:
@@ -1333,6 +1343,7 @@ def FilterMonthClosingPartners(request):
                 "qdt": 0,
                 "val": "R$ 00,00",
                 "mes": 0,
+                "relacao": "Sem Pagamentos",
                 })
             arrayA_pagar.append(newinfoa)
 
@@ -1389,9 +1400,6 @@ def fetchFilePartners(id):
 
 
     return arr_files
-
-
-
 
 
 #TABELAS FECHAMENTO PARCEIROS - MODAL
@@ -1575,7 +1583,6 @@ def SearchInfoFunction(request):
 #TABELA FECHAMENTO COMERCIAL
 def TableClosingCommercial(request):
     monthF = int(datetime.now().strftime("%m"))
-    print(monthF)
     with connections['auth_finances'].cursor() as cursor:
         query = "SELECT b.id, b.nome, month( a.data_repasse), a.status_comercial, SUM(a.valor_comercial) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE a.valor_comercial NOT LIKE '0' AND MONTH( a.data_repasse) = %s AND b.nome NOT LIKE 'Tosyn Lopes'  GROUP BY b.id, b.nome, MONTH( a.data_repasse), a.status_comercial, a.valor_comercial;"
         cursor.execute(query, (monthF,))
@@ -2158,7 +2165,6 @@ def TableClosingIntFilter(request):
                 "mes": 0,
                 })
             arrayPago.append(newinfoa)
-            print(arrayPago)
     #FILTRO DATA DASH FECHAMENTO INTERNO - PENDENTE
         querysA = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND a.status_partners LIKE 'Pendente' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
         cursor.execute(querysA, (month,))
@@ -3181,7 +3187,6 @@ def AnxDoc(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d"))
     saveFileEditionsFinances(id_agendamento, type_doc, request.FILES)
 
-    print(type(type_doc))
     with connections['auth_finances'].cursor() as cursor:
         Quers = "SELECT id, tipo_anexo FROM admins.tp_anx where id like %s;"
         cursor.execute(Quers, (type_doc,))
@@ -3193,7 +3198,6 @@ def AnxDoc(request):
             if tp_anexo == "Nota Fiscal":
                 queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id_agendamento_f` = %s);"
                 cursor.execute(queryAtt, (date_create, id_agendamento,))
-                print(id_agendamento)
 
             return {
                 "response": True,

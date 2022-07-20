@@ -358,11 +358,14 @@ def listIndicationViews(request):
     SsearchConvenio =  searchConvenio(request)
     SearchTypeAnexo = FunctionSearchTypeAnexo(request)
     ViewFoto = FilePhotoViewFunction(request)
+    
     return render(request, 'manage/listers/indication/listIndication.html', 
-    {"arr_ViewFoto": ViewFoto,
-    "arr_SearchIndication": SsearchIndication, 
-    "arr_SearchConvenio": SsearchConvenio, 
-    "arr_SearchTypeAnexo": SearchTypeAnexo,})
+    {
+        "arr_ViewFoto": ViewFoto,
+        "arr_SearchIndication": SsearchIndication, 
+        "arr_SearchConvenio": SsearchConvenio, 
+        "arr_SearchTypeAnexo": SearchTypeAnexo,
+    })
 
 
 
@@ -420,11 +423,11 @@ def ApiViewDataPatientsModal(request):
 def ApiChangePatientsModal(request):
     array = ApiChangePatientsModalFunction(request)
     return JsonResponse(array, safe=False, status=200)
-
+ 
 #MODAL PACIENTES FILES
 class FetchPatientsFiles(View):
     @staticmethod
-    @login_required
+    @login_required 
     @ensure_csrf_cookie
     def get(request):
         return JsonResponse(

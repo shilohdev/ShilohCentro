@@ -475,18 +475,21 @@ function deleteFile(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
 
 function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   console.log(id_user)
+
    $("#btn_salvar").data("id_user", id_user); 
    $("#anx_file").data("id_user", id_user);
 
-$("#modal3").hide();
-     $(object).prop("disabled", true);
+   $("#modal3").hide();
+   $(object).prop("disabled", true);
+   
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
    };     
 
    let r = new request($('{% csrf_token %}').val());
-   r.get("{% url 'FetchPatientsFiles' %}", formpost, function(re) {
+   r.post("{% url 'ApiListDocsPatients' %}", formpost, function(re) {
       if(re["response"] == true){
          $("#modal3").show();
          var dados = re["message"];
@@ -737,7 +740,7 @@ function AnxDoc(object) {
         },
     ];
 
-    fetchRequestFiles("{% url 'SaveEditionsPatient'  %}", "POST", "JSON", formpost, function(re) {
+    fetchRequestFiles("{% url 'ApiPathDocsPatients'  %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == false) {
             $("#anx_file").attr("disabled", false);
 

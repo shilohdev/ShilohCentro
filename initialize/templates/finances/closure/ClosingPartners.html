@@ -171,18 +171,13 @@ Acompanhe as últimas notícias!
                           <div class="indeterminate" style="background-color: #76c076da!important;"></div>
                       </div>
                       <p class="no-margin">&nbsp;</p>
-                      
                       <div class="col s4 m4 left-align p-0">
-                        {% for k in arr_valPartinersPay %} 
-                          <p id="regisPay" class="mb-0 pt-8">({{ k.qdt}} registros)</p>
-                          {% endfor %}
-                          <p id="regisPayf" class="mb-0 pt-8"></p>
-                      </div>
-                      <div class="col s8 m8 right-align">
-                        {% for k in arr_valPartinersPay %} 
-                          <h4 id="valPay" class="mb-0">{{ k.val }}</h4>
-                          {% endfor %}
-                          <h4 id="hPay" class="mb-0"></h4>
+                        {% for k in arr_valPartinersPay %}
+                        <p id="regisPay" class="mb-0" style="font-size: 16px;">{{k.relacao}}</p>
+                        <h5 id="valPay" class="mb-0">{{k.val}}</h5>
+                        {% endfor %}
+                        <p id="regisPayf" class="mb-0" style="font-size: 16px;"></p>
+                        <h5 id="hPay" class="mb-0"></h5>
                       </div>
                   </div>
               </div>
@@ -200,15 +195,11 @@ Acompanhe as últimas notícias!
                       <p class="no-margin">&nbsp;</p>
                       <div class="col s4 m4 left-align p-0">
                         {% for k in arr_valPartinersPending %}  
-                           <p id="regisPending" class="mb-0 pt-8">({{ k.qdt}} registros)</p>
+                           <p id="regisPending" class="mb-0 pt-8">{{k.relacao}}</p>
+                           <h5 id="valPending" class="mb-0">{{k.val}}</h5>
                         {% endfor %}
                         <p id="regisPendingf" class="mb-0 pt-8"></p>
-                      </div>
-                      <div class="col s8 m8 right-align">
-                        {% for k in arr_valPartinersPending %}  
-                          <h4 id="valPending" class="mb-0">{{ k.val }}</h4>
-                        {% endfor %}
-                          <h4 id="hPending" class="mb-0"></h4>
+                        <h5 id="hPending" class="mb-0"></h5>
                       </div>
                   </div>
               </div>
@@ -282,6 +273,7 @@ Acompanhe as últimas notícias!
                             <th data-field="id" style="text-align: center;">Nome [NC]</th>
                             <th data-field="id" style="text-align: center;">Categoria</th>
                             <th data-field="id" style="text-align: center;">Comercial</th>
+                            <th data-field="id" style="text-align: center;">Relação</th>
                             <th data-field="id" style="text-align: center;">Status</th>
                             <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
                             <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
@@ -293,6 +285,7 @@ Acompanhe as últimas notícias!
                             <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
                             <td style="text-align: center;">{{ k.categoria}}</td>
                             <td style="text-align: center;">{{ k.comercial}}</td>
+                            <td style="text-align: center;">{{ k.company}}</td>
                             <td style="text-align: center;">{{ k.status}}</td>
                             <td style="text-align: center;">{{ k.valor}}</td>
                             <td style="text-align: center;">
@@ -379,6 +372,7 @@ function searchMonth() {
                   <td style="text-align: center;">${n.medico} [${n.rn}] </td>
                   <td style="text-align: center;">${n.categoria}</td>
                   <td style="text-align: center;">${n.comercial}</td>
+                  <td style="text-align: center;">${n.company}</td>
                   <td style="text-align: center;">${n.status}</td>
                   <td style="text-align: center;">${n.valor}</td>
                   <td style="text-align: center;">
@@ -398,25 +392,30 @@ function searchMonth() {
             $("#regisPay").hide();
 
             $.map(dados, function (n, i) {
-               var d = `<h4 class="mb-0">${n.val}</h4>`;
+               var d = `<h5 class="mb-0">${n.val}</h5>`;
                $("#hPay").append(d);
-
-               var d2 = `<p>(${n.qdt} registros)</p>`;
+               
+               var d2 =`<p class="mb-0 " style="font-size: 16px;">${n.relacao}</p>`;
                $("#regisPayf").append(d2);
+
             });
+
 
             // DASH A PAGAR
             var dados = re["messageApagar"];
+            console.log(dados)
+
             $("#hPending").html("");
             $("#valPending").hide();
-            $("#regisPending").hide();
-            $("#regisPendingf").html("");
-            $.map(dados, function (n, i) {
-               var c = `<h4 class="mb-0">${n.val}</h4>`;
-               $("#hPending").append(c);
+            $("#regisPending").html("");
+            $("#regisPendingf").hide();
 
-               var c2 = `<p>(${n.qdt} registros)</p>`;
-               $("#regisPendingf").append(c2);
+            $.map(dados, function (n, i) {
+               var d = `<h5 class="mb-0">${n.val}</h5>`;
+               $("#hPending").append(d);
+
+               var d2 =`<p class="mb-0 " style="font-size: 16px;">${n.relacao}</p>`;
+               $("#regisPendingf").append(d2);
 
             });
 

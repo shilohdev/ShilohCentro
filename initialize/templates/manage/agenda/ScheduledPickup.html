@@ -64,7 +64,7 @@ Acompanhe as últimas notícias!
                         <div class="input-field col m3 s12" >
                            <div class="select-wrapper">
                               <label class="active">Enfermeiro</label>
-                              <select name="select" id="nurse" class="error " required="true" data-show="search">
+                              <select name="select" id="nurse" class="error" required="true" data-show="search">
                                  <option value="">Enfermeiro</option>
                                  {% for k in arr_SearchNurse%}
                                  <option value="{{ k.id }}">{{ k.nome }}</option>
@@ -269,50 +269,50 @@ Acompanhe as últimas notícias!
             </div>
          </div>
          <div class="row">
-            <div class=" container scroll" >
-               <!-- COMEÇO DA TABLE -->
-               <div class=" row container col s12" style="margin-bottom: 50px; overflow-x: auto">
-                  <table class=" bordered">
+            <div class="container">
+               <div class=" container scroll" >
+                  <div class=" col s12" style="margin-bottom: 50px; overflow-x: auto">
+                     <table class=" bordered">
+                        <thead style="background-color: #581848; color: white; font-size: 15px" >
+                           <tr>
+                              <th data-field="namet">Paciente - [Telefone]</th>
+                              <th data-field="nurset">Enfermeiro</th>
+                              <th data-field="doctort">Horário</th>
+                              <th data-field="telt">Exame</th>
+                              <th data-field="schedulingt">Data</th>
+                              <th data-field="examt">Unidade</th>
+                              <th data-field="status">Status</th>
+                              <th data-field="actiont">Ação</th>
+                           </tr>
+                        </thead>
+                        <tbody id="tb_append">
+                           {% for k in arr_SearchScheduledPickup%}
+                           <tr>
+                              <td>{{ k.paciente}} - [{{k.phone}}] </td>
+                              <td>{{ k.nurse}}</td>
+                              <td>{{ k.hr_age}}</td>
+                              <td>{{ k.exame}}</td>
+                              <td>{{ k.date_age}}</td>
+                              <td>{{ k.unity}}</td>
+                              <td>{{ k.status}}</td>
+                              <td>
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
+                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                 </a>
+                                 <!--
+                                    <a onclick="remove(this)" class="modal-trigger">
+                                 <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
+                                 </a>
+                                 -->
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
                   </div>
-                     <thead style="background-color: #581848; color: white; font-size: 15px" >
-                        <tr>
-                           <th data-field="namet">Paciente - [Telefone]</th>
-                           <th data-field="nurset">Enfermeiro</th>
-                           <th data-field="doctort">Horário</th>
-                           <th data-field="telt">Exame</th>
-                           <th data-field="schedulingt">Data</th>
-                           <th data-field="examt">Unidade</th>
-                           <th data-field="status">Status</th>
-                           <th data-field="actiont">Ação</th>
-                        </tr>
-                     </thead>
-                     <tbody id="tb_append">
-                        {% for k in arr_SearchScheduledPickup%}
-                        <tr>
-                           <td>{{ k.paciente}} - [{{k.phone}}] </td>
-                           <td>{{ k.nurse}}</td>
-                           <td>{{ k.hr_age}}</td>
-                           <td>{{ k.exame}}</td>
-                           <td>{{ k.date_age}}</td>
-                           <td>{{ k.unity}}</td>
-                           <td>{{ k.status}}</td>
-                           <td>
-                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
-                                 <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                              </a>
-                              <!--
-                                 <a onclick="remove(this)" class="modal-trigger">
-                              <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
-                              </a>
-                              -->
-                           </td>
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                  </table>
                </div>
+            </div>
          </div>
-            <!-- FIM DA TABLE -->
       </div>
    </div>
 </div>
@@ -562,27 +562,38 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
 
 //FUNCTION CONCLUIR
-function StatusConc(e){ 
-   $("#btn_conc").attr("disabled", true);
+function StatusConc(e){
+   var enfermeira = $("#nurse").val();
 
-   var id = $(e).data("id");
-   var convenio = $("tp_conv").val();
-   
-   var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "convenio": convenio,
-      "id": id,
-}
-   fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
-      if(re["response"] == "true"){
-         $("#btn_conc").attr("disabled", true);
-         alert("Agendamento Concluído com sucesso!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-         location.reload();
+   if(enfermeira == "489"){
+      alert("Insira a enfermeira que realizou a coleta!")
+      return false
+   }
+   else{
+      $("#btn_conc").attr("disabled", true);
+
+      var id = $(e).data("id");
+      var convenio = $("tp_conv").val();
+      var enfermeira = $("#nurse").val();
+      console.log(enfermeira)
+      var formpost = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+         "convenio": convenio,
+         "id": id,
+         "enfermeira": enfermeira,
       }
-      else{ 
-         $("#btn_conc").attr("disabled", false);
-      }
-   });
+      console.log(formpost)
+      fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+         if(re["response"] == "true"){
+            $("#btn_conc").attr("disabled", true);
+            alert("Agendamento Concluído com sucesso!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+            location.reload();
+         }
+         else{ 
+            $("#btn_conc").attr("disabled", false);
+         }
+      });
+   }  
 }
 
 //FUNCTION FRUSTAR

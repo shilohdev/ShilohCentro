@@ -105,6 +105,11 @@ Acompanhe as últimas notícias!
                                    <label for="attendance">
                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento </label>
                                </div>
+                               <div class="input-field col s3">
+                                <input readonly="readonly" style="color: black;" id="company" type="text">
+                                <label for="company">
+                                    <i class="material-icons" style="font-size: 15px">label_outline</i>&nbsp;Relação</label>
+                            </div>
                            </div>
                        </div>
                    </li>
@@ -628,6 +633,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                 "tel2": key["pessoal"]["phone2"],
                 "namePaciente": key["pessoal"]["paciente"],
                 "attendance": key["pessoal"]["atendimento"],
+                "company": key["pessoal"]["company"],
                 "zipcode": key["endereco"]["cep"],
                 "addres": key["endereco"]["rua"],
                 "number": key["endereco"]["numero"],
@@ -971,7 +977,9 @@ function FinalizeProcess(object) {
     var date_repass = $("#data_r").val();
     var date_age = $("#date_age").val();
     var tp_exame = $("#tp_exame").val();
-
+    var company = $("#company").val();
+    
+    console.log(company)
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user, //DICT COM O VALOR DO ID
@@ -983,6 +991,7 @@ function FinalizeProcess(object) {
         "date_repass": date_repass,
         "date_age": date_age,
         "tp_exame": tp_exame,
+        "company": company,
         
     };
 
@@ -994,7 +1003,6 @@ function FinalizeProcess(object) {
         }else{
             alert(re["message"]);
             $("#btn_end").attr("disabled", false);
-
         }
     });
 }

@@ -9,6 +9,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),  
     path('', include('auth_users.urls')),
+    path('', include('auth_patients.urls')),
     path('', include('auth_access.urls')),
     path('', include('module_clicksign.urls')),
 

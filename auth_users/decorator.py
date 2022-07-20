@@ -238,7 +238,6 @@ def CadastrePartners(request):
             user.save()
         else:
             user = User.objects.create_user(username=rn, email=email, first_name=name, last_name='', password=year)
-            print(user)
          #PERMISSÕES PRÉ DEFINIDAS ASSIM QUE CADASTRADAS
         arrayPermission = {
            "7": ["20", "16", '48', '19'], #PARCEIRO
@@ -303,7 +302,6 @@ def CadastreIndication(request):
             for id_lead, nome, tel in dados:
                 queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', NULL, 'Indicação Realizada', 'Indicado dia: ' %s, %s, %s, %s);"
                 cursor.execute(queryRegis, (data_atual, date_create, nomeUser, id_lead, ))
-                print(data_atual, date_create, nomeUser, id_lead)
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -485,7 +483,6 @@ def FschedulePickup(request):
 
         searchID = "SELECT id_p, id_l_p, unity_p, nome_p FROM customer_refer.patients where id_p = %s;"
         cursor.execute(searchID, (id_paciente,))
-        print(id_paciente)
         dados = cursor.fetchall()
         if dados:
             for idPaciente, idLeadPaciente, unityPaciente, nomePaciente in dados:
@@ -1233,7 +1230,6 @@ def ApiChangeUsersModalFunction(request):
     else:
         
         bodyData = request.POST #var para não precisar fazer tudo um por um
-        print("passei aquii")
 
         id_user = bodyData.get('id_user')
         perfil = bodyData.get('perfil')
@@ -1267,7 +1263,6 @@ def ApiChangeUsersModalFunction(request):
             "obs": "obs",  
             "unity": "unity",  
         }
-        print(dataKeys)
         
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
@@ -1295,10 +1290,8 @@ def ApiChangeUsersModalFunction(request):
                 cursor.execute(query, (resp_commerce,))
                 dados = cursor.fetchall()
                 for idC, nomeC, statusC in dados:
-                    print(dados)
                     if idC != "":
                         resp_commerce = idC
-                        print("1>>>>", resp_commerce)
                     
                 if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
@@ -1312,7 +1305,6 @@ def ApiChangeUsersModalFunction(request):
                     )
                     cursor.execute(query, params)
             except:
-                print("ERRROOO")
                 query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
                 params = (
                     perfil,
@@ -1329,7 +1321,6 @@ def ApiChangeUsersModalFunction(request):
                             id,
                             id_user,
                         )
-                        print(params)
                         cursor.execute(query)
         return {
             "response": True,
@@ -1741,7 +1732,7 @@ def fetchHistoryPatient(id):
     return arr_response
 
 
-def FetchPatientsFilesFunction(bodyData): #aqi
+def FetchPatientsFilesFunction(bodyData):
     try:
         keysLIST = []
         id = bodyData.id_user
@@ -1976,79 +1967,82 @@ def FunctionStatusAgendaConc(request):
     email = request.POST.get("email")
     login = request.POST.get("login")
     senha = request.POST.get("senha")
+    enfermeira = request.POST.get("enfermeira")
+    print(enfermeira)
 
     convenio = request.POST.get("convenio")
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-   
+    
+    
+
     q = SignatureVerification(id)
+    #DEPOIS QUANDO A CONCLUSAO DO CONTRATO FOR FINALIZADO, DESCOMENTAR ESSES TÓPICOS
+    #if q == True:
+    with connections['auth_users'].cursor() as cursor:
+        searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if dados:
+            for id_usuario, nome, perfil in dados:
+                pass
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }
+        param= (id_usuario, data_atual, obs, enfermeira, id,)
+        param2= ( id, data_atual,)
+        query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s, resp_enfermeiro = %s WHERE (`id` = %s);"
+        cursor.execute(query, param)
+        
+        '''
+        querySet = "SELECT id, nome_p FROM auth_agenda.collection_schedule where id = %s"
+        cursor.execute(querySet, (id,))
+        dados = cursor.fetchall()
 
-    if q == True:
-        with connections['auth_users'].cursor() as cursor:
-            searchID = "SELECT id, nome, perfil FROM auth_users.users WHERE login LIKE %s"
-            cursor.execute(searchID, (request.user.username,))
-            dados = cursor.fetchall()
-            if dados:
-                for id_usuario, nome, perfil in dados:
-                    print(type(perfil))
-                    pass
-            else:
-                return {
-                    "response": "false",
-                    "message": "Login expirado, faça login novamente para continuar."
-                }
+        for id_coleta, id_paciente in dados:
+            queryUp = "UPDATE `customer_refer`.`patients` SET `email_p` = %s, `login_conv` = %s, `senha_conv` = %s WHERE (`id_p` = %s);"
+            cursor.execute(queryUp, (email, login, senha, id_paciente,))
+        '''
+        paramver = (id,)
+        queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
+        cursor.execute(queryver, paramver)
+        dados = cursor.fetchall()
+        for tp_serviço, id, conv in dados:
+            if  tp_serviço != 5 and tp_serviço != 6:
+                if conv !=  '72':
+                    queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
+                    cursor.execute(queryVerif, (id,))
+                    dados = cursor.fetchall()
+                    if dados:
+                        for id, idagendamento in dados:
+                            return {
+                            "response": "true", 
+                            "message": "Coleta já concluída."
+                            }
+                    else: 
+                        pass
+                        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
+                        cursor.execute(query2, param2)
+        params7=(id,)
+        searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
+        cursor.execute(searchID2, params7)
+        dadoss = cursor.fetchall()
+        if dadoss:
+            for idc, id_paciente in dadoss:
+                pass
 
-            param= (id_usuario, data_atual, obs, id,)
-            param2= ( id, data_atual,)
-            query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s WHERE (`id` = %s);"
-            cursor.execute(query, param)
-            '''
-            querySet = "SELECT id, nome_p FROM auth_agenda.collection_schedule where id = %s"
-            cursor.execute(querySet, (id,))
-            dados = cursor.fetchall()
+                params3 = (id_paciente, data_atual, data_atual, nome,)
+                query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s, NULL);"
+                cursor.execute(query3, params3)
+        
+        if perfil == '2':
+            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Atendimento Concluiu Coleta', %s);"
+            cursor.execute(queryRank, (id_usuario, data_atual,))
 
-            for id_coleta, id_paciente in dados:
-                queryUp = "UPDATE `customer_refer`.`patients` SET `email_p` = %s, `login_conv` = %s, `senha_conv` = %s WHERE (`id_p` = %s);"
-                cursor.execute(queryUp, (email, login, senha, id_paciente,))
-            '''
-            paramver = (id,)
-            queryver  = "SELECT tp_servico, id, convenio from auth_agenda.collection_schedule where id LIKE %s"
-            cursor.execute(queryver, paramver)
-            dados = cursor.fetchall()
-            for tp_serviço, id, conv in dados:
-                if  tp_serviço != 5 and tp_serviço != 6:
-                    if conv !=  '72':
-                        queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
-                        cursor.execute(queryVerif, (id,))
-                        dados = cursor.fetchall()
-                        if dados:
-                            for id, idagendamento in dados:
-                                return {
-                                "response": "true", 
-                                "message": "Coleta já concluída."
-                                }
-                        else: 
-                            pass
-                            query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
-                            cursor.execute(query2, param2)
-            params7=(id,)
-            searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
-            cursor.execute(searchID2, params7)
-            dadoss = cursor.fetchall()
-            if dadoss:
-                for idc, id_paciente in dadoss:
-                    pass
-
-                    params3 = (id_paciente, data_atual, data_atual, nome,)
-                    query3 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Concluída', 'Finalizado dia: ' %s, %s, %s, NULL);"
-                    cursor.execute(query3, params3)
-            
-            if perfil == '2':
-                queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Atendimento Concluiu Coleta', %s);"
-                cursor.execute(queryRank, (id_usuario, data_atual,))
-
-            return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
-    else:
-        return Contrato_nao_assinado("Por favor, realize assinatura do termo.")
+        return {"response": "true", "message": "Agendamento Concluído com sucesso!"}
+    #else:
+        #return Contrato_nao_assinado("Por favor, realize assinatura do termo.")
 
 
 
@@ -3193,6 +3187,7 @@ def searchRouteNurse(request):
 
 
     with connections['customer_refer'].cursor() as cursor:
+        
         searchID = "SELECT a.perfil, a.id, a.nome, a.unity FROM auth_users.users a INNER JOIN admins.units_shiloh b ON a.unity = b.id_unit_s WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
@@ -3568,7 +3563,6 @@ def ApiAttPartnersFunction(request):
     else:
         
         bodyData = request.POST #var para não precisar fazer tudo um por um
-        print("passei aquii")
 
         id_user = bodyData.get('id_user')
         perfil = bodyData.get('perfil')
@@ -3602,7 +3596,6 @@ def ApiAttPartnersFunction(request):
             "obs": "obs",  
             "unity": "unity",  
         }
-        print(dataKeys)
         
         db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
         cursor = db.connection()
@@ -3630,10 +3623,8 @@ def ApiAttPartnersFunction(request):
                 cursor.execute(query, (resp_commerce,))
                 dados = cursor.fetchall()
                 for idC, nomeC, statusC in dados:
-                    print(dados)
                     if idC != "":
                         resp_commerce = idC
-                        print("1>>>>", resp_commerce)
                     
                 if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
@@ -3647,7 +3638,6 @@ def ApiAttPartnersFunction(request):
                     )
                     cursor.execute(query, params)
             except:
-                print("ERRROOO")
                 query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
                 params = (
                     perfil,
@@ -3664,7 +3654,6 @@ def ApiAttPartnersFunction(request):
                             id,
                             id_user,
                         )
-                        print(params)
                         cursor.execute(query)
         return {
             "response": True,
@@ -3934,7 +3923,6 @@ def RemoveProfile(id_usuario):
             pass
 
     else:
-        print("deu ruim lk")
         return {
             "response": "true",
             "message": "Arquivo excluido com sucesso."
@@ -4132,7 +4120,6 @@ def ContractCollectionFunction(bodyData):
                         "path": PATH_ORIGIN,
                         "url": settings.SHORT_PLATAFORM + "/docs/contracts/" + PATH2 + document_path + "/" + "termo.pdf"
                     })
-                    print(keysLIST)
                 return {
                     "response": True,
                     "message": {
@@ -4147,3 +4134,4 @@ def ContractCollectionFunction(bodyData):
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
         }
+

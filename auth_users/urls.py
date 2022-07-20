@@ -3,7 +3,6 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [ 
     #API MEU FINANCEIRO EM MASSA 
     path('create/access/all/', views.ApiCreatePermissionAll, name='ApiCreatePermissionAll'),
