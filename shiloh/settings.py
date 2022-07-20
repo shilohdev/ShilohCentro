@@ -146,6 +146,7 @@ INSTALLED_APPS = [
     'auth_dash',
     'module_file_storage',
     'module_clicksign',
+    'auth_patients',
 ]
 
 MIDDLEWARE = [
