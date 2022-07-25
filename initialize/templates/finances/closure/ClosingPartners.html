@@ -22,9 +22,8 @@ Acompanhe as últimas notícias!
         display: block;
     }
    }
-    
-
 </style>
+
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
     <div class="modal-content" id="modal2">
@@ -150,8 +149,9 @@ Acompanhe as últimas notícias!
     </div>
  </div>
  <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-    <!--FIM DO MODAL-->
-    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+<!--FIM DO MODAL-->
+    
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
        <div class="container">
           <div class="card">
              <div class="card-content" style="margin-top: -25px;">
@@ -171,14 +171,28 @@ Acompanhe as últimas notícias!
                           <div class="indeterminate" style="background-color: #76c076da!important;"></div>
                       </div>
                       <p class="no-margin">&nbsp;</p>
-                      <div class="col s4 m4 left-align p-0">
-                        {% for k in arr_valPartinersPay %}
-                        <p id="regisPay" class="mb-0" style="font-size: 16px;">{{k.relacao}}</p>
-                        <h5 id="valPay" class="mb-0">{{k.val}}</h5>
-                        {% endfor %}
-                        <p id="regisPayf" class="mb-0" style="font-size: 16px;"></p>
-                        <h5 id="hPay" class="mb-0"></h5>
-                      </div>
+                     <div class="row">
+                        <div class="col s4 m4 left-align">
+                            <p class="mb-0 " style="font-size: 16px;">Lab Movel</p>
+                        </div>
+                        <div class="col s8 m8  right-align">
+                            {% for k in arr_LabMovel_Pago %}
+                            <h5 id="arr_pago_labmovel" class="mb-0">{{k.valor}}</h5>
+                            {% endfor %}
+                            <h5 class="mb-0" id="pago_labmovel" style="display:none"></h5>
+                        </div>
+                     </div>   
+                     <div class="row">
+                        <div class="col s4 m4 left-align">
+                            <p class="mb-0 " style="font-size: 16px;">Shiloh Lab</p>
+                        </div>
+                        <div class="col s8 m8 right-align">
+                            {% for k in arr_ShilohLab_Pago %}
+                            <h5 id="arr_pago_shilohlab" class="mb-0">{{k.valor}}</h5>
+                            {% endfor %}
+                            <h5 class="mb-0" id="pago_shilohlab" style="display:none"></h5>
+                        </div>
+                     </div>
                   </div>
               </div>
           </div>
@@ -193,14 +207,28 @@ Acompanhe as últimas notícias!
                           <div class="indeterminate" style="background-color:  #ff0303!important;"></div>
                       </div>
                       <p class="no-margin">&nbsp;</p>
-                      <div class="col s4 m4 left-align p-0">
-                        {% for k in arr_valPartinersPending %}  
-                           <p id="regisPending" class="mb-0 pt-8">{{k.relacao}}</p>
-                           <h5 id="valPending" class="mb-0">{{k.val}}</h5>
-                        {% endfor %}
-                        <p id="regisPendingf" class="mb-0 pt-8"></p>
-                        <h5 id="hPending" class="mb-0"></h5>
-                      </div>
+                      <div class="row">
+                        <div class="col s4 m4 left-align">
+                            <p class="mb-0 " style="font-size: 16px;">Lab Movel</p>
+                        </div>
+                        <div class="col s8 m8  right-align">
+                            {% for k in arr_LabMovel_APagar %}
+                            <h5 id="arr_apagar_labmovel" class="mb-0">{{k.valor}}</h5>
+                            {% endfor %}
+                            <h5 class="mb-0" id="apagar_labmovel" style="display:none"></h5>
+                        </div>
+                     </div>   
+                     <div class="row">
+                        <div class="col s4 m4 left-align">
+                            <p class="mb-0 " style="font-size: 16px;">Shiloh Lab</p>
+                        </div>
+                        <div class="col s8 m8 right-align">
+                            {% for k in arr_ShilohLab_APagar %}
+                            <h5 id="arr_apagar_shilohlab" class="mb-0">{{k.valor}}</h5>
+                            {% endfor %}
+                            <h5 class="mb-0" id="apagar_shilohlab" style="display:none"></h5>
+                        </div>
+                     </div>
                   </div>
               </div>
           </div>
@@ -212,20 +240,21 @@ Acompanhe as últimas notícias!
                      <h5 class="mb-0">Total</h5>
                      <p class="no-margin">&nbsp;</p>
                      <div class="progress" style="background-color: #ffebee;">
-                        <div class="indeterminate" style="background-color: #00bcd4!important; width: 0.24%; "></div>
+                        <div class="indeterminate" style="background-color: #00bcd4!important;"></div>
                      </div>
                      <p class="no-margin">&nbsp;</p>
-                     <div class="col s4 m4 left-align p-0">
-                        {% for k in arr_valTotalPartiners %}
-                        <p id="regisAll" class="mb-0 pt-8">({{ k.qdt}} registros)</p>
+                     <div class="row">
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="col s4 m4 left-align">
+                           {% for k in arr_valTotalPartiners %}
+                            <p class="mb-0" id="arr_quantidade_filtro" style="font-size: 16px;">({{ k.qdt}} registros)</p>
+                            <p class="mb-0" id="quantidade_filtro" style="font-size: 16px; display: none;">(0 registros)</p>
+                        </div>
+                        <div class="col s8 m8  right-align">
+                           <h4 class="mb-0" id="arr_total_filtro" >{{k.val}}</h4>
+                           <h4 class="mb-0" id="total_filtro" style="display: none;">R$ 00,00</h4>
+                        </div>
                         {% endfor %}
-                        <p id="regisAllf" class="mb-0 pt-8"></p>
-                     </div>
-                     <div class="col s8 m8 right-align">
-                        {% for k in arr_valTotalPartiners %}
-                        <h4 id="valAll" class="mb-0">{{ k.val }}</h4>
-                        {% endfor %}
-                        <h4 id="hAll" class="mb-0"></h4>
                      </div>
                </div>
               </div>
@@ -356,11 +385,31 @@ function searchMonth() {
    };
    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
       var dados = re["table"]
+      if (dados == false){
+         $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro").css("display", "block");
+         $("#arr_pago_labmovel, #arr_pago_shilohlab, #arr_apagar_labmovel, #arr_apagar_shilohlab, #arr_quantidade_filtro, #arr_total_filtro").hide();
+         $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro, #tb_appendTable").html("");
 
-      if (dados == ""){
-         var appende = ' <tr> <td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+         var appende = ' <tr> <td colspan="7" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+         $("#tb_appendTable").append(appende);
+      
+         var pago_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+         $("#pago_labmovel").append(pago_labmovel);
          
-         $("#tb_appendTable").append(appende);     
+         var pago_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+         $("#pago_shilohlab").append(pago_shilohlab);
+
+         var apagar_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+         $("#apagar_labmovel").append(apagar_labmovel);
+         
+         var apagar_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+         $("#apagar_shilohlab").append(apagar_shilohlab);
+
+         var b = `<h4 class="mb-0">R$ 00,00</h4>`;
+         $("#total_filtro").append(b);
+
+         var b2 = `<p>(0 registros)</p>`;
+         $("#quantidade_filtro").append(b2);  
       }
       else{
          //TABELA
@@ -385,70 +434,77 @@ function searchMonth() {
             $("#tb_appendTable").append(a);
                   
             // DASH PAGO
-            var dados = re["Pago"];
-            $("#hPay").html("");
-            $("#valPay").hide();
-            $("#regisPayf").html("");
-            $("#regisPay").hide();
-
+               // Lab Movel
+            var dados = re["PagoLabMovel"];
+            $("#pago_labmovel").html("");
+            $("#pago_labmovel").css("display", "block");
+            $("#arr_pago_labmovel").hide();
+            console.log(dados)
             $.map(dados, function (n, i) {
-               var d = `<h5 class="mb-0">${n.val}</h5>`;
-               $("#hPay").append(d);
-               
-               var d2 =`<p class="mb-0 " style="font-size: 16px;">${n.relacao}</p>`;
-               $("#regisPayf").append(d2);
+               var valor = `<h5 class="mb-0">${n.valor}</h5>`
+               $("#pago_labmovel").append(valor);
 
             });
+            
+            // Shiloh Lab
+            var dados = re["PagoLabShilohLab"];
+            $("#pago_shilohlab").html("");
+            $("#pago_shilohlab").css("display", "block");
+            $("#arr_pago_shilohlab").hide();
+            console.log(dados)
+            $.map(dados, function (n, i) {
+               var valor = `<h5 class="mb-0">${n.valor}</h5>`
+               $("#pago_shilohlab").append(valor);
 
+            });
 
             // DASH A PAGAR
-            var dados = re["messageApagar"];
+               // Lab Movel
+            var dados = re["APagarLabMovel"];
+            $("#apagar_labmovel").html("");
+            $("#apagar_labmovel").css("display", "block");
+            $("#arr_apagar_labmovel").hide();
             console.log(dados)
-
-            $("#hPending").html("");
-            $("#valPending").hide();
-            $("#regisPending").html("");
-            $("#regisPendingf").hide();
-
             $.map(dados, function (n, i) {
-               var d = `<h5 class="mb-0">${n.val}</h5>`;
-               $("#hPending").append(d);
-
-               var d2 =`<p class="mb-0 " style="font-size: 16px;">${n.relacao}</p>`;
-               $("#regisPendingf").append(d2);
+               var valor = `<h5 class="mb-0">${n.valor}</h5>`
+               $("#apagar_labmovel").append(valor);
 
             });
 
-
-            var dados = re["messages"];
-            $("#valAll").hide();
-            $("#hAll").html("");
-            $("#regisAll").hide();
-            $("#regisAllf").html("");
+            // Shiloh Lab
+            var dados = re["APagarShilohLab"];
+            $("#apagar_shilohlab").html("");
+            $("#apagar_shilohlab").css("display", "block");
+            $("#arr_apagar_shilohlab").hide();
+            console.log(dados)
             $.map(dados, function (n, i) {
-               var b = `<h4 class="mb-0">${n.val}</h4>`;
-               $("#hAll").append(b);
-
-               var b2 = `<p>(${n.qdt} registros)</p>`;
-               $("#regisAllf").append(b2);
-
+               var valor = `<h5 class="mb-0">${n.valor}</h5>`
+               $("#apagar_shilohlab").append(valor);
             });
 
+            //TOTAL
+              var dados = re["Total"];
+            $("#quantidade_filtro, #total_filtro").html("");
+            $("#quantidade_filtro, #total_filtro").css("display", "block");
+            $("#arr_quantidade_filtro, #arr_total_filtro").hide();
 
+            $.map(dados, function (n, i) {
+               var quantidade = `<p class="mb-0" style="font-size: 16px;">(${n.qdt} registros)</p>`
+               $("#quantidade_filtro").append(quantidade);
+
+               var valor = `<h4 class="mb-0">${n.val}</h4>`
+               $("#total_filtro").append(valor);
+            });
          });
-
-
       }
-    
-
-      
    });
 }
+
+
 
 $("#pesq_agenda").click(function () {
    searchMonth();
 });
-
 
 class request {
    constructor(token) {

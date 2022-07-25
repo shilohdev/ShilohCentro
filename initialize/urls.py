@@ -13,4 +13,6 @@ urlpatterns = [
     path('', include('auth_access.urls')),
     path('', include('module_clicksign.urls')),
 
+    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
