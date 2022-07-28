@@ -24,156 +24,156 @@ Acompanhe as últimas notícias!
        <div class="card-content" style="margin-top: 50px;">
            <!--  <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
            -->
-           STATUS
-           <div class="container ">
-               <ul class="collapsible expandable ">
-                   <li class="active">
-                       <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
-                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
-                       </div>
-                       <div id="card_ag" class="row">
-                           <div class="col s12" style="margin-top: 10px;">
-                               <div class="input-field col s3 ">
-                                   <input readonly="readonly" style="color: black;" id="date_age" type="date">
-                                   <label for="date_age">Data Agendamento</label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="hr_age" type="text" placeholder="00:00">
-                                   <label for="hr_age">
-                                       <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tp_service" type="tel" />
-                                   <label for="tp_service" class="active">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço
-                                   </label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
-                                   <label for="tp_exame" class="active">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame </label>
-                               </div>
-                           </div>
-                           <div class="input-field col s12">
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
-                                   <label for="tp_conv" class="active">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio </label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="nurse" type="tel">
-                                   <label for="nurse" class="active">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro </label>
-                               </div>
-                           </div>
-                       </div>
-                   </li>
-                   <!--CARD 2-->
-                   <li class="active" style="margin-top: 30px;">
-                       <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
-                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
-                       </div>
-                       <div id="userint" class="row">
-                           <div class="col s12" style="margin-top: 10px;">
-                               <div class="input-field col s6">
-                                   <input readonly="readonly" id="namePaciente" type="tel" style="color: black;">
-                                   <label for="namePaciente" class="active">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente </label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tel1" type="tel">
-                                   <label for="tel1">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="tel2" type="tel">
-                                   <label for="tel2">
-                                       <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="resp_comercial" type="tel">
-                                   <label for="resp_comercial">
-                                       <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial </label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="doctor" type="text">
-                                   <label for="doctor">
-                                       <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico </label>
-                               </div>
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="attendance" type="text">
-                                   <label for="attendance">
-                                       <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento </label>
-                               </div>
-                               <div class="input-field col s3">
+           <a id="btn_card_coleta" class="btn btn-floating pulse tooltipped " data-tooltip="Informações da coleta" data-position="right" style="background-color: #581848;"><i class="material-icons">menu</i></a>
+            <div id="card_coleta" class="container scale-transition" style="display: none;">
+                <ul class="collapsible  expandable">
+                    <li class="">
+                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                            <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
+                        </div>
+                        <div id="card_ag" class="row">
+                            <div class="col s12" style="margin-top: 10px;">
+                                <div class="input-field col s3 ">
+                                    <input readonly="readonly" style="color: black;" id="date_age" type="date">
+                                    <label for="date_age">Data Agendamento</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="hr_age" type="text" placeholder="00:00">
+                                    <label for="hr_age">
+                                        <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="tp_service" type="tel" />
+                                    <label for="tp_service" class="active">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço
+                                    </label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
+                                    <label for="tp_exame" class="active">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame </label>
+                                </div>
+                            </div>
+                            <div class="input-field col s12">
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
+                                    <label for="tp_conv" class="active">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio </label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="nurse" type="tel">
+                                    <label for="nurse" class="active">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--CARD 2-->
+                    <li class="" style="margin-top: 30px;">
+                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                            <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
+                        </div>
+                        <div id="userint" class="row">
+                            <div class="col s12" style="margin-top: 10px;">
+                                <div class="input-field col s6">
+                                    <input readonly="readonly" id="namePaciente" type="tel" style="color: black;">
+                                    <label for="namePaciente" class="active">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente </label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="tel1" type="tel">
+                                    <label for="tel1">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="tel2" type="tel">
+                                    <label for="tel2">
+                                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="resp_comercial" type="tel">
+                                    <label for="resp_comercial">
+                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial </label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="doctor" type="text">
+                                    <label for="doctor">
+                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico </label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="attendance" type="text">
+                                    <label for="attendance">
+                                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento </label>
+                                </div>
+                                <div class="input-field col s3">
                                 <input readonly="readonly" style="color: black;" id="company" type="text">
                                 <label for="company">
                                     <i class="material-icons" style="font-size: 15px">label_outline</i>&nbsp;Relação</label>
                             </div>
-                           </div>
-                       </div>
-                   </li>
-                   <!--CARD 3-->
-                   <li class="active" style="margin-top: 30px;">
-                       <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
-                           <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ENDEREÇO</labe>
-                       </div>
-                       <div id="userint" class="row">
-                           <div class="col s12" style="margin-top: 10px;">
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="zipcode" type="text" maxlength="9" onblur="pesquisacep(this.value)">
-                                   <label for="zipcode">
-                                       <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
-                               </div>
-                               <div class="input-field col s7">
-                                   <input readonly="readonly" style="color: black;" id="addres" type="text">
-                                   <label for="addres">Logradouro </label>
-                               </div>
-                               <div class="input-field col s2">
-                                   <input readonly="readonly" style="color: black;" id="number" type="text">
-                                   <label for="number">Número </label>
-                               </div>
-                           </div>
-                           <div class="col s12">
-                               <div class="input-field col s3">
-                                   <input readonly="readonly" style="color: black;" id="complement" type="text">
-                                   <label for="complement">Complemento</label>
-                               </div>
-                               <div class="input-field col s5">
-                                   <input readonly="readonly" style="color: black;" id="district" type="text">
-                                   <label for="district">Bairro</label>
-                               </div>
-                               <div class="input-field col s2">
-                                   <input readonly="readonly" style="color: black;" id="city" type="text">
-                                   <label for="city">Cidade</label>
-                               </div>
-                               <div class="input-field col s2">
-                                   <input readonly="readonly" style="color: black;" id="uf" type="text" maxlength="2">
-                                   <label for="uf">UF</label>
-                               </div>
-                           </div>
-                       </div>
-                   </li>
-                   <li class="active" style="margin-top: 30px;">
+                            </div>
+                        </div>
+                    </li>
+                    <!--CARD 3-->
+                    <li class="" style="margin-top: 30px;">
+                        <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                            <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ENDEREÇO</labe>
+                        </div>
+                        <div id="userint" class="row">
+                            <div class="col s12" style="margin-top: 10px;">
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="zipcode" type="text" maxlength="9" onblur="pesquisacep(this.value)">
+                                    <label for="zipcode">
+                                        <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                                </div>
+                                <div class="input-field col s7">
+                                    <input readonly="readonly" style="color: black;" id="addres" type="text">
+                                    <label for="addres">Logradouro </label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input readonly="readonly" style="color: black;" id="number" type="text">
+                                    <label for="number">Número </label>
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <div class="input-field col s3">
+                                    <input readonly="readonly" style="color: black;" id="complement" type="text">
+                                    <label for="complement">Complemento</label>
+                                </div>
+                                <div class="input-field col s5">
+                                    <input readonly="readonly" style="color: black;" id="district" type="text">
+                                    <label for="district">Bairro</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input readonly="readonly" style="color: black;" id="city" type="text">
+                                    <label for="city">Cidade</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input readonly="readonly" style="color: black;" id="uf" type="text" maxlength="2">
+                                    <label for="uf">UF</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="" style="margin-top: 30px;">
                     <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
                         <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
                     </div>
                     <div class="row">
-                         <div class="col s12">
-                         <div class="col s12" style="margin-top: 15px;">
+                        <div class="col s12">
+                        <div class="col s12" style="margin-top: 15px;">
                             <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:
-                         </div>
-                         <div class="input-field col s3">
+                        </div>
+                        <div class="input-field col s3">
                             <input readonly="readonly" style="color: black;" id="login" type="text">
                             <label for="login" class=""> 
                             <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
-                         </div>
-                         <div class="input-field col s5">
+                        </div>
+                        <div class="input-field col s5">
                             <input readonly="readonly" style="color: black;" id="senha" type="text">
                             <label for="senha" class="active"> 
                             <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
-                         </div>
-                       </div>
+                        </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col s12" style="margin-top: 10px;">
@@ -185,8 +185,8 @@ Acompanhe as últimas notícias!
                         </div>
                     </div>
                 </li>
-               </ul>
-           </div>
+                </ul>
+            </div>
            <div class="row">
                <div class="col s11 mt-2 ml-4">
                    <button id="btn_start" data-id_user="" onclick="ShowFinance(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #581848;">
@@ -501,7 +501,7 @@ Acompanhe as últimas notícias!
                    <div  class="row container" >
                        <!-- COMEÇO DA TABLE -->
                        <div class="col s12" style="overflow-x: auto">
-                           <table id="page-length-option" class="bordered">
+                           <table id="page-length-option" class="bordered" style="margin-bottom: 10px;">
                                <thead style="background-color: #581848; color: white; font-size: 15px">
                                    <tr>
                                        <th data-field="id">Paciente</th>
@@ -525,10 +525,13 @@ Acompanhe as últimas notícias!
                                        <td style="text-align: center;">
                                            <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
                                                <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                               <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                                   <i class="material-icons right">edit</i>
+                                               <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                                   <i class="material-icons right" style="color: #f5bd46da">edit</i>
                                                </button>
-                                           </a>
+                                           </a> 
+                                           <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                                <i class="material-icons right" style="color: #66a366">library_books</i>
+                                            </a>
                                        </td>
                                    </tr>
                                    {% endfor %}
@@ -544,7 +547,6 @@ Acompanhe as últimas notícias!
 
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
-
 
 function ShowFinance(object) {
     var id_user = $(object).data("id_user");
@@ -767,7 +769,7 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 }
 
 //VISUALIZA O APPEND
-function viewFile(object) {
+function viewFile(object){
     var path = $(object).data("url");
     var filename = $(object).data("id");
     var a = document.createElement("a");
@@ -979,10 +981,9 @@ function FinalizeProcess(object) {
     var tp_exame = $("#tp_exame").val();
     var company = $("#company").val();
     
-    console.log(company)
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "id_user": id_user, //DICT COM O VALOR DO ID
+        "id_user": id_user, 
         "statusProgresso": statusProgresso,
         "ValorPago": ValorPago,
         "doctor": doctor,
@@ -1013,16 +1014,14 @@ function searchMonth() {
     var data2 = $("#data2").val();
     var statusProgressoTable = $("#statusProgressoTable").val();
 
-    
-
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-        "month": month, //DICT COM O VALOR DO ID
-        "data1": data1, //DICT COM O VALOR DO ID
-        "data2": data2, //DICT COM O VALOR DO ID
-        "statusProgressoTable": statusProgressoTable, //DICT COM O VALOR DO ID
+        "month": month, 
+        "data1": data1, 
+        "data2": data2, 
+        "statusProgressoTable": statusProgressoTable, 
     };
-    fetchRequest("{% url 'SearchMonthExamsRefund' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+    fetchRequest("{% url 'SearchMonthExamsRefund' %}", "POST", "JSON", formpost, function(re) {
         var dados = re["message"];
         $("#tb_append2").html("");
         $.map(dados, function(n, i) {
@@ -1032,12 +1031,16 @@ function searchMonth() {
                      <td style="text-align: center;">${n.coleta}</td>
                      <td style="text-align: center;">${n.exame}</td>
                      <td style="text-align: center;">${n.unidade}</td>
+                     <td style="text-align: center;">${n.company}</td> 
                      <td style="text-align: center;">${n.status_p}</td>
                      <td style="text-align: center;">
                         <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">
-                           <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                              <i class="material-icons right">edit</i>
-                           </button>
+                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                            </button>
+                        </a>
+                        <a data-id_user="${n.id}" onclick=\"ContratoFile(this)\" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                            <i class="material-icons right" style="color: #66a366">library_books</i>
                         </a>
                      </td>
                   </tr>
@@ -1045,7 +1048,7 @@ function searchMonth() {
             $("#tb_append2").append(a);
         });
         if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-            var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+            var appende = '<td colspan="7" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
             $("#tb_append2").append(appende); 
             }
     });
@@ -1158,6 +1161,57 @@ $("#anx_file").click(function(){
 });
 
 
+$('#btn_card_coleta').on("click", function() {
+    var a = $("#btn_card_coleta");
+    a.next('#card_coleta').slideToggle();
+
+});
+
+
+/*
+//BAIXA CONTRATO
+//VISUALIZA O APPEND
+function viewContrato(object) {
+   var path = $(object).data("url");
+   var a = document.createElement("a");
+   
+   a.href = "/docs/contracts" + path + "/termo.pdf";
+   a.download = "termo.pdf";
+   document.body.appendChild(a);
+   a.click();
+    }
+*/
+
+
+function ContratoFile(object){
+    $(object).attr("disabled", true)
+
+    var id_user = $(object).data("id_user");
+
+    var formpost = {
+        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+        "id_user": id_user, //DICT COM O VALOR DO ID
+    };
+
+    fetchRequest("{% url 'FileContract' %}", "POST", "JSON", formpost, function(re) {
+        if (re["response"] == true) {
+            $(object).attr("disabled", false)
+
+            var dados = re["message"];
+            var path = dados
+            var a = document.createElement("a");
+            
+            a.href = path;
+            a.download = "termo.pdf";
+            document.body.appendChild(a);
+            a.click();
+        }
+        else{
+            $(object).attr("disabled", false)
+            alert(re["message"])
+        }
+    })
+}
 
 </script>
 {% endblock %}

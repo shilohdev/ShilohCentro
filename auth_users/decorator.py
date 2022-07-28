@@ -95,6 +95,7 @@ def CadastreUser(request):
     uf = request.POST.get("uf")
     unit = request.POST.get("unit")
     id_user = request.POST.get("id_user")
+    empresa = request.POST.get("empresa")
     data_atual = str(datetime.now().strftime('%Y-%m-%d'))
 
     name = str(name).title()
@@ -112,8 +113,8 @@ def CadastreUser(request):
         if dados:
             return {"response": "true", "message": "CPF já cadastrado em sistema!"}
         else:
-            param = (tp_perfil, cpf, name, date_nasc, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, cpf, data_atual, unit,)
-            query = "INSERT INTO `auth_users`.`users` (`id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '', '', %s, '', 'Ativo', '193', %s, %s, '400.00', NULL, NULL);"
+            param = (tp_perfil, cpf, name, date_nasc, email, tel1, tel2, zipcode, addres, number, complement, district, city, uf, cpf, data_atual, unit, empresa,)
+            query = "INSERT INTO `auth_users`.`users` (`id`, `perfil`, `cpf`, `nome`, `data_nasc`, `email`, `tel1`, `tel2`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `city`, `uf`, `rn`, `obs`, `categoria`, `login`, `senha`, `status`, `resp_comerce`, `data_regis`, `unity`, `val_padrao`, `val_porcentagem`, `val_fixo`, `company`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '', '', '', %s, '', 'Ativo', '193', %s, %s, '400.00', NULL, NULL, %s);"
             cursor.execute(query, param)
             id_user = cursor.lastrowid
         #AUTENTICAÇÃO E CRIAÇÃO DE LOGIN E SENHA  aqui user   
@@ -150,7 +151,7 @@ def CadastreUser(request):
                 query = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES (%s, %s, '')"
                 cursor.execute(query, params)
 
-    return {"response": "true", "message": "Cadastrado com sucesso!"}
+        return {"response": True, "message": "Cadastrado com sucesso!"}
     
 
 #CADASTRAR PARCEIROS
@@ -481,11 +482,11 @@ def FschedulePickup(request):
             }
 
 
-        searchID = "SELECT id_p, id_l_p, unity_p, nome_p FROM customer_refer.patients where id_p = %s;"
+        searchID = "SELECT id_p, id_l_p, unity_p, nome_p, company_p FROM customer_refer.patients where id_p = %s;"
         cursor.execute(searchID, (id_paciente,))
         dados = cursor.fetchall()
         if dados:
-            for idPaciente, idLeadPaciente, unityPaciente, nomePaciente in dados:
+            for idPaciente, idLeadPaciente, unityPaciente, nomePaciente, company_lab in dados:
                 pass
             queryLead= "UPDATE `customer_refer`.`leads` SET `register` = '1', `status_l` = 'Paciente'  WHERE (`id_lead` = %s);"
             cursor.execute(queryLead, (idLeadPaciente,))
@@ -497,8 +498,8 @@ def FschedulePickup(request):
             driver = 488
             hr_age = '00:00'
             for id_conv, nome_conv  in dados:
-                params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number, complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente,)
-                query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_registro`, `unity`, `identification`, `perfil_int`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '');"
+                params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number, complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente, company_lab,)
+                query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_registro`, `unity`, `identification`, `perfil_int`, `company_lab`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '', %s);"
                 cursor.execute(query, params)
 
             params2 = (id_paciente, date_create, nomeUser,)
@@ -511,7 +512,7 @@ def FschedulePickup(request):
 
         else:
             return {
-                "response": "false",
+                "response": False,
                 "message": "Por favor tente novamente."
             }
     
@@ -1899,11 +1900,11 @@ def SearchModalScheduled(request):
         params = (
             id,
         )
-        query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, jj.id as id_enfermeira, e.nome, jm.nome, np.nome_p, a.tel1_p, a.tel2_p, a.resp_medico, a.resp_atendimento, a. resp_comercial, a.cep, a.rua, a.numero, a.complemento, a.bairro, a.cidade, a.uf, a.val_cust, a.val_work_lab, a.val_pag, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, np.email_p, np.login_conv, np.senha_conv FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN customer_refer.patients np ON a.nome_p = np.id_p INNER JOIN auth_users.users jj ON e.nome = jj.nome INNER JOIN auth_users.users jm ON a.motorista = jm.id WHERE a.id = %s"
+        query = "SELECT a.id, a.data_agendamento, a.hr_agendamento, b.tipo_servico, c.tipo_exame, g.nome_conv, jj.id as id_enfermeira, e.nome, jm.nome, np.nome_p, a.tel1_p, a.tel2_p, a.resp_medico, a.resp_atendimento, a.resp_comercial, a.cep, a.rua, a.numero, a.complemento, a.bairro, a.cidade, a.uf, a.val_cust, a.val_work_lab, a.val_pag, a.obs, b.tipo_servico, c.tipo_exame, a.status, a.motivo_status, co.color, np.email_p, np.login_conv, np.senha_conv, empresa.company FROM auth_agenda.collection_schedule a INNER JOIN admins.type_services b ON a.tp_servico = b.id INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN admins.health_insurance g ON a.convenio = g.id INNER JOIN auth_users.users e ON a.resp_enfermeiro = e.id INNER JOIN admins.status_colors co ON a.status = co.status_c INNER JOIN customer_refer.patients np ON a.nome_p = np.id_p INNER JOIN auth_users.users jj ON e.nome = jj.nome INNER JOIN auth_users.users jm ON a.motorista = jm.id INNER JOIN auth_users.company_lab empresa ON empresa.id = a.company_lab WHERE a.id = %s"
         cursor.execute(query, params)
         dados = cursor.fetchall()
         if dados:
-            for a_id, a_data_agendamento, a_hr_agendamento, b_tipo_servico, c_tipo_exame, g_nome_conv, jj_id, e_nome, jm_nome, np_nome_p, a_tel1_p, a_tel2_p, a_resp_medico, a_resp_atendimento, a_resp_comercial, a_cep, a_rua, a_numero, a_complemento, a_bairro, a_cidade, a_uf, a_val_cust, a_val_work_lab, a_val_pag, a_obs, b_tipo_servico, c_tipo_exame, a_status, a_motivo_status, co_color, email, login, senha in dados:
+            for a_id, a_data_agendamento, a_hr_agendamento, b_tipo_servico, c_tipo_exame, g_nome_conv, jj_id, e_nome, jm_nome, np_nome_p, a_tel1_p, a_tel2_p, a_resp_medico, a_resp_atendimento, a_resp_comercial, a_cep, a_rua, a_numero, a_complemento, a_bairro, a_cidade, a_uf, a_val_cust, a_val_work_lab, a_val_pag, a_obs, b_tipo_servico, c_tipo_exame, a_status, a_motivo_status, co_color, email, login, senha, company in dados:
                 dict_response = {
                     "agendamento": {
                         "data_agendamento": a_data_agendamento,
@@ -1946,6 +1947,7 @@ def SearchModalScheduled(request):
                     "obs": {
                         "obs": a_obs,
                         "statusM": a_status,
+                        "company": company,
                         "motivo_status": a_motivo_status,
                         "color": co_color,
 
@@ -1960,7 +1962,7 @@ def SearchModalScheduled(request):
     }
 
 
-#CONCLUIR COLETA AGENDADA
+#CONCLUIR COLETA AGENDADA   
 def FunctionStatusAgendaConc(request):
     id = request.POST.get("id")
     obs = request.POST.get("obs")
@@ -1968,6 +1970,7 @@ def FunctionStatusAgendaConc(request):
     login = request.POST.get("login")
     senha = request.POST.get("senha")
     enfermeira = request.POST.get("enfermeira")
+    company = request.POST.get("company")
     print(enfermeira)
 
     convenio = request.POST.get("convenio")
@@ -1991,7 +1994,7 @@ def FunctionStatusAgendaConc(request):
                 "message": "Login expirado, faça login novamente para continuar."
             }
         param= (id_usuario, data_atual, obs, enfermeira, id,)
-        param2= ( id, data_atual,)
+        param2= ( id, data_atual, company,)
         query = "UPDATE `auth_agenda`.`collection_schedule` SET `status` = 'Concluído', `resp_fin` = %s, data_fin = %s, obs = %s, resp_enfermeiro = %s WHERE (`id` = %s);"
         cursor.execute(query, param)
         
@@ -2022,7 +2025,7 @@ def FunctionStatusAgendaConc(request):
                             }
                     else: 
                         pass
-                        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL);"
+                        query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`, `company`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL, %s);"
                         cursor.execute(query2, param2)
         params7=(id,)
         searchID2 = "SELECT id, nome_p FROM auth_agenda.collection_schedule WHERE id LIKE %s"
@@ -2221,12 +2224,11 @@ def searchConcluidosF(request):
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
             }
-
+    
         if perfil == "1":
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, comp.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p INNER JOIN auth_users.company_lab comp ON pa.company_p = comp.id WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, a.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query)
             dados = cursor
-
             array = []
 
             for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente, company in dados:
@@ -2240,11 +2242,12 @@ def searchConcluidosF(request):
                     "id_unidade": id_unidade,
                     "regis": regis,
                     "company": company,
-                    })
+                    "contrato": "",
+                })
                 array.append(newinfoa)
 
         else:
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s,   st.status_p, pa.nome_p, comp.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p INNER JOIN auth_users.company_lab comp ON pa.company_p = comp.id WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
+            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, a.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query, (unityY,))
             dados = cursor
             array = []
@@ -2260,8 +2263,11 @@ def searchConcluidosF(request):
                     "id_unidade": id_unidade,
                     "regis": regis,
                     "company": company,
+                    "contrato": '',
                     })
+
                 array.append(newinfoa)
+                print(newinfoa)
 
     return array
 
@@ -4104,8 +4110,8 @@ def fetchHistoryIndication(id):
 
 def ContractCollectionFunction(bodyData):
     try:
-        keysLIST = []
         id = bodyData.id_user
+        keysLIST = []
         with connections['auth_agenda'].cursor() as cursor:
             query = "SELECT document_path, coleta_id FROM clicksign_services.registros_documents WHERE status LIKE 1 and coleta_id like %s"
             cursor.execute(query, (id,))
@@ -4135,3 +4141,34 @@ def ContractCollectionFunction(bodyData):
             "message": "Não foi possível encontrar este parceiro."
         }
 
+
+
+
+# TESTE
+def FileContractFunction(request):
+    try:
+        id = request.POST.get("id_user")
+        print(id, "MMMMMMMMMMMMMMMMMMMMMMMMMMMM")
+        keysLIST = []
+        with connections['auth_agenda'].cursor() as cursor:
+            query = "SELECT document_path, coleta_id FROM clicksign_services.registros_documents WHERE status LIKE 1 and coleta_id like %s"
+            cursor.execute(query, (id,))
+            dados = cursor.fetchall()
+            if dados:
+                for document_path, coleta_id in dados:
+                    PATH_ORIGIN = document_path
+                return {
+                    "response": True,
+                    "message": settings.SHORT_PLATAFORM + "/docs/contracts" + document_path + "/" + "termo.pdf"
+                }
+            else:
+                return{
+                    "response": False,
+                    "message": "Não foi possível locaclizar contrato."
+                }
+    except Exception as err:
+        print("EROOOOO>>", err)
+        return {
+            "response": False,
+            "message": "Não foi possível encontrar este parceiro."
+        }

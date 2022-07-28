@@ -152,6 +152,7 @@ Acompanhe as últimas notícias!
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
 <script type="text/javascript">
+   
    $(function(){
       $('input.checkgroup').click(function(){
          if($(this).is(":checked")){
@@ -163,21 +164,17 @@ Acompanhe as últimas notícias!
       })
    })
 
-function SelectShow() {
-  var show = document.getElementById("convenio").value;      
-      if(show == ""){
-         alert("Por favor, preencha um tipo de covênio válido")
-        }else{
-      $("#btn_cadastrar").attr("disabled", false);
-        }
-}
+      function SelectShow() {
+         var show = document.getElementById("convenio").value;      
+         if(show == ""){
+            alert("Por favor, preencha um tipo de covênio válido")
+         }else{
+         $("#btn_cadastrar").attr("disabled", false);
+         }
+      }
 
-
-
-      //$("#cpf").mask("999.999.999-99");
       $("#tel1").mask("(99) 99999-9999");
       $("#tel2").mask("(99) 99999-9999");
-   
 
      function CadastreIndication(){
          $("#btn_cadastrar").attr("disabled", true);   
@@ -206,7 +203,6 @@ function SelectShow() {
             "tel2": $('#tel2').val(),
             "obs": $('#obs').val(),
             "combo": $('#combo').val(),
-            //DICT valor do checkbox
             "checkbox": $('#div_combos input[type="checkbox"]:checked').val(),
             };
    
@@ -215,7 +211,9 @@ function SelectShow() {
                alert(re["message"]);
                $("#btn_cadastrar").attr("disabled", true);   
                location.reload();
-         }   
+            }else{
+               $("#btn_cadastrar").attr("disabled", false);   
+            }
       });
    };
    

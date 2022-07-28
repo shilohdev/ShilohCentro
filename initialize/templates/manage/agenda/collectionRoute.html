@@ -529,7 +529,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 
 		}
 
-	});
+	}); 
 
    var r = new request($('{% csrf_token %}').val());
    r.get("{% url 'ContractCollection' %}", formpost, function (re) {

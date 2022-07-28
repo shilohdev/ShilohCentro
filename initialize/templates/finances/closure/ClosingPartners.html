@@ -10,6 +10,8 @@ Fechamento de Parceiros
 {% block description-page %}
 Acompanhe as últimas notícias!
 {% endblock %}
+{% block loading %}
+{% endblock %}
 {% block content %}
 
 <style type="text/css">
@@ -22,17 +24,18 @@ Acompanhe as últimas notícias!
         display: block;
     }
    }
+
 </style>
 
 <!-- INICIO DO MODAL -->
-<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%" >
     <div class="modal-content" id="modal2">
        <div class="card-content">
           <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="nome_medico" type="text" >
           <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="status_pagamento" type="text" >              
        </div>
        <!--PAGO-->
-       <div class="container col s8" style="margin-top:20px">
+       <div class="container col s12 m8" style="margin-top:20px">
           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
              <div class="collapsible-header col s12" style=" height: 40px; background-color: #76c076da; color: white;" tabindex="0">
                 <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >PAGO</labe>
@@ -52,10 +55,10 @@ Acompanhe as últimas notícias!
           </table>
        </div>
        <!--EM ANÁLISE-->
-       <div class="container col s8" style="margin-top:80px">
+       <div class="container col s12 m8" style="margin-top:80px">
           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
              <div class="collapsible-header col s12" style=" height: 40px; background-color: #e97a1fda; color: white;" tabindex="0">
-                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold; " >EM ANÁLISE</labe>
+                <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">EM ANÁLISE</labe>
              </div>
              <thead>
                 <tr role="row">
@@ -69,7 +72,7 @@ Acompanhe as últimas notícias!
           </table>
        </div>
        <!--NÃO ATINGIDO-->
-       <div class="container col s8" style="margin-top:80px">
+       <div class="container col s12 m8" style="margin-top:80px">
           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
              <div class="collapsible-header col s12" style="  height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
                 <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;" >NÃO ATINGIDO</labe>
@@ -85,7 +88,7 @@ Acompanhe as últimas notícias!
           </table>
        </div>
        <!--GLOSA-->
-       <div class="container col s8" style="margin-top:80px">
+       <div class="container col s12 m8" style="margin-top:80px">
           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
              <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;" tabindex="0">
                 <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA</labe>
@@ -102,7 +105,7 @@ Acompanhe as últimas notícias!
           </table>
        </div>
        <!--OUTROS-->
-       <div class="container col s8" style="margin-top:80px">
+       <div class="container col s12 m8" style="margin-top:80px">
           <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
              <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;" tabindex="0">
                 <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
@@ -122,7 +125,7 @@ Acompanhe as últimas notícias!
        <div id="docss" class="col s12 m12" style="display: none; margin-top: 10px ;"></div>
        <div class="col s12">
          <div class="col s3"></div>
-         <div class="col s3 m6 mt-2">
+         <div class="col s12 m6 mt-2">
             <button id="btn_pay" data-id_user="" onclick="GetFile(this), PartnersPago(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;" value="733">
             <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">PAGO
             </span></button>
@@ -148,10 +151,10 @@ Acompanhe as últimas notícias!
        </div>
     </div>
  </div>
- <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-<!--FIM DO MODAL-->
-    
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+ <!--FIM DO MODAL-->
+
+<div class="breadcrumbs-dark pb-0" id="table_filter">
+   <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
        <div class="container">
           <div class="card">
              <div class="card-content" style="margin-top: -25px;">
@@ -159,8 +162,8 @@ Acompanhe as últimas notícias!
              </div>
           </div>
        </div>
-    </div>
-    <div class="row container m-0">
+   </div>
+   <div class="row container m-0">
       <div class="col s12 m4">
           <div class="card padding-4 animate fadeLeft">
               <div class="row">
@@ -260,85 +263,89 @@ Acompanhe as últimas notícias!
               </div>
           </div>
       </div>
-     </div>
-    <div class="container">
-       <div class="card">
-          <!-- Externo -->
-          <div id="userint" class="row">
-             <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                <div class="input-field col s12 m4">
-                   <input  id="cpf" type="text" onkeyup="searchPatients(this)">
-                   <label for="cpf">
-                   <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                </div>
-                <div class="input-field col s12 m2">
-                   <label class="active" for="select">Selecione um mês</label>
-                   <select name="select" id="mes_search" class="error">
-                      <option value="">Selecione</option>
-                      <option value="01">Janeiro</option>
-                      <option value="02">Fevereiro</option>
-                      <option value="03">Março</option>
-                      <option value="04">Abril</option>
-                      <option value="05">Maio</option>
-                      <option value="06">Junho</option>
-                      <option value="07">Julho</option>
-                      <option value="08">Agosto</option>
-                      <option value="09">Setembro</option>
-                      <option value="10">Outubro</option>
-                      <option value="11">Novembro</option>
-                      <option value="12">Dezembro</option>
-                   </select>
-                </div>
-                <div class="col s12 m3">&nbsp;
-                   <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                   <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                   </button>
-                </div>
-                <!-- COMEÇO DA TABLE -->
-                <div class="col s12 scroll">
-                   <table id="page-length-option" class="bordered" style="overflow-x: auto">
-                      <thead style="background-color: #581848; color: white; font-size: 15px">
-                         <tr>
-                            <th data-field="id" style="text-align: center;">Nome [NC]</th>
-                            <th data-field="id" style="text-align: center;">Categoria</th>
-                            <th data-field="id" style="text-align: center;">Comercial</th>
-                            <th data-field="id" style="text-align: center;">Relação</th>
-                            <th data-field="id" style="text-align: center;">Status</th>
-                            <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
-                            <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                         </tr>
-                      </thead>
-                      <tbody id="tb_appendTable">
-                         {% for k in arr_SearchClosingPartners %}
-                         <tr id="tr_{{ k.id }}">
-                            <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
-                            <td style="text-align: center;">{{ k.categoria}}</td>
-                            <td style="text-align: center;">{{ k.comercial}}</td>
-                            <td style="text-align: center;">{{ k.company}}</td>
-                            <td style="text-align: center;">{{ k.status}}</td>
-                            <td style="text-align: center;">{{ k.valor}}</td>
-                            <td style="text-align: center;">
-                               <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                               <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                               </a>
-                            </td>
-                         </tr>
-                         {% endfor %}
-                      </tbody>
-                   </table>
-                </div>
-                <!-- FIM DA TABLE -->
-             </div>
-          </div>
-       </div>
-    </div>
- </div>
+   </div>
+   <div class="container">
+      <div class="card">
+         <!-- Externo -->
+         <div id="userint" class="row">
+            <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+               <div class="input-field col s12 m4">
+                  <input  id="cpf" type="text" onkeyup="searchPatients(this)">
+                  <label for="cpf">
+                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+               </div>
+               <div class="input-field col s12 m2">
+                  <label class="active" for="select">Selecione um mês</label>
+                  <select name="select" id="mes_search" class="error">
+                     <option value="">Selecione</option>
+                     <option value="01">Janeiro</option>
+                     <option value="02">Fevereiro</option>
+                     <option value="03">Março</option>
+                     <option value="04">Abril</option>
+                     <option value="05">Maio</option>
+                     <option value="06">Junho</option>
+                     <option value="07">Julho</option>
+                     <option value="08">Agosto</option>
+                     <option value="09">Setembro</option>
+                     <option value="10">Outubro</option>
+                     <option value="11">Novembro</option>
+                     <option value="12">Dezembro</option>
+                  </select>
+               </div>
+               <div class="col s12 m3">&nbsp;
+                  <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                  <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                  </button>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="container">
+               <div class="container">
+               <!-- COMEÇO DA TABLE -->
+               <div class="col s12 scroll mb-3">
+                  <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                     <thead style="background-color: #581848; color: white; font-size: 15px">
+                        <tr>
+                           <th data-field="id" style="text-align: center;">Nome [NC]</th>
+                           <th data-field="id" style="text-align: center;">Categoria</th>
+                           <th data-field="id" style="text-align: center;">Comercial</th>
+                           <th data-field="id" style="text-align: center;">Relação</th>
+                           <th data-field="id" style="text-align: center;">Status</th>
+                           <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                           <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tb_appendTable">
+                        {% for k in arr_SearchClosingPartners %}
+                        <tr id="tr_{{ k.id }}">
+                           <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
+                           <td style="text-align: center;">{{ k.categoria}}</td>
+                           <td style="text-align: center;">{{ k.comercial}}</td>
+                           <td style="text-align: center;">{{ k.company}}</td>
+                           <td style="text-align: center;">{{ k.status}}</td>
+                           <td style="text-align: center;">{{ k.valor}}</td>
+                           <td style="text-align: center;">
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                              <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                              </a>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+               <!-- FIM DA TABLE -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 
 <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
-
 <script type = "text/javascript" >
 
    //FUNCTION BUSCAR
@@ -371,21 +378,27 @@ $(document).ready(function () {
 });
 
 
-function searchMonth() {
+function searchMonth(){
    //VALIDAÇÃO DE CAMPO
    var month = $("#mes_search").val();
    if (month == "") {
       alert("Selecione um mês válido")
       return false
    }
+   $("#table_filter").hide()
+   $("#load").show()
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "month": month //DICT COM O VALOR DO ID
    };
    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
+      $("#load").hide()
+      $("#table_filter").show()
+
       var dados = re["table"]
       if (dados == false){
+
          $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro").css("display", "block");
          $("#arr_pago_labmovel, #arr_pago_shilohlab, #arr_apagar_labmovel, #arr_apagar_shilohlab, #arr_quantidade_filtro, #arr_total_filtro").hide();
          $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro, #tb_appendTable").html("");

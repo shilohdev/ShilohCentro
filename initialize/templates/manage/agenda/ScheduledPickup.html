@@ -23,8 +23,11 @@ Acompanhe as últimas notícias!
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
       <div class="card-content" style="margin-top: 50px;">
-         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
+         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="company" type="text" >
+         <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none; display: none;" id="statusM" type="text" >
+         <!--
          <input readonly="readonly" style="color: black; font-size: 15px; border-bottom: none;" id="motivo_S" type="text" >
+         -->
          <div class="container ">
             <ul class="collapsible expandable " >
                <li class="active" >
@@ -488,7 +491,8 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
          var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
 			var dictKeys = { // nome id // nome do value
             "statusM": key["obs"]["statusM"],
-            "motivo_S": key["obs"]["motivo_status"],
+            "company": key["obs"]["company"],
+          // "motivo_S": key["obs"]["motivo_status"],
 				"date_age": key["agendamento"]["data_agendamento"],
 				"hr_age": key["agendamento"]["hr_agendamento"],
 				"tp_service": key["agendamento"]["tipo_servico"],
@@ -564,6 +568,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
 //FUNCTION CONCLUIR
 function StatusConc(e){
    var enfermeira = $("#nurse").val();
+   var company = $("#company").val();
 
    if(enfermeira == "489"){
       alert("Insira a enfermeira que realizou a coleta!")
@@ -581,6 +586,7 @@ function StatusConc(e){
          "convenio": convenio,
          "id": id,
          "enfermeira": enfermeira,
+         "company": company,
       }
       console.log(formpost)
       fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL

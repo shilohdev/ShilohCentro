@@ -95,7 +95,7 @@ class DashPartners_Closing:
 
     def Total(self):        
         with connections['auth_finances'].cursor() as cursor:
-            querys = f"SELECT COUNT(DISTINCT nome_medico) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano}  AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
+            querys = f"SELECT COUNT(DISTINCT id_agendamento) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano}  AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
             cursor.execute(querys)
             dados = cursor.fetchall()
             array2 = []
@@ -147,4 +147,145 @@ class DashPartners_Closing:
             return False
         
         return array
+
+
+class DashCommerce_Closing:
+    def __init__(self, mes=None, ano=None) -> None:
+        self.mes = mes
+        self.ano = ano
+
+    def Commerce_PagosLabMovel(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT relacao_commerce, nome_comercial, status_comercial, valor_comercial FROM auth_finances.closing_finance where EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano} AND status_comercial LIKE 'Pago' AND valor_comercial NOT LIKE '0' AND relacao_commerce like 'Lab Movel'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for relacao, id_comercial, status, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+    def Commerce_PagosShilohLab(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT relacao_commerce, nome_comercial, status_comercial, valor_comercial FROM auth_finances.closing_finance where EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano} AND status_comercial LIKE 'Pago' AND valor_comercial NOT LIKE '0' AND relacao_commerce like 'Shiloh Lab'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for relacao, id_comercial, status, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+            
+            return array
+
+    def Commerce_ApagarLabMovel(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT relacao_commerce, nome_comercial, status_comercial, valor_comercial FROM auth_finances.closing_finance where EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano} AND status_comercial LIKE 'Pendente' AND valor_comercial NOT LIKE '0' AND relacao_commerce like 'Lab Movel'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for relacao, id_comercial, status, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+    
+    def Commerce_ApagarShilohLab(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT relacao_commerce, nome_comercial, status_comercial, valor_comercial FROM auth_finances.closing_finance where EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano} AND status_comercial LIKE 'Pendente' AND valor_comercial NOT LIKE '0' AND relacao_commerce like 'Shiloh Lab'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for relacao, id_comercial, status, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+
+    def Commerce_Total(self):        
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT COUNT(DISTINCT id_agendamento) AS contagem, SUM(valor_comercial) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano}  AND valor_comercial NOT LIKE '0' group by MONTH(data_repasse)"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array2 = []
+            if dados:
+                for qdt, val, mes in dados:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    array2.append(newinfoa)
+                    return array2
+            else:
+                newinfoa = ({
+                    "qdt": "0",
+                    "val": "R$ 00,00",
+                    "mes": "0",
+                    })
+                array2.append(newinfoa)
+                return array2
+
+
+    def Commerce_FiltroTable(self):
+     with connections['auth_finances'].cursor() as cursor:
+        query = f"SELECT b.id, b.nome, month( a.data_repasse), a.status_comercial, a.relacao_commerce, SUM(a.valor_comercial) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_comercial = b.id WHERE a.valor_comercial NOT LIKE '0' AND EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano} AND b.nome NOT LIKE 'Tosyn Lopes'  GROUP BY b.id, b.nome, MONTH( a.data_repasse), a.status_comercial, a.valor_comercial, a.relacao_commerce"
+        cursor.execute(query)
+        dadoss = cursor.fetchall()
+        array = []
+        if dadoss:
+            for id, comercial, mes, status, company, valor in dadoss:
+                valor = (valor) if valor not in ["", None] else None
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                newinfoa = ({
+                    "id": id,
+                    "nome": comercial,
+                    "mes": mes,
+                    "valor": valor,
+                    "status": status,
+                    "company": company,
+                    })
+                array.append(newinfoa)
+        else:
+            return False
+        
+        return array
+
 

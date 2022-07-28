@@ -20,8 +20,8 @@ from django.http import HttpResponseForbidden
 from datetime import datetime 
 
 from requests import request
-from auth_users.decorator import ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, valTotalIntF, valIntPending, valIntPay, valCommercialPay, valCommercialPending, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valTotalCommercialFunction, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_users.decorator import FileContractFunction, ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_finances.functions.exams.models import Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, valTotalIntF, valIntPending, valIntPay, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatePermissionAll, allowPermission
@@ -908,23 +908,26 @@ def SearchInfoM(request):
 def ClosingCommercialViews(request): #INDICAÇÕES
     if allowPage(request, "fechamento_comercial") == False:
         return error(request)
-    ClosingCommercial = TableClosingCommercial(request)
-    valTotalCommercial = valTotalCommercialFunction(request)
-    ViewFoto = FilePhotoViewFunction(request)
-    valCommercialP = valCommercialPending(request)
-    valCommercialPayy = valCommercialPay(request)
 
+    ViewFoto = FilePhotoViewFunction(request)
+    Pago_LabMovel_Comercial = Pago_LabMovel_Comercial_Function(request)
+    Pago_ShilohLab_Comercial = Commerce_PagosShilohLab_Function(request)
+    Apagar_LabMovel_Comercial = Commerce_ApagarLabMovel_Function(request)
+    Apagar_ShilohLab_Comercial = Commerce_ApagarShilohLab_Function(request)
+    Apagar_ShiTotal_ComerciallohLab_Comercial = Commerce_total_Function(request)
+    ClosingCommercial = TableClosingCommercial(request)
 
     return render(request, 'finances/closure/ClosingCommercial.html',  
     {
-        "arr_SearchClosingCommercial": ClosingCommercial,
-        "arr_valTotalCommercial": valTotalCommercial,
         "arr_ViewFoto": ViewFoto,
-        "arr_valCommercialPending": valCommercialP,
-        "arr_valCommercialPay": valCommercialPayy,
-        
-
+        "arr_Commerce_LabMovel_Pago": Pago_LabMovel_Comercial,
+        "arr_Commerce_ShilohLab_Pago": Pago_ShilohLab_Comercial,
+        "arr_Commerce_LabMovel_Apagar": Apagar_LabMovel_Comercial,
+        "arr_Commerce_ShilohLab_Apagar": Apagar_ShilohLab_Comercial,
+        "arr_Commerce_Total_Comercial": Apagar_ShiTotal_ComerciallohLab_Comercial,
+        "arr_SearchClosingCommercial": ClosingCommercial,
     })
+
 
 #FILTRO MES FECHAMENTO COMERCIAL
 @login_required
@@ -1394,3 +1397,11 @@ class ContractCollection(View):
             DeletePatientsFilesFunction(request),
             safe=False
         )
+
+
+
+def FileContract(request):
+    array = FileContractFunction(request)
+    return JsonResponse(array, safe=False, status=200)
+
+

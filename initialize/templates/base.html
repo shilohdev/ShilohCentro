@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/chartist-js/chartist.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/app-assets/vendors/chartist-js/chartist-plugin-tooltip.css' %}">
 
+
     <!-- END: VENDOR CSS-->
     <!-- BEGIN: Page Level CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/vertical-modern-menu-template/materialize.min.css">
@@ -73,6 +74,29 @@
       margin-top: 0.9em;
     }
 }
+/* CAMPO DO LOADING PAGE */
+@media only screen and (max-width: 500px){
+  .loading-page-filtro-screen {
+    width: 92vw;
+    height: 100vh;
+    display: flex;
+    align-content: flex-end;
+    align-items: center;
+    justify-content: space-around;
+  }
+}
+
+@media only screen and (min-width: 501px){
+  .loading-page-filtro {
+    width: 75vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+  }  
+}
+/* FIM DO CAMPO LOADING PAGE */
 
   .upper{
   text-transform: capitalize;
@@ -94,6 +118,8 @@
     height:100%;
     border-radius: 100%;
   }
+
+
 </style>
 
 <header class="page-topbar" id="header">
@@ -183,6 +209,53 @@
         <div class="row">
             <div class="col s12">
               {% csrf_token %}
+
+              {% block loading %} 
+              <div id="load" class="loading-page-filtro loading-page-filtro-screen" style="display: none;" >
+                <div class="preloader-wrapper big active" >
+                  <div class="spinner-layer spinner-blue">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+              
+                  <div class="spinner-layer spinner-red">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+              
+                  <div class="spinner-layer spinner-yellow">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+              
+                  <div class="spinner-layer spinner-green">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endblock %}
+
               {% block content %}
               {% endblock %}
                 <div class="content-overlay"></div>

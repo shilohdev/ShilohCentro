@@ -230,5 +230,7 @@ urlpatterns = [
     #teste
     path('api/contrato/coleta/', views.ContractCollection.as_view(), name='ContractCollection'), #FILE PACIENTE
 
+    path('api/contrato/coleta/financei', views.FileContract, name='FileContract'), #FILE PACIENTE
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  
