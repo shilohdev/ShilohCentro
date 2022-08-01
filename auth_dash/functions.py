@@ -152,10 +152,10 @@ def RankingDashAtenMonthFunction(request):
         for id_user, perfil, unity in dados:
             perfil = int(perfil)
             if perfil == 1:
-                query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC LIMIT 5"
+                query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC"
                 cursor.execute(query, (data_atual,))
             else:
-                query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE us.unity = %s AND DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC LIMIT 5"
+                query = "SELECT COUNT(a.id), a.id_responsavel, us.nome, DATE_FORMAT(a.data_registro,'%m/%Y') FROM admins.ranking_atendimento a INNER JOIN auth_users.users us ON a.id_responsavel = us.id WHERE us.unity = %s AND DATE_FORMAT(a.data_registro,'%m/%Y') = DATE_FORMAT(CURRENT_DATE(), %s) group by a.id_responsavel, DATE_FORMAT(a.data_registro,'%m/%Y'), us.nome ORDER BY COUNT(a.id) DESC"
                 cursor.execute(query, (unity, data_atual,))
 
             dados = cursor.fetchall()        
@@ -205,7 +205,7 @@ def RankingEnfermagemDayFunction(request):
 #RANKING DASHBOARD ENFERMEIRAS > MÊS
 def RankingEnfermagemMonthFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_mes FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE Month(a.data_agendamento) = Month(CURRENT_DATE()) AND a.status = 'Concluído' GROUP BY b.nome, a.resp_enfermeiro ORDER BY qtd_mes DESC LIMIT 5;"
+        query = "SELECT b.nome, a.resp_enfermeiro, COUNT(a.status) AS qtd_mes FROM auth_agenda.collection_schedule a INNER JOIN auth_users.users b ON b.id = a.resp_enfermeiro WHERE Month(a.data_agendamento) = Month(CURRENT_DATE()) AND a.status = 'Concluído' GROUP BY b.nome, a.resp_enfermeiro ORDER BY qtd_mes DESC;"
         cursor.execute(query )
         dados = cursor.fetchall()        
         array = []

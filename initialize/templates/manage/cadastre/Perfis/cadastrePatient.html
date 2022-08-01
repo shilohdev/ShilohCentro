@@ -87,7 +87,7 @@ Acompanhe as últimas notícias!
                         {% endfor %}
                      </select>
                   </div>
-                  <div id="empresa" class="input-field col m2 s12" style="display: none;">
+                  <div id="empresa" class="input-field col m4 s12" style="display: none;">
                      <input readonly="readonly" style="color: black;"  id="company" type="text">
                      <label for="company">
                      <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Relação:</label>
@@ -436,7 +436,7 @@ function CadastrePatient() {
       $("#btn_cadastrar").attr("disabled", true);
 
       fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function (re) {
-         if (re["response"] == "true") {
+         if (re["response"] == "true"){
             alert(re["message"]);
             location.reload();
          } else {

@@ -289,3 +289,143 @@ class DashCommerce_Closing:
         return array
 
 
+
+
+class DashInterno_Closing:
+    def __init__(self, mes=None, ano=None) -> None:
+        self.mes = mes
+        self.ano = ano
+
+    def Interno_PagosLabMovel(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT finance.nome_medico, finance.valor_uni_partners FROM auth_finances.closing_finance finance INNER JOIN auth_users.users us ON finance.nome_medico = us.id WHERE us.perfil != 7 AND EXTRACT(MONTH FROM finance.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM finance.data_repasse) = {self.ano} AND finance.valor_comercial LIKE '0' AND finance.status_partners LIKE 'Pago' AND finance.relacao_commerce like 'Lab Movel'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for id_medico, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+    def Interno_PagosShilohLab(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT finance.nome_medico, finance.valor_uni_partners FROM auth_finances.closing_finance finance INNER JOIN auth_users.users us ON finance.nome_medico = us.id WHERE us.perfil != 7 AND EXTRACT(MONTH FROM finance.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM finance.data_repasse) = {self.ano} AND finance.valor_comercial LIKE '0' AND finance.status_partners LIKE 'Pago' AND finance.relacao_commerce like 'Shiloh Lab'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for id_medico, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+            
+            return array
+
+    def Interno_ApagarLabMovel(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT finance.nome_medico, finance.valor_uni_partners FROM auth_finances.closing_finance finance INNER JOIN auth_users.users us ON finance.nome_medico = us.id WHERE us.perfil != 7 AND EXTRACT(MONTH FROM finance.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM finance.data_repasse) = {self.ano} AND finance.valor_comercial LIKE '0' AND finance.status_partners LIKE 'Pendente' AND finance.relacao_commerce like 'Lab Movel'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for id_medico, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+    
+    def Interno_ApagarShilohLab(self):
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT finance.nome_medico, finance.valor_uni_partners FROM auth_finances.closing_finance finance INNER JOIN auth_users.users us ON finance.nome_medico = us.id WHERE us.perfil != 7 AND EXTRACT(MONTH FROM finance.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM finance.data_repasse) = {self.ano} AND finance.valor_comercial LIKE '0' AND finance.status_partners LIKE 'Pendente' AND finance.relacao_commerce like 'Shiloh Lab'"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                valor = [(valor) for id_medico, valor in dados]
+                valor = sum(valor)
+
+                valor = f"R$ {valor:_.2f}"
+                valor = valor.replace(".", ",").replace("_", ".")
+                
+                array.append({"valor": valor})
+
+            else:
+                array.append({"valor": "R$ 00,00"})
+
+            return array
+
+
+    def Interno_Total(self):        
+        with connections['auth_finances'].cursor() as cursor:
+            querys = f"SELECT COUNT(DISTINCT id_agendamento) AS contagem, SUM(valor_uni_partners) AS total, MONTH(data_repasse) FROM auth_finances.closing_finance WHERE EXTRACT(MONTH FROM data_repasse) = {self.mes} AND EXTRACT(YEAR FROM data_repasse) = {self.ano}  AND valor_comercial LIKE '0' group by MONTH(data_repasse)"
+            cursor.execute(querys)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                for qdt, val, mes in dados:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "qdt": qdt,
+                        "val": val,
+                        "mes": mes,
+                        })
+                    array.append(newinfoa)
+                    return array
+            else:
+                newinfoa = ({
+                    "qdt": "0",
+                    "val": "R$ 00,00",
+                    "mes": "0",
+                    })
+                array.append(newinfoa)
+                return array
+
+
+    def Interno_FiltroTable(self):
+        with connections['auth_finances'].cursor() as cursor:
+            query = f"SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners), a.relacao_commerce FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND EXTRACT(MONTH FROM a.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM a.data_repasse) = {self.ano} GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse), a.relacao_commerce"
+            cursor.execute(query)
+            dadoss = cursor.fetchall()
+            array = []
+            if dadoss:
+                for id, nome, status_partners, valor, company in dadoss:
+                    valor = (valor) if valor not in ["", None] else None
+                    valor = f"R$ {valor:_.2f}"
+                    valor = valor.replace(".", ",").replace("_", ".")
+                    newinfoa = ({
+                        "id": id,
+                        "nome": nome,
+                        "status": status_partners,
+                        "valor": valor,
+                        "company": company,
+                        })
+                    array.append(newinfoa)
+            else:
+                return False
+            
+            return array
+

@@ -197,8 +197,8 @@ urlpatterns = [
     path('rota/agendamentos/coletas/', views.CollectionRouteViews, name='CollectionRouteViews'),#EXAMES FINALIZADOS
     path('api/status/agenda/route', views.ApiIniciarColeta, name='ApiIniciarColeta'),#CONCLUIR
     path('api/salvar/anexo/', views.SaveAnexo, name='SaveAnexo'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
-    path('fechamento/finacneiro/interno/', views.closingInt, name='closingInt'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
-    path('financeiro/fechamento/interno/filter', views.SearchClosingIntFilter, name='SearchClosingIntFilter'),#EXAMES FINALIZADOS
+    path('fechamento/financeiro/interno/', views.ClosingInternoViews, name='ClosingInterno'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
+    path('financeiro/fechamento/interno/filter', views.ClosingInternoFiltro, name='ClosingInternoFiltro'),#EXAMES FINALIZADOS
 
     #INFOLOG
     path('info/log/', views.LogUser, name='LogUser'),#EXAMES FINALIZADOS

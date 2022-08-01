@@ -249,7 +249,7 @@ Acompanhe as últimas notícias!
                      <div class="row">
                         <p class="no-margin">&nbsp;</p>
                         <div class="col s4 m4 left-align">
-                           {% for k in arr_valTotalPartiners %}
+                           {% for k in arr_Total %}
                             <p class="mb-0" id="arr_quantidade_filtro" style="font-size: 16px;">({{ k.qdt}} registros)</p>
                             <p class="mb-0" id="quantidade_filtro" style="font-size: 16px; display: none;">(0 registros)</p>
                         </div>
@@ -265,16 +265,16 @@ Acompanhe as últimas notícias!
       </div>
    </div>
    <div class="container">
-      <div class="card">
-         <!-- Externo -->
-         <div id="userint" class="row">
-            <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+      <!-- Externo -->
+      <div id="userint" class="row">
+         <div class="col s12 s12 card">
+            <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
                <div class="input-field col s12 m4">
                   <input  id="cpf" type="text" onkeyup="searchPatients(this)">
                   <label for="cpf">
                   <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
                </div>
-               <div class="input-field col s12 m2">
+               <div class="input-field col s12 m4">
                   <label class="active" for="select">Selecione um mês</label>
                   <select name="select" id="mes_search" class="error">
                      <option value="">Selecione</option>
@@ -298,49 +298,50 @@ Acompanhe as últimas notícias!
                   </button>
                </div>
             </div>
-         </div>
-         <div class="row">
-            <div class="container">
+            <div class="row">
                <div class="container">
-               <!-- COMEÇO DA TABLE -->
-               <div class="col s12 scroll mb-3">
-                  <table id="page-length-option" class="bordered" style="overflow-x: auto">
-                     <thead style="background-color: #581848; color: white; font-size: 15px">
-                        <tr>
-                           <th data-field="id" style="text-align: center;">Nome [NC]</th>
-                           <th data-field="id" style="text-align: center;">Categoria</th>
-                           <th data-field="id" style="text-align: center;">Comercial</th>
-                           <th data-field="id" style="text-align: center;">Relação</th>
-                           <th data-field="id" style="text-align: center;">Status</th>
-                           <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
-                           <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                        </tr>
-                     </thead>
-                     <tbody id="tb_appendTable">
-                        {% for k in arr_SearchClosingPartners %}
-                        <tr id="tr_{{ k.id }}">
-                           <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
-                           <td style="text-align: center;">{{ k.categoria}}</td>
-                           <td style="text-align: center;">{{ k.comercial}}</td>
-                           <td style="text-align: center;">{{ k.company}}</td>
-                           <td style="text-align: center;">{{ k.status}}</td>
-                           <td style="text-align: center;">{{ k.valor}}</td>
-                           <td style="text-align: center;">
-                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                              <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                              </a>
-                           </td>
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                  </table>
-               </div>
-               <!-- FIM DA TABLE -->
+                  <div class="container">
+                  <!-- COMEÇO DA TABLE -->
+                  <div class="col s12 scroll mb-3">
+                     <table id="page-length-option" class="bordered" style="overflow-x: auto">
+                        <thead style="background-color: #581848; color: white; font-size: 15px">
+                           <tr>
+                              <th data-field="id" style="text-align: center;">Nome [NC]</th>
+                              <th data-field="id" style="text-align: center;">Categoria</th>
+                              <th data-field="id" style="text-align: center;">Comercial</th>
+                              <th data-field="id" style="text-align: center;">Relação</th>
+                              <th data-field="id" style="text-align: center;">Status</th>
+                              <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                              <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                           </tr>
+                        </thead>
+                        <tbody id="tb_appendTable">
+                           {% for k in arr_SearchClosingPartners %}
+                           <tr id="tr_{{ k.id }}">
+                              <td style="text-align: center;">{{ k.medico }} [{{ k.rn }}] </td>
+                              <td style="text-align: center;">{{ k.categoria}}</td>
+                              <td style="text-align: center;">{{ k.comercial}}</td>
+                              <td style="text-align: center;">{{ k.company}}</td>
+                              <td style="text-align: center;">{{ k.status}}</td>
+                              <td style="text-align: center;">{{ k.valor}}</td>
+                              <td style="text-align: center;">
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                                 <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                 </a>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+                  <!-- FIM DA TABLE -->
+                  </div>
                </div>
             </div>
          </div>
       </div>
    </div>
+</div>
 
 <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

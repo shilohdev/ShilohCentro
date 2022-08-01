@@ -115,8 +115,11 @@ Acompanhe as últimas notícias!
         </div>
     </div>
 </div>
+<!-- FIM DO MODAL -->
+
+
+
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-    <!--FIM DO MODAL-->
     <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
         <div class="container">
             <div class="card">
@@ -126,7 +129,7 @@ Acompanhe as últimas notícias!
             </div>
         </div>
     </div>
-    <div class="row container m-0">
+    <div class="container">
         <div class="col s12 m4">
             <div class="card padding-4 animate fadeLeft">
                 <div class="row">
@@ -136,18 +139,28 @@ Acompanhe as últimas notícias!
                         <div class="progress" style="background-color: #ffebee;">
                             <div class="indeterminate" style="background-color: #76c076da!important;"></div>
                         </div>
-                        <p class="no-margin">&nbsp;</p>                            
-                        <div class="col s4 m4 left-align p-0">
-                            {% for k in arr_valIntPay %} 
-                            <p id="regisPay" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
-                            {% endfor %}
-                            <p id="regisPayf" class="mb-0 pt-8"></p>
-                        </div>
-                        <div class="col s8 m8 right-align">
-                            {% for k in arr_valIntPay %} 
-                            <h5 id="valPay" class="mb-0">{{ k.val }}</h5>
-                            {% endfor %}
-                            <h5 id="hPay" class="mb-0"></h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="row">
+                            <div class="col s4 m4 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Lab Movel</p>
+                            </div>
+                            <div class="col s8 m8  right-align">
+                                {% for k in arr_Interno_LabMovel_Pago %}
+                                <h5 id="arr_pago_labmovel" class="mb-0">{{k.valor}}</h5>
+                                {% endfor %}
+                                <h5 class="mb-0" id="pago_labmovel" style="display:none"></h5>
+                            </div>
+                        </div>   
+                        <div class="row">
+                            <div class="col s4 m4 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Shiloh Lab</p>
+                            </div>
+                            <div class="col s8 m8 right-align">
+                                {% for k in arr_Interno_ShilohLab_Pago %}
+                                <h5 id="arr_pago_shilohlab" class="mb-0">{{k.valor}}</h5>
+                                {% endfor %}
+                                <h5 class="mb-0" id="pago_shilohlab" style="display:none"></h5>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,20 +173,30 @@ Acompanhe as últimas notícias!
                         <h5 class="mb-0">À Pagar</h5>
                         <p class="no-margin">&nbsp;</p>
                         <div class="progress" style="background-color: #ffebee;">
-                        <div class="indeterminate" style="background-color:  #ff0303!important;"></div>
+                            <div class="indeterminate" style="background-color:  #ff0303!important;"></div>
                         </div>
                         <p class="no-margin">&nbsp;</p>
-                        <div class="col s4 m4 left-align p-0">
-                            {% for k in arr_valIntPending %}  
-                            <p id="regisPending" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
-                            {% endfor %}
-                            <p id="regisPendingf" class="mb-0 pt-8"></p>
-                        </div>
-                        <div class="col s8 m8 right-align">
-                            {% for k in arr_valIntPending %}  
-                            <h5 id="valPending" class="mb-0">{{ k.val }}</h5>
-                            {% endfor %}
-                            <h5 id="hPending" class="mb-0"></h5>
+                        <div class="row">
+                            <div class="col s4 m4 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Lab Movel</p>
+                            </div>
+                            <div class="col s8 m8  right-align">
+                                {% for k in arr_Interno_LabMovel_Apagar %}
+                                <h5 id="arr_apagar_labmovel" class="mb-0">{{k.valor}}</h5>
+                                {% endfor %}
+                                <h5 class="mb-0" id="apagar_labmovel" style="display:none"></h5>
+                            </div>
+                        </div>   
+                        <div class="row">
+                            <div class="col s4 m4 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Shiloh Lab</p>
+                            </div>
+                            <div class="col s8 m8 right-align">
+                                {% for k in arr_Interno_ShilohLab_Apagar %}
+                                <h5 id="arr_apagar_shilohlab" class="mb-0">{{k.valor}}</h5>
+                                {% endfor %}
+                                <h5 class="mb-0" id="apagar_shilohlab" style="display:none"></h5>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -186,80 +209,85 @@ Acompanhe as últimas notícias!
                         <h5 class="mb-0">Total</h5>
                         <p class="no-margin">&nbsp;</p>
                         <div class="progress" style="background-color: #ffebee;">
-                            <div class="indeterminate" style="background-color: #00bcd4!important; width: 0.24%; "></div>
+                            <div class="indeterminate" style="background-color: #00bcd4!important;"></div>
                         </div>
                         <p class="no-margin">&nbsp;</p>
-                        <div class="col s4 m4 left-align p-0">
-                            {% for k in arr_valTotalInt %} 
-                            <p id="regisAll" class="mb-0 pt-8">({{ k.qdt }} registros)</p>
+                        <div class="row">
+                            <p class="no-margin">&nbsp;</p>
+                            <div class="col s4 m4 left-align">
+                                {% for k in arr_Interno_Total %}
+                                <p class="mb-0" id="arr_quantidade_filtro" style="font-size: 16px;">({{ k.qdt}} registros)</p>
+                                <p class="mb-0" id="quantidade_filtro" style="font-size: 16px; display: none;">(0 registros)</p>
+                            </div>
+                            <div class="col s8 m8  right-align">
+                                <h4 class="mb-0" id="arr_total_filtro" >{{k.val}}</h4>
+                                <h4 class="mb-0" id="total_filtro" style="display: none;">R$ 00,00</h4>
+                            </div>
                             {% endfor %}
-                            <p id="regisAllf" class="mb-0 pt-8"></p>
-                        </div>
-                        <div class="col s8 m8 right-align">
-                            {% for k in arr_valTotalInt %}
-                            <h5 id="valAll" class="mb-0">{{ k.val }}</h5>
-                            {% endfor %}
-                            <h5 id="hAll" class="mb-0"></h5>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+   
     <div class="container">
-        <div class="card">
-            <!-- Externo -->
-            <div id="userint" class="row">
-                <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                    <div class="input-field col s4">
-                        <input  id="cpf" type="text" onkeyup="searchPatients(this)">
-                        <label for="cpf">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 card">
+                    <div style="margin-top: 30px; margin-bottom: 30px;">
+                        <div class="input-field col s12 m4">
+                            <input  id="cpf" type="text" onkeyup="searchPatients(this)">
+                            <label for="cpf">
                             <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                    </div>
-                    <div class="input-field col s2">
-                        <select name="select" id="mes_search" class="error">
-                            <option value="">Selecione um mês</option>
-                            <option value="01">Janeiro</option>
-                            <option value="02">Fevereiro</option>
-                            <option value="03">Março</option>
-                            <option value="04">Abril</option>
-                            <option value="05">Maio</option>
-                            <option value="06">Junho</option>
-                            <option value="07">Julho</option>
-                            <option value="08">Agosto</option>
-                            <option value="09">Setembro</option>
-                            <option value="10">Outubro</option>
-                            <option value="11">Novembro</option>
-                            <option value="12">Dezembro</option>
-                        </select>
-                    </div>
-                    <div class="col s2">&nbsp;
-                        <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                        </button>
+                        </div>
+                        <div class="input-field col m4 s12">
+                            <select name="select" id="mes_search" class="error">
+                                <option value="">Selecione um mês</option>
+                                <option value="01">Janeiro</option>
+                                <option value="02">Fevereiro</option>
+                                <option value="03">Março</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Maio</option>
+                                <option value="06">Junho</option>
+                                <option value="07">Julho</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                        </div>
+                        <div class="col s12 m3">&nbsp;
+                            <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                            </button>
+                        </div>
                     </div>
                     <!-- COMEÇO DA TABLE -->
-                    <div class="col s12 scroll">
+                    <div class="col s12 m12 scroll mb-3">
                         <table id="page-length-option" class="bordered" style="overflow-x: auto">
                             <thead style="background-color: #581848; color: white; font-size: 15px">
                                 <tr>
-                                    <th data-field="id" style="text-align: center;">Nome</th>
-                                    <th data-field="id" style="text-align: center;">Status</th>
-                                    <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
-                                    <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                                <th data-field="id" style="text-align: center;">Nome</th>
+                                <th data-field="id" style="text-align: center;">Relação</th>
+                                <th data-field="id" style="text-align: center;">Status</th>
+                                <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
+                                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                                 </tr>
                             </thead>
                             <tbody id="tb_appendTable">
-                            {% for k in arr_SearchClosingInt %}
+                                {% for k in arr_SearchClosingInterno %}
                                 <tr id="tr_{{ k.id }}">
-                                    <td style="text-align: center;">{{ k.nome }} </td>
-                                    <td style="text-align: center;">{{ k.status}}</td>
-                                    <td style="text-align: center;">{{ k.valor}}</td>
-                                    <td style="text-align: center;">
-                                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                                            <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                                        </a>
-                                    </td>
+                                <td style="text-align: center;">{{ k.nome }} </td>
+                                <td style="text-align: center;">{{ k.company }}</td>
+                                <td style="text-align: center;">{{ k.status }}</td>
+                                <td style="text-align: center;">{{ k.valor }}</td>
+                                <td style="text-align: center;">
+                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
+                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                    </a>
+                                </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -322,130 +350,127 @@ Acompanhe as últimas notícias!
             "month": month //DICT COM O VALOR DO ID
         };
         
-        fetchRequest("{% url 'SearchClosingIntFilter' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
-            var dados = re["response"]            
-            //TABELA
-            var dados = re["table"];
-            $("#tb_appendTable").html("");
-            $.map(dados, function (n, i) {
-                var a = `
-                <tr id="tr_${n.id}">
-                    <td style="text-align: center;">${n.nome}</td>
-                    <td style="text-align: center;">${n.status}</td>
-                    <td style="text-align: center;">${n.valor}</td>
-                    <td style="text-align: center;">
-                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
-                        <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                        </a>
-                    </td>
-                </tr>
-                `;
-                $("#tb_appendTable").append(a);
-                    
-                // DASH PAGO
-                var dados = re["Pago"];
-                console.log(dados);
-                $("#hPay").html("");
-                $("#valPay").hide();
-                $("#regisPayf").html("");
-                $("#regisPay").hide();
-    
-                $.map(dados, function (n, i) {
-                var d = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hPay").append(d);
-    
-                var d2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisPayf").append(d2);
-                });
-                console.log(dados)
+        fetchRequest("{% url 'ClosingInternoFiltro' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES
+            $("#load").hide()
+            $("#table_filter").show()
 
+            var dados = re["table"]
+
+            if (dados == false){
+                $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro").css("display", "block");
+                $("#arr_pago_labmovel, #arr_pago_shilohlab, #arr_apagar_labmovel, #arr_apagar_shilohlab, #arr_quantidade_filtro, #arr_total_filtro").hide();
+                $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro, #tb_appendTable").html("");
+
+                var appende = ' <tr> <td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+                $("#tb_appendTable").append(appende);
+            
+                var pago_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+                $("#pago_labmovel").append(pago_labmovel);
                 
-                // DASH A PAGAR
-                var dados = re["messageApagar"];
-                $("#hPending").html("");
-                $("#valPending").hide();
-                $("#regisPending").hide();
-                $("#regisPendingf").html("");
-                $.map(dados, function (n, i) {
-                var c = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hPending").append(c);
-    
-                var c2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisPendingf").append(c2);
-    
-                });
-    
-                // DASH TOTAL
-                var dados = re["messages"];
-                $("#valAll").hide();
-                $("#hAll").html("");
-                $("#regisAll").hide();
-                $("#regisAllf").html("");
-                $.map(dados, function (n, i) {
-                var b = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hAll").append(b);
-    
-                var b2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisAllf").append(b2);
-    
-                }); 
+                var pago_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+                $("#pago_shilohlab").append(pago_shilohlab);
+
+                var apagar_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+                $("#apagar_labmovel").append(apagar_labmovel);
+                
+                var apagar_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+                $("#apagar_shilohlab").append(apagar_shilohlab);
+
+                var b = `<h4 class="mb-0">R$ 00,00</h4>`;
+                $("#total_filtro").append(b);
+
+                var b2 = `<p>(0 registros)</p>`;
+                $("#quantidade_filtro").append(b2);  
+                } else{
+                    //TABELA
+                    var dados = re["table"];
+                    $("#tb_appendTable").html("");
+                    $.map(dados, function (n, i) {
+                        var a = `
+                        <tr id="tr_${n.id}">
+                            <td style="text-align: center;">${n.nome}</td>
+                            <td style="text-align: center;">${n.company}</td>
+                            <td style="text-align: center;">${n.status}</td>
+                            <td style="text-align: center;">${n.valor}</td>
+                            <td style="text-align: center;"> 
+                                <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
+                                <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                </a>
+                            </td>
+                        </tr>
+                        `;
+                        $("#tb_appendTable").append(a);
+                            
+                        // DASH PAGO
+                        // Lab Movel
+                        var dados = re["PagoLabMovel"];
+                        $("#pago_labmovel").html("");
+                        $("#pago_labmovel").css("display", "block");
+                        $("#arr_pago_labmovel").hide();
+                        console.log(dados)
+                        $.map(dados, function (n, i) {
+                        var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                        $("#pago_labmovel").append(valor);
+
+                        });
+                        
+                        // Shiloh Lab
+                        var dados = re["PagoLabShilohLab"];
+                        $("#pago_shilohlab").html("");
+                        $("#pago_shilohlab").css("display", "block");
+                        $("#arr_pago_shilohlab").hide();
+                        console.log(dados)
+                        $.map(dados, function (n, i) {
+                        var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                        $("#pago_shilohlab").append(valor);
+
+                        });
+
+                        // DASH A PAGAR
+                        // Lab Movel
+                        var dados = re["APagarLabMovel"];
+                        $("#apagar_labmovel").html("");
+                        $("#apagar_labmovel").css("display", "block");
+                        $("#arr_apagar_labmovel").hide();
+                        console.log(dados)
+                        $.map(dados, function (n, i) {
+                        var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                        $("#apagar_labmovel").append(valor);
+
+                        });
+
+                        // Shiloh Lab
+                        var dados = re["APagarShilohLab"];
+                        $("#apagar_shilohlab").html("");
+                        $("#apagar_shilohlab").css("display", "block");
+                        $("#arr_apagar_shilohlab").hide();
+                        console.log(dados)
+                        $.map(dados, function (n, i) {
+                        var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                        $("#apagar_shilohlab").append(valor);
+                        });
+
+                        //TOTAL
+                        var dados = re["Total"];
+                        $("#quantidade_filtro, #total_filtro").html("");
+                        $("#quantidade_filtro, #total_filtro").css("display", "block");
+                        $("#arr_quantidade_filtro, #arr_total_filtro").hide();
+
+                        $.map(dados, function (n, i) {
+                        var quantidade = `<p class="mb-0" style="font-size: 16px;">(${n.qdt} registros)</p>`
+                        $("#quantidade_filtro").append(quantidade);
+
+                        var valor = `<h4 class="mb-0">${n.val}</h4>`
+                        $("#total_filtro").append(valor);
+                        });
+                    });
+                }
             });
-        
-            if (dados == "") {  
-                // DASH PAGO
-                var dados = re["Pago"];
-                $("#hPay").html("");
-                $("#valPay").hide();
-                $("#regisPayf").html("");
-                $("#regisPay").hide();
-    
-                $.map(dados, function (n, i) {
-                var d = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hPay").append(d);
-    
-                var d2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisPayf").append(d2);
-                });
-    
-                // DASH A PAGAR
-                var dados = re["messageApagar"];
-                $("#hPending").html("");
-                $("#valPending").hide();
-                $("#regisPending").hide();
-                $("#regisPendingf").html("");
-                $.map(dados, function (n, i) {
-                var c = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hPending").append(c);
-    
-                var c2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisPendingf").append(c2);
-    
-                });
-    
-                // DASH TOTAL
-                var dados = re["messages"];
-                $("#valAll").hide();
-                $("#hAll").html("");
-                $("#regisAll").hide();
-                $("#regisAllf").html("");
-                $.map(dados, function (n, i) {
-                var b = `<h5 class="mb-0">${n.val}</h5>`;
-                $("#hAll").append(b);
-    
-                var b2 = `<p>(${n.qdt} registros)</p>`;
-                $("#regisAllf").append(b2);
-    
-                });
-                var appendTable = '<td colspan="4" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>';
-                $("#tb_appendTable").append(appendTable); 
-            }    
+        } 
+
+        $("#pesq_agenda").click(function() {
+        searchMonth();
         });
-    }       
-
-
-            $("#pesq_agenda").click(function() {
-                searchMonth();
-            });
 
     class request {
         constructor(token) {

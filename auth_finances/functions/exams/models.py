@@ -2,6 +2,7 @@ from asyncio import exceptions
 from email.policy import default
 from multiprocessing.sharedctypes import Array
 import numbers
+from this import d
 from django.db import connections
 from django.db.models import query
 from django.shortcuts import render, get_object_or_404, redirect
@@ -29,7 +30,7 @@ from re import A
 from django.contrib.auth.models import User
 from numpy import empty
 from pymysql import NULL
-from auth_finances.models import DashPartners_Closing, DashCommerce_Closing
+from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing
 from functions.connection.models import Connection, Exams, RegisterActions
 from functions.general.decorator import convertDate, checkDayMonth, fetchQueryDashUnity 
 from django.forms import model_to_dict
@@ -552,14 +553,10 @@ def SaveEditionsFinancesFunctions(request):
             paramG =( id_user,)
             cursor.execute(queryG,paramG )
             
-            
-        
         if nomeStatus == 'Valor Não Atingido':
             queryN = "UPDATE `auth_finances`.`completed_exams` SET `def_glosado_n_atingido` = '2' WHERE `id_agendamento_f` = %s"
             paramN =( id_user,)
             cursor.execute(queryN,paramN )
-            
-            
 
         return {
             "response": True,
@@ -568,7 +565,7 @@ def SaveEditionsFinancesFunctions(request):
 
 
 
-#FINALIZAR  PROCESSO REEMBOLSO aquip
+#FINALIZAR  PROCESSO REEMBOLSO
 def FinalizeProcessFunction(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     id_agendamento = request.POST.get("id_user")
@@ -607,7 +604,7 @@ def FinalizeProcessFunction(request):
         cursor.execute(query2, params2)
 
 
-        queryVerif = "SELECT id, id_agendamento FROM auth_finances.closing_finance WHERE id_agendamento LIKE %s "
+        queryVerif = "SELECT id, id_agendamento FROM auth_finances.closing_finance WHERE id_agendamento LIKE %s"
         cursor.execute(queryVerif, (id_agendamento,))
         dados = cursor.fetchall()
         if dados: 
@@ -680,9 +677,9 @@ def FinalizeProcessFunction(request):
                                     paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create, companyParceiro, company,)
                                     cursor.execute(queryFinance, paramsFinance)
                             else:
-                                queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
-                                paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create, companyParceiro, company,)
-                                cursor.execute(queryFinance, paramsFinance)
+                                queryInterno ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `fatura`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, NULL, %s, %s);"
+                                paramsInterno = (id_agendamento, id, paciente, id, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create, companyParceiro, companyParceiro,)
+                                cursor.execute(queryInterno, paramsInterno)
                     
                     else:
                         return {"message":"Insira Nota Fiscal."}
@@ -693,7 +690,7 @@ def FinalizeProcessFunction(request):
     return {"response": "true", "message": "Processo Financeiro Finalizado!"}
 
 
-#REEMBOLSO FINALIZADO - TABELA COM TODOS CONCLUIDOS aquyy
+#REEMBOLSO FINALIZADO - TABELA COM TODOS CONCLUIDOS
 def searchrRefundCompletedFunction(request):
     with connections['auth_agenda'].cursor() as cursor:
         query = "SELECT a.id, pa.nome_p, a.data_fin, sp.data_inc_proc_f, sp.data_final_f, ex.tipo_exame, spa.status_p, uni.unit_s FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients pa ON a.nome_p = pa.id_p INNER JOIN auth_finances.completed_exams sp ON a.id = sp.id_agendamento_f INNER JOIN auth_finances.status_progress spa ON spa.id = sp.status_exame_f INNER JOIN  admins.exam_type ex ON a.tp_exame = ex.id INNER JOIN  admins.units_shiloh uni ON a.unity = uni.id_unit_s WHERE  a.status = 'Concluído' AND sp.regis LIKE  '1';"
@@ -1142,7 +1139,7 @@ def TableClosingPartners(request):
     return ObjetoFunction
 
 #VALOR TOTAL FECHAMENTO DOS PARCEIROS
-def valTotalPartinersF(request):
+def Total_Partners_Function(request):
     mes = int(datetime.now().strftime("%m"))
     ano = int(datetime.now().strftime("%Y"))
 
@@ -1737,211 +1734,113 @@ def fetchFileInt(id):
 
 # ------------------------------------------------ FECHAMENTO INTERNO
 
-#MÊS ATUAL DASH FECHAMENTO INTERNO - TOTAL
-def valTotalIntF(request):
-    monthCount = int(datetime.now().strftime("%m"))
-    with connections['auth_finances'].cursor() as cursor:
-        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) LIKE %s AND b.perfil <> 7 AND a.valor_uni_partners NOT LIKE '0' group by MONTH(a.data_repasse);"
-        cursor.execute(querys, (monthCount,))
-        dados = cursor.fetchall()
-        array2 = []
-        if dados:
-            for qdt, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdt,
-                    "val": val,
-                    "mes": mes,
-                    })
-                array2.append(newinfoa)
-        else:
-            newinfoa = ({
-                "qdt": "0",
-                "val": "R$ 00,00",
-                "mes": "0",
-                })
-            array2.append(newinfoa)
-        return array2
+# FECHAMENTO INTERNO - TOTAL
+def Interno_Total_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_Total()
+    
+    if ObjetoFunction == False:
+        return araay
+
+    return ObjetoFunction
 
 
-#MÊS ATUAL DASH FECHAMENTO INTERNO - PENDENTE
-def valIntPending(request):
-    monthCount = int(datetime.now().strftime("%m"))
-    with connections['auth_finances'].cursor() as cursor:
+#FECHAMENTO INTERNO - A PAGAR LAB MOVEL
+def Interno_ApagarLabMovel_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_ApagarLabMovel()
+    
+    if ObjetoFunction == False:
+        return araay
 
-        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pendente' AND MONTH(a.data_repasse) = %s AND b.perfil != 7 group by MONTH(a.data_repasse), b.perfil;"
-        cursor.execute(querys, (monthCount,))
-        dados = cursor.fetchall()
-        array2 = []
-        if dados:
-            for qdt, val, mes in dados:
-                val = f"R$ - {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdt,
-                    "val": val,
-                    "mes": mes,
-                    })
-                array2.append(newinfoa)
-        else:
-            newinfoa = ({
-                "qdt": "0",
-                "val": "R$ 00,00",
-                "mes": "0",
-                })
-            array2.append(newinfoa)
-        return array2
+    return ObjetoFunction
 
 
-#MÊS ATUAL DASH FECHAMENTO INTERNO - PAGO
-def valIntPay(request):
-    monthCount = int(datetime.now().strftime("%m"))
-    with connections['auth_finances'].cursor() as cursor:
+#FECHAMENTO INTERNO - A PAGAR SHILOH LAB
+def Interno_ApagarShilohLab_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_ApagarShilohLab()
+    
+    if ObjetoFunction == False:
+        return araay
 
-        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pago' AND MONTH(a.data_repasse) LIKE %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse)"
-        cursor.execute(querys, (monthCount,))
-        dados = cursor.fetchall()
-        array2 = []
-        if dados:
-            for qdt, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdt,
-                    "val": val,
-                    "mes": mes,
-                    })
-                array2.append(newinfoa)
-        else:
-            newinfoa = ({
-                "qdt": "0",
-                "val": "R$ 00,00",
-                "mes": "0",
-                })
-            array2.append(newinfoa)
+    return ObjetoFunction
 
-        return array2
+
+
+#FECHAMENTO INTERNO - PAGO LAB MOVEL
+def Pago_LabMovel_Interno_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_PagosLabMovel()
+    
+    if ObjetoFunction == False:
+        return araay
+
+    return ObjetoFunction
+
+
+#FECHAMENTO INTERNO - PAGO SHILOH LAB
+def Pago_ShilohLab_Interno_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_PagosShilohLab()
+    
+    if ObjetoFunction == False:
+        return araay
+
+    return ObjetoFunction
 
 
 #TABELA FECHAMENTO INTERNO
-def TableClosingInt(request):
-    month = int(datetime.now().strftime("%m"))
-    with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT a.nome_medico, b.nome, a.status_partners, SUM(a.valor_uni_partners) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.valor_comercial LIKE '0' AND MONTH( a.data_repasse) LIKE %s GROUP BY a.nome_medico, b.nome, a.status_partners, MONTH(a.data_repasse)"
-        cursor.execute(query, (month,))
-        dados = cursor.fetchall()
-        array = []
-        for id_comercial, comercial, status, valor in dados:
-            valor = f"R$ {valor:_.2f}"
-            valor = valor.replace(".", ",").replace("_", ".")
-            newinfoa = ({
-                "id": id_comercial,
-                "nome": comercial,
-                "status": status,
-                "valor": valor
-                })
-            array.append(newinfoa)
-        return array
+def SearchClosingInterno_Function(request):
+    mes = int(datetime.now().strftime("%m"))
+    ano = int(datetime.now().strftime("%Y"))
+    araay = []
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+    ObjetoFunction = ObjetoPath.Interno_FiltroTable()
+    
+    if ObjetoFunction == False:
+        return araay
 
+    return ObjetoFunction
 
-#FILTRO DATA DASH FECHAMENTO INTERNO
-def TableClosingIntFilter(request):
-    month = request.POST.get('month')
-    with connections['auth_finances'].cursor() as cursor:
-        query = "SELECT b.id, b.nome, b.perfil, month( a.data_repasse) AS mes_repasse, a.status_partners, SUM(a.valor_uni_partners) AS total FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE valor_uni_partners != 0 AND perfil != 7 AND MONTH( a.data_repasse) = %s GROUP BY b.id, b.nome, b.perfil, MONTH( a.data_repasse),  a.status_partners;"
-        cursor.execute(query, (month,))
-        dados = cursor
-        array = []
-        for id, medico, perfil, data_repasse, status, valor in dados:
-            valor = (valor) if valor not in ["", None] else None     
-            valor = int(valor or 0)
-            valor = f"R$ {valor:_.2f}"
-            valor = valor.replace(".", ",").replace("_", ".")
-            newinfoa = ({
-                "id": id,
-                "nome": medico,
-                "data_repasse": data_repasse,
-                "status": status,
-                "valor": valor
-                })
-            array.append(newinfoa)
-        #FILTRO DATA DASH FECHAMENTO INTERNO - TOTAL    
-        querys = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
-        cursor.execute(querys, (month,))
-        dados = cursor.fetchall()
-        arrayTotal = []
-        if dados:
-            for qdt, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdt,
-                    "val": val,
-                    "mes": mes,
-                    })
-                arrayTotal.append(newinfoa)
-        else:
-            newinfoa = ({
-                "qdt": 0,
-                "val": "R$ 00,00",
-                "mes": 0,
-                })
-            arrayTotal.append(newinfoa)
         
-        #FILTRO DATA DASH FECHAMENTO INTERNO - PAGO
-        queryPago = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE a.status_partners LIKE 'Pago' AND MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
-        cursor.execute(queryPago, (month,))
-        dados = cursor.fetchall()
-        arrayPago = []
-        if dados:
-            for qdts, vals, mes in dados:
-                vals = f"R$ {vals:_.2f}"
-                vals = vals.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdts,
-                    "val": vals,
-                    "mes": mes,
-                    })
-                arrayPago.append(newinfoa)
-                
-        else:
-            qdts = 0
-            newinfoa = ({
-                "qdt": 0,
-                "val": "R$ 00,00",
-                "mes": 0,
-                })
-            arrayPago.append(newinfoa)
-    #FILTRO DATA DASH FECHAMENTO INTERNO - PENDENTE
-        querysA = "SELECT COUNT(DISTINCT a.nome_medico) AS contagem, SUM(a.valor_uni_partners) AS total, MONTH(a.data_repasse) FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id WHERE MONTH(a.data_repasse) = %s AND a.valor_uni_partners NOT LIKE '0' AND a.status_partners LIKE 'Pendente' AND b.perfil <> 7 group by MONTH(a.data_repasse);"
-        cursor.execute(querysA, (month,))
-        dados = cursor.fetchall()
-        arrayA_pagar = []
-        if dados:
-            for qdt, vals, mes in dados: 
-                vals = f"R$ -{vals:_.2f}"
-                vals = vals.replace(".", ",").replace("_", ".")
-                newinfoa = ({
-                    "qdt": qdt,
-                    "val": vals,
-                    "mes": mes,
-                    })
-                arrayA_pagar.append(newinfoa)
-        else:
-            newinfoa = ({
-                "qdt": 0,
-                "val": "R$ 00,00",
-                "mes": 0,
-                })
-            arrayA_pagar.append(newinfoa)
+#FILTRO DATA DASH FECHAMENTO INTERNO
+def ClosingInternoFiltro_Function(request):
+    mes = request.POST.get('month')
+    ano = int(datetime.now().strftime("%Y"))
 
-    return { 
+    ObjetoPath = DashInterno_Closing(mes=mes, ano=ano)
+
+    Table = ObjetoPath.Interno_FiltroTable()
+    PagoLabMovel = ObjetoPath.Interno_PagosLabMovel()
+    PagoLabShilohLab = ObjetoPath.Interno_PagosShilohLab()
+    APagarLabMovel = ObjetoPath.Interno_ApagarLabMovel()
+    APagarShilohLab = ObjetoPath.Interno_ApagarShilohLab()
+    Total = ObjetoPath.Interno_Total()
+
+    return {
         "response": "true",
-        "table": array,
-        "Pago": arrayPago,
-        "messageApagar": arrayA_pagar,
-        "messages": arrayTotal,
+        "table": Table,
+        "PagoLabMovel": PagoLabMovel,
+        "PagoLabShilohLab": PagoLabShilohLab,
+        "APagarLabMovel": APagarLabMovel,
+        "APagarShilohLab": APagarShilohLab,
+        "Total": Total,
     }
 
  # -------------------------------------------------------------

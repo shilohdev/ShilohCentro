@@ -21,7 +21,7 @@ from datetime import datetime
 
 from requests import request
 from auth_users.decorator import FileContractFunction, ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, searchConcluidosF, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, valTotalIntF, valIntPending, valIntPay, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, valTotalPartinersF, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, TableClosingIntFilter, TableClosingInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatePermissionAll, allowPermission
@@ -859,7 +859,7 @@ def ClosingPartnersViews(request): #INDICAÇÕES
     if allowPage(request, "fechamento_parceiro") == False:
         return error(request)
     ClosingPartners = TableClosingPartners(request)
-    valTotalPartiners = valTotalPartinersF(request)
+    Total = Total_Partners_Function(request)
 
     ViewFoto = FilePhotoViewFunction(request)
     LabMovel_Pago = PagoLabMovelFunction(request)
@@ -875,7 +875,7 @@ def ClosingPartnersViews(request): #INDICAÇÕES
         "arr_ShilohLab_Pago": ShilohLab_Pago,
         "arr_LabMovel_APagar": LabMovel_APagar,
         "arr_ShilohLab_APagar": ShilohLab_APagar,
-        "arr_valTotalPartiners": valTotalPartiners,
+        "arr_Total": Total,
     })
 
 
@@ -914,7 +914,7 @@ def ClosingCommercialViews(request): #INDICAÇÕES
     Pago_ShilohLab_Comercial = Commerce_PagosShilohLab_Function(request)
     Apagar_LabMovel_Comercial = Commerce_ApagarLabMovel_Function(request)
     Apagar_ShilohLab_Comercial = Commerce_ApagarShilohLab_Function(request)
-    Apagar_ShiTotal_ComerciallohLab_Comercial = Commerce_total_Function(request)
+    Total_Commerce = Commerce_total_Function(request)
     ClosingCommercial = TableClosingCommercial(request)
 
     return render(request, 'finances/closure/ClosingCommercial.html',  
@@ -924,7 +924,7 @@ def ClosingCommercialViews(request): #INDICAÇÕES
         "arr_Commerce_ShilohLab_Pago": Pago_ShilohLab_Comercial,
         "arr_Commerce_LabMovel_Apagar": Apagar_LabMovel_Comercial,
         "arr_Commerce_ShilohLab_Apagar": Apagar_ShilohLab_Comercial,
-        "arr_Commerce_Total_Comercial": Apagar_ShiTotal_ComerciallohLab_Comercial,
+        "arr_Commerce_Total_Comercial": Total_Commerce,
         "arr_SearchClosingCommercial": ClosingCommercial,
     })
 
@@ -986,34 +986,37 @@ def SaveAnexo(request):
     array = SaveAnexoFunction(request)
     return JsonResponse(array, safe=False, status=200)
 
- 
 
 #FECHAMENTO INTERNO 
 @login_required
-def closingInt(request):
+def ClosingInternoViews(request): #INDICAÇÕES
     if allowPage(request, "fechamento_interno") == False:
         return error(request)
-    ClosingInt = TableClosingInt(request)
+
     ViewFoto = FilePhotoViewFunction(request)
-    valIntPayy = valIntPay(request)
-    valIntP = valIntPending(request)
-    valTotalInt = valTotalIntF(request)
+    Pago_LabMovel_Interno = Pago_LabMovel_Interno_Function(request)
+    Pago_ShilohLab_Interno = Pago_ShilohLab_Interno_Function(request)
+    Apagar_LabMovel_Interno = Interno_ApagarLabMovel_Function(request)
+    Apagar_ShilohLab_Interno = Interno_ApagarShilohLab_Function(request)
+    Interno_Total = Interno_Total_Function(request)
+    SearchClosingInterno = SearchClosingInterno_Function(request)
 
-    return render(request, 'finances/closure/ClosingInt.html', 
-    {   
-        "arr_SearchClosingInt": ClosingInt,
+    return render(request, 'finances/closure/ClosingInt.html',  
+    {
         "arr_ViewFoto": ViewFoto,
-        "arr_valIntPay": valIntPayy,
-        "arr_valIntPending": valIntP,
-        "arr_valTotalInt": valTotalInt,
-
+        "arr_Interno_LabMovel_Pago": Pago_LabMovel_Interno,
+        "arr_Interno_ShilohLab_Pago": Pago_ShilohLab_Interno,
+        "arr_Interno_LabMovel_Apagar": Apagar_LabMovel_Interno,
+        "arr_Interno_ShilohLab_Apagar": Apagar_ShilohLab_Interno,
+        "arr_Interno_Total": Interno_Total,
+        "arr_SearchClosingInterno": SearchClosingInterno,
+        
     })
 
 
-
 @login_required
-def SearchClosingIntFilter(request):
-    array = TableClosingIntFilter(request)
+def ClosingInternoFiltro(request):
+    array = ClosingInternoFiltro_Function(request)
     return JsonResponse(array, safe=False, status=200)
 
 
