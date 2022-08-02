@@ -8,8 +8,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 Página inicial 
 {% endblock %}
 {% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+CONSULTAR AGENDAMENTOS{% endblock %}
 {% block content %}
 
 <style type="text/css">
@@ -205,16 +204,8 @@ Acompanhe as últimas notícias!
       </div>
    </div>
 </div>
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-   <div class="container">
-      <div class="card" >
-         <div class="card-content ">
-            <h5 class="corfont">CONSULTAR AGENDAMENTOS</h5>
-         </div>
-      </div>
-   </div>
    <div class="container">
       <div class="card" id="search_agenda">
          <div id="userint" class="row container" >
@@ -299,8 +290,10 @@ Acompanhe as últimas notícias!
                               <td>{{ k.unity}}</td>
                               <td>{{ k.status}}</td>
                               <td>
-                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
-                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)" style="background-color: #f5be4600;">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                       <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                                    </button>
                                  </a>
                                  <!--
                                     <a onclick="remove(this)" class="modal-trigger">
@@ -440,7 +433,7 @@ function filterAgenda() {
          var dados = re["message"];
          for(k in dados){
                var key = dados[k];
-               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["exame"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\"> <i class="material-icons" style="color: #f1ff29">remove_red_eye</i> </a> </td> </tr>';
+               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["exame"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\" style="background-color: #f5be4600"> <i class="material-icons" style="color: #76c076da">remove_red_eye</i> </a> </td> </tr>';
                $("#tb_append").append(append);
          }
       }

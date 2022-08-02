@@ -8,8 +8,7 @@
    Página inicial
 {% endblock %}
 {% block description-page %}
-   Acompanhe as últimas notícias!
-{% endblock %}
+MINHAS INDICAÇÕES{% endblock %}
 {% block content %}
 
    <style type="text/css">
@@ -54,13 +53,6 @@
 <!--FIM DO MODAL 2-->
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <div class="container">
-      <div class="card" >
-         <div class="card-content ">
-            <h5 class="corfont">MINHAS INDICAÇÕES</h5>
-         </div>
-      </div>
-   </div>
-   <div class="container">
       <div class="card" ><!-- Externo -->         
          <div id="userint" class="row" >
             <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
@@ -88,8 +80,8 @@
                            <td style="text-align: center;">{{ k.medico_resp }}</td>
                            <td style="text-align: center;">
                               <a href="#modal1" class="modal-trigger" data-id_lead="{{ k.id }}" onclick="viewHistoricoModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
-                                    <i class="material-icons right">remove_red_eye</i>
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                    <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
                                  </button>
                               </a>
                            </td>

@@ -8,8 +8,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 Página inicial 
 {% endblock %}
 {% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+CONSULTAR AGENDAMENTOS INTERNOS{% endblock %}
 {% block content %}
 <style type="text/css">
    .corfont{
@@ -167,90 +166,84 @@ Acompanhe as últimas notícias!
       </div>
    </div>
 </div>
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-<div class="container">
-   <div class="card" >
-      <div class="card-content" style="margin-top: -25px;">
-         <h5 class="corfont">CONSULTAR AGENDAMENTOS INTERNOS</h5>
-      </div>
-   </div>
-</div>
-<div class="container">
-   <div class="card" id="search_agenda">
-      <div id="userint" class="row">
-         <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="input-field col s4">
-               <input id="cpf" type="text" onkeyup="searchPatients(this)">
-               <label for="cpf">
-               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-            </div>
-            <div class="input-field col s2">
-               <select name="select" id="mes_search" class="error">
-                  <option value="">Selecione um mês</option>
-                  <option value="01">Janeiro</option>
-                  <option value="02">Fevereiro</option>
-                  <option value="03">Março</option>
-                  <option value="04">Abril</option>
-                  <option value="05">Maio</option>
-                  <option value="06">Junho</option>
-                  <option value="07">Julho</option>
-                  <option value="08">Agosto</option>
-                  <option value="09">Setembro</option>
-                  <option value="10">Outubro</option>
-                  <option value="11">Novembro</option>
-                  <option value="12">Dezembro</option>
-               </select>
-            </div>
-            <div class="col s2">&nbsp;
-               <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-               </button>
-            </div>
-            <!-- COMEÇO DA TABLE -->
-            <div class="row container container">
+   <div class="container">
+      <div class="card" id="search_agenda">
+         <div id="userint" class="row">
+            <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+               <div class="input-field col s4">
+                  <input id="cpf" type="text" onkeyup="searchPatients(this)">
+                  <label for="cpf">
+                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+               </div>
+               <div class="input-field col s2">
+                  <select name="select" id="mes_search" class="error">
+                     <option value="">Selecione um mês</option>
+                     <option value="01">Janeiro</option>
+                     <option value="02">Fevereiro</option>
+                     <option value="03">Março</option>
+                     <option value="04">Abril</option>
+                     <option value="05">Maio</option>
+                     <option value="06">Junho</option>
+                     <option value="07">Julho</option>
+                     <option value="08">Agosto</option>
+                     <option value="09">Setembro</option>
+                     <option value="10">Outubro</option>
+                     <option value="11">Novembro</option>
+                     <option value="12">Dezembro</option>
+                  </select>
+               </div>
+               <div class="col s2">&nbsp;
+                  <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                  <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                  </button>
+               </div>
                <!-- COMEÇO DA TABLE -->
-               <div class="col s12" style="margin-bottom: 50px; overflow-x: auto">
-                  <table class=" bordered">
-                     <thead style="background-color: #581848; color: white; font-size: 15px" >
-                        <tr>
-                           <th data-field="namet">Paciente</th>
-                           <th data-field="perfilt">Perfil</th>
-                           <th data-field="telt">Telefone</th>
-                           <th data-field="schedulingt">Agendamento</th>
-                           <th data-field="unityt">Unidade</th>
-                           <th data-field="status">Status</th>
-                           <th data-field="actiont">Ação</th>
-                        </tr>
-                     </thead>
-                     <tbody id="tb_append">
-                        {% for k in arr_SearchScheduledPickupInt%}
-                        <tr>
-                           <td>{{ k.nome}}</td>
-                           <td>{{ k.perfil}}</td>
-                           <td>{{ k.tel}}</td>
-                           <td>{{ k.data_age}}</td>
-                           <td>{{ k.unity}}</td>
-                           <td>{{ k.status}}</td>
-                           <td>
-                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
-                              <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
-                              </a>
-                              <!--
-                                 <a onclick="remove(this)" class="modal-trigger">
-                                 <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
-                                 </a>
-                                 -->
-                           </td>
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                  </table>
+               <div class="row container container">
+                  <!-- COMEÇO DA TABLE -->
+                  <div class="col s12" style="margin-bottom: 50px; overflow-x: auto">
+                     <table class=" bordered">
+                        <thead style="background-color: #581848; color: white; font-size: 15px" >
+                           <tr>
+                              <th data-field="namet">Paciente</th>
+                              <th data-field="perfilt">Perfil</th>
+                              <th data-field="telt">Telefone</th>
+                              <th data-field="schedulingt">Agendamento</th>
+                              <th data-field="unityt">Unidade</th>
+                              <th data-field="status">Status</th>
+                              <th data-field="actiont">Ação</th>
+                           </tr>
+                        </thead>
+                        <tbody id="tb_append">
+                           {% for k in arr_SearchScheduledPickupInt%}
+                           <tr>
+                              <td>{{ k.nome}}</td>
+                              <td>{{ k.perfil}}</td>
+                              <td>{{ k.tel}}</td>
+                              <td>{{ k.data_age}}</td>
+                              <td>{{ k.unity}}</td>
+                              <td>{{ k.status}}</td>
+                              <td>
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)" style="background-color: #f5be4600">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                       <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                                   </button>                                 </a>
+                                 <!--
+                                    <a onclick="remove(this)" class="modal-trigger">
+                                    <i class="material-icons" style="color: rgba(221, 56, 56, 0.829); cursor: pointer;" >delete</i>
+                                    </a>
+                                    -->
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+                  <!-- FIM DA TABLE -->
                </div>
                <!-- FIM DA TABLE -->
             </div>
-            <!-- FIM DA TABLE -->
          </div>
       </div>
    </div>
@@ -543,9 +536,9 @@ function searchMonth() {
                         <td style="text-align: center;">${n.status}</td>
                         <td style="text-align: center;">
                            <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">
-                              <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                 <i class="material-icons right">edit</i>
-                              </button>
+                              <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                 <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                              </button>               
                            </a>
                         </td>
                      </tr>

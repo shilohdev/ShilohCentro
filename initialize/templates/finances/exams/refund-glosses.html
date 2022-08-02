@@ -7,9 +7,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% block title-page %}
 Página inicial
 {% endblock %}
-{% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+{% block description-page %}REEMBOLSO GLOSADO{% endblock %}
 {% block content %}
 <style type="text/css">
    .corfont{
@@ -23,7 +21,6 @@ Acompanhe as últimas notícias!
        <div class="card-content" style="margin-top: 50px;">
            <!--  <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
            -->
-           STATUS
            <div class="container ">
                <ul class="collapsible expandable ">
                    <li class="active">
@@ -333,16 +330,8 @@ Acompanhe as últimas notícias!
        </div>
    </div>
 </div>
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <!--FIM DO MODAL-->
    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-       <div class="container">
-           <div class="card">
-               <div class="card-content" style="margin-top: -25px;">
-                   <h5 class="corfont">REEMBOLSO GLOSADO</h5>
-               </div>
-           </div>
-       </div>
        <div class="container">
            <div class="card">
                <!-- Externo -->
@@ -380,9 +369,9 @@ Acompanhe as últimas notícias!
                                         <td style="text-align: center;">
                                             <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
                                                 <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                                <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                                    <i class="material-icons right">edit</i>
-                                                </button>
+                                                <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                                    <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                                                 </button> 
                                             </a>
                                         </td>
                                     </tr>
@@ -397,7 +386,6 @@ Acompanhe as últimas notícias!
            </div>
       </div>
    </div>
-</div>
 
 
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>

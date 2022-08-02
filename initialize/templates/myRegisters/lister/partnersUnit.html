@@ -8,8 +8,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 Página inicial
 {% endblock %}
 {% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+MEUS PARCEIROS{% endblock %}
 {% block content %}  
 
 <script src="https://demo.dashboardpack.com/architectui-html-pro/assets/scripts/main.d810cf0ae7f39f28f336.js"></script>
@@ -270,71 +269,64 @@ Acompanhe as últimas notícias!
       </div>
    </div>
 </div>
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <!--FIM DO MODAL-->
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-<div class="container">
    <div class="card" >
-      <div class="card-content" style="margin-top: -25px;">
-         <h5 class="corfont">MEUS PARCEIROS</h5>
-      </div>
-   </div>
-</div>
-<div class="card" >
-   <!-- Externo -->
-   <div id="userint" class="row" >
-      <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
-         <div class="input-field col s12 m4">
-            <input id="busc" type="text" onkeyup="searchPatients(this)">
-            <label for="busc">
-            <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-         </div>
-         <!-- COMEÇO DA TABLE -->
-         <div class="col s12 m12 scroll">
-            <table class="bordered" style="margin-top: 30px; overflow-x: auto">
-               <thead style="background-color: #581848; color: white; font-size: 15px" >
-                  <tr>
-                     <th data-field="id">Nome</th>
-                     <!--     <th data-field="id" style="text-align: center; width: 250px;">Comercial</th> -->   
-                     <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
-                     <th data-field="id" style="text-align: center; width: 130px;">Data Cadastro</th>
-                     <th data-field="id" style="text-align: center; width: 130px;">Status</th>
-                     <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
-                     <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                  </tr>
-               </thead>
-               <tbody id="tb_append">
-                  {% for k in arr_SearchPartiners %}
-                  <tr id="tr_{{ k.id }}">
-                     <td>{{ k.nome }} [{{ k.rn }}]</td>
-                     <!-- <td style="text-align: center;">{{ k.resp_comercial }}</td> -->   
-                     <td style="text-align: center;">{{ k.categoria }}</td>
-                     <td style="text-align: center;">{{ k.data_cad }}</td>
-                     <td style="text-align: center;">{{ k.status }}</td>
-                     <td style="text-align: center;">{{ k.company }}</td>
-                     <td style="text-align: center;">
-                        <div class="col s12 m12">
-                           <div class="col m6 s12 m6">
-                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                 <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                 <i class="material-icons right">edit</i>
+      <!-- Externo -->
+      <div id="userint" class="row" >
+         <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="input-field col s12 m4">
+               <input id="busc" type="text" onkeyup="searchPatients(this)">
+               <label for="busc">
+               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+            </div>
+            <!-- COMEÇO DA TABLE -->
+            <div class="col s12 m12 scroll">
+               <table class="bordered" style="margin-top: 30px; overflow-x: auto">
+                  <thead style="background-color: #581848; color: white; font-size: 15px" >
+                     <tr>
+                        <th data-field="id">Nome</th>
+                        <!--     <th data-field="id" style="text-align: center; width: 250px;">Comercial</th> -->   
+                        <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
+                        <th data-field="id" style="text-align: center; width: 130px;">Data Cadastro</th>
+                        <th data-field="id" style="text-align: center; width: 130px;">Status</th>
+                        <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
+                        <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                     </tr>
+                  </thead>
+                  <tbody id="tb_append">
+                     {% for k in arr_SearchPartiners %}
+                     <tr id="tr_{{ k.id }}">
+                        <td>{{ k.nome }} [{{ k.rn }}]</td>
+                        <!-- <td style="text-align: center;">{{ k.resp_comercial }}</td> -->   
+                        <td style="text-align: center;">{{ k.categoria }}</td>
+                        <td style="text-align: center;">{{ k.data_cad }}</td>
+                        <td style="text-align: center;">{{ k.status }}</td>
+                        <td style="text-align: center;">{{ k.company }}</td>
+                        <td style="text-align: center;">
+                           <div class="col s12 m12">
+                              <div class="col m6 s12 m6">
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                                    <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                       <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                                   </button>
+                                 </a>
+                              </div>
+                              <div class="col m6 s12 m6 m-0 p-0" style="display: none;">
+                                 <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
+                                 <i class="material-icons right">check</i>
                                  </button>
-                              </a>
+                              </div>
                            </div>
-                           <div class="col m6 s12 m6 m-0 p-0" style="display: none;">
-                              <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
-                              <i class="material-icons right">check</i>
-                              </button>
-                           </div>
-                        </div>
-                     </td>
-                  </tr>
-                  {% endfor %}
-               </tbody>
-            </table>
+                        </td>
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+            <!-- FIM DA TABLE -->
          </div>
-         <!-- FIM DA TABLE -->
       </div>
    </div>
 </div>

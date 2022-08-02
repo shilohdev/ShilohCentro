@@ -7,9 +7,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% block title-page %}
 Fechamento do Comercial
 {% endblock %}
-{% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+{% block description-page %}FECHAMENTO INTERNO{% endblock %}
 {% block content %}
 <style type="text/css">
    .corfont{
@@ -120,15 +118,6 @@ Acompanhe as últimas notícias!
 
 
 <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-    <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-        <div class="container">
-            <div class="card">
-                <div class="card-content" style="margin-top: -25px;">
-                    <h5 class="corfont">FECHAMENTO INTERNO</h5>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="container">
         <div class="col s12 m4">
             <div class="card padding-4 animate fadeLeft">
@@ -284,8 +273,12 @@ Acompanhe as últimas notícias!
                                 <td style="text-align: center;">{{ k.status }}</td>
                                 <td style="text-align: center;">{{ k.valor }}</td>
                                 <td style="text-align: center;">
-                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                                    <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)" style="background-color: #f5be4600">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                            <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                                        </button>
+                                    </button>
                                     </a>
                                 </td>
                                 </tr>
@@ -393,8 +386,10 @@ Acompanhe as últimas notícias!
                             <td style="text-align: center;">${n.status}</td>
                             <td style="text-align: center;">${n.valor}</td>
                             <td style="text-align: center;"> 
-                                <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
-                                <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\" style="background-color: #f5be4600">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                        <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                                    </button>
                                 </a>
                             </td>
                         </tr>

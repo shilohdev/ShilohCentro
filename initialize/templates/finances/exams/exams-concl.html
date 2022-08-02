@@ -7,9 +7,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% block title-page %}
 Página inicial
 {% endblock %}
-{% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
+{% block description-page %}SOLICITAÇÕES DE REEMBOLSO{% endblock %}
 {% block content %}
 <style type="text/css">
    .corfont{
@@ -353,195 +351,186 @@ Acompanhe as últimas notícias!
         </div>
     </div>
 </div>
-
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <!--FIM DO MODAL-->
-   <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-       <div class="container">
-           <div class="card">
-               <div class="card-content" style="margin-top: -25px;">
-                   <h5 class="corfont">SOLICITAÇÕES DE REEMBOLSO</h5>
-               </div>
-           </div>
-        </div>
-        <!--NEW CARD-->
-       <div class="row container m-0">
-        <div class="col s12 m3">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">Total</h5>
-                        <p class="no-margin">&nbsp;</p>
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="indeterminate" style="background-color: #794c8a !important"></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">&nbsp;</p>
-                        </div>
-                        {% for k in arr_CountAllFinance %}
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{k.qtd}}</h4>
-                        </div>
-                        {% endfor %}
+   
+<div class="breadcrumbs-dark pb-0" id="test1">
+    <!--NEW CARD-->
+    <div class="row container m-0">
+    <div class="col s12 m3">
+        <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h5 class="mb-0">Total</h5>
+                    <p class="no-margin">&nbsp;</p>
+                    <div class="progress" style="background-color: #ffebee;">
+                        <div class="indeterminate" style="background-color: #794c8a !important"></div>
                     </div>
+                    <p class="no-margin">&nbsp;</p>
+                    
+                    <div class="col s5 m5 left-align">
+                        <p class="mb-0 pt-8">&nbsp;</p>
+                    </div>
+                    {% for k in arr_CountAllFinance %}
+                    <div class="col s7 m7 right-align">
+                        <h4 class="mb-0">{{k.qtd}}</h4>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <div class="col s12 m3">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">Pendentes</h5>
-                        <p class="no-margin">&nbsp;</p>
-                        {% for k in arr_PendingFinance %}
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="determinate" style="background-color: #ffa726!important; width: {{k.progress}};"></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">{{k.percentage}}</p>
-                        </div>
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{k.qtd}}</h4>
-                        </div>
-                        {% endfor %} 
+    </div>
+    <div class="col s12 m3">
+        <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h5 class="mb-0">Pendentes</h5>
+                    <p class="no-margin">&nbsp;</p>
+                    {% for k in arr_PendingFinance %}
+                    <div class="progress" style="background-color: #ffebee;">
+                        <div class="determinate" style="background-color: #ffa726!important; width: {{k.progress}};"></div>
                     </div>
+                    <p class="no-margin">&nbsp;</p>
+                    
+                    <div class="col s5 m5 left-align">
+                        <p class="mb-0 pt-8">{{k.percentage}}</p>
+                    </div>
+                    <div class="col s7 m7 right-align">
+                        <h4 class="mb-0">{{k.qtd}}</h4>
+                    </div>
+                    {% endfor %} 
                 </div>
             </div>
         </div>
-        <div class="col s12 m3">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">Andamento / Análise</h5>
-                        <p class="no-margin">&nbsp;</p>
-                        {% for k in arr_AnalityFinance %}
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="determinate" style="background-color: #00bcd4!important; width: {{k.progress}};"></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">{{k.percentage}}</p>
-                        </div>
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{k.qtd}}</h4>
-                        </div>
-                        {% endfor %} 
+    </div>
+    <div class="col s12 m3">
+        <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h5 class="mb-0">Andamento / Análise</h5>
+                    <p class="no-margin">&nbsp;</p>
+                    {% for k in arr_AnalityFinance %}
+                    <div class="progress" style="background-color: #ffebee;">
+                        <div class="determinate" style="background-color: #00bcd4!important; width: {{k.progress}};"></div>
                     </div>
+                    <p class="no-margin">&nbsp;</p>
+                    <div class="col s5 m5 left-align">
+                        <p class="mb-0 pt-8">{{k.percentage}}</p>
+                    </div>
+                    <div class="col s7 m7 right-align">
+                        <h4 class="mb-0">{{k.qtd}}</h4>
+                    </div>
+                    {% endfor %} 
                 </div>
             </div>
         </div>
-        <div class="col s12 m3">
-            <div class="card padding-4 animate fadeLeft">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <h5 class="mb-0">À Finalizar</h5>
-                        <p class="no-margin">&nbsp;</p>
-                        {% for k in arr_PayFinance %} 
-                        <div class="progress" style="background-color: #ffebee;">
-                            <div class="determinate" style="background-color: #db5757!important; width: {{k.progress}}; "></div>
-                        </div>
-                        <p class="no-margin">&nbsp;</p>
-                        <div class="col s5 m5 left-align">
-                            <p class="mb-0 pt-8">{{k.percentage}}</p>
-                        </div>
-                        <div class="col s7 m7 right-align">
-                            <h4 class="mb-0">{{k.qtd}}</h4>
-                        </div>
-                        {% endfor %} 
+    </div>
+    <div class="col s12 m3">
+        <div class="card padding-4 animate fadeLeft">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h5 class="mb-0">À Finalizar</h5>
+                    <p class="no-margin">&nbsp;</p>
+                    {% for k in arr_PayFinance %} 
+                    <div class="progress" style="background-color: #ffebee;">
+                        <div class="determinate" style="background-color: #db5757!important; width: {{k.progress}}; "></div>
                     </div>
+                    <p class="no-margin">&nbsp;</p>
+                    <div class="col s5 m5 left-align">
+                        <p class="mb-0 pt-8">{{k.percentage}}</p>
+                    </div>
+                    <div class="col s7 m7 right-align">
+                        <h4 class="mb-0">{{k.qtd}}</h4>
+                    </div>
+                    {% endfor %} 
                 </div>
             </div>
         </div>
-       </div>
-        <!--FINISH CARD-->
+    </div>
+    </div>
+    <!--FINISH CARD-->
 
-        <div class="container">
-           <div class="card">
-               <!-- Externo -->
-               <div id="userint" class="row">
-                   <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                       <div class="input-field col s12 m3">
-                           <input id="cpf" type="text" onkeyup="searchPatients(this)">
-                           <label for="cpf">
-                               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                       </div> 
-                       <div class="col s12 m4">
-                            <div class="input-field col s6 m6">
-                                <input  id="data1" type="date">
-                                <label for="data1">
-                                <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data inicial </label>
-                            </div>
-                            <div class="input-field col s6 m6">
-                                <input  id="data2" type="date">
-                                <label for="data2">
-                                <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data final </label>
-                            </div>
-                       </div>
-                       <div class="input-field col s12 m3">
-                            <div class="select-wrapper">
-                                <select class="error" name="select" id="statusProgressoTable" required="true" data-required='true'>
-                                    <option value="">Status do Processo</option>
-                                    {% for k in arr_SearchStratusProgress %}
-                                    <option value="{{ k.status }}">{{ k.status }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+    <div class="container">
+        <div class="card">
+            <!-- Externo -->
+            <div id="userint" class="row">
+                <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
+                    <div class="input-field col s12 m3">
+                        <input id="cpf" type="text" onkeyup="searchPatients(this)">
+                        <label for="cpf">
+                            <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+                    </div> 
+                    <div class="col s12 m4">
+                        <div class="input-field col s6 m6">
+                            <input  id="data1" type="date">
+                            <label for="data1">
+                            <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data inicial </label>
                         </div>
-                       <div class="col s12 m2">&nbsp;
-                           <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                               <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                           </button>
-                       </div>
-                   </div>
+                        <div class="input-field col s6 m6">
+                            <input  id="data2" type="date">
+                            <label for="data2">
+                            <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data final </label>
+                        </div>
                     </div>
-                   <div  class="row container" >
-                       <!-- COMEÇO DA TABLE -->
-                       <div class="col s12" style="overflow-x: auto">
-                           <table id="page-length-option" class="bordered" style="margin-bottom: 10px;">
-                               <thead style="background-color: #581848; color: white; font-size: 15px">
-                                   <tr>
-                                       <th data-field="id">Paciente</th>
-                                       <th data-field="id" style="text-align: center;">Data Coletado</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
-                                       <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
-                                       <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                                   </tr> 
-                               </thead> 
-                               <tbody id="tb_append2">
-                                   {% for k in arr_SearchCompletedExams %}
-                                   <tr id="tr_{{ k.id }}">
-                                        <td>{{ k.paciente }}</td>
-                                        <td style="text-align: center;">{{ k.dataconc }}</td>
-                                        <td style="text-align: center;">{{ k.exame }}</td>
-                                        <td style="text-align: center;">{{ k.unidade }}</td>
-                                        <td style="text-align: center;">{{ k.company }}</td>
-                                        <td style="text-align: center;">{{ k.status_p }}</td>
-                                       <td style="text-align: center;">
-                                           <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                               <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                               <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                                   <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                                               </button>
-                                           </a> 
-                                           <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                                <i class="material-icons right" style="color: #66a366">library_books</i>
-                                            </a>
-                                       </td>
-                                   </tr>
-                                   {% endfor %}
-                               </tbody>
-                           </table>
-                       </div>
-                       <!-- FIM DA TABLE -->
-                   </div>
-               </div>
-        </div>
+                    <div class="input-field col s12 m3">
+                        <div class="select-wrapper">
+                            <select class="error" name="select" id="statusProgressoTable" required="true" data-required='true'>
+                                <option value="">Status do Processo</option>
+                                {% for k in arr_SearchStratusProgress %}
+                                <option value="{{ k.status }}">{{ k.status }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s12 m2">&nbsp;
+                        <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
+                            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                        </button>
+                    </div>
+                </div>
+                </div>
+                <div  class="row container" >
+                    <!-- COMEÇO DA TABLE -->
+                    <div class="col s12" style="overflow-x: auto">
+                        <table id="page-length-option" class="bordered" style="margin-bottom: 10px;">
+                            <thead style="background-color: #581848; color: white; font-size: 15px">
+                                <tr>
+                                    <th data-field="id">Paciente</th>
+                                    <th data-field="id" style="text-align: center;">Data Coletado</th>
+                                    <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
+                                    <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
+                                    <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
+                                    <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
+                                    <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                                </tr> 
+                            </thead> 
+                            <tbody id="tb_append2">
+                                {% for k in arr_SearchCompletedExams %}
+                                <tr id="tr_{{ k.id }}">
+                                    <td>{{ k.paciente }}</td>
+                                    <td style="text-align: center;">{{ k.dataconc }}</td>
+                                    <td style="text-align: center;">{{ k.exame }}</td>
+                                    <td style="text-align: center;">{{ k.unidade }}</td>
+                                    <td style="text-align: center;">{{ k.company }}</td>
+                                    <td style="text-align: center;">{{ k.status_p }}</td>
+                                    <td style="text-align: center;">
+                                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                                            <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                                <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                                            </button> 
+                                        </a> 
+                                        <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                            <i class="material-icons right" style="color: #66a366">library_books</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- FIM DA TABLE -->
+                </div>
+            </div>
     </div>
 </div>
 
@@ -1037,7 +1026,7 @@ function searchMonth() {
                         <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewUserModal(this)\">
                             <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
                                 <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                            </button>
+                            </button> 
                         </a>
                         <a data-id_user="${n.id}" onclick=\"ContratoFile(this)\" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
                             <i class="material-icons right" style="color: #66a366">library_books</i>
@@ -1213,5 +1202,29 @@ function ContratoFile(object){
     })
 }
 
+
+
+ $(document).ready(function(){
+      $('tabs').tabs();
+    });
+
 </script>
+
+
+
+<div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col m3"><a href="#test1">Test 1</a></li>
+        <li class="tab col m3"><a class="active" href="#test2">Test 2</a></li>
+        <li class="tab col sm disabled"><a href="#test3">Disabled Tab</a></li>
+        <li class="tab col m3"><a href="#test4">Test 4</a></li>
+      </ul>
+    </div>
+    <div id="test2" class="col s12">Test 2</div>
+    <div id="test3" class="col s12">Test 3</div>
+    <div id="test4" class="col s12">Test 4</div>
+  </div>
+
+
 {% endblock %}

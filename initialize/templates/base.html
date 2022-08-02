@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     
-    
+
     <meta name="author" content="ThemeSelect">
     <title>{% block title %}{% endblock %}</title>
     <link rel="apple-touch-icon" href="{% static '/app-assets/images/favicon/apple-touch-icon-152x152.png' %}">
@@ -56,12 +56,11 @@
       <!-- >>>> SELECT2 PATH
         <link rel="stylesheet" type="text/css" href="{% static 'css/pages/form-select2.min.css' %}">
       -->
-
+ 
 </head>
 <!-- END: Head-->
 
 <body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu preload-transitions 2-columns   " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
-
    
 <!--HEAD -->
 <style>
@@ -203,69 +202,30 @@
         {% endblock %}
     </aside>
     <!-- FIM DO MENU-->
-
-    <!-- BEGIN: Page Main-->
+    
     <div id="main">
         <div class="row">
             <div class="col s12">
               {% csrf_token %}
 
-              {% block loading %} 
-              <div id="load" class="loading-page-filtro loading-page-filtro-screen" style="display: none;" >
-                <div class="preloader-wrapper big active" >
-                  <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                      <div class="circle"></div>
-                    </div><div class="gap-patch">
-                      <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                      <div class="circle"></div>
-                    </div>
-                  </div>
-              
-                  <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                      <div class="circle"></div>
-                    </div><div class="gap-patch">
-                      <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                      <div class="circle"></div>
-                    </div>
-                  </div>
-              
-                  <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                      <div class="circle"></div>
-                    </div><div class="gap-patch">
-                      <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                      <div class="circle"></div>
-                    </div>
-                  </div>
-              
-                  <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                      <div class="circle"></div>
-                    </div><div class="gap-patch">
-                      <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                      <div class="circle"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endblock %}
+              {% include '_loading.html' %}
 
-              {% block content %}
-              {% endblock %}
+              <div class="container">
+                <div class="card" >
+                   <div class="card-content" style="margin-top: 25px;">
+                      <h5 class="corfont">{% block description-page  %}{% endblock %}</h5>
+                   </div>
+                </div>
+             </div>
+
+ 
+              {% block content %}{% endblock %}
+
                 <div class="content-overlay"></div>
             </div>
         </div>
     </div>
-    <!-- END: Page Main-->
 
-
-  
     <!-- FOOTER -->
  <!--     <footer class="page-footer footer footer-static footer-dark #ffb5e0s red lighten-5 gradient-shadow" style="position:inherit;">
         <div class="footer-copyright">

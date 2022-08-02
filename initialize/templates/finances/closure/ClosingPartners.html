@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% include '_loading.html' %}
 {% load static %}
 {% block title %}Shiloh | Fechamento de Parceiros{% endblock %}
 {% block icon-page %}
@@ -7,11 +8,7 @@ metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% block title-page %}
 Fechamento de Parceiros
 {% endblock %}
-{% block description-page %}
-Acompanhe as últimas notícias!
-{% endblock %}
-{% block loading %}
-{% endblock %}
+{% block description-page %}FECHAMENTO DOS PARCEIROS{% endblock %}
 {% block content %}
 
 <style type="text/css">
@@ -154,15 +151,6 @@ Acompanhe as últimas notícias!
  <!--FIM DO MODAL-->
 
 <div class="breadcrumbs-dark pb-0" id="table_filter">
-   <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-       <div class="container">
-          <div class="card">
-             <div class="card-content" style="margin-top: -25px;">
-                <h5 class="corfont">FECHAMENTO DE PARCEIROS</h5>
-             </div>
-          </div>
-       </div>
-   </div>
    <div class="row container m-0">
       <div class="col s12 m4">
           <div class="card padding-4 animate fadeLeft">
@@ -325,8 +313,10 @@ Acompanhe as últimas notícias!
                               <td style="text-align: center;">{{ k.status}}</td>
                               <td style="text-align: center;">{{ k.valor}}</td>
                               <td style="text-align: center;">
-                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)">
-                                 <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this); SearchInfo(this)" style="background-color: #f5be4600">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                                       <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                                   </button>
                                  </a>
                               </td>
                            </tr>
@@ -439,8 +429,10 @@ function searchMonth(){
                   <td style="text-align: center;">${n.status}</td>
                   <td style="text-align: center;">${n.valor}</td>
                   <td style="text-align: center;">
-                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\">
-                           <i class="material-icons" style="color: #f1ff29; margin-left: 3px;">remove_red_eye</i>
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\" style="background-color: #f5be4600">
+                           <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                              <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                           </button>
                         </a>
                   </td>
                </tr>
