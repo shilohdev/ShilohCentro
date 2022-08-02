@@ -10,7 +10,7 @@ Página inicial
 {% block description-page %}
 Acompanhe as últimas notícias!
 {% endblock %}
-{% block content %} 
+{% block content %}  
 
 <script src="https://demo.dashboardpack.com/architectui-html-pro/assets/scripts/main.d810cf0ae7f39f28f336.js"></script>
 <!-- SCRIPT MODAL-->
@@ -102,13 +102,36 @@ Acompanhe as últimas notícias!
          </div>
          <div class="container">
             <div class="card" >
+               <div class="row">
+                  <div class="container">
+                     <div class="col s12 m12 m-b10" style="padding-left: 10px;">
+                        <div class="active">
+                           <div class="collapsible-header col m6 s12 " style="height: 40px; margin-top: 10px; background-color: #581848; color: white;" tabindex="0">
+                              <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Selecione:</labe>
+                           </div>
+                        </div>
+                     </div>
+                     <div class=" col s3 m3 mb-5" style="margin-top: 30px;">
+                        <label>
+                        <input id="shiloh_lab" value="1" class="with-gap" type="radio" name="option"/>
+                        <span style="padding-left: 25px;" for="shiloh_lab">ShilohLab</span>
+                        </label>
+                     </div>
+                     <div class="container col s3 m3" style="margin-top: 30px;">
+                        <label>
+                        <input id="lab_movel" value="2" class="with-gap" type="radio" name="option"/>
+                        <span style="padding-left: 25px;" for="lab_movel">LabMovel</span>
+                        </label>
+                     </div>
+                  </div>
+               </div>
                <!-- Externo -->
                <div id="modalint" class="row" >
-                  <div class="col s12 m12"  style="margin-top: 30px;">
+                  <div class="col s12 m12"  style="margin-top: 10px;">
                      <div class="input-field col m5 s12 ">
                         <input id="name" type="text" data-required='true'>
                         <label for="name" class="active">
-                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Complemento</label>
+                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Completo</label>
                      </div>
                      <div class="input-field col s12 m3">
                         <input id="rn" type="text" data-required='true'>
@@ -500,28 +523,41 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
          $("#btn_cancel").data("id_user", id_user);
 
 
+         
+         var lab = key["obs"];
+         var lab_Company = lab["company"];
+
+         if(lab_Company == 2){
+         $('#lab_movel').prop('checked' , true);
+         $('#shiloh_lab').prop('checked' , false);
+         }else{ 
+         $('#shiloh_lab').prop('checked' ,true);
+         $('#lab_movel').prop('checked' , false);
+
+         } 
+
          var status = key["obs"];
          var status_partners = status["status"];
 
          if (status_partners == "Ativo") {
-            $("#btn_cancelar").hide();
-            $("#btn_cadastrar2").hide();
+            $("#btn_cancel").hide();
+            $("#btn_cadastrar").hide();
          } else {
-            $("#btn_cancelar").show();
-            $("#btn_cadastrar2").show();
+            $("#btn_cancel").show();
+            $("#btn_cadastrar").show();
          }
 
-
+         
          var val_p_fixo = $("#val_p_fixo").val();
          var checkbox_porcentagem = $("#val_p").val();
          var checkbox_fixo = $("#val_fixo").val();
-
 
          if (val_p_fixo != "") {
 
             $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
             $('input').filter('#val_p_fixo_check').prop('checked', true); // coloca o input checado
             $("#val_p_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+         
          } else if (checkbox_porcentagem != "") {
 
             $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
@@ -566,7 +602,17 @@ function changeStatusUser(object) {
 }
 
 function updatePartnersModal(object) {
-   //validação dofinanceiro
+
+   var shiloh = $("#shiloh_lab").prop("checked")
+   var movel = $("#lab_movel").prop("checked")
+
+   if (shiloh){
+      empresa = shiloh = $("#shiloh_lab").val()
+   }else{
+      empresa = movel = $("#lab_movel").val()
+   }
+
+   //validação do financeiro
    var val_p_fixo = $("#val_p_fixo").val();
    var checkbox_porcentagem = $("#val_p").val();
    var checkbox_fixo = $("#val_fixo").val();
@@ -589,8 +635,10 @@ function updatePartnersModal(object) {
          "id_user": id_user,
          "padrao": padrao,
          "porcentagem": porcentagem,
-         "fixo": fixo
+         "fixo": fixo,
+         "empresa": empresa
       };
+      console.log(formpost)
 
       $("#modalint input, #modalint select").each(function () { // PROCURA O QUE ESTÁ PREENCHIDO E SELECIONADO E ATRAVER DO FORMPOST PEGA O VALOR E MANDA PARA O BACK
          formpost[$(this).attr("id")] = $(this).val();
@@ -647,6 +695,21 @@ function CadastrePartners(object) {
       return false;
    }
 
+   var shiloh = $("#shiloh_lab").prop("checked")
+   var movel = $("#lab_movel").prop("checked")
+
+   if (shiloh){
+      var empresa = shiloh = $("#shiloh_lab").val()
+   }else{
+      var empresa = movel = $("#lab_movel").val()
+   }
+
+
+   if (shiloh && shiloh == false){
+      alert("Insira a relação correspondente.")
+      return false
+   }
+
    //validação do financeiro
    var val_p_fixo = $("#val_p_fixo").val();
    var checkbox_porcentagem = $("#val_p").val();
@@ -686,6 +749,8 @@ function CadastrePartners(object) {
          "porcentagem": checkbox_porcentagem,
          "fixo": checkbox_fixo, 
          "id_user": id_user,
+         "empresa": empresa,
+
       };
  
 
@@ -721,7 +786,6 @@ function CancelPrePartners(object) {
    });
 
 }
-
 
 </script>
 {% endfor %}

@@ -1,4 +1,5 @@
 #from asyncio.windows_events import NULL
+from itertools import count
 from sqlite3 import Cursor
 from unicodedata import category
 from django.http import QueryDict
@@ -1120,14 +1121,15 @@ def ApiViewDataPartnersModalFunctionINT(request):
             "response": False,
             "message": "Nenhum usuário encontrado com este id."
         }
+
     db = Connection('userdb', '', '', '', '')#VAR COM CONEXAO DE QUAL BANCO
     db.table = "auth_users.users p" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
-    dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, p.status"], True)
+    dados = db.fetch(["p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, p.status, p.company"], True)
 
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo, status in dados:
+        for p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo, status, company in dados:
             try:
                 val_padrao = f"R$ {val_padrao:_.2f}"
                 val_padrao = val_padrao.replace(".", ",").replace("_", ".")
@@ -1170,6 +1172,7 @@ def ApiViewDataPartnersModalFunctionINT(request):
             "obs": {
                 "obs": p_obs,
                 "status": status,
+                "company": company,
             }, 
                 "finances": {
                 "val_padrao": val_padrao,
@@ -2245,7 +2248,6 @@ def searchConcluidosF(request):
                     "contrato": "",
                 })
                 array.append(newinfoa)
-
         else:
             query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, a.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
             cursor.execute(query, (unityY,))
@@ -3570,12 +3572,12 @@ def ApiAttPartnersFunction(request):
         
         bodyData = request.POST #var para não precisar fazer tudo um por um
 
+        empresa = bodyData.get('empresa')
         id_user = bodyData.get('id_user')
         perfil = bodyData.get('perfil')
         padrao = bodyData.get('padrao').replace(",", ".").replace("R$", "")
         porcentagem = bodyData.get('porcentagem').replace("%", "")
         fixo = bodyData.get('fixo').replace(".", "|").replace(",", ".").replace("|", "").replace("R$", "")
-
         resp_commerce = bodyData.get('resp_commerce')
 
         padrao = float(padrao) if padrao not in ["", None] else None
@@ -3633,15 +3635,17 @@ def ApiAttPartnersFunction(request):
                         resp_commerce = idC
                     
                 if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
-                    query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
+                    query = "UPDATE auth_users.users SET {} = %s, resp_comerce = %s, val_padrao = %s, val_porcentagem = %s, val_fixo = %s, company = %s WHERE id = %s ".format(dataKeys[key]) #format serve para aplicar o método de formatação onde possui o valor da minha var dict e colocar dentro da minha chave, para ficar no padrão de UPDATE banco
                     params = (
                         bodyData.get(key), #serve para complementar o POST e obter o valor do input
                         resp_commerce,
                         padrao,
                         porcentagem,
                         fixo,
+                        empresa,
                         id_user,
                     )
+                    print(params)
                     cursor.execute(query, params)
             except:
                 query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
