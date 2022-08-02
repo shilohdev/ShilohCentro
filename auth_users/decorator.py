@@ -1974,7 +1974,6 @@ def FunctionStatusAgendaConc(request):
     senha = request.POST.get("senha")
     enfermeira = request.POST.get("enfermeira")
     company = request.POST.get("company")
-    print(enfermeira)
 
     convenio = request.POST.get("convenio")
     data_atual = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -2269,7 +2268,6 @@ def searchConcluidosF(request):
                     })
 
                 array.append(newinfoa)
-                print(newinfoa)
 
     return array
 
@@ -3645,7 +3643,6 @@ def ApiAttPartnersFunction(request):
                         empresa,
                         id_user,
                     )
-                    print(params)
                     cursor.execute(query, params)
             except:
                 query = "SELECT id FROM auth_permissions.permissions_type WHERE descriptions = %s"
@@ -4152,7 +4149,6 @@ def ContractCollectionFunction(bodyData):
 def FileContractFunction(request):
     try:
         id = request.POST.get("id_user")
-        print(id, "MMMMMMMMMMMMMMMMMMMMMMMMMMMM")
         keysLIST = []
         with connections['auth_agenda'].cursor() as cursor:
             query = "SELECT document_path, coleta_id FROM clicksign_services.registros_documents WHERE status LIKE 1 and coleta_id like %s"
@@ -4168,7 +4164,7 @@ def FileContractFunction(request):
             else:
                 return{
                     "response": False,
-                    "message": "Não foi possível locaclizar contrato."
+                    "message": "Não eciste contrato assinado."
                 }
     except Exception as err:
         print("EROOOOO>>", err)
