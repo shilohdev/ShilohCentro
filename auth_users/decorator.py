@@ -4164,7 +4164,7 @@ def FileContractFunction(request):
             else:
                 return{
                     "response": False,
-                    "message": "Não eciste contrato assinado."
+                    "message": "Não existe contrato assinado para essa coleta."
                 }
     except Exception as err:
         print("EROOOOO>>", err)
