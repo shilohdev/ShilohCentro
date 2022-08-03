@@ -290,7 +290,6 @@ class DashCommerce_Closing:
 
 
 
-
 class DashInterno_Closing:
     def __init__(self, mes=None, ano=None) -> None:
         self.mes = mes
@@ -428,4 +427,6 @@ class DashInterno_Closing:
                 return False
             
             return array
+
+
 

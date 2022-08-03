@@ -469,7 +469,7 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
    
 	var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
 	//$("#btn_atualizar").data("id_user", id_user); // att status
-
+   console.log(id_user)
 	var formpost = {
 		"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
 		"id_user": id_user //DICT COM O VALOR DO ID
