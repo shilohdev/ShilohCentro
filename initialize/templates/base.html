@@ -208,6 +208,31 @@
             <div class="col s12">
               {% csrf_token %}
 
+
+              {% block modal_loading %}
+                <div id="modalloading1" class="modal open" tabindex="0" style="z-index: 1003;display: none;top: 35%;transform: scaleX(1) scaleY(1);background-color: transparent; box-shadow: 0">
+                  <div class="modal-content" style="text-align: center">
+                    
+                    <div class="preloader-wrapper active">
+                  <div class="spinner-layer spinner-red-only" style="border-color: white">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                      <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+                </div>
+                <h5 style="color: white">Carregando...</h5>
+                  </div>
+                  
+                </div>
+                <div id="modalloading" class="modal-overlay" style="z-index: 1002; display: none; opacity: 0.5;"></div>
+              {% endblock %}
+
               {% include '_loading.html' %}
 
               <div class="container">
@@ -313,6 +338,20 @@ function fetchRequestFiles(url_f, type_f, dataType_f, data_post, sucess){
     }
   });
 }
+</script>
+<script type="text/javascript">
+function showLoadingPage(object){
+  if(object == "show"){
+    $("#modalloading").show();
+    $("#modalloading1").show();
+  } else {
+    $("#modalloading").hide();
+    $("#modalloading1").hide();
+  }
+}
 
-
+showLoadingPage("show");
+$(document).ready(function(){ // tooltip
+  showLoadingPage("close");
+});
 </script>

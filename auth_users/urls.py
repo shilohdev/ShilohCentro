@@ -102,7 +102,6 @@ urlpatterns = [
 
     #FINANCEIRO EXAMES
     #AGENDAMENTOS CONCLUIDOS
-    path('financeiro/exames/process/', views.FinancialExamsViews, name='FinancialExamsViews'), #FINANCEIRO EXAMES
     path('api/financeiro/exames/process/files/remove/', views.ModalExamsFinanceFileRemove, name='ModalExamsFinanceFileRemove'), #FINANCEIRO EXAMES
     path('api/financeiro/exames/process/files/remove/int', views.ModalExamsFinanceFileRemoveInt, name='ModalExamsFinanceFileRemoveInt'), #FINANCEIRO EXAMES
 

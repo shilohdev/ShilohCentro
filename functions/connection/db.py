@@ -8,6 +8,7 @@ class BancoDeDados(str, Enum):
     DBCLICKSIGN = 'clicksigndb'
     DBCOLLECTION = 'auth_agenda'
     DBCUSTOMERREFER = 'customer_refer'
+    DB_USER = 'auth_users'
 
 
 class DbManager(models.Manager):
@@ -55,6 +56,17 @@ class DBCollection(models.Model):
 
 class DBCustomerRefer(models.Model):
     use_db = BancoDeDados.DBCUSTOMERREFER.value
+    objects = DbManager()
+
+    class Meta:
+        abstract = True
+
+
+
+
+
+class DBusers(models.Model):
+    use_db = BancoDeDados.DB_USER.value
     objects = DbManager()
 
     class Meta:

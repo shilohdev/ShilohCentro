@@ -32,7 +32,7 @@ from numpy import empty
 from pymysql import NULL
 from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing
 from functions.connection.models import Connection, Exams, RegisterActions
-from functions.general.decorator import convertDate, checkDayMonth, fetchQueryDashUnity 
+from functions.general.decorator import convertDate, checkDayMonth, fetchAdministrator 
 from django.forms import model_to_dict
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -2633,7 +2633,7 @@ def CountAllFinanceFunction(request):
             for id_usuario, perfil, unity in dados:
                 pass
             
-            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            Q = fetchAdministrator("unit.unity", perfil, unity)
             query = "SELECT COUNT(a.id_agendamento_f), a.regis FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f WHERE {} AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 GROUP BY a.regis".format(Q)
             cursor.execute(query)
             dados = cursor.fetchall()
@@ -2658,7 +2658,7 @@ def CountPendingFinanceFunction(request):
                 pass
             
 
-            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            Q = fetchAdministrator("unit.unity", perfil, unity)
             queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()
@@ -2704,7 +2704,7 @@ def CountAnalityFinanceFunction(request):
             for id_usuario, perfil, unity in dados:
                 pass
             
-            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            Q = fetchAdministrator("unit.unity", perfil, unity)
             queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()
@@ -2763,7 +2763,7 @@ def CountPayFinanceFunction(request):
             for id_usuario, perfil, unity in dados:
                 pass
             
-            Q = fetchQueryDashUnity("unit.unity", perfil, unity)
+            Q = fetchAdministrator("unit.unity", perfil, unity)
             queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
             cursor.execute(queryTotal)
             dados = cursor.fetchall()

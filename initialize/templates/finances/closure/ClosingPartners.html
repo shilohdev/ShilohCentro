@@ -377,14 +377,14 @@ function searchMonth(){
       return false
    }
    $("#table_filter").hide()
-   $("#load").show()
+   showLoadingPage("show");
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "month": month //DICT COM O VALOR DO ID
    };
    fetchRequest("{% url 'SearchMonthClosingPartners' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
-      $("#load").hide()
+      showLoadingPage("close");
       $("#table_filter").show()
 
       var dados = re["table"]
@@ -895,9 +895,5 @@ function GetFile(object) {
 
 
 }
-
-
-
-
 </script>
-{% endblock %}      
+{% endblock %}

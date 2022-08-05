@@ -15,7 +15,7 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="dash_reimbursement" data-chapter="view" style="display: none">
-                    <a href="{% url 'DashboardsRefunds' %}"><i class="material-icons" style="font-size: 15px;">insert_chart</i><span data-i18n="Range Slider">Reembolsos</span></a>
+                    <a href="{% url 'DashboardsRefunds' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">insert_chart</i><span data-i18n="Range Slider">Reembolsos</span></a>
                 </li>
             </ul>
         </div>
@@ -25,10 +25,10 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="ranking_atendimento" data-chapter="view" style="display: none">
-                    <a href="{% url 'DashService' %}"><i class="material-icons" style="font-size: 15px;">star_border</i><span data-i18n="Range Slider">Atendimento</span></a>
+                    <a href="{% url 'DashService' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">star_border</i><span data-i18n="Range Slider">Atendimento</span></a>
                 </li>
                 <li data-permission="ranking_comercial" data-chapter="view" style="display: none">
-                    <a href="{% url 'DashCommercial' %}"><i class="material-icons" style="font-size: 15px;">star_border</i><span data-i18n="Range Slider">Comercial</span></a>
+                    <a href="{% url 'DashCommercial' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">star_border</i><span data-i18n="Range Slider">Comercial</span></a>
                 </li> 
             </ul>
         </div>
@@ -44,22 +44,22 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="list_users" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastreUser' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
+                    <a href="{% url 'cadastreUser' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
                 </li>
                 <li data-permission="register_partners" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastrePartnes' %}"><i class="material-icons" style="font-size: 15px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+                    <a href="{% url 'cadastrePartnes' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
                 </li>
                 <li data-permission="register_indication" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastreIndication' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+                    <a href="{% url 'cadastreIndication' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
                 </li>
                 <li data-permission="cadastre_patients" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastrePatient' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Sweetalert">Paciente</span></a>
+                    <a href="{% url 'cadastrePatient' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Sweetalert">Paciente</span></a>
                 </li>
                 <li data-permission="register_convenio" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastreConvenio' %}"><i class="material-icons" style="font-size: 15px;">assignment</i><span data-i18n="Sweetalert">Convênio</span></a>
+                    <a href="{% url 'cadastreConvenio' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">assignment</i><span data-i18n="Sweetalert">Convênio</span></a>
                 </li>
                 <li data-permission="cadastre_unit" data-chapter="view" style="display: none">
-                    <a href="{% url 'cadastreUnit' %}"><i class="material-icons" style="font-size: 15px;">control_point</i><span data-i18n="Sweetalert">Unidade</span></a>
+                    <a href="{% url 'cadastreUnit' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">control_point</i><span data-i18n="Sweetalert">Unidade</span></a>
                 </li>
            <!--  <li data-permission="register_lead" data-chapter="view" style="display: none">
                     <a href="{% url 'CadatsreLeadViews' %}"><i class="material-icons" style="font-size: 15px;">add</i><span data-i18n="Sweetalert">Lead</span></a>
@@ -72,16 +72,16 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="list_users" data-chapter="view" style="display: none">
-                    <a href="{% url 'listUsers' %}"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
+                    <a href="{% url 'listUsers' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">person</i><span data-i18n="Range Slider">Usuários Internos</span></a>
                 </li>
                 <li data-permission="list_patients" data-chapter="view" style="display: none">
-                    <a href="{% url 'listIndication' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
+                    <a href="{% url 'listIndication' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
                 </li>
                 <li data-permission="list_partners" data-chapter="view" style="display: none">
-                    <a href="{% url 'listPartnes' %}"><i class="material-icons" style="font-size: 15px;">supervisor_account</i><span data-i18n="Range Slider">Parceiros</span></a>
+                    <a href="{% url 'listPartnes' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">supervisor_account</i><span data-i18n="Range Slider">Parceiros</span></a>
                 </li>
                 <li data-permission="list_indication" data-chapter="view" style="display: none">
-                    <a href="{% url 'listLeads' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Range Slider">Indicações</span></a>
+                    <a href="{% url 'listLeads' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Range Slider">Indicações</span></a>
                 </li>
             </ul>
         </div>
@@ -91,7 +91,7 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="insert_permission" data-chapter="view" style="display: none">
-                    <a href="{% url 'setPermission' %}"><i class="material-icons" style="font-size: 15px;">tune</i><span data-i18n="Sweetalert">Permissão</span></a>
+                    <a href="{% url 'setPermission' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">tune</i><span data-i18n="Sweetalert">Permissão</span></a>
                 </li>
             </ul>
         </div>
@@ -104,7 +104,7 @@
     </li>
     <ul data-chapter="view" data-permission="leads_all" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
         <li>
-            <a href="{% url 'LeadsViews' %}"><i class="material-icons" style="font-size: 15px;">view_headline</i><span data-i18n="Range Slider">Leads</span></a>
+            <a href="{% url 'LeadsViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">view_headline</i><span data-i18n="Range Slider">Leads</span></a>
         </li>
     </ul>
     
@@ -118,16 +118,16 @@
         <div class="collapsible-body"> 
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="agendar_coleta" data-chapter="view" style="display: none">
-                    <a href="{% url 'schedulePickup' %}"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Agendar Coleta</span></a>
+                    <a href="{% url 'schedulePickup' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Agendar Coleta</span></a>
                 </li>
                 <li data-permission="consult_agenda" data-chapter="view" style="display: none">
-                    <a href="{% url 'ScheduledPickup' %}"><i class="material-icons" style="font-size: 15px;">view_comfy</i><span data-i18n="Range Slider">Coletas Agendadas</span></a>
+                    <a href="{% url 'ScheduledPickup' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">view_comfy</i><span data-i18n="Range Slider">Coletas Agendadas</span></a>
                 </li>
                 <li data-permission="collection_route" data-chapter="view" style="display: none">
-                    <a href="{% url 'CollectionRouteViews' %}"><i class="material-icons" style="font-size: 15px;">location_on</i><span data-i18n="Range Slider">Rota</span></a>
+                    <a href="{% url 'CollectionRouteViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">location_on</i><span data-i18n="Range Slider">Rota</span></a>
                 </li>
                 <li data-permission="adjust_route" data-chapter="view" style="display: none">
-                    <a href="{% url 'AdjustRouteViews' %}"><i class="material-icons" style="font-size: 15px;">map</i><span data-i18n="Range Slider">Fazer Rota</span></a>
+                    <a href="{% url 'AdjustRouteViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">map</i><span data-i18n="Range Slider">Fazer Rota</span></a>
                 </li>
             </ul>
         </div>
@@ -142,16 +142,16 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="agend_concluidos" data-chapter="view" style="display: none">
-                    <a href="{% url 'FinancialExamsViews' %}"><i class="material-icons" style="font-size: 15px;">playlist_add_check</i><span data-i18n="Range Slider">Solicitações</span></a>
+                    <a href="{% url 'ReembolsoFinanceiro' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">playlist_add_check</i><span data-i18n="Range Slider">Solicitações</span></a>
                 </li>
                 <li data-permission="not_reached" data-chapter="view" style="display: none">
-                    <a href="{% url 'refundNotReachedViews' %}"><i class="material-icons" style="font-size: 15px;">clear</i><span data-i18n="Range Slider">Não Atingidos</span></a>
+                    <a href="{% url 'refundNotReachedViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">clear</i><span data-i18n="Range Slider">Não Atingidos</span></a>
                 </li>
                 <li data-permission="glosses" data-chapter="view" style="display: none">
-                    <a href="{% url 'refundGlossesViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_down</i><span data-i18n="Range Slider">Glosados</span></a>
+                    <a href="{% url 'refundGlossesViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">thumb_down</i><span data-i18n="Range Slider">Glosados</span></a>
                 </li>
                 <li data-permission="reverse_finished" data-chapter="view" style="display: none">
-                    <a href="{% url 'RefundCompletedViews' %}"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
+                    <a href="{% url 'RefundCompletedViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">check</i><span data-i18n="Range Slider">Finalizados</span></a>
                 </li>
             </ul>
         </div>
@@ -161,13 +161,13 @@
         <div class="collapsible-body">
             <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                 <li data-permission="fechamento_parceiro" data-chapter="view" style="display: none">
-                    <a href="{% url 'ClosingPartners' %}"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Fechamento Parceiros</span></a>
+                    <a href="{% url 'ClosingPartners' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">today</i><span data-i18n="Range Slider">Fechamento Parceiros</span></a>
                 </li>
                 <li data-permission="fechamento_comercial" data-chapter="view" style="display: none">
-                    <a href="{% url 'ClosingCommercial' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Comercial</span></a>
+                    <a href="{% url 'ClosingCommercial' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Comercial</span></a>
                 </li>
                 <li data-permission="fechamento_interno" data-chapter="view" style="display: none">
-                    <a href="{% url 'ClosingInterno' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Interno</span></a>
+                    <a href="{% url 'ClosingInterno' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Interno</span></a>
                 </li>
             </ul>
         </div>
@@ -201,16 +201,16 @@
     </li>
     <ul data-permission="meus_registros" data-chapter="main" style="display: none" class="collapsible collapsible-sub" data-collapsible="accordion">
         <li data-chapter="view" data-permission="meus_registros_pacientes" style="display: none">
-            <a href="{% url 'ListerPatientsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
+            <a href="{% url 'ListerPatientsUnitViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">streetview</i><span data-i18n="Range Slider">Pacientes</span></a>
         </li>
         <li data-chapter="view" data-permission="meus_registros_parceiros" style="display: none">
-            <a href="{% url 'ListerPartnersUnitViews' %}"><i class="material-icons" style="font-size: 18px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
+            <a href="{% url 'ListerPartnersUnitViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 18px;"> supervisor_account</i><span data-i18n="Sweetalert">Parceiros</span></a>
         </li>
         <li data-chapter="view" data-permission="meus_registros_indicacao" style="display: none">
-            <a href="{% url 'ListerIndicationsUnitViews' %}"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
+            <a href="{% url 'ListerIndicationsUnitViews' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">thumb_up</i><span data-i18n="Sweetalert">Indicação</span></a>
         </li>
         <li data-permission="meu_fechamento" data-chapter="view" style="display: none">
-            <a href="{% url 'ClosingFinanceUnit' %}"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Financeiro</span></a>
+            <a href="{% url 'ClosingFinanceUnit' %}" onclick="showLoadingPage('show')"><i class="material-icons" style="font-size: 15px;">attach_money</i><span data-i18n="Range Slider">Fechamento Financeiro</span></a>
         </li>
     </ul>
 

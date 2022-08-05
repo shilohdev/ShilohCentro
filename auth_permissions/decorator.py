@@ -1,5 +1,7 @@
 from django.db import connections
 
+from auth_finances.functions.solicitacoes.models import Solicitacao_Reembolso_Pendente_Function, Solicitacao_Reembolso_Andamento_Pendente_Function
+
 
 def json_without_success(data):
     return {
@@ -40,3 +42,21 @@ def CreatePermissionAll(request):
             "response": True,
             "message": "Acessos criados",
         }
+
+
+def User_Information(request, status): #Função para pehar a info do usuario e usar como parametro
+    with connections['auth_permissions'].cursor() as cursor:
+        searchID = "SELECT DISTINCT a.perfil, a.id, a.nome, a.unity FROM auth_users.users a INNER JOIN admins.units_shiloh b ON a.unity = b.id_unit_s WHERE login LIKE %s "
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if dados:
+            for perfil, id_usuario, nome, unityY in dados:
+                if status == "Pendente":
+                    return Solicitacao_Reembolso_Pendente_Function(perfil, unityY)
+                if status == "Analise":
+                    return Solicitacao_Reembolso_Andamento_Pendente_Function(perfil, unityY)
+        else:
+            return {
+                "response": "false",
+                "message": "Login expirado, faça login novamente para continuar."
+            }

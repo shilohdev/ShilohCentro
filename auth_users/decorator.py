@@ -2208,67 +2208,6 @@ def FunctionStatusSelect(request):
     return array
 
 
-#TABELA SELECT AGENDADOS CONCLUIDOS 
-def searchConcluidosF(request):
-    with connections['auth_agenda'].cursor() as cursor:
-        searchID = "SELECT a.perfil, a.id, a.nome, a.unity FROM auth_users.users a INNER JOIN admins.units_shiloh b ON a.unity = b.id_unit_s WHERE login LIKE %s "
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for perfil, id_usuario, nome, unityY in dados: 
-
-                pass
-        else:
-            return {
-                "response": "false",
-                "message": "Login expirado, faça login novamente para continuar."
-            }
-    
-        if perfil == "1":
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, a.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
-            cursor.execute(query)
-            dados = cursor
-            array = []
-
-            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente, company in dados:
-                newinfoa = ({
-                    "id": id_agendamento,
-                    "paciente": nome_paciente,
-                    "dataconc": convertDate(data_agendamento),
-                    "exame": exame,
-                    "status_p": status,
-                    "unidade": unidade,
-                    "id_unidade": id_unidade,
-                    "regis": regis,
-                    "company": company,
-                    "contrato": "",
-                })
-                array.append(newinfoa)
-        else:
-            query = "SELECT a.id_agendamento_f, unit.data_agendamento, a.regis, ex.tipo_exame, und.unit_s, und.id_unit_s, st.status_p, pa.nome_p, a.company FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f INNER JOIN admins.exam_type ex ON unit.tp_exame = ex.id INNER JOIN admins.units_shiloh und ON und.id_unit_s = unit.unity INNER JOIN customer_refer.patients pa ON unit.nome_p = pa.id_p WHERE und.id_unit_s LIKE %s AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND unit.status like 'Concluído' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 ORDER BY unit.data_agendamento ASC"
-            cursor.execute(query, (unityY,))
-            dados = cursor
-            array = []
-                
-            for id_agendamento, data_agendamento, regis, exame, unidade, id_unidade, status, nome_paciente, company in dados:
-                newinfoa = ({
-                    "id": id_agendamento,
-                    "paciente": nome_paciente,
-                    "dataconc": convertDate(data_agendamento),
-                    "exame": exame,
-                    "status_p": status,
-                    "unidade": unidade,
-                    "id_unidade": id_unidade,
-                    "regis": regis,
-                    "company": company,
-                    "contrato": '',
-                    })
-
-                array.append(newinfoa)
-
-    return array
-
-
 #SELECT STATUS PROCESSO
 def FunctionStatus(request):
     with connections['auth_finances'].cursor() as cursor:
@@ -2397,16 +2336,17 @@ def SearchLeadsAll(request):
 #SELECT MÉDICOS
 def searchDoctorLead(request):
     with connections['userdb'].cursor() as cursor:
-        query = "SELECT id, nome, company FROM auth_users.users ;"
+        query = "SELECT id, nome, company, status FROM auth_users.users;"
         cursor.execute(query)
         dados = cursor.fetchall()
         array = []
             
-        for id, nome, company in dados:
+        for id, nome, company, status in dados:
             newinfoa = ({
                 "id": id,
                 "nome": nome,
                 "company": company,
+                "status": status,
                 })
             array.append(newinfoa)
         return array

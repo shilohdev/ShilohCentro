@@ -80,7 +80,7 @@ def fetchQueryUnityFinance(column, perfil, unityY=None):
     return f"{column} = {unityY}"
 
 
-def fetchQueryDashUnity(column, perfil, unity=None):
+def fetchAdministrator(column, perfil, unity=None):
     if str(perfil) == "1":
         return f"{column} IS NOT NULL"
     return f"{column} = {unity}"

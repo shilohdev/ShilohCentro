@@ -45,8 +45,10 @@ CADASTRAR LEAD{% endblock %}
                      <span>Indicado por:</span>
                      <select name="select" id="doctor" onchange="SelectShow()" class="select2 browser-default" data-required='true'>
                         <option value="">Selecione</option>
-                        {% for k in  arr_SearchDoctorL %}
-                        <option value="{{ k.id }}">{{ k.nome }}</option>
+                        {% if arr_SearchDoctorL.status == 'Ativo' %}
+                           {% for k in  arr_SearchDoctorL %}
+                           <option value="{{ k.id }}">{{ k.nome }}</option>
+                        {% else %}
                         {% endfor %}
                      </select>
                   </div>

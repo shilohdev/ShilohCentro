@@ -30,7 +30,6 @@ from django.contrib.auth.models import User
 from numpy import empty
 from pymysql import NULL
 from functions.connection.models import Connection, Exams, RegisterActions
-from functions.general.decorator import convertDate, checkDayMonth, fetchQueryDashUnity
 from django.forms import model_to_dict
 from django.conf import settings
 from django.core.files.storage import default_storage

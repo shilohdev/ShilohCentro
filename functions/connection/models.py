@@ -1,8 +1,9 @@
+from platform import mac_ver
+from re import A
 from django.db import connections
 from django.db import models
 from functions.general.decorator import dealStrignify
-from functions.connection.db import DB, DBAdmins, DBCollection, DBCustomerRefer
-
+from functions.connection.db import DB, DBAdmins, DBCollection, DBCustomerRefer, DBusers
 
 class Exams(DB):
     id = models.AutoField("ID", primary_key=True, auto_created=True)
@@ -42,7 +43,7 @@ class Users(DB):
             ])
         ]
 
-
+#QUEYSET <<<<
 class RegisterActions(DBAdmins):
     id_register = models.AutoField("ID", primary_key=True, auto_created=True)
     id_pagina = models.IntegerField(null=True, blank=True, default=None)
@@ -189,3 +190,20 @@ class PatientsDB(DBCustomerRefer):
                 "id_p",
             ])
         ]
+
+
+class Partnerss(DBusers):
+    id = models.AutoField(primary_key=True, auto_created=True)
+    nome = models.CharField(max_length=255, null=True, blank=True, default=None)
+    status = models.CharField(max_length=45, null=True, blank=True, default=None)
+
+    class Meta:
+        db_table = "users"
+        indexes = [
+            models.Index(fields=[
+                "id",
+            ])
+        ]
+
+    def __str__(self):
+        return self.nome

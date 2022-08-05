@@ -198,7 +198,7 @@ CADASTRAR PACIENTE{% endblock %}
                         <span>Indicado por:</span>
                         <select id="doctor_new" onchange="SelectShow()" class="select2 browser-default" data-required="true">
                            <option value="">Selecione</option>
-                           {% for k in arr_SearchDoctorL %}
+                           {% for k in  arr_SearchDoctorL %}
                            <option value="{{ k.id }}">{{ k.nome }}</option>
                            {% endfor %}
                         </select>

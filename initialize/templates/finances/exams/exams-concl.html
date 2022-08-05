@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block title %}Shiloh | Exames Concluídos{% endblock %}
+
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
+
 {% block title-page %}
 Página inicial
 {% endblock %}
+
 {% block description-page %}SOLICITAÇÕES DE REEMBOLSO{% endblock %}
+
 {% block content %}
 <style type="text/css">
    .corfont{
@@ -15,7 +21,15 @@ Página inicial
    font-weight: bold;
    }
 
+   .scroll-y{
+   height: 800px;
+   max-height: 800px;
+   overflow-y: scroll;
+   }
+
+
 </style>
+
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
@@ -448,91 +462,23 @@ Página inicial
     </div>
     </div>
     <!--FINISH CARD-->
-
-    <div class="container" id="test1">
-        <div class="card">
-            <!-- Externo -->
-            <div id="userint" class="row">
-                <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                    <div class="input-field col s12 m3">
-                        <input id="cpf" type="text" onkeyup="searchPatients(this)">
-                        <label for="cpf">
-                            <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                    </div> 
-                    <div class="col s12 m4">
-                        <div class="input-field col s6 m6">
-                            <input  id="data1" type="date">
-                            <label for="data1">
-                            <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data inicial </label>
-                        </div>
-                        <div class="input-field col s6 m6">
-                            <input  id="data2" type="date">
-                            <label for="data2">
-                            <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data final </label>
-                        </div>
-                    </div>
-                    <div class="input-field col s12 m3">
-                        <div class="select-wrapper">
-                            <select class="error" name="select" id="statusProgressoTable" required="true" data-required='true'>
-                                <option value="">Status do Processo</option>
-                                {% for k in arr_SearchStratusProgress %}
-                                <option value="{{ k.status }}">{{ k.status }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col s12 m2">&nbsp;
-                        <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                            <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                        </button>
-                    </div>
-                </div>
-                </div>
-                <div  class="row container" >
-                    <!-- COMEÇO DA TABLE -->
-                    <div class="col s12" style="overflow-x: auto">
-                        <table id="page-length-option" class="bordered" style="margin-bottom: 10px;">
-                            <thead style="background-color: #581848; color: white; font-size: 15px">
-                                <tr>
-                                    <th data-field="id">Paciente</th>
-                                    <th data-field="id" style="text-align: center;">Data Coletado</th>
-                                    <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
-                                    <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
-                                    <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
-                                    <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
-                                    <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                                </tr> 
-                            </thead> 
-                            <tbody id="tb_append2">
-                                {% for k in arr_SearchCompletedExams %}
-                                <tr id="tr_{{ k.id }}">
-                                    <td>{{ k.paciente }}</td>
-                                    <td style="text-align: center;">{{ k.dataconc }}</td>
-                                    <td style="text-align: center;">{{ k.exame }}</td>
-                                    <td style="text-align: center;">{{ k.unidade }}</td>
-                                    <td style="text-align: center;">{{ k.company }}</td>
-                                    <td style="text-align: center;">{{ k.status_p }}</td>
-                                    <td style="text-align: center;">
-                                        <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                            <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                                <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                                            </button> 
-                                        </a> 
-                                        <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                            <i class="material-icons right" style="color: #66a366">library_books</i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- FIM DA TABLE -->
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+              <ul class="tabs">
+                <li class="tab col m3"><a class="active" href="#solicitacao_pendente">Pendente</a></li>
+                <li class="tab col m3"><a href="#solicitacao_andamento_analise">Em Andamento / Análise</a></li>
+                <li class="tab col m3"><a href="#test3">Glosa / Não Atingido</a></li>
+                <li class="tab col m3"><a href="#test3">Finalizado</a></li>
+              </ul>
             </div>
+        </div>
     </div>
 </div>
+
+{% include '../exams/partials/_solicitacoes_pendentes.html' %}
+{% include '../exams/partials/_solicitacoes_em_andamento_analise.html' %}
+
 
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
@@ -544,7 +490,7 @@ function ShowFinance(object) {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user,//DICT COM O VALOR DO ID
     };
-    fetchRequest("{% url 'ApiStartProcess' %}", "POST", "JSON", formpost, function(re) {
+        ("{% url 'ApiStartProcess' %}", "POST", "JSON", formpost, function(re) {
         if (re["response"] == "true"){
             var dados = re["dadoss"];
                 alert(re["message"]);
@@ -556,28 +502,6 @@ function ShowFinance(object) {
         }
     });
 }
-
-//FUNCTION BUSCAR
-function searchPatients(object) {
-    var e = $(object).val().toUpperCase();
-    if (e == "") {
-        $('#tb_append2 > tr').each(function() {
-            $(this).show();
-        });
-    } else {
-        $('#tb_append2 > tr').each(function() {
-            var trs = $(this).find("td");
-            var tr1 = $(trs[0]).text().toUpperCase();
-            var check = (tr1.indexOf(e) != -1);
-            if (check == true) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-}
-
 
 //CONFIG MODAL
 $(document).ready(function() {
@@ -1209,5 +1133,4 @@ function ContratoFile(object){
     });
 
 </script>
-
 {% endblock %}
