@@ -1,101 +1,40 @@
 {% load static %}
 
-<div class="container" id="solicitacao_andamento_analise">
-    <div class="card">
-        <!-- Externo -->
-        <div id="userint" class="row">
-            <div class="col s12" style="margin-top: 30px; margin-bottom: 30px;">
-                <div class="input-field col s12 m3">
-                    <input id="cpf" type="text" onkeyup="searchPatients(this)">
-                    <label for="cpf">
-                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-                </div> 
-                <div class="col s12 m4">
-                    <div class="input-field col s6 m6">
-                        <input  id="data1" type="date">
-                        <label for="data1">
-                        <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data inicial </label>
-                    </div>
-                    <div class="input-field col s6 m6">
-                        <input  id="data2" type="date">
-                        <label for="data2">
-                        <i class="material-icons" style="font-size: 15px">date_range</i>&nbsp;Data final </label>
-                    </div>
-                </div>
-                <div class="input-field col s12 m3">
-                    <div class="select-wrapper">
-                        <select class="error" name="select" id="statusProgressoTable" required="true" data-required='true'>
-                            <option value="">Status do Processo</option>
-                            {% for k in arr_SearchStratusProgress %}
-                            <option value="{{ k.status }}">{{ k.status }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="col s12 m2">&nbsp;
-                    <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                        <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                    </button>
-                </div>
-            </div>
-            </div>
-            <div  class="row container" >
-                <!-- COMEÇO DA TABLE -->
-                <div class="col s12 scroll-y" style="overflow-x: auto;">
-                    <table id="pagelengthoption" class="bordered" style="margin-bottom: 10px;">
-                        <thead style="background-color: #581848; color: white; font-size: 15px">
-                            <tr>
-                                <th data-field="id">Paciente</th>
-                                <th data-field="id" style="text-align: center;">Data Coletado</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
-                                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                            </tr> 
-                        </thead>
-                        <tbody id="tb_append2">
-                            {% for k in arr_Solicitacao_Andamento_Pendente %}
-                            <tr id="tr_{{ k.id }}">
-                                <td>{{ k.paciente }}</td>
-                                <td style="text-align: center;">{{ k.dataconc }}</td>
-                                <td style="text-align: center;">{{ k.exame }}</td>
-                                <td style="text-align: center;">{{ k.unidade }}</td>
-                                <td style="text-align: center;">{{ k.company }}</td>
-                                <td style="text-align: center;">{{ k.status_p }}</td>
-                                <td style="text-align: center;">
-                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                            <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                                        </button> 
-                                    </a> 
-                                    <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                        <i class="material-icons right" style="color: #66a366">library_books</i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!-- FIM DA TABLE -->
-            </div>
-        </div>
+<div class="col s12" id="solicitacao_andamento_analise" style="padding: 30px;">
+    <table class="bordered pagelengthoption" style="margin-bottom: 10px;">
+        <thead style="background-color: #581848; color: white; font-size: 15px">
+            <tr>
+                <th data-field="id">Paciente</th>
+                <th data-field="id" style="text-align: center;">Data Coletado</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
+                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+            </tr> 
+        </thead>
+        <tbody id="tb_append2">
+            {% for k in arr_Solicitacao_Andamento_Pendente %}
+            <tr id="tr_{{ k.id }}">
+                <td>{{ k.paciente }}</td>
+                <td style="text-align: center;">{{ k.dataconc }}</td>
+                <td style="text-align: center;">{{ k.exame }}</td>
+                <td style="text-align: center;">{{ k.unidade }}</td>
+                <td style="text-align: center;">{{ k.company }}</td>
+                <td style="text-align: center;">{{ k.status_p }}</td>
+                <td style="text-align: center;">
+                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                            <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                        </button> 
+                    </a> 
+                    <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                        <i class="material-icons right" style="color: #66a366">library_books</i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-
-
-
-<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-
-<script type="text/javascript">
-var datatableLeads = $("#pagelengthoption").DataTable({
-    "paging" : true,
-    "ordering" : true,
-    "scrollCollapse" : true,
-    "searching" : true,
-    "columnDefs" : [{orderable: true, targets: 0 }],
-});
-</script>
