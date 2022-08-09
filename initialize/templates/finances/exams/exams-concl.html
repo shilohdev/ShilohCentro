@@ -27,30 +27,7 @@ Página inicial
    overflow-y: scroll;
    }
 
-   .tabs .indicator {
-    position: absolute;
-    bottom: 0;
-    height: 2px;
-    background-color: #581848;
-    will-change: left,right;
-}
 
-.tabs .tab a.active, .tabs .tab a:hover {
-    color: #750c97;
-    background-color: transparent;
-}
-
-.tabs .tab a {
-    font-size: 14px;
-    display: block;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    padding: 0 24px;
-    -webkit-transition: color .28s ease,background-color .28s ease;
-    transition: color .28s ease,background-color .28s ease;
-    color: rgb(0 0 0 / 87%);
-}
 </style>
 
 <!-- INICIO DO MODAL -->
@@ -407,7 +384,7 @@ Página inicial
                     <div class="col s5 m5 left-align">
                         <p class="mb-0 pt-8">&nbsp;</p>
                     </div>
-                    {% for k in arr_Dash_Total_Solicitacoes %}
+                    {% for k in arr_CountAllFinance %}
                     <div class="col s7 m7 right-align">
                         <h4 class="mb-0">{{k.qtd}}</h4>
                     </div>
@@ -485,69 +462,26 @@ Página inicial
     </div>
     </div>
     <!--FINISH CARD-->
-</div>
-<div class="container">
-    <div class="card">
-        <div class="container">
-            <div class="row">
-                <div class="col s12" style="margin-top:20px">
-                  <ul class="tabs">
-                    <li class="tab col m3"><a class="active" href="#solicitacao_pendente">Pendente / Pago</a></li>
-                    <li class="tab col m3"><a href="#solicitacao_andamento_analise">Em Andamento / Análise</a></li>
-                    <li class="tab col m3"><a href="#solicitacao_glosa_n_atingido">Glosa / Não Atingido</a></li>
-                    <li class="tab col m3"><a href="#solicitacao_finalizada">Finalizado</a></li>
-                  </ul>
-                </div>
-            </div>
-        </div>
-        <div  class="row" >
-            <div class="container">
-                <div class="container scroll">
-                    <div class="col s12 m12" style="overflow-x: auto;">
-                        {% include '../exams/partials/_solicitacoes_pendentes.html' %}
-                        {% include '../exams/partials/_solicitacoes_em_andamento_analise.html' %}
-                        {% include '../exams/partials/_solicitacoes_glosa_n_atingido.html' %}
-                        {% include '../exams/partials/_solicitacoes_finalizadas.html' %}
-                    </div>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+              <ul class="tabs">
+                <li class="tab col m3"><a class="active" href="#solicitacao_pendente">Pendente</a></li>
+                <li class="tab col m3"><a href="#solicitacao_andamento_analise">Em Andamento / Análise</a></li>
+                <li class="tab col m3"><a href="#test3">Glosa / Não Atingido</a></li>
+                <li class="tab col m3"><a href="#test3">Finalizado</a></li>
+              </ul>
             </div>
         </div>
     </div>
 </div>
 
+{% include '../exams/partials/_solicitacoes_pendentes.html' %}
+{% include '../exams/partials/_solicitacoes_em_andamento_analise.html' %}
 
 
-<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 <script type = "text/javascript" >
-
-var datatableReembolso = $(".pagelengthoption").DataTable({
-    "ordering" : true,
-    "scrollCollapse" : true,
-    "searching" : true,
-    "columnDefs" : [{orderable: true, targets: 0 }],
-});
-$(".dropdown-trigger").css("display", "none")
-
-
-$(document).ready(function(){ // <<<< execute a seguinte função
-
-    function changeTable() {
-        $(".select-wrapper").find("select").hide();
-        $(".dataTables_length").css({
-            "width": "60px",
-            "position": "relative",
-        })
-
-        showLoadingPage("close");
-    }
-    setTimeout(showLoadingPage("show"), 500);
-    setTimeout(showLoadingPage("show"), 1000);
-    setTimeout(changeTable, 200);
-});
-
 
 function ShowFinance(object) {
     var id_user = $(object).data("id_user");
@@ -1197,8 +1131,6 @@ function ContratoFile(object){
  $(document).ready(function(){
       $('tabs').tabs();
     });
+
 </script>
-
-
-
 {% endblock %}

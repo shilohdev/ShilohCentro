@@ -21,7 +21,7 @@ from datetime import datetime
 
 from requests import request
 from auth_users.decorator import FileContractFunction, ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, searchGlosses, FunctionStatusN, searchNotReached, SearchMonthExamsConclFunction, searchrRefundCompletedFunction, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from functions.general.decorator import BodyDecode
 from auth_permissions.decorator import CreatePermissionAll, allowPermission
@@ -526,6 +526,27 @@ def ApiFinalizeProcess(request):
     array = FinalizeProcessFunction(request)
     return JsonResponse(array, safe=False, status=200)
 
+@login_required
+def SearchMonthExamsConcl(request):
+    array = SearchMonthExamsConclFunction(request)
+    return JsonResponse(array, safe=False, status=200)
+
+#REEMBOLSO COMPLETO - FINALIZADO aquiy
+@login_required
+def RefundCompletedViews(request):
+    if allowPage(request, "reverse_finished") == False:
+        return error(request)
+    SearchRefundCompleted = searchrRefundCompletedFunction(request)
+    SearchStratusProgress = FunctionStatus(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-completed.html',  
+    {
+        "arr_SearchRefundCompleted": SearchRefundCompleted, 
+        "arr_SearchStratusProgress": SearchStratusProgress,
+        "arr_ViewFoto": ViewFoto,
+    })
+
 #INDIVIDUAL, MEUS REGISTROS
 def ListerPatientsUnitViews(request): #PACIENTES
     SsearchConvenio =  searchConvenio(request)
@@ -644,6 +665,39 @@ def SaveEditionsPatient(request):
     array = SaveEditionsPatientFunction(request)
     return JsonResponse(array, safe=False, status=200)
 
+
+#REEMBOLSO NÃO ATINGIDO
+@login_required
+def refundNotReachedViews(request): #INDICAÇÕES
+    if allowPage(request, "not_reached") == False:
+        return error(request)
+    SearchStatusN = FunctionStatusN(request)
+    SearchNotReached=searchNotReached(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-notReached.html', 
+    {
+        "arr_SearchStatusN": SearchStatusN, 
+        "arr_SearchNotReached": SearchNotReached,
+        "arr_ViewFoto": ViewFoto,
+        })
+
+
+
+#REEMBOLSO GLOSADO
+@login_required
+def refundGlossesViews(request): #INDICAÇÕES
+    if allowPage(request, "glosses") == False:
+        return error(request)
+    SearchStatusN = FunctionStatusN(request)
+    SearchGlosses=searchGlosses(request)
+    ViewFoto = FilePhotoViewFunction(request)
+
+    return render(request, 'finances/exams/refund-glosses.html', 
+    {"arr_SearchStatusN": SearchStatusN, 
+    "arr_SearchSearchGlosses": SearchGlosses,
+    "arr_ViewFoto": ViewFoto,
+    })
 
 #AGENDAR COLETA INTERNA
 @login_required

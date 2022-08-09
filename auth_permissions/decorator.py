@@ -1,6 +1,6 @@
 from django.db import connections
 
-from auth_finances.functions.solicitacoes.models import Dash_Solicitacoes_Reemboslo_Total, Solicitacao_Reembolso_Pendente_Function, Solicitacao_Reembolso_Andamento_Function, Solicitacao_Reembolso_Glosa_Natingido_Function, Solicitacao_Reembolso_Finalizado_Function
+from auth_finances.functions.solicitacoes.models import Solicitacao_Reembolso_Pendente_Function, Solicitacao_Reembolso_Andamento_Pendente_Function
 
 
 def json_without_success(data):
@@ -54,14 +54,7 @@ def User_Information(request, status): #Função para pehar a info do usuario e 
                 if status == "Pendente":
                     return Solicitacao_Reembolso_Pendente_Function(perfil, unityY)
                 if status == "Analise":
-                    return Solicitacao_Reembolso_Andamento_Function(perfil, unityY)
-                if status == "Glosa":
-                    return Solicitacao_Reembolso_Glosa_Natingido_Function(perfil, unityY)
-                if status == "Finalizado":
-                    return Solicitacao_Reembolso_Finalizado_Function(perfil, unityY)
-                if status == "Dash_Total":
-                    return Dash_Solicitacoes_Reemboslo_Total(perfil, unityY)
-
+                    return Solicitacao_Reembolso_Andamento_Pendente_Function(perfil, unityY)
         else:
             return {
                 "response": "false",
