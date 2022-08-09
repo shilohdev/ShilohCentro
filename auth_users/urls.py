@@ -125,16 +125,6 @@ urlpatterns = [
     path('financeiro/fechamento/parceiros/detalhes', views.payCommercial, name='payCommercial'),
 
 
-
-    #FINALIZADOS
-    path('financeiro/exames/exames/process-fin/', views.RefundCompletedViews, name='RefundCompletedViews'),#EXAMES FINALIZADOS
-    path('financeiro/search/exames/finish/', views.SearchMonthExamsConcl, name='SearchMonthExamsConcl'),#EXAMES FINALIZADOS
-    #path('api/historico/actions/', views.HistoricoViews, name='HistoricoViews'),#API HISTÓRICO
-    #NÃO ATINGIDO
-    path('financeiro/reembolso/nao/atingido/', views.refundNotReachedViews, name='refundNotReachedViews'),
-    #GLOSADO
-    path('financeiro/reembolso/glosado/', views.refundGlossesViews, name='refundGlossesViews'),
-
     #INDIVIDUAL, MEUS REGISTROS
     path('listar/pacientes/meus-registros/', views.ListerPatientsUnitViews, name='ListerPatientsUnitViews'),#PACIENTES
     path('listar/parceiros/meus-registros/', views.ListerPartnersUnitViews, name='ListerPartnersUnitViews'),#PARCEIROS

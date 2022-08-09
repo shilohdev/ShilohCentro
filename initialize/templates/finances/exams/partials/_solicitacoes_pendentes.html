@@ -1,49 +1,39 @@
 {% load static%}
-
-<div class="container" id="solicitacao_pendente">
-    <div class="card">
-        <!-- Externo -->
-            <div  class="row container" >
-                <!-- COMEÇO DA TABLE -->
-                <div class="col s12 scroll-y" style="overflow-x: auto;">
-                    <table id="page-length-option" class="bordered" style="margin-bottom: 10px;">
-                        <thead style="background-color: #581848; color: white; font-size: 15px">
-                            <tr>
-                                <th data-field="id">Paciente</th>
-                                <th data-field="id" style="text-align: center;">Data Coletado</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
-                                <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
-                                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                            </tr> 
-                        </thead>
-                        <tbody id="tb_append2">
-                            {% for k in arr_Solicitacao_Reembolso_Pendente %}
-                            <tr id="tr_{{ k.id }}">
-                                <td>{{ k.paciente }}</td>
-                                <td style="text-align: center;">{{ k.dataconc }}</td>
-                                <td style="text-align: center;">{{ k.exame }}</td>
-                                <td style="text-align: center;">{{ k.unidade }}</td>
-                                <td style="text-align: center;">{{ k.company }}</td>
-                                <td style="text-align: center;">{{ k.status_p }}</td>
-                                <td style="text-align: center;">
-                                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                            <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                                        </button> 
-                                    </a> 
-                                    <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                        <i class="material-icons right" style="color: #66a366">library_books</i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!-- FIM DA TABLE -->
-            </div>
-        </div>
+<div class="col s12" id="solicitacao_pendente" style="padding: 30px;">
+    <table id="dt_one" class="bordered pagelengthoption" style="margin-bottom: 10px;"> 
+        <thead style="background-color: #581848; color: white; font-size: 15px">
+            <tr>
+                <th data-field="id">Paciente</th>
+                <th data-field="id" style="text-align: center;">Data Coletado</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
+                <th data-field="id" style="text-align: center; width: 130px;">Status Processo</th>
+                <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+            </tr> 
+        </thead>
+        <tbody id="tb_append2">
+            {% for k in arr_Solicitacao_Reembolso_Pendente %}
+            <tr id="tr_{{ k.id }}">
+                <td>{{ k.paciente }}</td>
+                <td style="text-align: center;">{{ k.dataconc }}</td>
+                <td style="text-align: center;">{{ k.exame }}</td>
+                <td style="text-align: center;">{{ k.unidade }}</td>
+                <td style="text-align: center;">{{ k.company }}</td>
+                <td style="text-align: center;">{{ k.status_p }}</td>
+                <td style="text-align: center;">
+                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                        <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                            <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                        </button> 
+                    </a> 
+                    <a data-id_user="{{ k.id }}" onclick="ContratoFile(this)" class="btn tooltipped" data-tooltip="Baixar Termo" data-position="top" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                        <i class="material-icons right" style="color: #66a366">library_books</i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
