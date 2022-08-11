@@ -469,7 +469,6 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
    
 	var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
 	//$("#btn_atualizar").data("id_user", id_user); // att status
-   console.log(id_user)
 	var formpost = {
 		"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
 		"id_user": id_user //DICT COM O VALOR DO ID
@@ -573,7 +572,7 @@ function StatusConc(e){
       var id = $(e).data("id");
       var convenio = $("tp_conv").val();
       var enfermeira = $("#nurse").val();
-      console.log(enfermeira)
+      
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
          "convenio": convenio,
@@ -581,7 +580,7 @@ function StatusConc(e){
          "enfermeira": enfermeira,
          "company": company,
       }
-      console.log(formpost)
+      
       fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
          if(re["response"] == "true"){
             $("#btn_conc").attr("disabled", true);

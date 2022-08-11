@@ -445,7 +445,7 @@ function searchMonth(){
             $("#pago_labmovel").html("");
             $("#pago_labmovel").css("display", "block");
             $("#arr_pago_labmovel").hide();
-            console.log(dados)
+
             $.map(dados, function (n, i) {
                var valor = `<h5 class="mb-0">${n.valor}</h5>`
                $("#pago_labmovel").append(valor);
@@ -457,7 +457,7 @@ function searchMonth(){
             $("#pago_shilohlab").html("");
             $("#pago_shilohlab").css("display", "block");
             $("#arr_pago_shilohlab").hide();
-            console.log(dados)
+
             $.map(dados, function (n, i) {
                var valor = `<h5 class="mb-0">${n.valor}</h5>`
                $("#pago_shilohlab").append(valor);
@@ -470,7 +470,7 @@ function searchMonth(){
             $("#apagar_labmovel").html("");
             $("#apagar_labmovel").css("display", "block");
             $("#arr_apagar_labmovel").hide();
-            console.log(dados)
+
             $.map(dados, function (n, i) {
                var valor = `<h5 class="mb-0">${n.valor}</h5>`
                $("#apagar_labmovel").append(valor);
@@ -482,7 +482,7 @@ function searchMonth(){
             $("#apagar_shilohlab").html("");
             $("#apagar_shilohlab").css("display", "block");
             $("#arr_apagar_shilohlab").hide();
-            console.log(dados)
+
             $.map(dados, function (n, i) {
                var valor = `<h5 class="mb-0">${n.valor}</h5>`
                $("#apagar_shilohlab").append(valor);

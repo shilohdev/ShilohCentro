@@ -2221,7 +2221,7 @@ def FunctionStatus(request):
                 "status": status,
                 })
             array.append(newinfoa)
-    return array
+        return array
 
 
 #TIPO DE ANEXO
@@ -2238,7 +2238,7 @@ def FunctionSearchTypeAnexo(request):
                 "tipo_anexo": tipo_anexo,
                 })
             array.append(newinfoa)
-    return array
+        return array
 
 #INICIO DO PROCESSO REEMBOLSO
 def FunctionStartProcess(request):
@@ -2282,7 +2282,7 @@ def FunctionStartProcess(request):
 #MODAL SOLICITAÇÕES DE REEMBOLSO
 def SearchModalExamsFunction(request):
     id = request.POST.get('id_user')
-    
+
     FC = FinancesExams()
     dict_response = {}
     finances_exams_data = FC.fetch_exams(id)
@@ -2292,7 +2292,6 @@ def SearchModalExamsFunction(request):
     dict_response.update(modal_data) if modal_data else None
     dict_response.update(finances_exams_data) if modal_data else None
 
-    #dict_response["history"] = historicExamConclFunction(id)
     return {
         "response": True,
         "message": dict_response #RETORNO DO MESSAGE COM O DICT 

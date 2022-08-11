@@ -412,7 +412,7 @@ Fechamento do Comercial
                         $("#pago_labmovel").html("");
                         $("#pago_labmovel").css("display", "block");
                         $("#arr_pago_labmovel").hide();
-                        console.log(dados)
+
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_labmovel").append(valor);
@@ -424,7 +424,7 @@ Fechamento do Comercial
                         $("#pago_shilohlab").html("");
                         $("#pago_shilohlab").css("display", "block");
                         $("#arr_pago_shilohlab").hide();
-                        console.log(dados)
+
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_shilohlab").append(valor);
@@ -437,7 +437,6 @@ Fechamento do Comercial
                         $("#apagar_labmovel").html("");
                         $("#apagar_labmovel").css("display", "block");
                         $("#arr_apagar_labmovel").hide();
-                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_labmovel").append(valor);
@@ -449,7 +448,6 @@ Fechamento do Comercial
                         $("#apagar_shilohlab").html("");
                         $("#apagar_shilohlab").css("display", "block");
                         $("#arr_apagar_shilohlab").hide();
-                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_shilohlab").append(valor);
@@ -574,8 +572,6 @@ Fechamento do Comercial
     function viewFile(object) {
         var path = $(object).data("path");
         var filename = $(object).data("name");
-        console.log(path)
-        console.log(filename)
         var a = document.createElement("a");
         a.href = "/docs/" + path;
         a.download = filename;
@@ -664,8 +660,7 @@ Fechamento do Comercial
                 `;
                 $("#pago").append(a);
             });
-            console.log("pagos>>")
-            console.log(dados)
+        
 
 
         

@@ -1,0 +1,282 @@
+<div class="modal-content" id="modalFinancee">
+    <div class="card-content" style="margin-top: 50px;">
+        <!--  <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="statusM" type="text" >
+        -->
+        <a id="btn_card_coletaF" class="btn btn-floating pulse tooltipped " data-tooltip="Informações da coleta" data-position="right" style="background-color: #76c076da;"><i class="material-icons">menu</i></a>
+         <div id="card_coletaF" class="container scale-transition" style="display: none;">
+             <ul class="collapsible  expandable">
+                 <li class="">
+                     <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                         <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
+                     </div>
+                     <div id="card_ag" class="row">
+                         <div class="col s12" style="margin-top: 10px;">
+                             <div class="input-field col s3 ">
+                                 <input readonly="readonly" style="color: black;" id="date_age_finalizado" type="date">
+                                 <label for="date_age_finalizado">Data Agendamento</label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="hr_age_finalizado" type="text" placeholder="00:00">
+                                 <label for="hr_age_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="tp_service_finalizado" type="tel" />
+                                 <label for="tp_service_finalizado" class="active">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço
+                                 </label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="tp_exame_finalizado" type="tel">
+                                 <label for="tp_exame_finalizado" class="active">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame </label>
+                             </div>
+                         </div>
+                         <div class="input-field col s12">
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="tp_conv_finalizado" type="tel">
+                                 <label for="tp_conv_finalizado" class="active">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio </label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="nurse_finalizado" type="tel">
+                                 <label for="nurse_finalizado" class="active">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro </label>
+                             </div>
+                         </div>
+                     </div>
+                 </li>
+                 <!--CARD 2-->
+                 <li class="" style="margin-top: 30px;">
+                     <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                         <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
+                     </div>
+                     <div id="userint" class="row">
+                         <div class="col s12" style="margin-top: 10px;">
+                             <div class="input-field col s6">
+                                 <input readonly="readonly" id="namePaciente_finalizado" type="tel" style="color: black;">
+                                 <label for="namePaciente_finalizado" class="active">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente </label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="tel1_finalizado" type="tel">
+                                 <label for="tel1_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="tel2_finalizado" type="tel">
+                                 <label for="tel2_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="resp_comercial_finalizado" type="tel">
+                                 <label for="resp_comercial_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial </label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="doctor_finalizado" type="text">
+                                 <label for="doctor_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Médico </label>
+                             </div>
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="attendance_finalizado" type="text">
+                                 <label for="attendance_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Atendimento </label>
+                             </div>
+                             <div class="input-field col s3">
+                             <input readonly="readonly" style="color: black;" id="company_finalizado" type="text">
+                             <label for="company_finalizado">
+                                 <i class="material-icons" style="font-size: 15px">label_outline</i>&nbsp;Relação</label>
+                         </div>
+                         </div>
+                     </div>
+                 </li>
+                 <!--CARD 3-->
+                 <li class="" style="margin-top: 30px;">
+                     <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                         <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ENDEREÇO</labe>
+                     </div>
+                     <div id="userint" class="row">
+                         <div class="col s12" style="margin-top: 10px;">
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="zipcode_finalizado" type="text" maxlength="9" onblur="pesquisacep(this.value)">
+                                 <label for="zipcode_finalizado">
+                                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                             </div>
+                             <div class="input-field col s7">
+                                 <input readonly="readonly" style="color: black;" id="addres_finalizado" type="text">
+                                 <label for="addres_finalizado">Logradouro </label>
+                             </div>
+                             <div class="input-field col s2">
+                                 <input readonly="readonly" style="color: black;" id="number_finalizado" type="text">
+                                 <label for="number_finalizado">Número </label>
+                             </div>
+                         </div>
+                         <div class="col s12">
+                             <div class="input-field col s3">
+                                 <input readonly="readonly" style="color: black;" id="complement_finalizado" type="text">
+                                 <label for="complement_finalizado">Complemento</label>
+                             </div>
+                             <div class="input-field col s5">
+                                 <input readonly="readonly" style="color: black;" id="district_finalizado" type="text">
+                                 <label for="district_finalizado">Bairro</label>
+                             </div>
+                             <div class="input-field col s2">
+                                 <input readonly="readonly" style="color: black;" id="city_finalizado" type="text">
+                                 <label for="city_finalizado">Cidade</label>
+                             </div>
+                             <div class="input-field col s2">
+                                 <input readonly="readonly" style="color: black;" id="uf_finalizado" type="text" maxlength="2">
+                                 <label for="uf_finalizado">UF</label>
+                             </div>
+                         </div>
+                     </div>
+                 </li>
+                 <li class="" style="margin-top: 30px;">
+                 <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                     <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                 </div>
+                 <div class="row">
+                     <div class="col s12">
+                     <div class="col s12" style="margin-top: 15px;">
+                         <i class="material-icons" style="font-size: 15px"></i>&nbsp;Acesso para o Convênio:
+                     </div>
+                     <div class="input-field col s3">
+                         <input readonly="readonly" style="color: black;" id="login_finalizado" type="text">
+                         <label for="login_finalizado" class=""> 
+                         <i class="material-icons" style="font-size: 15px">person_outline</i>&nbsp;Login</label>
+                     </div>
+                     <div class="input-field col s5">
+                         <input readonly="readonly" style="color: black;" id="senha_finalizado" type="text">
+                         <label for="senha_finalizado" class="active"> 
+                         <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
+                     </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col s12" style="margin-top: 10px;">
+                         <div class="input-field col s12">
+                             <input readonly="readonly" style="color: black;" id="obs_finalizado" type="text">
+                             <label for="obs_finalizado">
+                                 <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                         </div>
+                     </div>
+                 </div>
+             </li>
+             </ul>
+         </div>
+        <div class="container" id="card_finance">
+            <ul class="collapsible expandable ">
+                <li class="active" id="cardFinance">
+                    <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                        <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">FINANCEIRO</labe>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin-top: 10px;">
+                            <div class="input-field col s3">
+                                <input readonly="readonly" style="color: black;" id="date_first" type="text" data-required='true'>
+                                <label for="date_first_finalizado">Inicio do Processo</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input readonly="readonly" style="color: black;" id="date_end" type="text">
+                                <label for="date_end_finalizado">Fim do processo</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <div class="select-wrapper">
+                                    <select class="error" name="select" id="statusProgresso_finalizado" required="true" data-required='true'>
+                                        <option value="">Status do Processo</option>
+                                        {% for k in arr_SearchStratusProgress %}
+                                        <option value="{{ k.id }}">{{ k.status }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin-top: 10px;">
+                            <div class="input-field col s3">
+                                <input id="cust_alv_finalizado" type="tel" placeholder="R$" data-required='true'>
+                                <label for="cust_alv_finalizado">
+                                    <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Custo Alvaro</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="val_w_lab_finalizado" type="tel" placeholder="R$" onkeyup="CalVal(this);" onblur="CalVal(this)"  data-required='true'>
+                                <label for="val_w_lab_finalizado">
+                                    <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor WorkLab</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="val_pago_finalizado" type="tel" placeholder="R$" onkeyup="CalVal(this)" onblur="CalVal(this)" data-required='true'>
+                                <label for="val_pago_finalizado">
+                                    <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor Pago</label>
+                            </div>
+                            <div class="input-field col s2">
+                                <input readonly="readonly" style="color: black; border-bottom: none;text-align: left; font-size: 20px;" id="porcentagem_finalizado" type="text" >
+                                <label id="labelporcentagem" for="porcentagem_finalizado" class="active">
+                                    <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Porcentagem paga:
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                             <div class="input-field col s3">
+                                 <input style="color: black;" id="data_r_finalizado" type="date" data-required='true'>
+                                 <label for="data_r_finalizado">Data Repasse</label>
+                             </div>
+                            <div class="input-field col s3">
+                                <input id="n_nf_finalizado" type="text" data-required='true'>
+                                <label for="n_nf_finalizado">
+                                    <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Nº Nota Fiscal</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="active" style="margin-top: 30px;">
+                    <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                        <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ANEXOS</labe>
+                    </div>
+                    <div class="row">
+                        <div class="col s11 ml-4">
+                            <table class="bordered" style="margin-top: 20px;">
+                                <thead style="background-color: #76c076da; color: white; font-size: 15px">
+                                    <tr>
+                                        <th data-field="id"> Arquivos Anexados</th>
+                                        <th data-field="id"> Data</th>
+                                        <th data-field="id"> Tipo</th>
+                                        <th data-field="name" style="width: 120px;">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb_append_finalizado">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </li>
+                <li class="active" style="margin-top: 30px;">
+                    <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                        <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">HISTÓRICO</labe>
+                    </div>
+                    <div class="row">
+                        <div class="col s12" style="margin-top: 10px;">
+                            <div id="activity" class="col s12 active" style="display: block;">
+                                <div class="activity">
+                                    <p class="mt-5 mb-0 ml-5 font-weight-900">Histórico</p>
+                                    <ul id="historico_F" class="widget-timeline mb-0 scroll-y" style="padding-right: 10px;">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+     <div class="col s12 ">
+     <div class="col s12 m12 m12">
+         <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
+     </div>
+     </div>
+ </div>

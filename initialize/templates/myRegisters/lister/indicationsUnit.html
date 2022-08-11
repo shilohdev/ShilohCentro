@@ -128,7 +128,6 @@ $(document).ready(function() {
 
 function viewHistoricoModal(object){
    var id_lead = $(object).data("id_lead");
-   console.log(id_lead)
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_lead": id_lead ,

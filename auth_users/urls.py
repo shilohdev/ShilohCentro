@@ -110,7 +110,7 @@ urlpatterns = [
     path('api/consultar/exames/modal/finances', views.SearchModalExamsFinances, name='SearchModalExamsFinances'),#API MODAL FINANCEIRO
     path('api/salvar/alteracoes/modal/finances', views.SaveEditionsFinances, name='SaveEditionsFinances'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('api/finalizar/exames/modal/', views.ApiFinalizeProcess, name='ApiFinalizeProcess'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
-    path('financeiro/search/exames/solicitacoes/', views.SearchMonthExamsRefund, name='SearchMonthExamsRefund'),#EXAMES FINALIZADOS
+
     #PAGAMENTOS PAREIROS 
     path('financeiro/fechamento/parceiros/', views.ClosingPartnersViews, name='ClosingPartners'),#EXAMES FINALIZADOS
     path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#EXAMES FINALIZADOS
