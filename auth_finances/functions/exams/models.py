@@ -2299,8 +2299,11 @@ def FunctionDashCardWorkLab(request):
         ArrCardWorkLab = []
         if dados:
             for qtd, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
+                if val == None:
+                    val = "R$ 00.00"
+                else:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qtd": qtd,
                     "val": val,
@@ -2308,7 +2311,14 @@ def FunctionDashCardWorkLab(request):
                     })
                 ArrCardWorkLab.append(newinfoa)
 
-        return ArrCardWorkLab
+        else:
+            newinfoa = ({
+                "qtd": 0,
+                "val": "R$ 00,00",
+                "mes": monthCount,
+                })
+            ArrCardWorkLab.append(newinfoa)
+    return ArrCardWorkLab
 
 
 
@@ -2454,6 +2464,12 @@ def FunctionDashCardNFs(request):
                     "qtd_anx": qtd_anx,
                     })
                 array.append(newinfoa)
+        else:
+            newinfoa = ({
+                "mes": 0,
+                "qtd_anx": 0,
+                })
+            array.append(newinfoa)
         return array
 
 

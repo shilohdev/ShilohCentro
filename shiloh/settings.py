@@ -15,6 +15,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 # OS -> SERVE PARA USAR AS FUNCIONALIDADES QUE DEPENDEM DO SISTEMA OPERACIONAL, COMO ARQUIVOS, ENVIRONMENT ETC.
 from pathlib import Path
 import os
+from urllib import request
 
 # CRIAR ENVIRONMENT
 # ENVIRONMENT -> SÃO VARIÁVEIS QUE FICAM MAIS FÁCEIS DE TROCAR
@@ -352,3 +353,4 @@ LISTPATHTYPE = {
 LISTPATHTYPEFINANCE = {
     "NF": "NF",
 }
+

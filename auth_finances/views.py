@@ -7,17 +7,17 @@ from django.shortcuts import get_object_or_404, render
 from requests import request
 from auth_permissions.decorator import User_Information
 from auth_users.decorator import FilePhotoViewFunction, FunctionSearchTypeAnexo, FunctionStatus, allowPage
-from functions.connection.models import Partnerss
 from django.http import HttpResponse
 import time
 from django.contrib.auth.decorators import login_required
+from auth_users.models import Users
 
 
 
 def teste(request):
     start_time = time.time()
 
-    a= Partnerss.objects.exclude(status='Cancelado')
+    a= Users.objects.exclude(status='Cancelado')
     print(a)
     end_time = time.time()
     duration = start_time - end_time

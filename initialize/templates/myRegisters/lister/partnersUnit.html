@@ -88,7 +88,7 @@ MEUS PARCEIROS{% endblock %}
 
 
 <!-- INICIO DO MODAL -->
-<div id="modal1" class="scroll-area-md modal modal-fixed-footer" style="width: 85%; height: 90%;">
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content scrollbar-container ps--active-y" id="modal2">
       <!--CORPO DO MODAL-->
       <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
@@ -262,7 +262,7 @@ MEUS PARCEIROS{% endblock %}
    <div class="modal-footer">
       <!--BUTTON--> 
       <div class="col s12 m12" id="modal3">
-         <a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #c74d4d">Cancelar</a>
+      <!--<a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #c74d4d">Cancelar</a>--> 
          <a onclick="updatePartnersModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>
          <a onclick="CadastrePartners(this)" id="btn_cadastrar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #76c076da;">Cadastrar</a>
          <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>

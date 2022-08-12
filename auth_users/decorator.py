@@ -2331,26 +2331,6 @@ def SearchLeadsAll(request):
         
 
         return array
-
-#SELECT MÉDICOS
-def searchDoctorLead(request):
-    with connections['userdb'].cursor() as cursor:
-        query = "SELECT id, nome, company, status FROM auth_users.users;"
-        cursor.execute(query)
-        dados = cursor.fetchall()
-        array = []
-            
-        for id, nome, company, status in dados:
-            newinfoa = ({
-                "id": id,
-                "nome": nome,
-                "company": company,
-                "status": status,
-                })
-            array.append(newinfoa)
-        return array
-
-
         
 #CADASTRAR LEAD INTERNO
 def CadastreLead(request):

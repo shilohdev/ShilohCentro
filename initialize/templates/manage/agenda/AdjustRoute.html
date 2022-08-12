@@ -63,8 +63,8 @@ ROTA{% endblock %}
                                 <td style="text-align: center;">
                                     <select name="nurse" class="nurseclass">
                                         <option value="">Enfermeiro(a)</option>
-                                        {% for k in arr_SearchNurse %}
-                                        <option value="{{ k.id }}">{{ k.nome }}</option>
+                                        {% for nurse in arr_SearchNurse %}
+                                        <option value="{{ nurse.id }}">{{ nurse.nome }}</option>
                                         {% endfor %}
                                     </select>   
                                 </td>

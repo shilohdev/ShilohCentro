@@ -68,8 +68,8 @@ CONSULTAR AGENDAMENTOS{% endblock %}
                               <label class="active">Enfermeiro</label>
                               <select name="select" id="nurse" class="error" required="true" data-show="search">
                                  <option value="">Enfermeiro</option>
-                                 {% for k in arr_SearchNurse%}
-                                 <option value="{{ k.id }}">{{ k.nome }}</option>
+                                 {% for nurse in arr_SearchNurse_Active%}
+                                 <option value="{{ nurse.id }}">{{ nurse.nome }}</option>
                                  {% endfor %}
                               </select>
                            </div>
