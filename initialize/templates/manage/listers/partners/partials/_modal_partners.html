@@ -1,0 +1,193 @@
+    <div class="modal-content scrollbar-container ps--active-y" id="modal2">
+       <!--CORPO DO MODAL-->
+       <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+          <div class="container">
+             <div class="card">
+                <div class="card-content" style="margin-top: -40px; background-color: #581848;" >
+                   <h5 class="corfont" style="color:white">ATUALIZAR PARCEIRO</h5>
+                </div>
+             </div>
+          </div>
+          <div class="container">
+             <div class="card" >
+                <!-- Externo -->
+                <div id="modalint" class="row" >
+                   <div class="col s12 m12"  style="margin-top: 30px;">
+                      <div class="input-field col s12 m3">
+                         <input style="color: black;"  readonly="readonly" id="company" type="text" >
+                         <label style="color: black;" for="company">Relação:</label>
+                      </div>
+                   </div>
+                   <div class="col s12 m12"  style="margin-top: 30px;">
+                      <div class="input-field col s5">
+                         <input id="name" type="text" placeholder="">
+                         <label for="name" class="active">
+                         <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Completo</label>
+                      </div>
+                      <div class="input-field col s12 m3">
+                         <input id="rn" type="text" >
+                         <label for="rn">
+                         <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NR</label>
+                      </div>
+                      <div class="input-field col s12 m3" >
+                         <div class="select-wrapper">
+                            <select name="select" id="categoria" onchange="SelectShow()" class="error " required="">
+                               <option value="">Categoria</option>
+                               {% for k in arr_SearchCategoria %}
+                               <option value="{{ k.id }}">{{ k.categoria }}</option>
+                               {% endfor %}
+                            </select>
+                         </div>
+                      </div>
+                   </div>
+                   <div class="col s12 m12">
+                      <div class="input-field col s12 m8">
+                         <input id="email" type="email" >
+                         <label for="email">
+                         <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                      </div>
+                      <div class="input-field col s12 m2">
+                         <input id="tel1" type="tel" >
+                         <label for="tel1">
+                         <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                      </div>
+                      <div class="input-field col s12 m2">
+                         <input id="tel2" type="tel" >
+                         <label for="tel2">
+                         <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
+                      </div>
+                   </div>
+                   <div class="col s12">
+                      <div class="input-field col s12 m3">
+                         <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
+                         <label for="zipcode">
+                         <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                      </div>
+                      <div class="input-field col s12 m7">
+                         <input id="addres" type="text" >
+                         <label for="addres">Logradouro </label>
+                      </div>
+                      <div class="input-field col s12 m2">
+                         <input id="number" type="text" >
+                         <label for="number">Número </label>
+                      </div>
+                   </div>
+                   <div class="col s12">
+                      <div class="input-field col s12 m3">
+                         <input id="complement" type="text" >
+                         <label for="complement">Complemento</label>
+                      </div>
+                      <div class="input-field col s12 m5">
+                         <input id="district" type="text" >
+                         <label for="district">Bairro</label>
+                      </div>
+                      <div class="input-field col s12 m2">
+                         <input id="city" type="text" >
+                         <label for="city">Cidade</label>
+                      </div>
+                      <div class="input-field col s12 m2">
+                         <input id="uf" type="text"  maxlength="2">
+                         <label for="uf">UF</label>
+                      </div>
+                   </div>
+                   <div class="input-field col s12 m12">
+                      <div class="input-field col s12">
+                         <input id="obs" type="text" >
+                         <label for="obs">
+                         <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
+                      </div>
+                   </div>
+                   <!--FINANCEIRO-->
+                   <div class="col s12 m12">
+                      <div class="active">
+                         <div class="collapsible-header col s12 m6" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
+                            <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
+                         </div>
+                      </div>
+                   </div>
+                   <div id="financeiro">
+                      <div class="col s12 m12" >
+                         <div class="col s12 m6">
+                            <div class="input-field col s12 m3">
+                               <label>
+                               <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
+                               <span>Valor Padrão:</span>
+                               </label>
+                            </div>
+                            <div class="input-field col s12 m5">
+                               <input readonly="readonly" type="text" id="val_p_fixo" class="checkgroup" style="color:black;">
+                            </div>
+                         </div>
+                      </div>
+                      <div class="col s12 m12">
+                         <div class="col s12 m6">
+                            <div class="input-field col s12 m3">
+                               <label>
+                               <input type="checkbox" id="val_p_check" class="checkgroup2" onclick="porcentagem()">
+                               <span>Porcentagem:</span>
+                               </label>
+                            </div>
+                            <div class="input-field col s12 m5">
+                               <input type="text" id="val_p" class="checkgroup2" onchange="porcentagem()">
+                            </div>
+                         </div>
+                      </div>
+                      <div class="col s12 m12">
+                         <div class="col s12 m6">
+                            <div class="input-field col s12 m3">
+                               <label>
+                               <input type="checkbox" id="val_fixo_check" class="checkgroup3" onclick="fixo()" >
+                               <span>Valor Fixo:</span>
+                               </label>
+                            </div>
+                            <div class="input-field col s12 m5">
+                               <input type="text" id="val_fixo" class="checkgroup3" onchange="fixo()">
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                   <div id="card_atualizar_comercial" style="display:none">
+                     <div class="col m12 s12" style="margin-top: 50px;">
+                        <div class="active">
+                           <div class="collapsible-header col s12 m6" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
+                              <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Atualizar Comercial</labe>
+                           </div>
+                        </div>
+                     </div>
+                     <div id="commercial">
+                        <div class="col s12 m12">
+                           <div class="input-field col s12 m3" style="margin-top: -2px;">
+                              <label for="old_commerce" >Atual:</label>
+                              <div class="select-wrapper" style="margin-top: 38px;"> 
+                                 <input readonly="readonly" style="color:black" id="old_commerce" type="text" >
+                              </div>
+                           </div>
+                           <div class="input-field col s12 m3" style="margin-top: 10px;">
+                              <span>Novo:</span><br><br>
+                              <select id="nome_commerce" class="select2 browser-default">
+                                 <option value="">Selecione:</option>
+                                 {% for k in arr_SearchComercial %}
+                                 <option value="{{ k.id }}"> {{ k.nome }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                   </div>
+               </div>
+             </div>
+          </div>
+          <!--FIM DO CORPO-->
+       </div>
+    </div>
+    <div class="modal-footer">
+       <!--BUTTON-->
+       <div class="col s12" id="modalfooter">
+          <div class="col s12 m12">
+             <a style="display: none; background-color: #e97a1fda;" onclick="Recontato(this)" id="btn_recontato" class="btn btn-timer waves-effect waves-light">Recontato</a>      
+             <a onclick="updateModal(this)" id="btn_atualizar" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>      
+             <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
+          </div>
+       </div>
+    </div>
+

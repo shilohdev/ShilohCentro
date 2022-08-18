@@ -35,9 +35,10 @@ import re
 import shutil
 from django.contrib.auth.models import User
 from numpy import true_divide
+from auth_users.models import HistoryPartners
 from functions.connection.models import Connection
-from functions.general.decorator import Contrato_nao_assinado, convertDate, checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
-from auth_finances.functions.exams.models import saveFileEditionsFinances, FinancesExams, FinancesExamsInt, fetchFileEditionsFinances, fetchFileEditionsFinancesInt, fetchFileInt
+from functions.general.decorator import checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
+from auth_finances.functions.exams.models import FinancesExams, fetchFileEditionsFinances
 from django.conf import settings
 from django.core.files.storage import default_storage
 from auth_permissions.decorator import allowPermission, json_without_success
@@ -916,67 +917,22 @@ def ApiViewDataUserModalFunction(request):
     
 #/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-#SELECT TODOS PARCEIROS
-def searchPartiners(request):
-    tp_category = request.POST.get("tp_category")
-    
-    with connections['auth_permissions'].cursor() as cursor:
-        param = (tp_category,)
-        if tp_category != "":
-            query = "SELECT  a.id, a.nome, b.categoria, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners b ON a.categoria = b.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s WHERE b.id LIKE %s AND a.status like 'Ativo' AND  a.status like 'Inativo' "
-            cursor.execute(query, param)
-            dados = cursor.fetchall()
-            array = []
-
-            for id, nome, categoria, status, unity in dados:
-                newinfoa = ({
-                    "id": id,
-                    "nome": nome,
-                    "categoria": categoria,
-                    "status": status,
-                    "unity": unity,
-                    "btn_status": "#76c076da" if status.upper() == "ATIVO" else "#c74d4d"
-                })
-                array.append(newinfoa)
-            
-            return {
-                "response": True,
-                "message": array
-            }
-        else:
-            query = "SELECT  a.id, a.nome, b.categoria, a.status, us.unit_s FROM auth_users.users a INNER JOIN auth_users.Category_pertners b ON a.categoria = b.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s WHERE b.id"
-            cursor.execute(query)
-            dados = cursor.fetchall()
-            array2 = []
-
-            for id, nome, categoria, status, unity in dados:
-                newinfoa = ({
-                    "id": id,
-                    "nome": nome,
-                    "categoria": categoria,
-                    "status": status,
-                    "unity": unity,
-                    "btn_status": "#76c076da" if status.upper() == "ATIVO" else "#c74d4d"
-
-                    })
-                array2.append(newinfoa)
-                    
-            return {
-                "response": True,
-                "message": array2
-            }
-
-#SELECT TABELA PARCEIROS
+#LISTAR PARCEIROS
 def TabelaPartners(request):
-    with connections['auth_permissions'].cursor() as cursor:
+    if not allowPermission(request, "editPartners"):
+        permissao = False
+    else:
+        permissao = True
+
+    with connections['auth_users'].cursor() as cursor:
         query = "SELECT  a.id, a.nome, a.rn, c.categoria, rc.nome, a.status, us.unit_s, comp.company FROM auth_users.users a INNER JOIN auth_users.Category_pertners c ON a.categoria = c.id INNER JOIN auth_users.users rc ON a.resp_comerce = rc.id INNER JOIN admins.units_shiloh us ON a.unity = us.id_unit_s INNER JOIN  auth_users.company_lab comp ON a.company = comp.id"
         cursor.execute(query)
-        dados = cursor
+        dados = cursor.fetchall()
         array = []
-            
+
         for id, nome, rn, categoria,  resp_comercial, status, unity, company  in dados:
             newinfoa = ({
+                "permissao": permissao,
                 "id": id,
                 "nome": nome,
                 "rn": rn,
@@ -988,7 +944,6 @@ def TabelaPartners(request):
                 "btn_status": "#76c076da" if status.upper() == "ATIVO" else "#c74d4d"
                 })
             array.append(newinfoa)
-
         return array
 
 #TABELA PARCEIROS INDIVIDUAL
@@ -1000,7 +955,7 @@ def TabelaPartnersUnit(request):
         if dados:
             for id_usuario, nome in dados:
                 pass
-        else:#aqui
+        else:
             return {
                 "response": "false",
                 "message": "Login expirado, faça login novamente para continuar."
@@ -1030,14 +985,14 @@ def TabelaPartnersUnit(request):
 
     
 
-
 #MODAL PARCEIROS (INFOS DO MODAL)
 def ApiViewDataPartnersModalFunction(request):
     if not allowPermission(request, "editPartners"):
-        return json_without_success("Você não possui permissão para fazer esse tipo de alteração.")
+        permissao = False
+    else:
+        permissao = True
 
-    dict_response = {} #VARIAVEL VAZIA PARA RECEBER O DICT
-    
+    dict_response = {}
     try:
         id_user = int(request.POST.get('id_user'))
     except:
@@ -1049,10 +1004,10 @@ def ApiViewDataPartnersModalFunction(request):
     db.table = "auth_users.users p INNER JOIN auth_users.users rc ON p.resp_comerce = rc.id INNER JOIN auth_users.company_lab comp ON p.company = comp.id" #VAR COM CONEEXAO TABLE
     db.condition = "WHERE p.id = %s " #VAR COM A CONDDIÇÃO UTILIZADA NO BANCO
     db.params = (id_user,) #VAR COM O PARAM
-    dados = db.fetch(["rc.nome, p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, comp.company "], True)
+    dados = db.fetch(["rc.nome, p.nome, p.email, p.tel1, p.tel2, p.cep, p.rua, p.numero, p.complemento, p.bairro, p.city, p.uf, p.rn, p.obs, p.categoria, p.val_padrao, p.val_porcentagem, p.val_fixo, comp.company, p.status "], True)
 
     if dados:#VARIAVEL DADOS COM TODOS OS PARAMETROS SOLICITADOS PARA OS USUARIOS
-        for comercial, p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo, company in dados:
+        for comercial, p_nome, p_email, p_tel1, p_tel2, p_cep, p_rua, p_numero, p_complemento, p_bairro, p_city, p_uf, p_rn, p_obs, p_categoria, val_padrao, val_porcentagem, val_fixo, company, status in dados:
             try:
                 val_padrao = f"R$ {val_padrao:_.2f}"
                 val_padrao = val_padrao.replace(".", ",").replace("_", ".")
@@ -1096,11 +1051,15 @@ def ApiViewDataPartnersModalFunction(request):
             }, 
             "obs": {
                 "obs": p_obs,
+                "status": status,
             }, 
             "finances": {
                 "val_padrao": val_padrao,
                 "val_porcentagem": val_porcentagem,
                 "val_fixo": val_fixo,
+            }, 
+            "user": {
+                "permissao": permissao,
             }, 
         } #DICTS COM PARAMETROS PARA SEREM PASSADOS PRO JS
 
@@ -4088,3 +4047,26 @@ def FileContractFunction(request):
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
         }
+#----------------------------------------
+
+def HistoricoParceiros(request):
+    id = request.POST.get('id_partners')
+
+    Obj = HistoryPartners
+    retorno = Obj.localizaHistorico(id)
+    if retorno == []: return False
+
+    return {
+        "response": True,
+        "message": retorno
+    }
+    
+
+def RecontatoFunction(request):
+    id = request.POST.get('id_user')
+    print(id)
+    with connections['auth_agenda'].cursor() as cursor:
+        query = "UPDATE `auth_users`.`users` SET `status` = 'Recontato' WHERE `id` = {};".format(id)
+        cursor.execute(query)
+
+        return {"response": True, "message": "Status Atualizado"}

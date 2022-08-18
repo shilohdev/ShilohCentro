@@ -31,17 +31,23 @@ CADASTRAR USUÁRIOS{% endblock %}
                      </div>
                   </div>
                </div>
-               <div class=" col s3 m3 mb-5" style="margin-top: 30px;">
+               <div class=" col s3 m2 mb-5" style="margin-top: 30px;">
                   <label>
                   <input id="shiloh_lab" value="1" class="with-gap" type="radio" name="option"/>
                   <span style="padding-left: 25px;">ShilohLab</span>
                   </label>
                </div>
-               <div class="container col s3 m3" style="margin-top: 30px;">
+               <div class="container col s3 m2 " style="margin-top: 30px;">
                   <label>
                   <input id="lab_movel" value="2" class="with-gap" type="radio" name="option" />
                   <span style="padding-left: 25px;">LabMovel</span>
                   </label>
+               </div>
+               <div class="container col s3 m2 " style="margin-top: 30px;">
+                  <label>
+                     <input id="golshen_lab" value="3" class="with-gap" type="radio" name="option" />
+                     <span style="padding-left: 25px;">Golshen Lab</span>
+                  </label> 
                </div>
             </div>
          </div>
@@ -180,10 +186,12 @@ CADASTRAR USUÁRIOS{% endblock %}
       var uf = $("#uf").val();
       var unit = $("#unit").val();
       var shiloh = $('#shiloh_lab').val();
-      var movel = $('#lab_movel').val();
+      var movel = $('#lab_movel').val(); 
+      var golshen = $('#golshen_lab').val(); 
       
       var shiloh = $("#shiloh_lab").prop("checked")
       var movel = $("#lab_movel").prop("checked")
+      var golshen = $("#golshen_lab").prop("checked")
 
        //VALIDAÇÃO DO EMAIL
        var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/;
@@ -209,11 +217,14 @@ CADASTRAR USUÁRIOS{% endblock %}
 
       shiloh = $("#shiloh_lab").prop("checked")
       movel = $("#lab_movel").prop("checked")
+      golshen = $("#golshen_lab").prop("checked")
 
       if (shiloh){
          empresa = shiloh = $("#shiloh_lab").val()
-      }else{
+      }else if (movel){
          empresa = movel = $("#lab_movel").val()
+      }else{
+         golshen = movel = $("#golshen_lab").val()
       }
 
       var btncadastrar = {

@@ -1,0 +1,628 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Listar Parceiros{% endblock %}
+{% block icon-page %}
+   metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+   Página inicial
+{% endblock %}
+{% block description-page %}CONSULTAR PARCEIROS{% endblock %}
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static '/app-assets/css/pages/form-select2.min.css' %}">
+
+<style type="text/css">
+   .corfont{
+      color: #641108;
+      font-weight: bold;
+   }     
+   .scrollbar-sidebar,
+   .scrollbar-container {
+      position: relative;
+      height: 100%
+   }
+
+   .scroll-area {
+      overflow-x: hidden;
+      height: 400px
+   }
+
+   .scroll-area-xs {
+      height: 150px;
+      overflow-x: hidden
+   }
+
+   .scroll-area-sm {
+      height: 200px;
+      overflow-x: hidden
+   }
+
+   .scroll-area-md {
+      height: 300px;
+      overflow-x: hidden
+   }
+
+   .scroll-area-lg {
+      height: 400px;
+      overflow-x: hidden
+   }
+
+   .scroll-area-x {
+      overflow-x: auto;
+      width: 100%;
+      max-width: 100%
+   }
+
+   .shadow-overflow {
+      position: relative
+   }
+
+   .shadow-overflow::after,
+   .shadow-overflow::before {
+      width: 100%;
+      bottom: auto;
+      top: 0;
+      left: 0;
+      height: 1.5rem;
+      position: absolute;
+      z-index: 10;
+      content: '';
+      background: linear-gradient(to bottom, #fff 20%, rgba(255, 255, 255, 0) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0)
+   }
+
+   .shadow-overflow::after {
+      bottom: 0;
+      top: auto;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 80%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0)
+   }
+
+</style>   
+
+
+<script src="https://demo.dashboardpack.com/architectui-html-pro/assets/scripts/main.d810cf0ae7f39f28f336.js"></script>   
+   
+<!-- INICIO DO MODAL -->
+<div id='modal1' class="col s12 m12" style="overflow-x: auto;">
+   {% include 'partials/_modal_partners' %}
+</div>
+
+<!--FIM DO MODAL--> 
+
+
+
+
+<!-- INICIO DO MODAL 2 -->
+   
+<div id="modalH" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   <div class="modal-content" id="modal3">
+      <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">         
+         <div class="active" style="margin-top: 30px;">
+            <div class="card" >
+               <div class="card-content" style="margin-top: -40px; background-color: #581848;" >
+                  <h5 class="corfont" style="color:white">HISTÓRICO</h5>
+               </div>
+            </div>            
+            <div class="row">
+                <div class="col s12" style="margin-top: 10px;">
+                    <div id="activity" class="col s12 active" style="display: block;">
+                        <div class="activity">
+                            <p class="mt-5 mb-0 ml-5 font-weight-900">Histórico</p>
+                            <ul id="historico" class="widget-timeline mb-0">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!--BUTTON-->
+   <div class="modal-footer">         
+      <div class="col m12 s12 ">
+         <div class="col m10 s12">            
+         </div>
+         <div class="col m2 s12">
+            <a href="#!" class=" btn modal-trigger modal-action modal-close waves-effect" class=" btn modal-action modal-close waves-effect" style= "border-color: #dcdcdc; position: relative; transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s; color: #212529; background-color: #eee; border-color: #eee; font-size: 0.8rem; font-weight: 500;"><span style="font-size: 16px">VOLTAR</span></a>
+         </div>
+      </div>
+   </div>
+</div>
+<!--FIM DO MODAL 2-->
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">      
+   <div class="container">
+      <div class="card"><!-- Externo -->
+         <div id="userint" class="row" >
+            <div class="col m12 s12"  style="margin-top: 30px; margin-bottom: 30px;">
+               <div class="input-field col m4 s12">
+                  <input id="busc" type="text" onkeyup="searchPatients(this)">
+                  <label for="busc">
+                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+               </div>
+               <div class="input-field col m2 s12" >
+                  <div class="select-wrapper">
+                     <select name="select" id="Search_status" class="error " required="">
+                        <option value="">Status</option>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Recontato">Recontato</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="input-field col m2 s12">
+                  <button onclick="PesquisarFilter()" id="btn_pesquisar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px">
+                  <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
+                  </button>
+               </div>
+               <!-- COMEÇO DA TABLE -->            
+               <div class="col s12 scroll">
+                  <table id="page-length-option" class="bordered" style="margin-top: 20px; overflow-x: auto">
+                     <thead style="background-color: #581848; color: white; font-size: 15px" >
+                        <tr>
+                           <th data-field="id" >Nome do Usuário</th>
+                           <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
+                           <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
+                           <th data-field="id" style="text-align: center; width: 130px;">Unidade</th>
+                           <th data-field="id" style="text-align: center; width: 130px;">Status</th>
+                           <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+                        </tr>
+                           </thead>
+                  <tbody id="tb_append">
+                     {% for k in arr_SearchPartiners %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
+                        <tr id="tr_{{ k.id }}">
+                           <td>{{ k.nome }} [{{ k.rn }}]</td>
+                           <td style="text-align: center;">{{ k.categoria }}</td>
+                           <td style="text-align: center;">{{ k.resp_comercial }}</td>
+                           <td style="text-align: center;">{{ k.unity }}</td>
+                           <td style="text-align: center;">{{ k.status }}</td>
+                           <td style="text-align: center;">
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
+                                    <i class="material-icons right">edit</i>
+                                 </button>
+                              </a>
+                              <a href="#modalH" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoryModal(this)"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
+                                    <i class="material-icons right">remove_red_eye</i>
+                                 </button>
+                              </a>
+                           </td>
+                        </tr>
+                   {% endfor %} <!-- FIM DO ARRAY -->
+                  </tbody>
+                  </table>
+               </div><!-- FIM DA TABLE -->
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{% for k in arr_SearchPartiners %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+<script type = "text/javascript">
+// SCRIPT MODAL //
+   
+   function padrao() {
+      var checkbox_padrao = $("#val_p_fixo").val();
+      if($("#val_p_fixo_check").is(":checked")) {
+         $("#val_p, #val_fixo").attr("disabled", true)
+         $("#val_p_check, #val_fixo_check").attr('disabled', true);
+         $("#val_p_fixo").val("R$ 400,00");
+
+      }else{
+         $("#val_p, #val_fixo").attr("disabled", false)
+         $("#val_p_check, #val_fixo_check").attr('disabled', false);
+         $("#val_p, #val_fixo,  #val_p_fixo").val("");
+      }
+   }
+
+   function porcentagem() {
+      var checkbox_porcentagem = $("#val_p").val();
+      if($("#val_p_check").is(":checked")) {
+         $("#val_fixo").attr("disabled", true)
+         $("#val_p_fixo_check, #val_fixo_check").attr('disabled', true);
+      }else{
+         $("#val_fixo").attr("disabled", false)
+         $("#val_p_fixo_check, #val_fixo_check").attr('disabled', false);
+         $("#val_p, #val_fixo").val("");
+      }
+   }
+
+  function fixo() {
+      var checkbox_fixo = $("#val_fixo").val();
+         if($("#val_fixo_check").is(":checked")) {
+            $("#val_p ").attr('disabled', true);
+            $("#val_p_fixo_check, #val_p_check").attr("disabled", true)
+         }else{
+            $("#val_p ").attr('disabled', false);
+            $("#val_p_fixo_check, #val_p_check").attr("disabled", false)
+            $("#val_p, #val_fixo").val("");
+         }
+   }
+
+   function SelectShow() {
+      var show = document.getElementById("categoria").value;
+      $("#btn_atualizar").attr("disabled", true);
+
+      if (show == '') {
+         alert("Por favor, preencha um tipo de Categoria")
+      } else {
+         $("#btn_atualizar").attr("disabled", false);
+      }
+   };
+
+      $("#tel1").mask("(99) 99999-9999");
+      $("#tel2").mask("(99) 99999-9999");
+      $("#zipcode").mask("99999-999");
+            
+   // CEP //
+
+   function pesquisacep(valor) {
+      var cep = valor.replace(/\D/g, '');
+         if (cep != "") {
+         var validacep = /^[0-9]{8}$/;
+         if(validacep.test(cep)) {
+         var end_addres = $("#addres").val("...");
+         var end_district = $("#district").val("...");
+         var end_city = $("#city").val("...");
+         var end_state = $("#uf").val("...");
+         var script = document.createElement('script');
+                  
+         script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=bsccep';
+         document.body.appendChild(script);
+         }else{
+            limocamp();
+            alert("Formato de CEP inválido.");
+         }
+         }else{
+            limocamp();
+         }
+   };
+                  
+   function bsccep(val) {
+         if (!("erro" in val)) {
+         var end_addres = $("#addres").val(val.logradouro);
+         var end_district = $("#district").val(val.bairro);
+         var end_city = $("#city").val(val.localidade);
+         var end_state = $("#uf").val(val.uf);
+         }else{
+            limocamp();
+            alert("CEP não encontrado no CORREIOS. Entre no site: https://www.correios.com.br/ e pesquise um cep válido.");
+         }
+   };
+                  
+   function limocamp() {
+      var end_zipcode = $("#zipcode").val("");
+      var end_addres = $("#addres").val("");
+      var end_number = $("#number").val("");
+      var end_district = $("#district").val("");
+      var end_city = $("#city").val("");
+      var end_state = $("#uf").val("");
+   };
+   
+//FIM SCRIPT MODAL //
+
+
+
+// SCRIPT PAGE //
+      $(document).ready(function() {
+      $('.modal').modal();
+      $('.modal').css({
+         "width":"80%",
+      });
+   });
+
+   function PesquisarFilter() {
+
+      var Search_status = $("#Search_status").val();
+      
+         var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "Search_status": Search_status,   
+         };    
+         fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function(re) {
+            dados = re["message"]
+            if(dados != ""){
+            var exibir= $("#tb_append").html("");
+               for (k in dados) {
+                  var key = dados[k];
+                  var append = '<tr id="tr_'+key["id"]+'"> <td> '+key["nome"]+' ['+key["rn"]+'] </td> <td style="text-align: center;"> '+ key["categoria"] +' </td> <td style="text-align: center;"> '+key["resp_comercial"]+' </td> <td style="text-align: center;"> '+ key["unity"] +' </td> <td style="text-align: center;"> '+ key["status"] +' </td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" > <button onclick=\"viewUserModal(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"> <i class="material-icons right">edit</i> </button></a> <a href="#modalH" class="modal-trigger" ><button data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;" onclick=\"viewHistoryModal(this)\"><i class="material-icons right">remove_red_eye</i> </button></a> </td> </tr>'
+                  $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
+                
+               }
+            } else { // SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
+               var appende = $("#tb_append").html("");
+               var appende = '<td colspan="6" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+               $("#tb_append").append(appende); 
+            }
+         });
+      
+   };
+
+   function viewHistoryModal(object) { //FUNCTION DO ONCLICK
+      // MODAL FINANCEIRO
+      var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+      
+      var formpost = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+         "id_user": id_user //DICT COM O VALOR DO ID
+      };
+
+      $("#modal3").hide();
+      $(object).prop("disabled", true);
+      fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function(re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+         $(object).prop("disabled", false);
+         if (re["response"] == false) {
+            alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         } else { //SE FOR VERDADDEIRA, PROSSEGUE
+            $("#modal3").show();
+            var ap = "";
+            var historyResponse = re["message"];
+            $.map(historyResponse, function(n, i) {
+                  ap += `
+                  <li class="timeline-items timeline-icon-green active">
+                     <div id="data_f" class="timeline-time">${n.data_operacao}</div>
+                     <h6 id="name_u" class="timeline-title">${n.tp_operacao}</h6>
+                     <p id="action_f" class="timeline-text">${n.descricao}</p>
+                  </li>
+               `;
+            });
+            $("#historico").html(ap);
+
+         }
+
+      });
+
+   }
+  
+   function viewUserModal(object){//FUNCTION DO ONCLICK
+      var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+         $("#btn_atualizar").data("id_user", id_user);
+         
+         
+         // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+      var formpost = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+         "id_user": id_user //DICT COM O VALOR DO ID
+      };
+
+
+         $("#modal2").hide();
+         $(object).prop("disabled", true);
+         
+         
+      fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+        
+        
+         if(re["response"] == false){ 
+            alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         }else{ //SE FOR VERDADDEIRA, PROSSEGUE
+            $("#modal2").show();
+            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+            var dictKeys = {
+               "name": key["personal"]["name"],
+               "rn": key["personal"]["rn"],
+               "categoria": key["personal"]["categoria"],
+
+               "email": key["contacts"]["email"],
+               "tel1": key["contacts"]["phone"],
+               "tel2": key["contacts"]["phone_aux"],
+
+               "zipcode": key["address"]["zipcode"],
+               "addres": key["address"]["street"],
+               "number": key["address"]["street_number"],
+               "complement": key["address"]["complement"],
+               "district": key["address"]["district"],
+               "city": key["address"]["city"],
+               "uf": key["address"]["state"],
+
+               "obs": key["obs"]["obs"],
+
+               "val_p_fixo": key["finances"]["val_padrao"],
+               "val_p": key["finances"]["val_porcentagem"],
+               "val_fixo": key["finances"]["val_fixo"],
+
+               "old_commerce": key["commerce"]["old_commerce"],
+               //aqui faz o .map
+            }
+            
+            $.map(dictKeys, function(n, i){ // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+               $(`#${i}`).val(n);
+               var findLabel = $(`#${i}`).closest("div");
+               $(findLabel).find("label").attr("class", "active");
+               if(i == "categoria"){ // colocar o nome da categoria id 
+                  var valueObject = $("#categoria option:selected").text();
+                  $("input[class='select-dropdown dropdown-trigger']").val(valueObject);
+                  $('li[class="selected"]').attr("class", "");
+                  var findObject = $(`span:contains(${valueObject})`).closest("li");
+                  $(findObject).attr("class", "selected");
+               }
+            });
+            $("#btn_atualizar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
+            var val_p_fixo = $("#val_p_fixo").val();
+            var checkbox_porcentagem = $("#val_p").val();
+            var checkbox_fixo = $("#val_fixo").val();
+
+            if (val_p_fixo != "") {
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_p_fixo_check').prop('checked', true); // coloca o input checado
+               $("#val_p_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+
+            } else if (checkbox_porcentagem != "") {
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_p_check').prop('checked', true); // coloca o input checado
+               $("#val_p_fixo_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+
+            } else if (checkbox_fixo != "") {
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $('input').filter('#val_fixo_check').prop('checked', true); // coloca o input checado
+               $("#val_p_fixo_check, #val_p_check").attr("disabled", true) //desabilita o campo
+
+            } else {
+               $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
+               $("#val_p_fixo_check, #val_p_check, #val_fixo_check").attr("disabled", false) //desabilita o campo
+
+            }
+            $("#btn_atualizar").data("id_user", id_user);
+            $("#btn_recontato").data("id_user", id_user);
+
+            try {
+               var perfil = re["perfil"];
+               console.log(perfil);
+               var status = re["status"];
+               console.log(status);
+               if (perfil != "1" && status == "Inativo") {
+                  $("#btn_re").show();
+                  $("#card_commercial").hide();
+                  $("#btn_actualize").hide();
+               } else {
+                  $("#btn_re").hide();
+                  $("#card_commercial").show();
+                  $("#btn_actualize").show();t
+               }
+            }catch {
+               $("#btn_re").hide();
+               $("#card_commercial").show();
+               $("#btn_actualize").show();
+
+            }
+            
+         };
+      });         
+      
+   };
+
+   function changeStatusUser(object){
+      var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+      var formpost = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+         "id_user": id_user, //DICT COM O VALOR DO ID
+         };
+      fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
+         if(re["response"] == false){ 
+            alert("Nenhum dado encontrado.");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         }else{ //SE FOR VERDADDEIRA, PROSSEGUE
+            var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+            $(`#tr_${id_user} > td`).eq(2).text(key["status"]);
+            $(`#btn_status_${id_user}`).css("background-color", key["btn_status"]
+            )
+         }
+      });
+   };
+
+
+   function changeUserModal(object){
+      $("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+      $("#btn_start").data("id_user", id_user);
+  
+
+      var val_p_fixo = $("#val_p_fixo").val();
+      var checkbox_porcentagem = $("#val_p").val();
+      var checkbox_fixo = $("#val_fixo").val();
+      var NewComerce = $("#nome_commerce").val();
+      var oldCommerce = $("#old_commerce").val();
+
+      if(NewComerce == ""){
+         NewComerce = oldCommerce
+      }else{
+         NewComerce = NewComerce
+      }
+
+
+      if(val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo == ""){
+         alert("Por favor, insira um valor válido ao Financeiro.")
+         return false
+      }else{
+
+         var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+         var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user, //DICT COM O VALOR DO ID
+            "resp_commerce": NewComerce, //DICT COM O VALOR DO ID
+            "padrao": val_p_fixo, //DICT COM O VALOR DO ID
+            "porcentagem": checkbox_porcentagem, //DICT COM O VALOR DO ID
+            "fixo": checkbox_fixo, //DICT COM O VALOR DO ID
+         };
+
+         $("#input, #modalint select").each(function () {
+            formpost[$(this).attr("id")] = $(this).val();
+         });
+      
+         fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+            if (re["response"] == false) {
+               alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+               $("#btn_atualizar").attr("disabled", false);
+
+            } else { //SE FOR VERDADDEIRA, PROSSEGUE
+               $("#btn_atualizar").attr("disabled", true);
+               alert(re["message"]);
+               location.reload();
+
+            }
+         });
+      }
+   };
+
+   function changePartnersModal(object){
+      $("#btn_recontato").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+
+         var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+         var name = $("#name").val();
+         var formpost = {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id_user": id_user, //DICT COM O VALOR DO ID    
+            "name": name,       
+         };
+      
+         fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+            if (re["response"] == false) {
+               alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+               $("#btn_recontato").attr("disabled", false);
+
+            } else { //SE FOR VERDADDEIRA, PROSSEGUE
+               $("#btn_recontato").attr("disabled", true);
+               alert(re["message"]);
+               location.reload();
+
+            }
+         });
+      
+   };
+
+   function searchPatients(object){
+      var e = $(object).val().toUpperCase();
+      if(e == ""){
+         $('#tb_append > tr').each(function() {
+               $(this).show();
+         });
+      } else {
+         $('#tb_append > tr').each(function() {
+            var trs = $(this).find("td");
+            var tr1 = $(trs[0]).text().toUpperCase();
+               var check = (tr1.indexOf(e) != -1);
+               if(check == true){
+                  $(this).show();
+               } else {
+                  $(this).hide();
+               }
+         });
+      }
+   }
+
+   $("#nome_commerce").change(function(){
+      var object = $("#nome_commerce option:selected");
+   });
+   $(".select2").select2({
+      dropdownParent: $('#modal1'),
+      dropdownAutoWidth: true,
+      width: '100%',
+   });  
+</script>
+{% endfor %}
+{% endblock %}

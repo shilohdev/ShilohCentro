@@ -81,13 +81,13 @@ urlpatterns = [
     
     #LISTAR PARCEIROS
     path('listar/parceiros/', views.listPartnesViews, name='listPartnes'),
-  
     #API LISTAR PARCEIROS 
-    path('api/listar/parceiros/', views.ApiListPartnesViews, name='ApiListPartnes'),
     path('api/modal/parceiros/', views.ApiViewDataPartnersModal, name='ApiViewDataPartnersModal'),
+    path('api/historico/parceiros', views.ApiHistoryPartnersViews, name='ApiHistoryPartners'),
+    path('api/recontato/parceiros', views.Recontato_Partners, name='Recontato_Partners'),
     path('api/modal/parceiros/int', views.ApiViewDataPartnersModalint, name='ApiViewDataPartnersModalint'), #Meeus parceiros
 
-
+ 
  
     #LISTAR PACIENTES
     path('listar/pacientes/', views.listIndicationViews, name='listIndication'),

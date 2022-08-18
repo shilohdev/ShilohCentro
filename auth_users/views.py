@@ -19,22 +19,20 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from datetime import datetime 
 from django.db.models import Q
-
 from requests import request
-from auth_users.decorator import FileContractFunction, ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_users.decorator import RecontatoFunction, FileContractFunction, ContractCollectionFunction, HistoricoParceiros, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
 from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthSolicitation, pesqMesInternoFinalizados, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
 from .models import Users
 from functions.general.decorator import BodyDecode
-from auth_permissions.decorator import CreatePermissionAll, allowPermission
-
+from auth_permissions.decorator import CreatePermissionAll
 import base64
 import json
 import time
 from re import A
-
 from functions.module_clicksign.decorator import ModuleSendClickSignFunction
- 
+
+
 
 def FotoProfile(request):
     ViewFoto = FilePhotoViewFunction(request)
@@ -315,7 +313,7 @@ def listPartnesViews(request):
     searchUnity = searchUnit(request)
     SearchComercial = searchComercialFunction(request)
     ViewFoto = FilePhotoViewFunction(request)
-
+    
     return render(request, 'manage/listers/partners/listPartners.html', 
     {
         "arr_SearchCategoria": SsearchCategoria, 
@@ -324,14 +322,7 @@ def listPartnesViews(request):
         "arr_SearchComercial": SearchComercial,
         "arr_ViewFoto": ViewFoto,
     })
-
-
-#API LISTAR PARCEIROS
-@ensure_csrf_cookie
-@login_required
-def ApiListPartnesViews(request):
-    array = searchPartiners(request)
-    return JsonResponse(array, safe=False, status=200)
+ 
 
 
 #MODAL PARCEIROS ADM 
@@ -1325,3 +1316,12 @@ def FileContract(request):
     return JsonResponse(array, safe=False, status=200)
 
 
+
+def ApiHistoryPartnersViews(request):
+    array = HistoricoParceiros(request)
+    return JsonResponse(array, safe=False, status=200)
+
+
+def Recontato_Partners(request):
+    array = RecontatoFunction(request)
+    return JsonResponse(array, safe=False, status=200)
