@@ -1,6 +1,7 @@
 from django.db import connections
 from django.db import models
 from functions.connection.db import DBusers
+from functions.general.decorator import convertDate
 
 
 
@@ -44,6 +45,6 @@ class HistoryPartners:
                 "id_parceiro": id_parceiro,
                 "acao": tp_operacao,
                 "descricao": descricao,
-                "data": data_registro
+                "data": convertDate(data_registro)
             } for id, nome, id_parceiro, tp_operacao, descricao, data_registro in dados]
             

@@ -91,7 +91,6 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', en
 <div id="modalhistorico" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    {% include '../partners/partials/_modal_historico.html' %} 
 </div>
-   
 
 
 <div class="breadcrumbs-dark pb-0">
@@ -158,7 +157,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', en
                            {% endif %}
                         </td>
                      </tr>
-                     {% endfor %} <!-- FIM DO ARRAY -->
+                     {% endfor %}
                   </tbody>
                </table>
             </div>
@@ -542,28 +541,32 @@ function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_partners": id_partners //DICT COM O VALOR DO ID
    }; 
+   
+   $("#modalhistorico2").hide();
+   $(object).attr("display", 'none');
 
    fetchRequest("{% url 'ApiHistoryPartners' %}", "POST", "JSON", formpost, function(re) {
+      $("#modalhistorico2").show();
       if(re["response"] == true){
-         $("#modal3").show();
          var dados = re["message"];
          var historico_append = "";
    
             $.map(dados, function(n, i){
                historico_append += `
-               <li class="timeline-items timeline-icon-green active">
-                  <div class="timeline-time">${n.data}</div>
-                  <h6 class="timeline-title">${n.acao}</h6>
-                  <p class="timeline-text">${n.descricao}</p>
+               <li class="timeline-items timeline-icon-green active ">
+                  <div id="data_f" class="timeline-time">${n.data}</div>
+                  <h4 id="name_u" class="timeline-title">${n.acao}</h4>
+                  <p id="action_f" class="timeline-text">${n.descricao}</p>
                </li>
             `;
-         });
+         }); 
             $("#historico_app").html(historico_append);
       } else {
+         var appende = "";
          var appende = ` 
-            <li class="timeline-items timeline-icon-green active ">
-               <div id="data_f" class="timeline-time">18/04/2022 11:28:04</div>
-               <h5 id="name_u" class="timeline-title">Nenhum registro encontrado.</h5>
+            <li class="timeline-items timeline-icon-red active ">
+               <div id="data_f" class="timeline-time"></div>
+               <h4 id="name_u" class="timeline-title">Nenhum registro encontrado.</h4>
                <p id="action_f" class="timeline-text">Informação do sistema.</p>
             </li>
          `
@@ -576,7 +579,6 @@ function Recontato(i){
    $("#btn_recontato").attr("disabled", true);
 
    var id_user = $(i).data("id_user");
-   
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
@@ -587,17 +589,13 @@ function Recontato(i){
          alert("atualizou")
          $("#btn_atualizar").show();
          $("#btn_recontato").hide();
-
       }else{
          $("#btn_recontato").attr("disabled", false);
          alert(re["message"])
          $("#btn_atualizar").hide();
          $("#btn_recontato").show();
-
       }
-
    });
-
 }
 
 

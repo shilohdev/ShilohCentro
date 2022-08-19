@@ -1,0 +1,248 @@
+{% load static %}
+<div class="modal-content" id="modalpendente_card">
+    <div class="container ">
+        <ul class="collapsible expandable ">
+            <li class="active">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">DADOS DO AGENDAMENTO</labe>
+                </div>
+                <div id="card_ag" class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="date_age" type="date">
+                            <label for="date_age">Data Agendamento</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="hr_age" type="text" placeholder="00:00">
+                            <label for="hr_age">
+                                <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="tp_service" type="tel" />
+                            <label for="tp_service" class="active">
+                                <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo de Serviço
+                            </label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="tp_exame" type="tel">
+                            <label for="tp_exame" class="active">
+                                <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Tipo do Exame </label>
+                        </div>
+                    </div>
+                    <div class="input-field col s12">
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="tp_conv" type="tel">
+                            <label for="tp_conv" class="active">
+                                <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Convênio </label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="nurse" type="tel">
+                            <label for="nurse" class="active">
+                                <i class="material-icons" style="font-size: 15px">phone</i>Enfermeiro </label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <!--CARD 2-->
+            <li class="active" style="margin-top: 30px;">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">PACIENTE</labe>
+                </div>
+                <div id="userint" class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s6">
+                            <input readonly="readonly" id="namePaciente" type="tel" style="color: black;">
+                            <label for="namePaciente" class="active">
+                                <i class="material-icons" style="font-size: 15px">phone</i>Nome do Paciente </label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="tel1" type="tel">
+                            <label for="tel1">
+                                <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="perfil" type="text">
+                            <label for="perfil">
+                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Comercial </label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="unity" type="text">
+                            <label for="unity">
+                                <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Unidade </label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="active" style="margin-top: 30px;">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #76c076da; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                </div> 
+                <div class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s12">
+                            <input readonly="readonly" style="color: black;" id="obs" type="text">
+                            <label for="obs">
+                                <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col s11 mt-2 ml-4">
+            <button id="btn_start" onclick="ShowFinance(this)" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px; background-color: #581848;">
+                <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Iniciar</spanpx>
+            </button>
+        </div>
+    </div>
+    <div class="container" id="card_finance" style="display: none;">
+        <ul class="collapsible expandable ">
+            <li class="active" id="cardFinance">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">FINANCEIRO</labe>
+                </div>
+                <div class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="date_first" type="text" data-required='true'>
+                            <label for="date_first">Inicio do Processo</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input readonly="readonly" style="color: black;" id="date_end" type="text">
+                            <label for="date_end">Fim do processo</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <div class="select-wrapper">
+                                <select class="error" name="select" id="statusProgresso" required="true" data-required='true'>
+                                    <option value="">Status do Processo</option>
+                                    {% for k in arr_SearchStratusProgress %}
+                                    <option value="{{ k.id }}">{{ k.status }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s3">
+                            <input id="cust_alv" type="tel" placeholder="R$" data-required='true'>
+                            <label for="cust_alv">
+                                <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Custo Alvaro</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="val_w_lab" type="tel" placeholder="R$" onkeyup="CalVal(this);" onblur="CalVal(this)" data-required='true'>
+                            <label for="val_w_lab">
+                                <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor WorkLab</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="val_pago" type="tel" placeholder="R$" onkeyup="CalVal(this)" onblur="CalVal(this)" data-required='true'>
+                            <label for="val_pago">
+                                <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Valor Pago</label>
+                        </div>
+                        <div class="input-field col s2">
+                            <input readonly="readonly" style="color: black; border-bottom: none;text-align: left; font-size: 20px;" id="porcentagem" type="text">
+                            <label id="labelporcentagem" for="porcentagem" class="active">
+                                <i class="material-icons" style="font-size: 15px">attach_money</i>&nbsp;Porcentagem paga:
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <input style="color: black;" id="date_repass" type="date" data-required='true'>
+                            <label for="date_repass">Data repasse</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="n_nf" type="text" data-required='true'>
+                            <label for="n_nf">
+                                <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Nº Nota Fiscal</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="active" style="margin-top: 30px;">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">ANEXOS</labe>
+                </div>
+                <div class="row" id="div_files">
+                    <div class="col s12">
+                        <div class="col s4 mt-2 ml-3">
+                            <input id="doc_anx" type="file">
+                        </div>
+                        <div class="input-field col s3">
+                            <div class="select-wrapper">
+                                <select name="select" id="tp_anx" class="error" required="true" data-show="search">
+                                    <option value="">Tipo do Anexo</option>
+                                    {% for k in arr_SearchTypeAnexo%}
+                                    <option value="{{ k.id }}">{{ k.tipo_anexo }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s11 ml-4">
+                        <table class="bordered" style="margin-top: 20px;">
+                            <thead style="background-color: #581848; color: white; font-size: 15px">
+                                <tr>
+                                    <th data-field="id"> Arquivos Anexados</th>
+                                    <th data-field="id"> Data e hora</th>
+                                    <th data-field="id"> Tipo</th>
+                                    <th data-field="name" style="width: 120px;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb_append">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </li>
+            <li class="active" style="margin-top: 40px;">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">OBSERVAÇÕES</labe>
+                </div>
+                <div class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div class="input-field col s12">
+                            <input id="obsF" type="text">
+                            <label for="obsF">
+                                <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="active" style="margin-top: 30px;">
+                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
+                    <labe style="margin-top: 0.5em; font-size: 20px; font-weight: bold;">HISTÓRICO</labe>
+                </div>
+                <div class="row">
+                    <div class="col s12" style="margin-top: 10px;">
+                        <div id="activity" class="col s12 active" style="display: block;">
+                            <div class="activity">
+                                <p class="mt-5 mb-0 ml-5 font-weight-900">Histórico</p>
+                                <ul id="historico" class="widget-timeline mb-0">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <div class="col s11 mt-2 ml-4">
+                <button id="btn_end" data-id_user="" onclick="FinalizeProcess(this)" class="waves-effect waves dark btn next-step mb-4" type="submit" style="width: 100%; margin-top: 10px; background-color: #76c076da;">
+                    <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Finalizar</spanpx>
+                </button>
+            </div>
+        </ul>
+    </div>
+</div>
+<div class="modal-footer">
+ <!--BUTTON-->
+    <div class="col s12 m12">
+        <a  stryle="display: none" onclick="changeUserModal(this)" id="btn_salvar" data-target="#CompanyProfile" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>      
+        <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
+    </div>
+ </div>

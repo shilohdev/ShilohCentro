@@ -37,7 +37,7 @@ from django.contrib.auth.models import User
 from numpy import true_divide
 from auth_users.models import HistoryPartners
 from functions.connection.models import Connection
-from functions.general.decorator import checkDayMonth, fetchQueryUnity, fetchQueryUnityFinance
+from functions.general.decorator import checkDayMonth, convertDate, fetchQueryUnity, fetchQueryUnityFinance
 from auth_finances.functions.exams.models import FinancesExams, fetchFileEditionsFinances
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -179,6 +179,7 @@ def CadastrePartners(request):
     porcentagem = request.POST.get("porcentagem")
     fixo = request.POST.get("fixo")
     empresa = request.POST.get("empresa")
+    date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     name = str(name).title()
 
@@ -258,6 +259,9 @@ def CadastrePartners(request):
                 )
                 query = "INSERT INTO `auth_permissions`.`auth_permissions_allow` (`id_permission`, `id_user`, `nome_user`) VALUES (%s, %s, '')"
                 cursor.execute(query, params)
+                
+                query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, %s, 'Cadastro de Parceria', 'Parceiro ativado', %s);"
+                cursor.execute(query, (id_user, id_usuario,  date_create,)) #primeiro parametro é o parceiro, segundo paremetro é o usuario logado
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -280,7 +284,7 @@ def CadastreIndication(request):
         params = (
             user_resp,
         )
-        searchID = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
+        searchID = "SELECT id, nome, unity, perfil FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, params)
         dados = cursor.fetchall()
         if not dados:
@@ -289,7 +293,7 @@ def CadastreIndication(request):
                 "message": "Não foi possivel cadastrar esta indicação, recarregue a página."
             }
 
-        for id_usuario, nomeUser, unity in dados:
+        for id_usuario, nomeUser, unity, perfil in dados:
             cpf = formatcpfcnpj(cpf)
             tel1 = formatTEL(tel1)
             tel2 = formatTEL(tel2)
@@ -305,6 +309,10 @@ def CadastreIndication(request):
             for id_lead, nome, tel in dados:
                 queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', NULL, 'Indicação Realizada', 'Indicado dia: ' %s, %s, %s, %s);"
                 cursor.execute(queryRegis, (data_atual, date_create, nomeUser, id_lead, ))
+            
+            if perfil == '7':
+                query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, 'Indicação Cadastrada', 'Registro realizado dia:', %s);"
+                cursor.execute(query, (id_usuario, id_usuario, date_create,))
 
     return {"response": "true", "message": "Cadastrado com sucesso!"}
 
@@ -1488,6 +1496,10 @@ def ApiCadastrePatienteFunction(request):
             queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
             cursor.execute(queryRegis, (id_p, data_atual, date_create, nomeUser, ))
 
+
+        query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, 'Indicação Cadastrada', 'Registro realizado dia:', %s);"
+        cursor.execute(query, (medico_resp, id_usuario, date_create,))
+
         return {"response": "true", "message": "Cadastrado com sucesso!"}
 
 
@@ -2201,7 +2213,6 @@ def FunctionSearchTypeAnexo(request):
 
 #INICIO DO PROCESSO REEMBOLSO
 def FunctionStartProcess(request):
-    
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     date_create_ptbr = str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
     idq = request.POST.get("id_user")
@@ -4063,10 +4074,25 @@ def HistoricoParceiros(request):
     
 
 def RecontatoFunction(request):
-    id = request.POST.get('id_user')
-    print(id)
-    with connections['auth_agenda'].cursor() as cursor:
-        query = "UPDATE `auth_users`.`users` SET `status` = 'Recontato' WHERE `id` = {};".format(id)
-        cursor.execute(query)
+    id_partnerss = request.POST.get('id_user')
+    date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
+    with connections['auth_agenda'].cursor() as cursor:
+
+        searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        if not dados:
+            return {
+                "response": False,
+                "message": "Login expirado, faça login novamente para continuar."}
+        else:
+            for id_user, nome in dados:
+
+                query = "UPDATE `auth_users`.`users` SET `status` = 'Recontato', `resp_comerce` = {} WHERE `id` = {};".format(id_user, id_partnerss)
+                cursor.execute(query)
+
+                query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, %s, 'Parceiro em recontato', 'Nova tratativa de ativação, prazo de 7 dias.', %s);"
+                cursor.execute(query, (id_partnerss, id_user, date_create,))
+                
         return {"response": True, "message": "Status Atualizado"}

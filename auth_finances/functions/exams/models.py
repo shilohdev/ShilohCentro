@@ -194,11 +194,11 @@ def fetchHistoryModalFinances(id):
 
 #MODAL SOLICITAÇÃO DE REEMBOLSO
 def FunctionModalFinances(request):
-    id = request.POST.get('id_user')
+    id= request.POST.get('id_user')
 
     files = fetchFileEditionsFinances(id)
     history = fetchHistoryModalFinances(id)
-    filesInt = fetchFileEditionsFinancesInt(id)
+    filesInt = fetchFileEditionsFinancesInt(id) #interno
 
     dict_response = {}
     with connections['auth_finances'].cursor() as cursor:
@@ -248,7 +248,7 @@ def FunctionModalFinances(request):
                         "val_work": ef_val_work_f,# valor worklab
                         "val_pago": ef_val_pag_f,# valor pago
                         "por_paga": ef_porcentagem_paga_f,# porcentagem paga
-                        "date_repass": ef_data_repasse,# nota fiscal
+                        "data_repasse": convertDate(ef_data_repasse),# nota fiscal
                         "nf": ef_nf_f,# nota fiscal
                         "date_end": convertDate(ef_data_final_f) ,# data final do processo
                         "data_regis": ef_data_registro_f,# data registro
@@ -272,7 +272,7 @@ def FunctionModalFinances(request):
                         "val_work": dados.val_work_f,# valor worklab
                         "val_pago": dados.val_pag_f,# valor pago
                         "por_paga": dados.porcentagem_paga_f,# porcentagem paga
-                        "date_repass": dados.data_repasse,# data do reembolso
+                        "data_repasse": dados.data_repasse,# data do reembolso
                         "nf": dados.nf_f,# nota fiscal
                         "date_end": dados.data_final_f,# data final do processo
                         "data_regis": dados.data_registro_f,# data registro
@@ -291,10 +291,10 @@ def FunctionModalFinances(request):
 
  
 #GET FILE >> ADICIONAR DIRETORIO
-def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
+def saveFileEditionsFinances(id_agendamento, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     with connections['auth_users'].cursor() as cursor:
         params = (
-            id,
+            id_agendamento,
         )
         query = "SELECT id, nome_p, identification FROM auth_agenda.collection_schedule WHERE id LIKE %s;"
         cursor.execute(query, params)
@@ -302,8 +302,8 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
         if dados:
             for idColeta, id_paciente, identificacao in dados:
                 if identificacao == "Externo":
-                    PATH = settings.BASE_DIR_DOCS + "/patients/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-                    PATH_USER = PATH.format(id_paciente) # ADICIONANDO ID NO {} DE CIMA /\
+                    PATH = settings.BASE_DIR_DOCS + "/patients/process/{}/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+                    PATH_USER = PATH.format(id_paciente, idColeta) # ADICIONANDO ID NO {} DE CIMA /\
                     PATH_TYPES = PATH_USER + "/" + etype + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
                     arr_dir = []
                     for name, file in FILES.items():
@@ -313,8 +313,8 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
                             "path": PATH_TYPES + file.name
                         })
                 else: 
-                    PATH = settings.BASE_DIR_DOCS + "/user/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-                    PATH_USER = PATH.format(id_paciente) # ADICIONANDO ID NO {} DE CIMA /\
+                    PATH = settings.BASE_DIR_DOCS + "/user/process/{}/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+                    PATH_USER = PATH.format(id_paciente, idColeta) # ADICIONANDO ID NO {} DE CIMA /\
                     PATH_TYPES = PATH_USER + "/" + etype + "/" 
                     arr_dir = []
 
@@ -324,67 +324,74 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
                             "name": file.name,
                             "path": PATH_TYPES + file.name
                         })
-
         return True
 
 
-#GER FILE
-def fetchFileEditionsFinances(id):
+#GER FILE >> visualiza no modal
+def fetchFileEditionsFinances(id_agendamento): #esta vindo o id da coleta
+    with connections['auth_finances'].cursor() as cursor:
 
-    arr_files = []
+        query = "SELECT id, nome_p, identification FROM auth_agenda.collection_schedule WHERE id LIKE %s;"
+        cursor.execute(query, (id_agendamento,))
+        dados = cursor.fetchall()
+        if dados: 
+            for idColeta, id_paciente, identification in dados:
+                pass
 
-    ORIGIN_PATH = f"/patients/process/{id}"
-    PATH = settings.BASE_DIR_DOCS + f"/patients/process/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-    EXISTS = default_storage.exists(PATH)
-    if EXISTS:
-        FILES = default_storage.listdir(PATH)
-        FILES = list(FILES)[0]
-        for keys in FILES:
-            n = (str(((str(keys).replace("[", "")).replace("]", "")).replace("'", "")).replace(" ", "")).split(",")
-            for key in n:
-                key = ((str(key).replace("[", "")).replace("]", "")).replace("'", "")
-                PATH_TYPE = PATH + f"/{key}"
-                ORIGIN_PATH_TYPE = ORIGIN_PATH + f"/{key}"
-                for fkey in default_storage.listdir(PATH_TYPE):
-                    if type(fkey) != list:
-                        if fkey not in ["", None]:
-                            fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
-                            if len(fkey) > 1:
-                                PATH_FILE = PATH_TYPE + f"/{fkey}"
-                                ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
-                                arr_files.append({
-                                    "type": key,
-                                    "description_type": settings.LISTPATHTYPE.get(key, ""),
-                                    "file": {
-                                        "name": fkey,
-                                        "date_created": {
-                                            "en": str(default_storage.get_created_time(PATH_FILE).date()),
-                                            "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
-                                        },
-                                        "path": ORIGIN_PATH_FILE
-                                    }
-                                })
-                    else:
-                        for fkey in fkey:
-                            if fkey not in ["", None]:
-                                fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
-                                if len(fkey) > 1:
-                                    PATH_FILE = PATH_TYPE + f"/{fkey}"
-                                    ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
-                                    arr_files.append({
-                                        "type": key,
-                                        "description_type": settings.LISTPATHTYPE.get(key, ""),
-                                        "file": {
-                                            "name": fkey,
-                                            "date_created": {
-                                                "en": str(default_storage.get_created_time(PATH_FILE).date()),
-                                                "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
-                                            },
-                                            "path": ORIGIN_PATH_FILE
-                                        }
-                                    })
-    return arr_files
- 
+            arr_files = []
+            # path : id paciente/ id coleta / numero do file / file
+            ORIGIN_PATH = f"/patients/process/{id_paciente}/{idColeta}"
+            PATH = settings.BASE_DIR_DOCS + f"/patients/process/{id_paciente}/{idColeta}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+            EXISTS = default_storage.exists(PATH)
+            if EXISTS:
+                FILES = default_storage.listdir(PATH)
+                FILES = list(FILES)[0]
+                for keys in FILES:
+                    n = (str(((str(keys).replace("[", "")).replace("]", "")).replace("'", "")).replace(" ", "")).split(",")
+                    for key in n:
+                        key = ((str(key).replace("[", "")).replace("]", "")).replace("'", "")
+                        PATH_TYPE = PATH + f"/{key}"
+                        ORIGIN_PATH_TYPE = ORIGIN_PATH + f"/{key}"
+                        for fkey in default_storage.listdir(PATH_TYPE):
+                            if type(fkey) != list:
+                                if fkey not in ["", None]:
+                                    fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
+                                    if len(fkey) > 1:
+                                        PATH_FILE = PATH_TYPE + f"/{fkey}"
+                                        ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
+                                        arr_files.append({
+                                            "type": key,
+                                            "description_type": settings.LISTPATHTYPE.get(key, ""),
+                                            "file": {
+                                                "name": fkey,
+                                                "date_created": {
+                                                    "en": str(default_storage.get_created_time(PATH_FILE).date()),
+                                                    "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
+                                                },
+                                                "path": ORIGIN_PATH_FILE
+                                            }
+                                        })
+                            else:
+                                for fkey in fkey:
+                                    if fkey not in ["", None]:
+                                        fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
+                                        if len(fkey) > 1:
+                                            PATH_FILE = PATH_TYPE + f"/{fkey}"
+                                            ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
+                                            arr_files.append({
+                                                "type": key,
+                                                "description_type": settings.LISTPATHTYPE.get(key, ""),
+                                                "file": {
+                                                    "name": fkey,
+                                                    "date_created": {
+                                                        "en": str(default_storage.get_created_time(PATH_FILE).date()),
+                                                        "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
+                                                    },
+                                                    "path": ORIGIN_PATH_FILE
+                                                }
+                                            })
+            return arr_files
+    
 
 
 #GER FILE 
@@ -458,20 +465,18 @@ def SaveEditionsFinancesFunctions(request):
     val_pago = request.POST.get('val_pago')
     porcentagem = request.POST.get('porcentagem')
 
-
-
-    #saveFileEditionsFinances(id_user, type_doc, request.FILES)
     bodyData = json.loads(request.POST.get('data'))
     
     nomeStatus = bodyData.get('statusProgresso')
     obsF = bodyData.get('obsF')
     dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
         "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
-        "date_repass": "data_repasse",
+        "data_repasse": "data_repasse",
         "n_nf": "nf_f",
         "statusProgresso": "status_exame_f",
         "obsF": "obs_f",
     }
+
     with connections['auth_finances'].cursor() as cursor:
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -489,7 +494,7 @@ def SaveEditionsFinancesFunctions(request):
             
             if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     vData = bodyData.get(key)
-                    if key == "date_repass":
+                    if key == "data_repasse":
                         vData = vData if vData not in ["", None] else None
 
                     alvaro = float (cust_alv) if cust_alv not in ["", None] else None #serve para aceitar campo null quando double
@@ -571,7 +576,7 @@ def FinalizeProcessFunction(request):
     doctor = request.POST.get("doctor")
     paciente = request.POST.get("paciente")
     comercial = request.POST.get("comercial")
-    repasse = request.POST.get("date_repass")
+    repasse = request.POST.get("data_repasse")
     date_age = request.POST.get("date_age")
     tp_exame = request.POST.get("tp_exame")
     companyParceiro = request.POST.get("company")
@@ -2480,11 +2485,13 @@ def AnxDoc(request):
     id_agendamento = request.POST.get('id_user')
     type_doc = request.POST.get('type_doc')
     date_create = str(datetime.now().strftime("%Y-%m-%d"))
+
     saveFileEditionsFinances(id_agendamento, type_doc, request.FILES)
 
     with connections['auth_finances'].cursor() as cursor:
         Quers = "SELECT id, tipo_anexo FROM admins.tp_anx where id like %s;"
         cursor.execute(Quers, (type_doc,))
+        print(id_agendamento)
         dados = cursor.fetchall()
         if dados: 
             for id, tp_anexo in dados:
@@ -2498,6 +2505,8 @@ def AnxDoc(request):
                 "response": True,
                 "message": "Anexado!"
             }
+        else: 
+            print("nao")
 
 
 
