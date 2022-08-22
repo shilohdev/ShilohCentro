@@ -208,7 +208,7 @@ def ScheduledPickupViews(request):
     if allowPage(request, "consult_agenda") == False:
         return error(request)
 
-    nurse_active = Users.objects.order_by('-data_regis').filter(status='Ativo')
+    nurse_active = Users.objects.order_by('-data_regis').filter(status='Ativo', perfil='3')
 
     SsearchDoctor = searchDoctor(request)
     SsearchExame = searchExame(request)
