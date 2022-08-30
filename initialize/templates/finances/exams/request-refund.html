@@ -231,6 +231,8 @@ $(document).ready(function() {
 // CARD DO FINANCEIRO - INICIAR REEMBOLSO
 function ShowFinance(object) {
     $("#btn_start").attr("disabled", true);
+    $("#btn_salvar").show()
+
     var id_user = $(object).data("id_user");
     var statusProgresso = $("#statusProgresso").val();
     var formpost = {
@@ -243,12 +245,15 @@ function ShowFinance(object) {
         var dados = re["dadoss"];
             alert(re["message"]);
                 $("#btn_start").hide();
+                $("#btn_salvar").show()
                 $("#card_finance").show();
                 $("#statusProgresso").val(dados["statusProgresso"]).attr("selected","selected");
                 $("#date_first").val(dados["date_first"]);    
         }else{
             alert(re["message"]);
             $("#btn_start").attr("disabled", false);
+            $("#btn_salvar").hide()
+
         }
     });
 }

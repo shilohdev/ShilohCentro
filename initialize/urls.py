@@ -13,6 +13,6 @@ urlpatterns = [
     path('', include('auth_access.urls')),
     path('', include('module_clicksign.urls')),
     path('', include('auth_finances.urls')),
-
+    path('', include('task_scheduling.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

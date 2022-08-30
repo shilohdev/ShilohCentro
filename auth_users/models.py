@@ -25,12 +25,11 @@ class Users(DBusers):
 
 
 
-
 class HistoryPartners:
     def __init__(self, id=None) -> None: 
         self.id = id
 
-    def localizaHistorico(self):
+    def localizaHistorico(self): 
         with connections['auth_users'].cursor() as cursor:
             query = "SELECT r.id, u.nome, r.id_parceiro, r.tp_operacao, r.descricao, r.data_registro FROM auth_users.register_partners r INNER JOIN auth_users.users u ON r.id_parceiro = u.id WHERE r.id_parceiro = {}".format(self)
             cursor.execute(query)
