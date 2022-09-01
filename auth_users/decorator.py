@@ -3627,14 +3627,11 @@ def ApiNewRegisPatientFunction(request):
                 for id_p, id_l_p in dados:
                     queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
                     cursor.execute(queryRegis, (id_p, data_atual, date_create, nome_user, ))
-                
                 return {
                     "response": True,
                     "message": "Cadastrado com sucesso! Ficará ativo após agendamento da primeira coleta."
                 }
         
-
-
 
 #MEU PERFIL PUXAR TODAS INFORMAÇÕES DO BANCO
 def DataMyProfileViews(request):
@@ -3704,8 +3701,8 @@ def ApichangeUserProfileFunction(request):
 
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, unity FROM auth_users.users WHERE login LIKE %s"
-        params = (request.user.username,)                       
-        cursor.execute(searchID, params)        
+        params = (request.user.username,)
+        cursor.execute(searchID, params)
         dados = cursor.fetchall()
         
         if dados:         
