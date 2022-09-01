@@ -1441,11 +1441,10 @@ def ApiCadastrePatienteFunction(request):
         cursor.execute(queryExists, (cpf,))
         dados = cursor.fetchall()
         if dados:
-            queryName = "SELECT id_p FROM customer_refer.patients WHERE nome_p LIKE %s"
-            cursor.execute(queryName, (name,))
-            dados = cursor.fetchall()
-            if dados:
-                return {"response": "true", "message": "Paciente já cadastrado em sistema!"}
+            tem_lead = LocalizaLead(name)
+            if tem_lead != False:
+                return {"response": True, "message": "Paciente já cadastrado em sistema!"}
+            
             else:
                 param = (lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, id_company, data_atual,)
                 query="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -1500,7 +1499,7 @@ def ApiCadastrePatienteFunction(request):
         query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, 'Indicação Cadastrada', 'Registro realizado dia:', %s);"
         cursor.execute(query, (medico_resp, id_usuario, date_create,))
 
-        return {"response": "true", "message": "Cadastrado com sucesso!"}
+        return {"response": True, "message": "Cadastrado com sucesso!"}
 
 
 
@@ -3580,28 +3579,26 @@ def ApiNewRegisPatientFunction(request):
         name = str(name).title()
         date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-
         cpf = formatcpfcnpj(cpf)
         tel1 = formatTEL(tel1)
         tel2 = formatTEL(tel2)
 
-        Queryq = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(Queryq, (request.user.username,))
+        VerificaLogin = "SELECT id, nome, unity FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(VerificaLogin, (request.user.username,))
         dados = cursor.fetchall()
         if dados:
             for id_usuario, nome_user, unity in dados:
                 pass
         else:
             return {
-                "response": "false",
+                "response": False,
                 "message": "Login expirado, faça login novamente para continuar."
             }
 
-        searchLead = "SELECT id_lead, cpf_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE nome_lead like %s;"
-        cursor.execute(searchLead, (name,))
-        dados = cursor.fetchall()
+        verifica_lead = LocalizaLead(name)
+        print("verifica_lead FALSE", verifica_lead)
 
-        if dados:
+        if verifica_lead == 'False':
             return {
                 "response": False,
                 "message": "Verifique se já é um paciente ou cadastre através dos Leads"
@@ -3612,31 +3609,29 @@ def ApiNewRegisPatientFunction(request):
             query = "INSERT INTO `customer_refer`.`leads` (`id_lead`, `cpf_lead`, `nome_lead`, `email_lead`, `tel1_lead`, `tel2_lead`, `convenio_lead`, `tp_exame`, `obs_l`, `medico_resp_l`, `resp_cadastro`, `register`, `data_regis_l`, `unity_l`, `status_l`) VALUES (NULL, %s, %s, %s, %s, %s, %s,'' , %s, %s,'' , 0, %s, %s, 'Em Contato');"
             cursor.execute(query, params) #insere nos lads
 
-            searchLead = "SELECT id_lead, cpf_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE nome_lead like %s;"
-            cursor.execute(searchLead, (name,))
+            verifica_lead = LocalizaLead(name)
+            id_lead = verifica_lead
+
+            searchCompany = "SELECT id, nome, company FROM auth_users.users WHERE id LIKE %s"
+            cursor.execute(searchCompany, (medico_resp,))
             dados = cursor.fetchall()
 
-            for id_lead, cpf_lead, nome_lead, tel1_lead in dados:
-                searchCompany = "SELECT id, nome, company FROM auth_users.users WHERE id LIKE %s"
-                cursor.execute(searchCompany, (medico_resp,))
+            for id_resp, nome_resp, company_resp in dados:
+                param = (id_lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, company_resp, data_atual,)
+                queryPaciente="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(queryPaciente, param) #cadastra o paciente
+
+                QuerySet = "SELECT id_p, id_l_p FROM customer_refer.patients WHERE id_l_p LIKE %s;"
+                cursor.execute(QuerySet, (id_lead,))
                 dados = cursor.fetchall()
-
-                for id_resp, nome_resp, company_resp in dados:
-                    param = (id_lead, cpf, name, email, data_nasc, tel1, tel2, cep, rua, numero ,complement, bairro, cidade, uf, conv_medico, medico_resp, id_usuario, obs, login, senha, unity, company_resp, data_atual,)
-                    queryPaciente="INSERT INTO `customer_refer`.`patients` (`id_p`, `id_l_p`, `cpf_p`, `nome_p`, `email_p`, `data_nasc_p`, `tel1_p`, `tel2_p`, `cep_p`, `rua_p`, `numero_p`, `complemento_p`, `bairro_p`, `cidade_p`, `uf_p`, `convenio_p`, `medico_resp_p`, `atendente_resp_p`, `obs`, `login_conv`,`senha_conv`, `unity_p`, `company_p`, `data_regis`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    cursor.execute(queryPaciente, param) #cadastra o paciente
-
-                    QuerySet = "SELECT id_p, id_l_p FROM customer_refer.patients WHERE id_l_p LIKE %s;"
-                    cursor.execute(QuerySet, (id_lead,))
-                    dados = cursor.fetchall()
-                    for id_p, id_l_p in dados:
-                        queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
-                        cursor.execute(queryRegis, (id_p, data_atual, date_create, nome_user, ))
-                    
-                    return {
-                        "response": True,
-                        "message": "Cadastrado com sucesso!"
-                    }
+                for id_p, id_l_p in dados:
+                    queryRegis = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '3', %s, 'Cadastro Realizado', 'Cadastrado dia: ' %s, %s, %s, NULL);"
+                    cursor.execute(queryRegis, (id_p, data_atual, date_create, nome_user, ))
+                
+                return {
+                    "response": True,
+                    "message": "Cadastrado com sucesso! Ficará ativo após agendamento da primeira coleta."
+                }
         
 
 
@@ -4096,3 +4091,16 @@ def RecontatoFunction(request):
                 cursor.execute(query, (id_partnerss, id_user, date_create,))
                 
         return {"response": True, "message": "Status Atualizado"}
+
+
+
+def LocalizaLead(nome_paciente):
+    with connections['auth_agenda'].cursor() as cursor:
+        searchLead = "SELECT id_lead, cpf_lead, nome_lead, tel1_lead FROM customer_refer.leads WHERE nome_lead like %s;"
+        cursor.execute(searchLead, (nome_paciente,))
+        dados = cursor.fetchall()
+        if dados:
+            for id_lead, cpf_lead, nome_lead, tel1_lead in dados:
+                return id_lead
+        else:
+            return False

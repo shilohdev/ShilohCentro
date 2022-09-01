@@ -421,7 +421,7 @@ function CadastrePatient() {
       $("#btn_cadastrar").attr("disabled", true);
 
       fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function (re) {
-         if (re["response"] == "true"){
+         if (re["response"] == true){
             alert(re["message"]);
             location.reload();
          } else {
