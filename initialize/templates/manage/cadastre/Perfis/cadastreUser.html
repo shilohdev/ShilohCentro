@@ -213,11 +213,11 @@ CADASTRAR USUÁRIOS{% endblock %}
       golshen = $("#golshen_lab").prop("checked")
 
       if (shiloh){
-         empresa = shiloh = $("#shiloh_lab").val()
+         empresa = $("#shiloh_lab").val()
       }else if (movel){
-         empresa = movel = $("#lab_movel").val()
+         empresa = $("#lab_movel").val()
       }else{
-         golshen = movel = $("#golshen_lab").val()
+         empresa  = $("#golshen_lab").val()
       }
 
       var btncadastrar = {
