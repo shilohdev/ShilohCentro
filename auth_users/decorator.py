@@ -65,7 +65,7 @@ def formatTEL(tel: str):
 def searchTPerfil(request):
     with connections['auth_permissions'].cursor() as cursor:
         #SELECT DO BANCO DIRETO PARA O SELECT HTML >>>> TIPO DE PERFFIL
-        query = "SELECT id, descriptions FROM auth_permissions.permissions_type WHERE descriptions NOT LIKE  'Parceiro' ORDER BY descriptions;"
+        query = "SELECT id, descriptions FROM auth_permissions.permissions_type WHERE descriptions NOT LIKE 'Parceiro' ORDER BY descriptions;"
         cursor.execute(query)
         dados = cursor
         array = []
@@ -4030,11 +4030,14 @@ def HistoricoParceiros(request):
     
 
 def RecontatoFunction(request):
-    id_partnerss = request.POST.get('id_user')
+    id_partnerss = request.POST.get('id_parceiro')
+    id_comercial = request.POST.get('comercial')
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    with connections['auth_agenda'].cursor() as cursor:
-
+    print(id_partnerss)
+    print(id_comercial)
+    print(date_create)
+    with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
         dados = cursor.fetchall()
@@ -4045,13 +4048,13 @@ def RecontatoFunction(request):
         else:
             for id_user, nome in dados:
 
-                query = "UPDATE `auth_users`.`users` SET `status` = 'Recontato', `resp_comerce` = {} WHERE `id` = {};".format(id_user, id_partnerss)
+                query = "UPDATE `auth_users`.`users` SET `status` = 'Recontato', `resp_comerce` = {} WHERE `id` = {};".format(id_comercial, id_partnerss)
                 cursor.execute(query)
 
-                query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, %s, 'Parceiro em recontato', 'Nova tratativa de ativação, prazo de 7 dias.', %s);"
+                query = "INSERT INTO `auth_users`.`register_partners` (`id`, `id_parceiro`, `id_user`, `tp_operacao`, `descricao`, `data_registro`) VALUES (NULL, %s, %s, 'Parceiro em recontato', 'Nova tratativa de ativação, prazo de 15 dias.', %s);"
                 cursor.execute(query, (id_partnerss, id_user, date_create,))
                 
-        return {"response": True, "message": "Status Atualizado"}
+        return {"response": True, "message": "Status Atualizado."}
 
 
 

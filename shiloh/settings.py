@@ -40,6 +40,7 @@ os.environ['DEBUG'] = '1'
 os.environ['AMQP_USER'] = 'guest'
 os.environ['AMQP_PASSWORD'] = 'guest'
 os.environ['AMQP_PORT'] = '5672'
+os.environ['AMQP_HOST'] = '34.102.44.244'
 
 # EMAIL SETTINGS
 os.environ['EMAIL_HOST'] = 'mail.shiloh.com.br'
@@ -100,14 +101,23 @@ SHORT_URL = f"https://short.{DOMAIN}"
 AMQP_USER = os.environ.get("AMQP_USER")
 AMQP_PASSWORD = os.environ.get("AMQP_PASSWORD")
 AMQP_PORT = os.environ.get("AMQP_PORT")
+AMQP_HOST = os.environ.get("AMQP_HOST")
 
-#CELERY
-broker_url = f'amqp://{AMQP_USER}:{AMQP_PASSWORD}@localhost:{AMQP_PORT}//'
-CELERY_BROKER_URL = f'amqp://{AMQP_USER}:{AMQP_PASSWORD}@localhost:{AMQP_PORT}//'
+#CELERY >> config para django
+broker_url = f'amqp://{AMQP_USER}:{AMQP_PASSWORD}@{AMQP_HOST}:{AMQP_PORT}//'
+CELERY_BROKER_URL = f'amqp://{AMQP_USER}:{AMQP_PASSWORD}@{AMQP_HOST}:{AMQP_PORT}//'
+CELERY_ENABLE_UTC = True
+CELERY_BROKER_HEARTBEAT = 0
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
+BROKER_CONNECTION_TIMEOUT = 7200
+CELERY_BROKER_CONNECTION_TIMEOUT = 7200
+CELERY_RESULT_EXPIRES = 7200
+
+
+
 
 #MAILER
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -138,6 +148,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'django_celery_beat',
     'initialize',
     'auth_access',
     'auth_users',

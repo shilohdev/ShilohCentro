@@ -311,17 +311,19 @@ def listPartnesViews(request):
     SsearchCategoria = searchCategoria(request)
     SsearchPartiners = TabelaPartners(request)
     searchUnity = searchUnit(request)
-    SearchComercial = searchComercialFunction(request)
     ViewFoto = FilePhotoViewFunction(request)
-    
+    permissions = searchTPerfil(request)
+    comercial = Users.objects.order_by('nome').filter(Q(status='Ativo', perfil='6'))
+
     return render(request, 'manage/listers/partners/listPartners.html', 
     {
         "arr_SearchCategoria": SsearchCategoria, 
         "arr_SearchPartiners": SsearchPartiners,
         "arr_SearchUnit": searchUnity,
-        "arr_SearchComercial": SearchComercial,
         "arr_ViewFoto": ViewFoto,
-    })
+        "arr_comercial": comercial,
+        "permissions": permissions,
+    }) 
  
 
 
