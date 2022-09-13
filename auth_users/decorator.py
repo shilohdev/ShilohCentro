@@ -76,8 +76,20 @@ def searchTPerfil(request):
                 "id": id
                 })
             array.append(newinfoa)
-
         return array
+
+
+def SearchPermissionEditPartnerss(request):
+    with connections['auth_permissions'].cursor() as cursor:
+        searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
+        cursor.execute(searchID, (request.user.username,))
+        dados = cursor.fetchall()
+        for id_usuario, nome in dados:
+            query = "SELECT id_permission, id_user FROM auth_permissions.auth_permissions_allow WHERE id_permission like '49' and id_user like %s;"
+            cursor.execute(query, (id_usuario,))
+            dados = cursor.fetchall()
+            if dados: return "Permissao"
+            else: return "Sem permissão"
 
 #CADASTRAR USER INTERNO
 def CadastreUser(request):
@@ -3560,8 +3572,6 @@ def ApiNewRegisPatientFunction(request):
             }
 
         verifica_lead = LocalizaLead(name)
-        print("verifica_lead FALSE", verifica_lead)
-
         if verifica_lead == 'False':
             return {
                 "response": False,
@@ -4034,9 +4044,6 @@ def RecontatoFunction(request):
     id_comercial = request.POST.get('comercial')
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    print(id_partnerss)
-    print(id_comercial)
-    print(date_create)
     with connections['auth_users'].cursor() as cursor:
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))

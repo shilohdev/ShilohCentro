@@ -48,7 +48,7 @@ CADASTRAR USUÁRIOS{% endblock %}
             <div class="input-field col m3 s12" >
                <label style="margin-bottom: 15px;">Perfil <span style="color: red;">*</span></label>
                <div class="select-wrapper" style="margin-top: 30px;">
-                  <select name="select" id="tp_perfil" onchange="SelectShow()" class="error " data-required="true">
+                  <select name="select" id="tp_perfil" class="error " data-required="true">
                      <option value="">Selecione</option>
                      {% for k in arr_SearchPerfil %}
                      <option value="{{ k.id }}">{{ k.descriptions }}</option>
@@ -73,28 +73,28 @@ CADASTRAR USUÁRIOS{% endblock %}
                   <div class="input-field col m3 s12">
                      <input id="cpf" type="text"  data-required="true">
                      <label for="cpf">
-                     <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF</label>
+                     <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;CPF <span style="color: red;">*</span></label>
                   </div>
                   <div class="input-field col m5 s12">
                      <input id="name" type="text"  data-required="true" class="upper">
                      <label for="name">
-                     <i class="material-icons" onkeyup="formatText()" style="font-size: 15px">person</i>&nbsp;Nome</label>
+                     <i class="material-icons" onkeyup="formatText()" style="font-size: 15px">person</i>&nbsp;Nome <span style="color: red;">*</span></label>
                   </div>
                   <div class="input-field col m4 s12">
                      <input id="date_nasc" type="date"  data-required="true">
-                     <label for="date_nasc">Data de Nacimento</label>
+                     <label for="date_nasc">Data de Nacimento <span style="color: red;">*</span></label>
                   </div>
                </div>
                <div class="col m12 s12">
                   <div class="input-field col m8 s12">
                      <input id="email" type="email"  data-required="true">
                      <label for="email">
-                     <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
+                     <i class="material-icons" style="font-size: 15px">email <span style="color: red;">*</span></i>&nbsp;E-mail</label>
                   </div>
                   <div class="input-field col m2 s12">
                      <input id="tel1" type="tel"  data-required="true">
                      <label for="tel1">
-                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
+                     <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1 <span style="color: red;">*</span></label>
                   </div>
                   <div class="input-field col m2 s12">
                      <input id="tel2" type="tel">
@@ -106,7 +106,7 @@ CADASTRAR USUÁRIOS{% endblock %}
                   <div class="input-field col m3 s12" >
                      <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)"  data-required="true">
                      <label for="zipcode">
-                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
+                     <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP <span style="color: red;">*</span></label>
                   </div>
                   <div class="input-field col m7 s12">
                      <input id="addres" type="text" data-required="true" >
@@ -163,6 +163,8 @@ CADASTRAR USUÁRIOS{% endblock %}
    $("#zipcode").mask("99999-999");
 
    function CadastreUser() {
+      $("#btn_cadastrar").attr("disabled", true);
+
       var tp_perfil = $("#tp_perfil").val();
       var cpf = $("#cpf").val();
       var name = $("#name").val();
@@ -191,7 +193,7 @@ CADASTRAR USUÁRIOS{% endblock %}
          if(!filter.test(email) && email != ""){
             alert('Insira um e-mail válido.');  
             return false;
-      }
+         }
 
 
       //VALIDAÇÃO DE CAMPO NULL
@@ -200,6 +202,7 @@ CADASTRAR USUÁRIOS{% endblock %}
          if ($(this).val() == "") {
             alert("Preencha os campos obrigatórios.");
             $(this).focus();
+            $("#btn_cadastrar").attr("disabled", false);
             i = 1;
             return false;
          }
@@ -217,7 +220,7 @@ CADASTRAR USUÁRIOS{% endblock %}
       }else if (movel){
          empresa = $("#lab_movel").val()
       }else{
-         empresa  = $("#golshen_lab").val()
+         empresa = $("#golshen_lab").val()
       }
 
       var btncadastrar = {
@@ -243,9 +246,9 @@ CADASTRAR USUÁRIOS{% endblock %}
       fetchRequest("{% url 'ApiCadastreUser' %}", "POST", "JSON", btncadastrar, function (re) {
          if (re["response"] == true) {
             alert(re["message"]);
-            $("#btn_cadastrar").attr("disabled", true);
             location.reload();
          }else{
+            alert(re["message"]);
             $("#btn_cadastrar").attr("disabled", false);
          }
       });
