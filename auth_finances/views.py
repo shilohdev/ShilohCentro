@@ -40,6 +40,7 @@ def ReembolsoFinanceiro(request):
     Solicitacao_Andamento_Pendente = User_Information(request, 'Analise')
     Solicitacao_Glosa_Natingido = User_Information(request, 'Glosa')
     Solicitacao_Finalizada = User_Information(request, 'Finalizado')
+    Solicitacao_Juridico = User_Information(request, 'Juridico')
     Dash_reemsolso_pendente = User_Information(request, 'Dash_Pendente')
     Dash_reemsolso_pago = User_Information(request, 'Dash_Pago')
     Dash_reembolso_andamento = User_Information(request, 'Dash_Andamento')
@@ -58,6 +59,7 @@ def ReembolsoFinanceiro(request):
         "arr_Solicitacao_Andamento_Pendente": Solicitacao_Andamento_Pendente,
         "arr_Solicitacao_Glosa_Natingido": Solicitacao_Glosa_Natingido,
         "arr_Solicitacao_Finalizada": Solicitacao_Finalizada,
+        "arr_Solicitacao_Reembolso_Juridico": Solicitacao_Juridico,
         "arr_Dash_reemsolso_pendente": Dash_reemsolso_pendente,
         "arr_Dash_reemsolso_pago": Dash_reemsolso_pago,
         "arr_Dash_reembolso_andamento": Dash_reembolso_andamento,

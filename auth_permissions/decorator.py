@@ -63,6 +63,9 @@ def User_Information(request, status): #Função para pehar a info do usuario e 
                 if status == "Finalizado":
                     r = SolicitacaoReembolso.Solicitacao_Reembolso_Finalizado_Function(perfil, unityY)
                     return r
+                if status == "Juridico":
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Juridico_Function(perfil, unityY)
+                    return r
                 if status == "Dash_Pendente":
                     r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Pendente(perfil, unityY)
                     return r

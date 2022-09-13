@@ -180,7 +180,7 @@ class FinancesExamsInt:
 
 #histórico financeiros
 def fetchHistoryModalFinances(id):
-    response = RegisterActions.objects.filter(id_agendamento=id)
+    response = RegisterActions.objects.order_by('-data_operacao').filter(id_agendamento=id)
     if list(response):
         r = [(model_to_dict(key)) for key in response]
         for j in r:

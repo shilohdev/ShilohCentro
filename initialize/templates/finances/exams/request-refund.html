@@ -11,6 +11,12 @@ Página inicial
 
 {% block content %}
 <style type="text/css">
+    .limite-campo{
+   height: 500px;
+   max-height: 500px;
+   overflow-y: scroll;
+   }
+
    .scroll-y{
    height: 505px;
    max-height: 505px;
@@ -167,8 +173,9 @@ Página inicial
                   <ul class="tabs">
                     <li class="tab col m3"><a class="active" href="#solicitacao_pendente">Pendente / Repasse / Pago</a></li>
                     <li class="tab col m3"><a href="#solicitacao_andamento_analise">Em Andamento / Análise</a></li>
-                    <li class="tab col m3"><a href="#solicitacao_glosa_n_atingido">Glosa / Não Atingido</a></li>
-                    <li class="tab col m3"><a href="#solicitacao_finalizada">Finalizado</a></li>
+                    <li class="tab col m2"><a href="#solicitacao_glosa_n_atingido">Glosa / Não Atingido</a></li>
+                    <li class="tab col m2"><a href="#solicitacao_juridico">Jurídico</a></li>
+                    <li class="tab col m2"><a href="#solicitacao_finalizada">Finalizado</a></li>
                   </ul>
                 </div>
             </div>
@@ -180,6 +187,7 @@ Página inicial
                         {% include '../exams/partials/_solicitacoes_pendentes.html' %}
                         {% include '../exams/partials/_solicitacoes_em_andamento_analise.html' %}
                         {% include '../exams/partials/_solicitacoes_glosa_n_atingido.html' %}
+                        {% include '../exams/partials/_solicitacoes_juridico.html' %}
                         {% include '../exams/partials/_solicitacoes_finalizadas.html' %}
                     </div>
                 </div>
@@ -737,29 +745,35 @@ function ModalPricipal(object) {
          $("#btn_start").data("id_user", id_user); //PEGA O ID DO PACIENTE
 
          //AQUI INICIA FUNCTION APPEND FILE
-         var filesResponse = JSON.parse(re["message"]["files"]);
-         var ap = "";
-         $.map(filesResponse, function (n, i) {
-            ap += `
-                <tr>
-                    <td>${n.file.name}</td>
-                    <td>${n.file.date_created.pt}</td>
-                    <td>${n.description_type}</td>
-                    <td style="text-align: center;">
-                        <button data-url="${n.file.path}" data-id="${n.file.name}" onclick=\"viewFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"><i class="material-icons right">cloud_download</i></button>
-                        <button data-url="${n.file.path}" data-id_patient="${id_user}" data-type="${n.type}" data-id="${n.file.name}" onclick=\"removeFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;"><i class="material-icons right">delete</i></button>
-                    </td>
-                </tr>
-                `;
-         });
-         $("#tb_append").html(ap);
-
+        var filesResponse = JSON.parse(re["message"]["files"]);
+        if (filesResponse.length === 0){
+            var ap = "";
+            var ap = ' <tr> <td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td></tr>'
+            $("#tb_append").html(ap);
+        }else{
+            var ap = "";
+            $.map(filesResponse, function (n, i) {
+                ap += `
+                    <tr>
+                        <td>${n.file.name}</td>
+                        <td>${n.file.date_created.pt}</td>
+                        <td>${n.description_type}</td>
+                        <td style="text-align: center;">
+                            <button data-url="${n.file.path}" data-id="${n.file.name}" onclick=\"viewFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;"><i class="material-icons right">cloud_download</i></button>
+                            <button data-url="${n.file.path}" data-id_patient="${id_user}" data-type="${n.type}" data-id="${n.file.name}" onclick=\"removeFile(this)\" class="btn mb-1 waves-effect waves-light ativ" type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #c74d4d;"><i class="material-icons right">delete</i></button>
+                        </td>
+                    </tr>
+                    `;
+            });
+            $("#tb_append").html(ap);
+        }
+         
          //AQUI INICIA FUNCTION GET HISTORY
          var historyResponse = re["message"]["history"];
          var his = "";
          $.map(historyResponse, function (n, i) {
             his += `
-                <li class="timeline-items timeline-icon-green active ">
+                <li class="timeline-items timeline-icon-green active">
                     <div id="data_f" class="timeline-time">${n.data_operacao}</div>
                     <h5 id="name_u" class="timeline-title">${n.nome_user}</h5>
                     <p id="action_f" class="timeline-text">${n.descricao}</p>

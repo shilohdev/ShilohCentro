@@ -77,7 +77,6 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', en
 
 </style> 
 
-<div class="swal-overlay" tabindex="-1" style="display: none;">
    
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    {% include '../partners/partials/_modal_partners.html' %} 
@@ -89,30 +88,30 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', en
 
 
 <div class="breadcrumbs-dark pb-0">
-<div class="container">
-   <div class="card" >
-      <!-- Externo -->
-      <div id="userint" class="row" >
-         <div class="col s12"  style="padding: 40px;">
-            {% if 'Permissao' %}
-               <div id="acess_menu" class="col s12 m6 mb-2" style="margin-top: 20px; padding-left: 0px">
-                  <ul class="tabs" >
-                     <li class="tab col s4 p-0" ><a class="p-0 active" onclick="todosParceiros()" style="color: black; font-size: 20px; cursor: pointer;">TODOS</a></li>
-                     <li class="tab col s4 p-0"><a class="p-0" onclick="parceirosInativos()" style="color: black; font-size: 20px; cursor: pointer;">INATIVOS</a></li>
-                  </ul>
+   <div class="container">
+      <div class="card" >
+         <!-- Externo -->
+         <div id="userint" class="row" >
+            <div class="col s12"  style="padding: 40px;">
+               {% if 'Permissao' %}
+                  <div id="acess_menu" class="col s12 m6 mb-2" style="margin-top: 20px; padding-left: 0px">
+                     <ul class="tabs" >
+                        <li class="tab col s4 p-0" ><a class="p-0 active" onclick="todosParceiros()" style="color: black; font-size: 20px; cursor: pointer;">TODOS</a></li>
+                        <li class="tab col s4 p-0"><a class="p-0" onclick="parceirosInativos()" style="color: black; font-size: 20px; cursor: pointer;">INATIVOS</a></li>
+                     </ul>
+                  </div>
+               {% else %}
+               {% endif %}
+               <div class="col s12 m12 scroll scroll-y" id="todos_parceiros">
+                  {% include '../partners/partials/_table_todos.html' %} 
                </div>
-            {% else %}
-            {% endif %}
-            <div class="col s12 m12 scroll scroll-y" id="todos_parceiros">
-               {% include '../partners/partials/_table_todos.html' %} 
-            </div>
-            <div class="col s12 m12 scroll scroll-y" id="parceiros_inativos" style="display:none;">
-               {% include '../partners/partials/_table_inativos.html' %} 
+               <div class="col s12 m12 scroll scroll-y" id="parceiros_inativos" style="display:none;">
+                  {% include '../partners/partials/_table_inativos.html' %} 
+               </div>
             </div>
          </div>
       </div>
    </div>
-</div>
 </div>
 
 
