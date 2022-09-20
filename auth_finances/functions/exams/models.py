@@ -22,7 +22,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
-from datetime import datetime
+from datetime import date, datetime
 import base64
 import json
 import time
@@ -1032,8 +1032,9 @@ def PagoShilohLabFunction(request):
 
 #FILTRO TABELA FECHAMENTO PARCEIROS
 def FilterMonthClosingPartners(request):
-    mes = request.POST.get('month')
     ano = int(datetime.now().strftime("%Y"))
+    mes = int(datetime.now().strftime("%m"))
+    #mes = 5 - 1
 
     ObjetoPath = DashPartners_Closing(mes=mes, ano=ano)
 
@@ -1097,60 +1098,22 @@ def fetchFilePartners(id):
     return arr_files
 
 
+
+
+
 #TABELAS FECHAMENTO PARCEIROS - MODAL
 def searchClosingPartners(request):
+    mes_atual = int(datetime.now().strftime("%m"))
+    mes = 5 - 1
     id_medico = request.POST.get('id_user')
-    monthCount = request.POST.get('month')
-    monthF = int(datetime.now().strftime("%m"))
 
     files = fetchFilePartners(id_medico) #CHAMA A FUNÇÃO, LOCALIZA MEU DIRETÓRIO.
+
+
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 6 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        arrayNot = []
-        for paciente, agendamento, exame in dados:
-            newinfoa = ({
-                "paciente": paciente,
-                "agendamento": convertDate(agendamento),
-                "exame": exame,
-                })
-            arrayNot.append(newinfoa)
-        
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 5 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        array = []
-        for pacienteG, agendamentoG, exameG in dados:
-            newinfoa = ({
-                "pacienteG": pacienteG,
-                "agendamentoG": convertDate(agendamentoG),
-                "exameG": exameG,
-                })
-            array.append(newinfoa)
-
-
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        arrayAnalise = []
-        for pacienteA, agendamentoA, exameA in dados:
-            newinfoa = ({
-                "pacienteA": pacienteA,
-                "agendamentoA": convertDate(agendamentoA) ,
-                "exameA": exameA,
-                })
-            arrayAnalise.append(newinfoa)
-
-
-     
+     ## inicia aqui
         queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s"
-        if monthCount == "" or monthCount == None:
-            cursor.execute(queryPago, (monthF, id_medico,))
-
-        else:
-            cursor.execute(queryPago, (monthCount, id_medico,))
-
+        cursor.execute(queryPago, (mes, id_medico,))
         dados = cursor.fetchall()
         arrayPago = []
         
@@ -1171,11 +1134,8 @@ def searchClosingPartners(request):
 
 
         queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s "
-        if monthCount == "" or monthCount == None:
-            cursor.execute(queryCount, (monthF, id_medico,))
-        else:
-            cursor.execute(queryCount, (monthCount, id_medico,))
-        
+        cursor.execute(queryCount, (mes, id_medico,))
+
         dados = cursor.fetchall()
         arrayPagoCount = []
         for contagem, valor in dados:
@@ -1191,29 +1151,10 @@ def searchClosingPartners(request):
                 })
             arrayPagoCount.append(newinfoa)
 
-
-        queryOutros = "SELECT id_lead, nome_lead, data_regis_l, status_l FROM customer_refer.leads WHERE medico_resp_l = %s AND status_l NOT LIKE 'Paciente'"
-        cursor.execute(queryOutros, (id_medico,))
-        dados = cursor.fetchall()
-        arrayOutros = []
-        for idlead, pacienteO,  indicacaoO, statusO in dados:
-
-            newinfoa = ({
-                "idlead": idlead,
-                "pacienteO": pacienteO,
-                "indicacaoO": convertDate(indicacaoO),
-                "statusO": statusO,
-                })
-            arrayOutros.append(newinfoa)
-
         return {
             "response": "true",
-            "message": array,
-            "message2": arrayNot,
-            "messageAnalise": arrayAnalise,
             "messagePago": arrayPago,
             "messageCount": arrayPagoCount,
-            "messageOutros": arrayOutros,
             "files": json.dumps(files),
 
         }
@@ -2497,7 +2438,7 @@ def AnxDoc(request):
             for id, tp_anexo in dados:
                 pass
 
-            if tp_anexo == "Nota Fiscal":
+            if tp_anexo == "Comprovante de Pagamento":
                 queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id_agendamento_f` = %s);"
                 cursor.execute(queryAtt, (date_create, id_agendamento,))
 
@@ -2506,8 +2447,10 @@ def AnxDoc(request):
                 "message": "Anexado!"
             }
         else: 
-            print("nao")
-
+            {
+            "response": False,
+            "message": "Erro ao Anexar."
+            }
 
 
 #GER FILE >> retornar HTML

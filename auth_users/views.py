@@ -778,7 +778,7 @@ def ClosingPartnersViews(request): #INDICAÇÕES
 
     return render(request, 'finances/closure/ClosingPartners.html', 
     {
-        "arr_SearchClosingPartners": ClosingPartners, 
+        # "arr_SearchClosingPartners": ClosingPartners, 
         "arr_ViewFoto": ViewFoto,
         "arr_LabMovel_Pago": LabMovel_Pago,
         "arr_ShilohLab_Pago": ShilohLab_Pago,

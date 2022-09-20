@@ -11,26 +11,12 @@ Página inicial
 ROTA{% endblock %}
 {% block content %}
 
-<div class="breadcrumbs-dark pb-0 pt-4" >
+<div class="breadcrumbs-dark pb-0" >
     <div class="container">
         <div class="card" >
-            <!-- Externo -->
-            <div  class="row">
-                <div class="col m12 s12"  style="margin-top: 30px;">
-                    <div class="input-field col m4 s12">
-                        <input id="bscinput" type="text" onkeyup="SearchUsers(this)">
-                        <label for="bscinput">
-                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar por nome...</label>    
-                    </div>
-                    <div class="input-field col m8 s12" >                   
-                    </div>
-                </div>
-            </div>
             <div class="row">
-                <div class=" container">
-                <!-- COMEÇO DA TABLE -->
-                    <div class="col m12 s12">
-                        <table class="bordered" style="margin-bottom: 50px; overflow-x: auto">
+                <div class="col m12 s12" style="padding: 60px; padding-top:30px"> 
+                    <table class="bordered pagelengthoption" style="overflow-x: auto">
                         <thead style="background-color: #581848; color: white; font-size: 15px" >
                             <tr>
                             <th data-field="schedulingt" style="text-align: center; width: 50px;">Data</th>
@@ -38,8 +24,9 @@ ROTA{% endblock %}
                             <th data-field="zipcode" style="text-align: center; width: 100px;">CEP</th>
                             <th data-field="nurset" style="text-align: center; width: 150px;">Enfermeiro</th>
                             <th data-field="doctort" style="text-align: center; width: 80px;">Horário</th>
+                            <th data-field="doctort" style="text-align: center; width: 80px;">Relação</th>
                             <th data-field="actiont" style="text-align: center; width: 30px;">Ação</th>
-                            </tr>
+                            </tr> 
                         </thead>
                         <tbody id="tb_append">
                             {% for k in arr_SearchAdjustRoute %}
@@ -55,37 +42,54 @@ ROTA{% endblock %}
                                         {% endfor %}
                                     </select>   
                                 </td>
+                                <td style="text-align: center;">{{ k.hora }}</td>                                
+                                <td style="text-align: center;">{{ k.unidade }}</td>                                
                                 <td style="text-align: center;">
-                                    <select name="select" class="hr_agenda">
-                                        <option value="">Horário:</option>
-                                        <option value="07:00">07:00</option>
-                                        <option value="08:00">08:00</option>
-                                        <option value="09:00">09:00</option>
-                                        <option value="10:00">10:00</option>
-                                        <option value="11:00">11:00</option>
-                                        <option value="12:00">12:00</option>
-                                        <option value="13:00">13:00</option>
-                                    </select>
-                                </td>
-                                
-                                <td style="text-align: center;">                                
-                                    <button id="btn_salvar" onclick="changeAdjustRoute(this)" data-id_agen="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
-                                        <i class="material-icons right">check</i>
+                                    <button id="btn_salvar" onclick="changeAdjustRoute(this)" data-id_agen="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                                        <i class="material-icons right" style="color: #66a366">check</i>
                                     </button>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
 <script type="text/javascript">
+
+    var datatableColetas = $(".pagelengthoption").DataTable({
+         "ordering" : true,
+         "scrollCollapse" : true,
+         "searching" : true,
+         "columnDefs" : [{orderable: true, targets: 0 }],
+      });
+      $(".dropdown-trigger").css("display", "none")
+
+      $(document).ready(function(){ // <<<< execute a seguinte função
+         function changeTable() {
+            $(".select-wrapper").find("select").hide();
+            $(".dataTables_length").css({
+                  "width": "60px",
+                  "position": "relative",
+            })
+
+            showLoadingPage("close");
+         }
+         setTimeout(showLoadingPage("show"), 500);
+         setTimeout(showLoadingPage("show"), 1000);
+         setTimeout(changeTable, 200);
+      });
+
+
 
     function SearchUsers(object){
         var e = $(object).val().toUpperCase();
@@ -120,29 +124,32 @@ ROTA{% endblock %}
 
     function changeAdjustRoute(object, Select){
         var hora_val = $(".hr_agenda").val();
-        var nurse_val = $(".nurseclass").val();
+        var nurse_val = $(".nurseclass").val(); // pega os valores
 
-        if (hora_val == "" || nurse_val == ""){
-            alert("Prencha todos os campos.")
+        if (hora_val == "" && nurse_val == ""){
+            alert("Para salvar, preencha algum campo");
+            return false
         }
 
-        var id = $(object).data("id_agen");
+        if (hora_val != "" || nurse_val != ""){
 
-        var formpost = {
-            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "id": id,
-            "nurse": nurse,
-            "hr_agenda": hr_agenda,
-        };
-     
-        fetchRequest("{% url 'ApiAdjustRoute' %}", "POST", "JSON", formpost, function(re){
-            if(re["response"] == false){ 
-                alert("Não foi possível prosseguir.");
-            } else {
-                $(object).closest('tr').remove()
-            }
-        });
-     
+            var id = $(object).data("id_agen");
+
+            var formpost = {
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "id": id,
+                "nurse": nurse,
+                "hr_agenda": hr_agenda,
+            };
+        
+            fetchRequest("{% url 'ApiAdjustRoute' %}", "POST", "JSON", formpost, function(re){
+                if(re["response"] == false){ 
+                    alert("Não foi possível prosseguir.");
+                } else {
+                    $(object).closest('tr').remove()
+                }
+            });
+        }
     }
 </script>
 {% endblock %}

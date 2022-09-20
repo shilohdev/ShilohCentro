@@ -503,43 +503,51 @@ def FschedulePickup(request):
                 "message": "Login expirado, faça login novamente para continuar."
             }
 
-
-        searchID = "SELECT id_p, id_l_p, unity_p, nome_p, company_p FROM customer_refer.patients where id_p = %s;"
-        cursor.execute(searchID, (id_paciente,))
+        queryHorario = "SELECT count(hr_agendamento), data_agendamento, hr_agendamento FROM auth_agenda.collection_schedule WHERE identification like 'Externo' and hr_agendamento = %s and data_agendamento = %s GROUP BY data_agendamento, hr_agendamento;"
+        cursor.execute(queryHorario, (hr_age, date_age,))
         dados = cursor.fetchall()
-        if dados:
-            for idPaciente, idLeadPaciente, unityPaciente, nomePaciente, company_lab in dados:
-                pass
-            queryLead= "UPDATE `customer_refer`.`leads` SET `register` = '1', `status_l` = 'Paciente'  WHERE (`id_lead` = %s);"
-            cursor.execute(queryLead, (idLeadPaciente,))
-
-            searchID = "SELECT id, nome_conv FROM admins.health_insurance WHERE nome_conv = %s"
-            cursor.execute(searchID, (convenio,))
-            dados = cursor.fetchall()
-            nurse = 489
-            driver = 488
-            hr_age = '00:00'
-            for id_conv, nome_conv  in dados:
-                params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number, complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente, company_lab,)
-                query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_registro`, `unity`, `identification`, `perfil_int`, `company_lab`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '', %s);"
-                cursor.execute(query, params)
-
-            params2 = (id_paciente, date_create, nomeUser,)
-            query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s, NULL);"
-            cursor.execute(query2, params2)
-
-            queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Agendou Coleta', %s);"
-            cursor.execute(queryRank, (id_usuario, date_create,))
-
-
+        if not dados:
+            pass
         else:
-            return {
-                "response": False,
-                "message": "Por favor tente novamente."
-            }
-    
-        return {"response": "true", "message": "Agendado com sucesso!"}
+            for contador, data, hora in dados:
+                if contador >= 8:
+                    return {"response": 'limite', "message": "Horário não está mais disponivel."}
+                else:
 
+                    searchID = "SELECT id_p, id_l_p, unity_p, nome_p, company_p FROM customer_refer.patients where id_p = %s;"
+                    cursor.execute(searchID, (id_paciente,))
+                    dados = cursor.fetchall()
+
+                    if dados:
+                        for idPaciente, idLeadPaciente, unityPaciente, nomePaciente, company_lab in dados:
+                            pass
+                        queryLead= "UPDATE `customer_refer`.`leads` SET `register` = '1', `status_l` = 'Paciente'  WHERE (`id_lead` = %s);"
+                        cursor.execute(queryLead, (idLeadPaciente,))
+
+                        searchID = "SELECT id, nome_conv FROM admins.health_insurance WHERE nome_conv = %s"
+                        cursor.execute(searchID, (convenio,))
+                        dados = cursor.fetchall()
+                        nurse = 489
+                        driver = 488
+                        for id_conv, nome_conv  in dados:
+                            params = (id_paciente, tel1, tel2, date_age, hr_age, tp_service, tp_exame, id_conv, nurse, driver, doctor, commerce, nomeUser, zipcode, addres, number, complement, district, city, uf, val_cust, val_work_lab, val_pag, obs, date_create, unityPaciente, company_lab,)
+                            query = "INSERT INTO `auth_agenda`.`collection_schedule` (`id`, `nome_p`, `tel1_p`, `tel2_p`, `data_agendamento`, `hr_agendamento`, `tp_servico`, `tp_exame`, `convenio`, `resp_enfermeiro`, `motorista`, `resp_medico`, `resp_comercial`, `resp_atendimento`, `cep`, `rua`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `val_cust`, `val_work_lab`, `val_pag`, `obs`, `status`, `motivo_status`, `resp_fin`, `data_fin`, `data_registro`, `unity`, `identification`, `perfil_int`, `company_lab`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'Pendente', '', '', '1969-12-31', %s, %s, 'Externo', '', %s);"
+                            cursor.execute(query, params)
+
+                        params2 = (id_paciente, date_create, nomeUser,)
+                        query2 = "INSERT INTO `customer_refer`.`register_paciente` (`id_register`, `id_pagina`, `id_paciente`, `tp_operacao`, `descricao`, `data_registro`, `user_resp`, `id_lead`) VALUES (NULL, '2', %s, 'Coleta Agendada', 'Novo agendamento relizado.', %s, %s, NULL);"
+                        cursor.execute(query2, params2)
+
+                        queryRank = "INSERT INTO `admins`.`ranking_atendimento` (`id`, `id_responsavel`, `acao`, `data_registro`) VALUES (NULL, %s, 'Agendou Coleta', %s);"
+                        cursor.execute(queryRank, (id_usuario, date_create,))
+
+                        return {"response": "true", "message": "Agendado com sucesso!"}
+
+                    else:
+                        return {
+                            "response": False,
+                            "message": "Por favor tente novamente."
+                        }
 
 
 #SELECIONAR MEDICOS
@@ -3838,19 +3846,21 @@ def FilePhotoViewFunction(request): #aqi
 #TABELA AJUSTAR ROTA DAS ENFERMEIRAS
 def searchAdjustRouteNurse(request):    
     with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT ag.id as agendamento, ag.data_agendamento, pa.nome_p, ag.cep, ag.status FROM  auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON pa.id_p = ag.nome_p WHERE ag.hr_agendamento LIKE '00:00' AND ag.resp_enfermeiro LIKE '489' AND ag.status LIKE 'Pendente' AND ag.data_agendamento <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY ag.data_agendamento, ag.hr_agendamento ASC"
+        query = "SELECT ag.id as agendamento, ag.data_agendamento, pa.nome_p, ag.cep, ag.hr_agendamento, ag.status, unidade.unit_s FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON pa.id_p = ag.nome_p INNER JOIN admins.units_shiloh unidade ON ag.unity = unidade.id_unit_s WHERE ag.resp_enfermeiro LIKE '489' AND ag.status LIKE 'Pendente' AND ag.data_agendamento <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) ORDER BY ag.data_agendamento, ag.hr_agendamento ASC"
         cursor.execute(query)
         dados = cursor.fetchall()
         array = []
         if dados:
-            for id_agendamento, data, nome_paciente, cep, status in dados:
+            for id_agendamento, data, nome_paciente, cep, hora, status, unidade in dados:
                 dataFormatada = datetime.strptime(str(data), "%Y-%m-%d").strftime("%d/%m/%Y") if data not in ["", None] else ""
                 newinfoa = ({
                     "id": id_agendamento,
                     "date_age": dataFormatada,
                     "paciente": nome_paciente,
                     "cep": cep,
-                    "nurse": status,              
+                    "hora": hora,
+                    "status": status,              
+                    "unidade": unidade,              
                     })
                 array.append(newinfoa)
             return array 

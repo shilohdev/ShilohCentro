@@ -29,6 +29,20 @@ AGENDAR COLETA
                         <input id="date_age" type="date" data-required='true'>
                         <label for="date_age">Data Agendamento</label>
                      </div>
+                     <div class="input-field col s3">
+                        <select name="select" id="hr_age" class="error " data-required='true'>
+                           <option value="">Horário</option>
+                           <option value="05:00">05:00</option>
+                           <option value="06:00">06:00</option>
+                           <option value="07:00">07:00</option>
+                           <option value="08:00">08:00</option>
+                           <option value="09:00">09:00</option>
+                           <option value="10:00">10:00</option>
+                           <option value="11:00">11:00</option>
+                           <option value="12:00">12:00</option>
+                           <option value="13:00">13:00</option>
+                        </select>
+                     </div>
                      <div class="input-field col m3 s12" >
                         <div class="select-wrapper">
                            <select name="select" id="tp_service" onchange="SelectShow()" class="error " data-required='true'>
@@ -279,12 +293,17 @@ $(".select2").select2({
                };
 
                fetchRequest("{% url 'ApiSchedulePickup' %}", "POST", "JSON", btncadastrar, function(re){
+               console.log(re["response"])
                if(re["response"] == "true"){
                   alert(re["message"]);
                   location.reload();
-            
+
+               }else if (re["response"] == "limite"){
+                  alert(re["message"]);
+                  $("#btn_cadastrar").attr("disabled", false);
+
                }else{ 
-                  if(re["response"] == false){
+                  if(re["response"] == false ){
                      $("#btn_cadastrar").attr("disabled", false);
                }
             }
