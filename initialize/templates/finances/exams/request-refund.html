@@ -421,9 +421,9 @@ function FinalizeProcess(object) {
     $("#btn_end").attr("disabled", true);
     //VALIDAÇÃO DE CAMPO NULL
     var i = 0;
-    $("#cardFinance input[data-required='true']").each(function() {
+    $("#cardFinance input[data-required='true'] select[data-required='true']").each(function() {
         if ($(this).val() == "") {
-            alert("Preencha os campos obrigatórios. E verifique há Nota Fiscal anexada.");
+            alert("Preencha os campos obrigatórios. E verifique há Comprovante de pagamento anexado.");
             $("#btn_end").attr("disabled", false);
             $(this).focus();
             i = 1;
@@ -445,24 +445,6 @@ function FinalizeProcess(object) {
     var tp_exame = $("#tp_exame").val();
     var company = $("#company").val();
 
-    
-    if (statusProgresso == "4"){
-        var i = 0;
-        $("#porcentagem").attr("data-required='true'");
-        $("#cardFinance input[data-required='true']").each(function() {
-            if ($(this).val() == "") {
-                alert("Preencha os campos obrigatórios. E verifique há Nota Fiscal anexada.");
-                $("#btn_salvar").attr("disabled", false);
-                $(this).focus();
-                i = 1;
-                return false;
-            }
-        });
-        if (i == 1) {
-            return false;
-        }
-    }
-
     var formpost = {
         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         "id_user": id_user, 
@@ -478,10 +460,14 @@ function FinalizeProcess(object) {
     };
 
     fetchRequest("{% url 'ApiFinalizeProcess' %}", "POST", "JSON", formpost, function(re) {
-        if (re["response"] == "true") {
+        if(re["response"] == "true") {
             alert(re["message"]);
             $("#btn_end").attr("disabled", true);
             location.reload();
+        }else if(re["response"] == "sem_anexo"){
+            alert(re["message"]);
+            $("#btn_end").attr("disabled", false);
+
         }else{
             alert(re["message"]);
             $("#btn_end").attr("disabled", false);

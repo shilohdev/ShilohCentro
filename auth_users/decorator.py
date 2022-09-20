@@ -1966,7 +1966,7 @@ def FunctionStatusAgendaConc(request):
         dados = cursor.fetchall()
         for tp_serviço, id, conv in dados:
             if  tp_serviço != 5 and tp_serviço != 6:
-                if conv !=  '72':
+                if conv !=  '72': #cortesia
                     queryVerif = "SELECT id, id_agendamento_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s "
                     cursor.execute(queryVerif, (id,))
                     dados = cursor.fetchall()
@@ -1976,8 +1976,7 @@ def FunctionStatusAgendaConc(request):
                             "response": "true", 
                             "message": "Coleta já concluída."
                             }
-                    else: 
-                        pass
+                    else:
                         query2 = "INSERT INTO `auth_finances`.`completed_exams` (`id`, `id_agendamento_f`, `data_inc_proc_f`, `status_exame_f`, `resp_inicio_p_f`, `val_alvaro_f`, `val_work_f`, `val_pag_f`, `porcentagem_paga_f`, `data_repasse`, `nf_f`, `anx_f`, `data_aquivo_f`, `data_final_f`, `data_registro_f`, `resp_final_p_f`, `regis`, `obs_f`, `identification`, `def_glosado_n_atingido`, `company`) VALUES (NULL, %s, NULL, '8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, %s, NULL, '0', NULL, 'Externo', NULL, %s);"
                         cursor.execute(query2, param2)
         params7=(id,)

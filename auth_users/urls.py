@@ -113,7 +113,8 @@ urlpatterns = [
 
     #PAGAMENTOS PAREIROS 
     path('financeiro/fechamento/parceiros/', views.ClosingPartnersViews, name='ClosingPartners'),#EXAMES FINALIZADOS
-    path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#FECHAMENTO PARCEIRO > MES
+    path('financeiro/fechamento/parceiros/filter/personalizado', views.FiltroPersonalizado_ClosingPartners_views, name='FiltroPersonalizado_ClosingPartners_views'),#FECHAMENTO PARCEIRO > FILTRO PERSONALIZADO
     path('financeiro/fechamento/parceiros/detalhes', views.paymentDetails, name='paymentDetails'),
     path('financeiro/fechamento/parceiros/pay', views.payPartnersV, name='payPartnersV'),
     path('financeiro/modal/parceiros/status', views.SearchInfoM, name='SearchInfoM'),

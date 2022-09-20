@@ -327,7 +327,7 @@ Fechamento de Parceiros
                   <label for="data_fim">Fim</label>
                </div>
                <div class="col s12 m3 mt-2">
-                  <button id="filtrar_fechamento" class="waves-effect waves dark btn next-step" type="button"
+                  <button id="filtrar_fechamento" onclick="pesquisarPersonalizado()" class="waves-effect waves dark btn next-step" type="button"
                      style="width: 100%;">
                      <span
                         style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
@@ -439,6 +439,7 @@ Fechamento de Parceiros
          } else {
             //TABELA
             var dados = re["table"];
+            var a = $("#tabela_fechamento_atual").html("");
 
             //$("#tabela_fechamento_atual").html("");
             $.map(dados, function (n, i) {
@@ -541,12 +542,159 @@ Fechamento de Parceiros
       });
    }
 
-
-
-
    function TableFechamentoEspecifico() {
       $("#filtro_datas").css('display', 'block');
       $("#table_mes").css('display', 'none');
+   }
+
+
+   function pesquisarPersonalizado() {
+      showLoadingPage("show");
+      
+      var data_inicio = $("#data_inicio").val();
+      var data_fim = $("#data_fim").val();
+
+      var formpost = {
+         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+         'data_inicio': data_inicio,
+         'data_fim': data_fim,
+      };
+      console.log(formpost)
+      fetchRequest("{% url 'FiltroPersonalizado_ClosingPartners_views' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
+         showLoadingPage("close");
+         $("#table_filter").show()
+
+         var dados = re["table"]
+         if (dados == false) {
+
+            $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro").css("display", "block");
+            $("#arr_pago_labmovel, #arr_pago_shilohlab, #arr_apagar_labmovel, #arr_apagar_shilohlab, #arr_quantidade_filtro, #arr_total_filtro").hide();
+            $("#pago_labmovel, #pago_shilohlab, #apagar_labmovel, #apagar_shilohlab, #quantidade_filtro, #total_filtro, #tabela_fechamento_atual").html("");
+
+            var appende = ' <tr> <td colspan="7" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td> </tr>'
+            $("#tabela_fechamento_atual").append(appende);
+
+            var pago_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+            $("#pago_labmovel").append(pago_labmovel);
+
+            var pago_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+            $("#pago_shilohlab").append(pago_shilohlab);
+
+            var apagar_labmovel = `<h5 class="mb-0">R$ 00,00</h5>`
+            $("#apagar_labmovel").append(apagar_labmovel);
+
+            var apagar_shilohlab = `<h5 class="mb-0">R$ 00,00</h5>`
+            $("#apagar_shilohlab").append(apagar_shilohlab);
+
+            var b = `<h4 class="mb-0">R$ 00,00</h4>`;
+            $("#total_filtro").append(b);
+
+            var b2 = `<p>(0 registros)</p>`;
+            $("#quantidade_filtro").append(b2);
+         } else {
+            //TABELA
+            var dados = re["table"];
+            var a = $("#tabela_fechamento_atual").html("");
+
+            //$("#tabela_fechamento_atual").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+               <tr id="tr_${n.id}">
+                  <td style="text-align: center;">${n.medico} [${n.rn}] </td>
+                  <td style="text-align: center;">${n.categoria}</td>
+                  <td style="text-align: center;">${n.comercial}</td>
+                  <td style="text-align: center;">${n.company}</td>
+                  <td style="text-align: center;">${n.status}</td>
+                  <td style="text-align: center;">${n.valor}</td>
+                  <td style="text-align: center;">
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\" style="background-color: #f5be4600">
+                           <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px;width: 15px;padding: 1;padding-right: 8px;background-color: #f5be4600;">
+                              <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
+                           </button>
+                        </a>
+                  </td>
+               </tr>
+               `;
+
+               $("#tabela_fechamento_atual").append(a);
+
+
+
+               // DASH PAGO
+               // Lab Movel
+               var dados = re["PagoLabMovel"];
+               $("#pago_labmovel").html("");
+               $("#pago_labmovel").css("display", "block");
+               $("#arr_pago_labmovel").hide();
+
+               $.map(dados, function (n, i) {
+                  var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                  $("#pago_labmovel").append(valor);
+
+               });
+
+               // Shiloh Lab
+               var dados = re["PagoLabShilohLab"];
+               $("#pago_shilohlab").html("");
+               $("#pago_shilohlab").css("display", "block");
+               $("#arr_pago_shilohlab").hide();
+
+               $.map(dados, function (n, i) {
+                  var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                  $("#pago_shilohlab").append(valor);
+
+               });
+
+               // DASH A PAGAR
+               // Lab Movel
+               var dados = re["APagarLabMovel"];
+               $("#apagar_labmovel").html("");
+               $("#apagar_labmovel").css("display", "block");
+               $("#arr_apagar_labmovel").hide();
+
+               $.map(dados, function (n, i) {
+                  var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                  $("#apagar_labmovel").append(valor);
+
+               });
+
+               // Shiloh Lab
+               var dados = re["APagarShilohLab"];
+               $("#apagar_shilohlab").html("");
+               $("#apagar_shilohlab").css("display", "block");
+               $("#arr_apagar_shilohlab").hide();
+
+               $.map(dados, function (n, i) {
+                  var valor = `<h5 class="mb-0">${n.valor}</h5>`
+                  $("#apagar_shilohlab").append(valor);
+               });
+
+               //TOTAL
+               var dados = re["Total"];
+               $("#quantidade_filtro, #total_filtro").html("");
+               $("#quantidade_filtro, #total_filtro").css("display", "block");
+               $("#arr_quantidade_filtro, #arr_total_filtro").hide();
+
+               $.map(dados, function (n, i) {
+                  var quantidade = `<p class="mb-0" style="font-size: 16px;">(${n.qdt} registros)</p>`
+                  $("#quantidade_filtro").append(quantidade);
+
+                  var valor = `<h4 class="mb-0">${n.val}</h4>`
+                  $("#total_filtro").append(valor);
+               });
+            });
+
+            var dataValues = $("#page-length-option").dataTable({ // traz retorno do data table
+               "ordering": true,
+               "scrollCollapse": true,
+               "searching": true,
+               "columnDefs": [{
+                  orderable: true,
+                  targets: 0
+               }],
+            });
+         }
+      });
    }
 
 
