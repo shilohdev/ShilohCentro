@@ -76,6 +76,23 @@ Fechamento de Parceiros
             <tfoot id="Count"></tfoot>
          </table>
       </div>
+      <!--AGUARDANDO REPASSE-->
+      <div class="container col s12 m8" style="margin-top:80px">
+         <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+            <div class="collapsible-header col s12" style="  height: 40px; background-color: #528336; color: white;"
+               tabindex="0">
+               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">AGUARDANDO REPASSE</labe>
+            </div>
+            <thead>
+               <tr role="row">
+                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
+                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+               </tr>
+            </thead>
+            <tbody id="repasse"></tbody>
+         </table>
+      </div>
       <!--EM ANÁLISE-->
       <div class="container col s12 m8" style="margin-top:80px">
          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
@@ -94,47 +111,31 @@ Fechamento de Parceiros
             </tbody>
          </table>
       </div>
-      <!--NÃO ATINGIDO-->
-      <div class="container col s12 m8" style="margin-top:80px">
-         <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-            <div class="collapsible-header col s12" style="  height: 40px; background-color: #c74d4d; color: white;"
-               tabindex="0">
-               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">NÃO ATINGIDO</labe>
-            </div>
-            <thead>
-               <tr role="row">
-                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
-                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
-                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
-               </tr>
-            </thead>
-            <tbody id="tb_naoAtingido"></tbody>
-         </table>
-      </div>
-      <!--GLOSA-->
+      <!--GLOSA E NÃO ATINGIDO-->
       <div class="container col s12 m8" style="margin-top:80px">
          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
             <div class="collapsible-header col s12" style=" height: 40px; background-color: #c74d4d; color: white;"
                tabindex="0">
-               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA</labe>
+               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">GLOSA / NÃO ATINGIDO</labe>
             </div>
             <thead>
                <tr role="row">
                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Coleta</th>
                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Exame</th>
+                  <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
                </tr>
             </thead>
             <tbody id="glosa">
             </tbody>
          </table>
       </div>
-      <!--OUTROS-->
+      <!--JURÍDICO-->
       <div class="container col s12 m8" style="margin-top:80px">
          <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
-            <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;"
+            <div class="collapsible-header col s12" style=" height: 40px; background-color: #4c4b4b; color: white;"
                tabindex="0">
-               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
+               <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">JURÍDICO</labe>
             </div>
             <thead>
                <tr role="row">
@@ -143,10 +144,29 @@ Fechamento de Parceiros
                   <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
                </tr>
             </thead>
-            <tbody id="outros">
+            <tbody id="juridico">
             </tbody>
          </table>
       </div>
+     <!-- OUTROS
+         <div class="container col s12 m8" style="margin-top:80px">
+            <table id="multi-select" class="display dataTable dtr-inline" role="grid" style="width: 762px;">
+               <div class="collapsible-header col s12" style=" height: 40px; background-color: #8e3636; color: white;"
+                  tabindex="0">
+                  <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">OUTROS</labe>
+               </div>
+               <thead>
+                  <tr role="row">
+                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 145px;">Nome</th>
+                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">Data Indicação</th>
+                     <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 91px;">Status</th>
+                  </tr>
+               </thead>
+               <tbody id="outros">
+               </tbody>
+            </table>
+         </div>
+     --> 
       <!--BOTÃO PAGO-->
       <div id="docss" class="col s12 m12" style="display: none; margin-top: 10px ;"></div>
       <div class="col s12">
@@ -317,23 +337,26 @@ Fechamento de Parceiros
                </div>
             </div>
 
-            <div class="container" id="filtro_datas" style="display: none;">
-               <div class="input-field col m3 s6">
-                  <input id="data_inicio" type="date" data-required="true">
-                  <label for="data_inicio">Início</label>
+            <div class="row" id="filtro_datas" style="display: none;">
+               <div class="container">
+                  <div class="input-field col m3 s6">
+                     <input id="data_inicio" type="date" data-required="true">
+                     <label for="data_inicio">Início</label>
+                  </div>
+                  <div class="input-field col m3 s6">
+                     <input id="data_fim" type="date" data-required="true">
+                     <label for="data_fim">Fim</label>
+                  </div>
+                  <div class="col s12 m3 mt-2">
+                     <button id="filtrar_fechamento" onclick="pesquisarPersonalizado()" class="waves-effect waves dark btn next-step" type="button"
+                        style="width: 100%;">
+                        <span
+                           style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
+                     </button>
+                  </div>
                </div>
-               <div class="input-field col m3 s6">
-                  <input id="data_fim" type="date" data-required="true">
-                  <label for="data_fim">Fim</label>
-               </div>
-               <div class="col s12 m3 mt-2">
-                  <button id="filtrar_fechamento" onclick="pesquisarPersonalizado()" class="waves-effect waves dark btn next-step" type="button"
-                     style="width: 100%;">
-                     <span
-                        style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</span>
-                  </button>
-               </div>
-            </div> 
+            </div>
+
             <div class="container" id="table_mes" style="display: none;">
                <div class="input-field col s12 m4">
                   <input  id="pesquisa" type="text" onkeyup="searchPatients(this)">
@@ -350,6 +373,7 @@ Fechamento de Parceiros
                            <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
                            <th data-field="id" style="text-align: center; width: 130px;">Relação</th>
                            <th data-field="id" style="text-align: center; width: 130px;">Status</th>
+                           <th data-field="id" style="text-align: center; width: 130px;">Mês de Referência</th>
                            <th data-field="id" style="text-align: center; width: 130px;">Valor Total</th>
                            <th data-field="name" style="text-align: center; width: 85px;">Ação</th>
                         </tr>
@@ -450,9 +474,10 @@ Fechamento de Parceiros
                   <td style="text-align: center;">${n.comercial}</td>
                   <td style="text-align: center;">${n.company}</td>
                   <td style="text-align: center;">${n.status}</td>
+                  <td style="text-align: center;">${n.mes}</td>
                   <td style="text-align: center;">${n.valor}</td>
                   <td style="text-align: center;">
-                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\" style="background-color: #f5be4600">
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this, 'mes'); SearchInfo(this)\" style="background-color: #f5be4600">
                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px;width: 15px;padding: 1;padding-right: 8px;background-color: #f5be4600;">
                               <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
                            </button>
@@ -528,16 +553,6 @@ Fechamento de Parceiros
                   $("#total_filtro").append(valor);
                });
             });
-
-            var dataValues = $("#page-length-option").dataTable({ // traz retorno do data table
-               "ordering": true,
-               "scrollCollapse": true,
-               "searching": true,
-               "columnDefs": [{
-                  orderable: true,
-                  targets: 0
-               }],
-            });
          }
       });
    }
@@ -545,12 +560,15 @@ Fechamento de Parceiros
    function TableFechamentoEspecifico() {
       $("#filtro_datas").css('display', 'block');
       $("#table_mes").css('display', 'none');
+      $("#data_inicio").val('');
+      $("#data_fim").val('');
    }
 
 
    function pesquisarPersonalizado() {
       showLoadingPage("show");
-      
+      $("#table_mes").css('display', 'block');
+
       var data_inicio = $("#data_inicio").val();
       var data_fim = $("#data_fim").val();
 
@@ -560,6 +578,7 @@ Fechamento de Parceiros
          'data_fim': data_fim,
       };
       console.log(formpost)
+
       fetchRequest("{% url 'FiltroPersonalizado_ClosingPartners_views' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
          showLoadingPage("close");
          $("#table_filter").show()
@@ -594,7 +613,7 @@ Fechamento de Parceiros
          } else {
             //TABELA
             var dados = re["table"];
-            var a = $("#tabela_fechamento_atual").html("");
+            $("#tabela_fechamento_atual").html("");
 
             //$("#tabela_fechamento_atual").html("");
             $.map(dados, function (n, i) {
@@ -605,9 +624,10 @@ Fechamento de Parceiros
                   <td style="text-align: center;">${n.comercial}</td>
                   <td style="text-align: center;">${n.company}</td>
                   <td style="text-align: center;">${n.status}</td>
+                  <td style="text-align: center;">${n.mes}</td>
                   <td style="text-align: center;">${n.valor}</td>
                   <td style="text-align: center;">
-                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this); SearchInfo(this)\" style="background-color: #f5be4600">
+                        <a href="#modal1" class="modal-trigger" data-id_user="${n.id}" onclick=\"viewAgenModal(this, '${n.mes}'); SearchInfo(this)\" style="background-color: #f5be4600">
                            <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px;width: 15px;padding: 1;padding-right: 8px;background-color: #f5be4600;">
                               <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
                            </button>
@@ -684,15 +704,6 @@ Fechamento de Parceiros
                });
             });
 
-            var dataValues = $("#page-length-option").dataTable({ // traz retorno do data table
-               "ordering": true,
-               "scrollCollapse": true,
-               "searching": true,
-               "columnDefs": [{
-                  orderable: true,
-                  targets: 0
-               }],
-            });
          }
       });
    }
@@ -836,66 +847,23 @@ Fechamento de Parceiros
    }
 
 
-   function viewAgenModal(object) {
+   function viewAgenModal(object, obj) {
       var id_user = $(object).data("id_user");
-
-      var month = $("#mes_search").val();
+      var personalizado = obj
 
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
          "id_user": id_user,
-         "month": month,
+         "personalizado": personalizado,
       };
       $("#modal2").hide();
       $(object).prop("disabled", true);
 
       fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function (re) { //FUNÇÃO FILTRAR MES
-         if (re["response"] == false) {
+         if (re["response"] == false) { 
             alert("Nenhum dado encontrado."); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
 
          } else {
-            $("#modal2").show();
-            var dados = re["message2"];
-            $("#tb_naoAtingido").html("");
-            $.map(dados, function (n, i) {
-               var a = `
-                  <tr id="tr_${n.id}" role="row" class="odd">
-                     <td>${n.paciente}</td>
-                     <td>${n.agendamento}</td>
-                     <td>${n.exame}</td>
-                  </tr>
-               `;
-               $("#tb_naoAtingido").append(a);
-            });
-
-            var dados = re["message"];
-            $("#glosa").html("");
-            $.map(dados, function (n, i) {
-               var a = `
-                  <tr id="tr_${n.id}" role="row" class="odd">
-                     <td>${n.pacienteG}</td>
-                     <td>${n.agendamentoG}</td>
-                     <td>${n.exameG}</td>
-                  </tr>
-               `;
-               $("#glosa").append(a);
-            });
-
-
-            var dados = re["messageAnalise"];
-            $("#analise").html("");
-            $.map(dados, function (n, i) {
-               var a = `
-                  <tr id="tr_${n.id}" role="row" class="odd">
-                     <td>${n.pacienteA}</td>
-                     <td>${n.agendamentoA}</td>
-                     <td>${n.exameA}</td>
-                  </tr>
-               `;
-               $("#analise").append(a);
-            });
-
-
             var dados = re["messagePago"];
             $("#pago").html("");
             $.map(dados, function (n, i) {
@@ -910,20 +878,6 @@ Fechamento de Parceiros
                `;
                $("#pago").append(a);
             });
-
-            var dados = re["messageOutros"];
-            $("#outros").html("");
-            $.map(dados, function (n, i) {
-               var a = `
-                  <tr id="tr_${n.idlead}" role="row" class="odd">
-                     <td>${n.pacienteO}</td>
-                     <td>${n.indicacaoO}</td>
-                     <td>${n.statusO}</td>
-                  </tr>
-               `;
-               $("#outros").append(a);
-            });
-
 
             var dados = re["messageCount"];
             $("#Count").html("");
@@ -940,9 +894,75 @@ Fechamento de Parceiros
                $("#Count").append(a);
             });
 
+            var dados = re["messageRepasse"];
+            $("#repasse").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+                  <tr role="row" class="odd">
+                     <td>${n.nome_p}</td>
+                     <td>${n.tipo_exame}</td>
+                     <td>${n.data_agendamento}</td>
+                  </tr>
+               `;
+               $("#repasse").append(a);
+            });
 
+            var dados = re["messageAnalise"];
+            $("#analise").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+                  <tr role="row" class="odd">
+                     <td>${n.nome_p}</td>
+                     <td>${n.tipo_exame}</td>
+                     <td>${n.data_agendamento}</td>
+                  </tr>
+               `;
+               $("#analise").append(a);
+            });
+
+            var dados = re["messageGlosaNaoAtingido"];
+            $("#glosa").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+                  <tr role="row" class="odd">
+                     <td>${n.nome_p}</td>
+                     <td>${n.data_agendamento}</td>
+                     <td>${n.tipo_exame}</td>
+                     <td>${n.status}</td>
+                  </tr>
+               `;
+               $("#glosa").append(a);
+            });
+
+
+            var dados = re["messageJuridico"];
+            $("#juridico").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+                  <tr role="row" class="odd">
+                     <td>${n.nome_p}</td>
+                     <td>${n.data_agendamento}</td>
+                     <td>${n.tipo_exame}</td>
+                  </tr>
+               `;
+               $("#juridico").append(a);
+            });
+
+         /* 
+         var dados = re["messageOutros"];
+            $("#outros").html("");
+            $.map(dados, function (n, i) {
+               var a = `
+                  <tr id="tr_${n.idlead}" role="row" class="odd">
+                     <td>${n.pacienteO}</td>
+                     <td>${n.indicacaoO}</td>
+                     <td>${n.statusO}</td>
+                  </tr>
+               `;
+               $("#outros").append(a);
+            });
+         */
          }
-
       });
 
       var r = new request($('{% csrf_token %}').val());
@@ -952,30 +972,29 @@ Fechamento de Parceiros
             var docs = dados["docs"];
             div = ""
             div2 = ""
-
             if (docs.length > 0) {
                $.map(docs, function (n, i) {
                   $("#docss").css("display", "block");
                   div += ` 
-                           <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0" data-down="${n.path}">
-                              <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
-                                 <div class="dropify-errors-container">
-                                 </div>
-                                 <button type="button" class="dropify-clear" onclick=\"removeFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">Remover</button>
-                                 <div id="display" class="dropify-preview" style="display: block;">
-                                       <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">NF</span></span>
-                                       <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
-                                          <div class="dropify-infos-inner">
-                                             </br>
-                                             <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
-                                             <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.type}</span></p>
-                                             <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
-                                          </div>
-                                       </div>
-                                 </div>
-                              </div>
+                     <div class="container closests col s5 m4" for="preview" style="width:200px;  margin:0" data-down="${n.path}">
+                        <div id="preview" class="dropify-wrapper has-preview" style="height: 114px;">
+                           <div class="dropify-errors-container">
                            </div>
-                     `
+                           <button type="button" class="dropify-clear" onclick=\"removeFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">Remover</button>
+                           <div id="display" class="dropify-preview" style="display: block;">
+                                 <span class="dropify-render"><i class="dropify-font-file"></i><span class="dropify-extension">NF</span></span>
+                                 <div class="dropify-infos" onclick=\"viewFile(this)\" data-type="${n.type}"  data-name="${n.name}" data-id_partners="${id_user}" data-path="${n.path}">
+                                    <div class="dropify-infos-inner">
+                                       </br>
+                                       <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.name}</span></p>
+                                       <p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner">${n.type}</span></p>
+                                       <p class="dropify-infos-message" style="margin-top: 0px;padding-top: 0px;">Download</p>
+                                    </div>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                  `
                });
 
                $("#docss").html(div);
@@ -984,9 +1003,7 @@ Fechamento de Parceiros
                $("#docss").css("display", "none");
             }
          }
-
-      });
-
+     });
    }
 
    //PAGO
@@ -995,8 +1012,8 @@ Fechamento de Parceiros
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
          "id_user": id_user, //DICT COM O VALOR DO ID
-
       };
+
       fetchRequest("{% url 'payPartnersV' %}", "POST", "JSON", formpost, function (re) {
          if (re["response"] == "true") {
             $("#btn_end").attr("disabled", true);
@@ -1023,22 +1040,18 @@ Fechamento de Parceiros
                "nome_medico": key["teste"]["nome_medico"],
                "status_pagamento": key["teste"]["status_pagamento"],
                "valorTotal": key["teste"]["val"],
-
             }
+
             $.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
                $(`#${i}`).val(n);
                var findLabel = $(`#${i}`).closest("div");
                $(findLabel).find("label").attr("class", "active");
             });
-
             $("#btn_pay").data("id_user", id_user); //PEGA O ID DO PACIENTE
-
          }
       });
 
    }
-
-
    // ------------------------  DOCS  --------------------------------//
    $('.dropify').dropify(); //Ativar o dropify
 

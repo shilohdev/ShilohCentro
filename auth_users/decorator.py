@@ -3292,7 +3292,7 @@ def FetchPartnersFilesFunction(bodyData):
         }
 
     except Exception as err:
-        print("EROOOOO>>", err)
+        print("EROOOOsssO>>", err)
         return {
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
@@ -3997,7 +3997,7 @@ def ContractCollectionFunction(bodyData):
             else:
                 return False
     except Exception as err:
-        print("EROOOOO>>", err)
+        print("EROOOOrrrO>>", err)
         return {
             "response": False,
             "message": "Não foi possível encontrar este parceiro."
@@ -4028,7 +4028,7 @@ def FileContractFunction(request):
                     "message": "Não existe termo assinado para essa coleta."
                 }
     except Exception as err:
-        print("EROOOOO>>", err)
+        print("EROOOOOss>>", err)
         return {
             "response": False,
             "message": "Não foi possível encontrar este parceiro."

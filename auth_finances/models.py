@@ -1,5 +1,6 @@
 from datetime import datetime
 import imp
+import json
 from django.db import models
 from django.db import connections
 import base64
@@ -123,12 +124,14 @@ class DashPartners_Closing:
 
     def FiltroTable(self):
      with connections['auth_finances'].cursor() as cursor:
-        query = f"SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month( a.data_repasse) AS mes_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE EXTRACT(MONTH FROM a.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM a.data_repasse) = {self.ano} GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), b.id, a.status_partners, a.relacao_partners"
+        query = f"SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month(a.data_repasse) AS mes_repasse, YEAR( a.data_repasse), SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE EXTRACT(MONTH FROM a.data_repasse) = {self.mes} AND EXTRACT(YEAR FROM a.data_repasse) = {self.ano} GROUP BY a.nome_medico, co.nome, b.rn, MONTH( a.data_repasse), YEAR( a.data_repasse), b.id, a.status_partners, a.relacao_partners"
         cursor.execute(query)
         dadoss = cursor.fetchall()
         array = []
         if dadoss:
-            for id, medico, categoria, comercial, rn, data_repasse, valor, status, company in dadoss:
+            for id, medico, categoria, comercial, rn, mes, ano, valor, status, company in dadoss:
+                mes_ref = str(mes) + '/' + str(ano)
+                print(mes_ref)
                 valor = (valor) if valor not in ["", None] else None
                 valor = f"R$ {valor:_.2f}"
                 valor = valor.replace(".", ",").replace("_", ".")
@@ -138,7 +141,7 @@ class DashPartners_Closing:
                     "rn": rn, 
                     "categoria": categoria,
                     "comercial": comercial,
-                    "data_repasse": data_repasse,
+                    "mes": mes_ref,
                     "valor": valor,
                     "status": status,
                     "company": company,
@@ -433,9 +436,10 @@ class DashInterno_Closing:
 
 #filtro personalizado dos parceiros
 class ClosingPartnersFilter:
-    def __init__(self, data_inicio=None, data_fim=None) -> None:
+    def __init__(self, data_inicio, data_fim):
         self.data_inicio = data_inicio
         self.data_fim = data_fim
+
     '''
         def PagosLabMovel(self):
             with connections['auth_finances'].cursor() as cursor:
@@ -548,12 +552,13 @@ class ClosingPartnersFilter:
 
     def FiltroTable(self):
         with connections['auth_finances'].cursor() as cursor:
-            queryCalculo = f"SELECT b.id, b.nome, c.categoria, co.nome, b.rn, data_repasse, SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE a.data_repasse BETWEEN '2022-09-01' and '2022-09-20' GROUP BY a.nome_medico, co.nome, b.rn, a.data_repasse, b.id, a.status_partners, a.relacao_partners"
+            queryCalculo = f"SELECT b.id, b.nome, c.categoria, co.nome, b.rn, month(a.data_repasse), YEAR( a.data_repasse), SUM(a.valor_uni_partners) AS total, a.status_partners, a.relacao_partners FROM auth_finances.closing_finance a INNER JOIN auth_users.users b ON a.nome_medico = b.id INNER JOIN auth_users.users co ON a.nome_comercial = co.id INNER JOIN auth_users.Category_pertners c ON b.categoria = c.id WHERE a.data_repasse BETWEEN '{self.data_inicio}' and '{self.data_fim}' GROUP BY a.nome_medico, co.nome, b.rn, month(a.data_repasse), YEAR( a.data_repasse), b.id, a.status_partners, a.relacao_partners"
             cursor.execute(queryCalculo)
-            dadoss = cursor.fetchall()
+            dados = cursor.fetchall()
             array = []
-            if dadoss:
-                for id, medico, categoria, comercial, rn, data_repasse, valor, status, company in dadoss:
+            if dados:
+                for id, medico, categoria, comercial, rn, mes, ano, valor, status, company in dados:
+                    mes_ref = str(mes) + '/' + str(ano)
                     valor = (valor) if valor not in ["", None] else None
                     valor = f"R$ {valor:_.2f}"
                     valor = valor.replace(".", ",").replace("_", ".")
@@ -563,7 +568,7 @@ class ClosingPartnersFilter:
                         "rn": rn, 
                         "categoria": categoria,
                         "comercial": comercial,
-                        "data_repasse": convertDate(data_repasse),
+                        "mes": mes_ref,
                         "valor": valor,
                         "status": status,
                         "company": company,
@@ -574,3 +579,204 @@ class ClosingPartnersFilter:
             
             return array
 
+
+
+class ClosingPartnersModal_Mes:
+    def __init__(self, mes=None, id_medico=None) -> None:
+        self.mes = mes
+        self.id_medico = id_medico
+
+    def relacao_pagos(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = '{}' AND nome_medico = '{}'".format(self.mes, self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            arrayPago = []
+            if dados: 
+                for iDmedico, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
+                    valor_uniP = f"R$ {valor_uniP:_.2f}"
+                    valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
+
+                    newinfoa = ({
+                        "iDmedico": iDmedico,
+                        "pacienteP": pacienteP,
+                        "dataColetaP": convertDate(dataColetaP),
+                        "dataRepasseP": convertDate(dataRepasseP),
+                        "exameP": exameP,
+                        "valor_uniP": valor_uniP,
+                        })
+                    arrayPago.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "iDmedico": '-',
+                    "pacienteP": '-',
+                    "dataColetaP": '-',
+                    "dataRepasseP": '-',
+                    "exameP": '-',
+                    "valor_uniP": '-',
+                    })
+                arrayPago.append(newinfoa)
+
+            return arrayPago 
+
+            
+
+    def count_pagos(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = '{}' AND nome_medico = '{}'".format(self.mes, self.id_medico)
+            cursor.execute(queryCount)
+            dados = cursor.fetchall()
+            arrayPagoCount = []
+            if dados:
+                for contagem, valor in dados:
+                    if valor == None:
+                        valor = 0
+                    valor = float(valor) if valor not in ["", None] else None
+                    valor = f"R$ {valor:_.2f}"
+                    valorS = valor.replace(".", ",").replace("_", ".")
+
+                    newinfoa = ({
+                        "contagem": contagem,
+                        "valor": valorS,
+                        })
+                    arrayPagoCount.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "contagem": '-',
+                    "valor": '-',
+                    })
+                arrayPagoCount.append(newinfoa)
+
+
+            return arrayPagoCount
+
+    
+    def analise(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT us.id, pa.nome_p, ex.tipo_exame, ag.data_agendamento FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f WHERE us.id = '{}' AND ff.status_exame_f LIKE 2".format(self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            arrayAnalise = []
+            if dados: 
+                for id, nome_p, tipo_exame, data_agendamento in dados:
+
+                    newinfoa = ({
+                        "id": id,
+                        "nome_p": nome_p,
+                        "tipo_exame": tipo_exame,
+                        "data_agendamento": convertDate(data_agendamento),
+                        })
+                    arrayAnalise.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "nome_p": '-',
+                    "tipo_exame": '-',
+                    "data_agendamento": '-',
+                    })
+                arrayAnalise.append(newinfoa)
+            return arrayAnalise
+
+    def GlosaNaoAtingido(self):
+        print(self.id_medico)
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT us.id, pa.nome_p, ex.tipo_exame, ag.data_agendamento, exm.status_p FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f INNER JOIN auth_finances.status_progress exm ON ff.status_exame_f = exm.id WHERE us.id = '{}' AND ff.status_exame_f LIKE 6 OR ff.status_exame_f LIKE 5".format(self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            array = []
+            if dados:
+                print("a")
+                for id, nome_p, tipo_exame, data_agendamento, status in dados:
+                    newinfoa = ({
+                        "id": id,
+                        "nome_p": nome_p,
+                        "tipo_exame": tipo_exame,
+                        "data_agendamento": convertDate(data_agendamento),
+                        "status": status,
+                        })
+                    array.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "nome_p": '-',
+                    "tipo_exame": '-',
+                    "data_agendamento": '-',
+                    "status": '-',
+                    })
+                array.append(newinfoa)
+            return array
+
+
+    def Repasse(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT us.id, pa.nome_p, ex.tipo_exame, ag.data_agendamento, exm.status_p FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f INNER JOIN auth_finances.status_progress exm ON ff.status_exame_f = exm.id WHERE us.id = '{}' AND ff.status_exame_f LIKE 12".format(self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            array = []
+            if dados: 
+                for id, nome_p, tipo_exame, data_agendamento, status in dados:
+                    newinfoa = ({
+                        "id": id,
+                        "nome_p": nome_p,
+                        "tipo_exame": tipo_exame,
+                        "data_agendamento": convertDate(data_agendamento),
+                        })
+                    array.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "nome_p": '-',
+                    "tipo_exame": '-',
+                    "data_agendamento": '-',
+                    })
+                array.append(newinfoa)
+            return array
+
+
+    def GlosaNaoAtingido(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT us.id, pa.nome_p, ex.tipo_exame, ag.data_agendamento FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f INNER JOIN auth_finances.status_progress exm ON ff.status_exame_f = exm.id WHERE us.id = '{}' AND ff.status_exame_f LIKE 13".format(self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            array = []
+            if dados: 
+                for id, nome_p, tipo_exame, data_agendamento in dados:
+                    newinfoa = ({
+                        "id": id,
+                        "nome_p": nome_p,
+                        "tipo_exame": tipo_exame,
+                        "data_agendamento": convertDate(data_agendamento),
+                        })
+                    array.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "nome_p": '-',
+                    "tipo_exame": '-',
+                    "data_agendamento": '-',
+                    })
+                array.append(newinfoa)
+            return array
+
+
+    def Outros(self):
+        with connections['auth_agenda'].cursor() as cursor:
+            queryPago = "SELECT us.id, pa.nome_p, ex.tipo_exame, ag.data_agendamento, exm.status_p FROM auth_agenda.collection_schedule ag INNER JOIN customer_refer.patients pa ON ag.nome_p = pa.id_p INNER JOIN auth_users.users us ON pa.medico_resp_p = us.id INNER JOIN admins.exam_type ex ON ex.id = ag.tp_exame INNER JOIN auth_finances.completed_exams ff ON ag.id = ff.id_agendamento_f INNER JOIN auth_finances.status_progress exm ON ff.status_exame_f = exm.id WHERE us.id = '{}' AND ff.status_exame_f LIKE 6 OR ff.status_exame_f LIKE 5".format(self.id_medico)
+            cursor.execute(queryPago)
+            dados = cursor.fetchall()
+            array = []
+            if dados: 
+                for id, nome_p, tipo_exame, data_agendamento, status in dados:
+                    newinfoa = ({
+                        "id": id,
+                        "nome_p": nome_p,
+                        "tipo_exame": tipo_exame,
+                        "data_agendamento": convertDate(data_agendamento),
+                        "status": status,
+                        })
+                    array.append(newinfoa)
+            else:
+                newinfoa = ({
+                    "nome_p": '-',
+                    "tipo_exame": '-',
+                    "data_agendamento": '-',
+                    "status": '-',
+                    })
+                array.append(newinfoa)
+            return array 

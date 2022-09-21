@@ -244,10 +244,12 @@ function SelectShow() {
             alert("Preencha os campos obrigatórios.");
             $(this).focus();
             i = 1;
+            $("#btn_cadastrar").attr("disabled", false);
             return false;
          }
       });
       if(i == 1){
+         $("#btn_cadastrar").attr("disabled", false);
          return false;
       }
       
@@ -271,6 +273,7 @@ function SelectShow() {
 
       if(val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo ==""){
          alert("Por favor, insira um valor válido ao Financeiro.")
+         $("#btn_cadastrar").attr("disabled", false);
          return false
 
       }else{

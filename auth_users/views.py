@@ -799,6 +799,7 @@ def FiltroPersonalizado_ClosingPartners_views(request):
     return JsonResponse(array, safe=False, status=200)
 
 
+#FECHAMENTO DOS PARCEIROS
 @login_required
 def paymentDetails(request):
     array = searchClosingPartners(request)

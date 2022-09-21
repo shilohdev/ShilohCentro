@@ -30,7 +30,7 @@ from re import A
 from django.contrib.auth.models import User
 from numpy import empty
 from pymysql import NULL
-from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing, ClosingPartnersFilter
+from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing, ClosingPartnersFilter, ClosingPartnersModal_Mes
 from functions.connection.models import Connection, Exams, RegisterActions
 from functions.general.decorator import convertDate, fetchAdministrator 
 from django.forms import model_to_dict
@@ -949,9 +949,9 @@ def PagoShilohLabFunction(request):
 #FECHAMENTO DOS PARCEIROS - MES VIGENTE
 def FilterMonthClosingPartners(request):
     ano = int(datetime.now().strftime("%Y"))
-    mes = int(datetime.now().strftime("%m"))
-    #mes = 5 - 1
-
+    mes_atual = int(datetime.now().strftime("%m"))
+    mes = mes_atual -1 #Se refere a data repasse do mes passado para o pagamento até dia 10 subsequente
+    print(mes)
     ObjetoPath = DashPartners_Closing(mes=mes, ano=ano)
 
     Table = ObjetoPath.FiltroTable()
@@ -977,12 +977,12 @@ def FilterMonthClosingPartners(request):
 def FiltroPersonalizado_ClosingPartners(request):
     data_inicio = request.POST.get('data_inicio')
     data_fim = request.POST.get('data_fim')
-    print(data_inicio)
-    print(data_fim)
+
 
     ObjetoPath = ClosingPartnersFilter(data_inicio=data_inicio, data_fim=data_fim)
 
     Table = ObjetoPath.FiltroTable()
+
     ''' PagoLabMovel = ObjetoPath.PagosLabMovel()
         PagoLabShilohLab = ObjetoPath.PagosShilohLab()
         APagarLabMovel = ObjetoPath.APagarLabMovel()
@@ -1048,60 +1048,32 @@ def fetchFilePartners(id):
 #TABELAS FECHAMENTO PARCEIROS - MODAL
 def searchClosingPartners(request):
     mes_atual = int(datetime.now().strftime("%m"))
-    mes = 5 - 1
+    mes = mes_atual -1
     id_medico = request.POST.get('id_user')
+    personalizado = request.POST.get('personalizado')
+    print(personalizado, "<<<<")
 
     files = fetchFilePartners(id_medico) #CHAMA A FUNÇÃO, LOCALIZA MEU DIRETÓRIO.
 
+    ObjetoPath = ClosingPartnersModal_Mes(mes=mes, id_medico=id_medico)
 
-    with connections['auth_agenda'].cursor() as cursor:
-     ## inicia aqui
-        queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s"
-        cursor.execute(queryPago, (mes, id_medico,))
-        dados = cursor.fetchall()
-        arrayPago = []
-        
+    pago = ObjetoPath.relacao_pagos()
+    soma_pagos = ObjetoPath.count_pagos()
+    repasse = ObjetoPath.Repasse()
+    analise = ObjetoPath.analise()
+    GlosaNaoAtingido = ObjetoPath.GlosaNaoAtingido()
+    Juridico = ObjetoPath.GlosaNaoAtingido()
 
-        for iDmedico, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
-            valor_uniP = f"R$ {valor_uniP:_.2f}"
-            valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
-
-            newinfoa = ({
-                "iDmedico": iDmedico,
-                "pacienteP": pacienteP,
-                "dataColetaP": convertDate(dataColetaP),
-                "dataRepasseP": convertDate(dataRepasseP),
-                "exameP": exameP,
-                "valor_uniP": valor_uniP,
-                })
-            arrayPago.append(newinfoa)
-
-
-        queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s "
-        cursor.execute(queryCount, (mes, id_medico,))
-
-        dados = cursor.fetchall()
-        arrayPagoCount = []
-        for contagem, valor in dados:
-            if valor == None:
-                valor = 0
-            valor = float(valor) if valor not in ["", None] else None
-            valor = f"R$ {valor:_.2f}"
-            valorS = valor.replace(".", ",").replace("_", ".")
-
-            newinfoa = ({
-                "contagem": contagem,
-                "valor": valorS,
-                })
-            arrayPagoCount.append(newinfoa)
-
-        return {
-            "response": "true",
-            "messagePago": arrayPago,
-            "messageCount": arrayPagoCount,
-            "files": json.dumps(files),
-
-        }
+    return {
+        "response": "true",
+        "messagePago": pago,
+        "messageCount": soma_pagos,
+        "messageRepasse": repasse,
+        "messageAnalise": analise,
+        "messageGlosaNaoAtingido": GlosaNaoAtingido,
+        "messageJuridico": Juridico,
+        "files": json.dumps(files),
+    }
 
 
 #BOTÃO CONCLUIR PAGAMENTO
@@ -1769,9 +1741,6 @@ def SearchFinanceIntGlosa(request):
 
     return array
 
-
-
-
  
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitAnalise(request):
@@ -1827,9 +1796,6 @@ def ClosingUnitAnalise(request):
                     })
                 array.append(newinfoa)
         return array
-
-
-
 
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitResult(request):
@@ -2466,7 +2432,6 @@ def localizaAnexo(id_coleta):
                         return True
 
 #ATULIZA INFORMAÇÕES SOBRE A SOLICITAÇÃO DE REEMBOLSO
-
 def atualizaDadosDeFinalizacao(repasse, statusProgresso, date_create, id_usuario, id_agendamento, nome):
     with connections['admins'].cursor() as cursor:        
         #atualização de status

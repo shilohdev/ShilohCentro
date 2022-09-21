@@ -616,9 +616,9 @@ function CadastrePartients_NewRegis(){
    }
 
    
-   if (cpf == "" && Calc >= 10 ){
+   if (cpf == "" && Calc >= 13 ){
       $("#cpf_new").attr("class", "data-required='true'");
-      alert("CPF obrigatório acima de 10 anos.")
+      alert("CPF obrigatório para crianças acima de 12 anos.")
       return false
    }
    else{
