@@ -18,21 +18,21 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from datetime import datetime 
-
+from django.db.models import Q
 from requests import request
-from auth_users.decorator import FileContractFunction, ContractCollectionFunction, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, searchDoctorLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, searchPartiners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
-from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, CountPayFinanceFunction, CountAnalityFinanceFunction, CountPendingFinanceFunction, CountAllFinanceFunction, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FilterMonthClosingPartners, TableClosingPartners, SearchMonthExamsRefundF, SearchMonthSolicitation, pesqMesInternoFinalizados, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
+from auth_users.decorator import SearchPermissionEditPartnerss, RecontatoFunction, FileContractFunction, ContractCollectionFunction, HistoricoParceiros, HistoryIndicationFunction, ApiAdjustRouteFunction, searchAdjustRouteNurse, FilePhotoViewFunction, PhotoProfileFunction, ApichangeUserProfileFunction, DataMyProfileViews, ApiNewRegisPatientFunction, ApiAttPartnersFunction, searchComercialFunction, PrePartnerCancelFunction, CadastrePrePartners, RemoveFilePartnersFunction, FetchPartnersFilesFunction, ApiGerFilePartnersFunction, ApiNfPartnersFunction, ApiViewDataPartnersModalFunctionINT, errors, ModalExamsFinanceFileRemoveFunctionInt, SearchStatusLeadFilterFunction, FunctionSearchStatusLead, StatusNegative, iInfoLog, searchRouteNurse, searchUnidadeTabela, RetfundFFinalizado, RetfundFConcl, SearchMonthIntFunction, FunctionStatusAgendaConcInt, SearchModalScheduledInt, searchScheduledPickupInt, FschedulePickupInt, SearchSelectInterno, CountAgendamentAtrasadosFunction, CountAgendamentsCFunction, CountAgendamentsCSFunction, CountAgendamentsFFunction, CountAgendamentsPFunction,  CountLeadsDayFunction, CountLeadsMesFunction, CountLeadsFunction, SaveEditionsPatientFunction, searchUnit, ApiChangeStatusUnitFunction, cadastreUnit, UpdatePerfil, CadastreLead, SearchLeadsAll, searchIndicationUnit, TabelaPartnersUnit, searchPatientsUnit, ModalExamsFinanceFileRemoveFunction, SearchModalExamsFunction, FunctionStartProcess, FunctionSearchTypeAnexo, FunctionStatus, FunctionStatusSelect, FunctionStatusAgendaCancel, FunctionStatusAgendaFrustrar,ApiReagendarAgendaConcFunction, FunctionStatusAgendaConc, SearchModalScheduled, searchScheduledPickup, SearchSelectSchedule, DeletePatientsFilesFunction, FetchPatientsFilesFunction, ApiChangePatientsModalFunction,searchLead, SelectConvenio, ApiViewDataPatientsModalFunction, ApiCadastrePatienteFunction, searchLeads, searchIndication, searchUsers, ApiChangeUsersModalFunction, ApiViewDataPartnersModalFunction, ApiChangeStatusFunction, ApiViewDataUserModalFunction,TabelaPartners, SearchUsersFull, DeleteConv, FScheduledPickup, searchService, searchDoctor, searchExame, FschedulePickup, CadastreUser, CadastrePartners, CadastreIndication, formatcpfcnpj, formatTEL, ApiChangeStatusConvenioFunction, cadastreConv, error, allowPage, searchTPerfil, searchCategoria, searchNurse, searchDriver, searchConvenio
+from auth_finances.functions.exams.models import Total_Partners_Function, ClosingInternoFiltro_Function, SearchClosingInterno_Function, Interno_Total_Function, Interno_ApagarShilohLab_Function, Interno_ApagarLabMovel_Function, Pago_ShilohLab_Interno_Function, Pago_LabMovel_Interno_Function, Commerce_total_Function, Commerce_ApagarLabMovel_Function, Commerce_ApagarShilohLab_Function, Commerce_PagosShilohLab_Function, ShilohLab_APagarFunction, LabMovel_APagarFunction, PagoShilohLabFunction, PagoLabMovelFunction, Pago_LabMovel_Comercial_Function, AnxDoc, FunctionDashCardNFs, FunctionDashFinanceTableYear, FunctionDashFinanceTable, FunctionDashOutros, FunctionCardReembolsado, FunctionDashCardWorkLab, FunctionDashCardAlvaro, FunctionDashGeralFinalizados, FunctionDashGeralPendente, FunctionDashPago, FunctionDashAndamento, FunctionDashAnalise, FunctionDashPendente, ClosingUnitResult, ClosingUnitAnalise, SearchFinanceIntGlosa, SearchFinanceIntAgendado, SearchFinanceInt, SaveAnexoFunction, payCommercialFunction, SearchInfoCommercialFunction, searchNotAtingeClosingCommercial, FilterMonthClosingCommercial, TableClosingCommercial, SearchInfoFunction, payPartnersVFunction, searchClosingPartners, FiltroPersonalizado_ClosingPartners,  FilterMonthClosingPartners, TableClosingPartners, SearchMonthSolicitation, pesqMesInternoFinalizados, FinalizeProcessFunction, SaveEditionsFinancesFunctions, FunctionModalFinances
 from auth_dash.functions import CountDashTotalFunction, DashCommerceMonthFunction, DashCommerceDayFunction, RankingCommerceMonthFunction, RankingCommerceDayFunction, DashProdutividadePacienteFunction, DashProdutividadeAgendamentoFunction, DashCollectionConcluidoMesFunction, DashCollectioAndamentoMesFunction, DashCollectionPendenteMesFunction, DashCollectionConcluidoDiaFunction, DashCollectioAndamentoDiaFunction, DashCollectionPendenteDiaFunction, RankingEnfermagemMonthFunction, RankingEnfermagemDayFunction, RankingDashAtenMonthFunction, PhotoRankByArrayFunction, _treating_data, RankingDashAtenDayFunction, PhotoRankFunction
+from .models import Users
 from functions.general.decorator import BodyDecode
-from auth_permissions.decorator import CreatePermissionAll, allowPermission
-
+from auth_permissions.decorator import CreatePermissionAll
 import base64
 import json
 import time
 from re import A
-
 from functions.module_clicksign.decorator import ModuleSendClickSignFunction
- 
+
+
 
 def FotoProfile(request):
     ViewFoto = FilePhotoViewFunction(request)
@@ -170,8 +170,7 @@ def ApiPermissionsUsers(request):
 @login_required
 def schedulePickupViews(request):
     if allowPage(request, "agendar_coleta") == False:
-        return error(request)
-    SsearchNurse =  searchNurse(request)
+        return error(request)    
     SsearchDriver =  searchDriver(request)
     sSelect_conv =  SelectConvenio(request)
     SsearchExame = searchExame(request)
@@ -181,7 +180,6 @@ def schedulePickupViews(request):
     return render(request, 'manage/agenda/schedulePickup.html',
      {
         "arr_ViewFoto": ViewFoto,
-         "arr_SearchNurse": SsearchNurse,
          "arr_SearchService": SsearchService, 
          "arr_SearchDriver": SsearchDriver, 
          "arr_SelectConvenio": sSelect_conv, 
@@ -210,10 +208,11 @@ def ScheduledPickupViews(request):
     if allowPage(request, "consult_agenda") == False:
         return error(request)
 
+    nurse_active = Users.objects.order_by('-data_regis').filter(status='Ativo', perfil='3')
+
     SsearchDoctor = searchDoctor(request)
     SsearchExame = searchExame(request)
     SsearchService = searchService(request)
-    SsearchNurse =  searchNurse(request)
     SsearchDriver =  searchDriver(request)
     SsearchConvenio =  searchConvenio(request)
     SsearchScheduledPickup =  searchScheduledPickup(request)
@@ -230,7 +229,7 @@ def ScheduledPickupViews(request):
         "arr_SearchDoctor": SsearchDoctor, 
         "arr_SearchExame": SsearchExame, 
         "arr_SearchService": SsearchService, 
-        "arr_SearchNurse": SsearchNurse, 
+        "arr_SearchNurse_Active": nurse_active, 
         "arr_SearchDriver": SsearchDriver, 
         "arr_SearConvenio": SsearchConvenio, 
         "arr_SearchScheduledPickup": SsearchScheduledPickup,  
@@ -312,25 +311,20 @@ def listPartnesViews(request):
     SsearchCategoria = searchCategoria(request)
     SsearchPartiners = TabelaPartners(request)
     searchUnity = searchUnit(request)
-    SearchComercial = searchComercialFunction(request)
     ViewFoto = FilePhotoViewFunction(request)
+    permissions = SearchPermissionEditPartnerss(request)
+    comercial = Users.objects.order_by('nome').filter(Q(status='Ativo', perfil='6'))
 
     return render(request, 'manage/listers/partners/listPartners.html', 
     {
         "arr_SearchCategoria": SsearchCategoria, 
         "arr_SearchPartiners": SsearchPartiners,
         "arr_SearchUnit": searchUnity,
-        "arr_SearchComercial": SearchComercial,
         "arr_ViewFoto": ViewFoto,
-    })
-
-
-#API LISTAR PARCEIROS
-@ensure_csrf_cookie
-@login_required
-def ApiListPartnesViews(request):
-    array = searchPartiners(request)
-    return JsonResponse(array, safe=False, status=200)
+        "arr_comercial": comercial,
+        "permissions": permissions,
+    }) 
+ 
 
 
 #MODAL PARCEIROS ADM 
@@ -379,20 +373,20 @@ def listLeadsViews(request):
     return render(request, 'manage/listers/lead/listLead.html', {"arr_ViewFoto": ViewFoto, "arr_SearchLeads": SsearchLeads, })
 
 
-#LISTAR PACIENTES SEARCH
+#CADASTRAR PACIENTE
 @login_required
 def CadastrePatientViews(request):
     if allowPage(request, "cadastre_patients") == False:
         return error(request)
     SsearchPatients = searchLeads(request)  
     SsearchConvenio =  searchConvenio(request)
-    SsearchDoctorL =  searchDoctorLead(request)
     ViewFoto = FilePhotoViewFunction(request)
+    doctor_active = Users.objects.order_by('-data_regis').filter(Q(status='Ativo') | Q(status='Inativo'))
 
     return render(request, 'manage/cadastre/Perfis/cadastrePatient.html', 
     {"arr_SearchPatients": SsearchPatients,
     "arr_SearchConvenio": SsearchConvenio,
-    "arr_SearchDoctorL": SsearchDoctorL,
+    "arr_SearchDoctorL": doctor_active,
     "arr_ViewFoto": ViewFoto,
     })
     
@@ -523,7 +517,7 @@ def SaveEditionsFinances(request):
 #FINALIZAR PROCESSO MODAL FINANCEIRO 
 @login_required
 def ApiFinalizeProcess(request):
-    array = FinalizeProcessFunction(request)
+    array = FinalizeProcessFunction(request) 
     return JsonResponse(array, safe=False, status=200)
 
 #INDIVIDUAL, MEUS REGISTROS
@@ -593,12 +587,12 @@ def LeadsViews(request): #INDICAÇÕES
 def CadatsreLeadViews(request): #INDICAÇÕES
     if allowPage(request, "register_lead") == False:
         return error(request)
-    SsearchDoctorL =  searchDoctorLead(request)
+    doctor_active = Users.objects.order_by('-data_regis').filter(Q(status='Ativo') | Q(status='Inativo'))
     sSelect_conv =  SelectConvenio(request)
     ViewFoto = FilePhotoViewFunction(request)
 
     return render(request, 'manage/cadastre/Perfis/cadastreLead.html', 
-    {"arr_SearchDoctorL": SsearchDoctorL, 
+    {"arr_SearchDoctorL": doctor_active, 
     "arr_SelectConvenio": sSelect_conv, 
     "arr_ViewFoto": ViewFoto,
     })
@@ -767,11 +761,6 @@ def SearchMonthExamsSolicitationViews(request):
     array = SearchMonthSolicitation(request)
     return JsonResponse(array, safe=False, status=200)
 
-@login_required
-def SearchMonthExamsRefund(request):
-    array = SearchMonthExamsRefundF(request)
-    return JsonResponse(array, safe=False, status=200)
-
 
 #FECHAMENTO PARCEIROS
 @login_required
@@ -789,7 +778,7 @@ def ClosingPartnersViews(request): #INDICAÇÕES
 
     return render(request, 'finances/closure/ClosingPartners.html', 
     {
-        "arr_SearchClosingPartners": ClosingPartners, 
+        # "arr_SearchClosingPartners": ClosingPartners, 
         "arr_ViewFoto": ViewFoto,
         "arr_LabMovel_Pago": LabMovel_Pago,
         "arr_ShilohLab_Pago": ShilohLab_Pago,
@@ -804,7 +793,13 @@ def SearchMonthClosingPartners(request):
     array = FilterMonthClosingPartners(request)
     return JsonResponse(array, safe=False, status=200)
 
+@login_required
+def FiltroPersonalizado_ClosingPartners_views(request):
+    array = FiltroPersonalizado_ClosingPartners(request)
+    return JsonResponse(array, safe=False, status=200)
 
+
+#FECHAMENTO DOS PARCEIROS
 @login_required
 def paymentDetails(request):
     array = searchClosingPartners(request)
@@ -1009,7 +1004,6 @@ def createUsers():
         ]
 
         for key in arr_response:
-            print(key)
             firstname = key.get('name', '')
             id_user = key.get('username', None)
             email = key.get('email', '')
@@ -1032,8 +1026,7 @@ def createUsers():
         "quantity_exists": e,
         "quantity_create": c
     }
-    
-    print(array)
+
     return True
 
 
@@ -1279,11 +1272,12 @@ def AdjustRouteViews(request):
         return error(request)
     ViewFoto = FilePhotoViewFunction(request)#foto perfil parte superior
     SsearchAdjustRoute =  searchAdjustRouteNurse(request)
-    SsearchNurse =  searchNurse(request)
+    nurse_active = Users.objects.order_by('-data_regis').filter(status='Ativo')
     return render(request, 'manage/agenda/AdjustRoute.html', 
+    
     {
         "arr_SearchAdjustRoute": SsearchAdjustRoute,
-        "arr_SearchNurse": SsearchNurse,
+        "arr_SearchNurse": nurse_active,
         "arr_ViewFoto": ViewFoto,
     })
 
@@ -1328,3 +1322,12 @@ def FileContract(request):
     return JsonResponse(array, safe=False, status=200)
 
 
+
+def ApiHistoryPartnersViews(request):
+    array = HistoricoParceiros(request)
+    return JsonResponse(array, safe=False, status=200)
+
+
+def Recontato_Partners(request):
+    array = RecontatoFunction(request)
+    return JsonResponse(array, safe=False, status=200)

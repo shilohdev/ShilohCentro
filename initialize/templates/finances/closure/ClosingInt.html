@@ -10,10 +10,7 @@ Fechamento do Comercial
 {% block description-page %}FECHAMENTO INTERNO{% endblock %}
 {% block content %}
 <style type="text/css">
-   .corfont{
-   color: #641108;
-   font-weight: bold;
-   }
+
    @media only screen and (max-width: 800ypx){
     .tfoot {
         display: block;
@@ -117,7 +114,7 @@ Fechamento do Comercial
 
 
 
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0" >
     <div class="container">
         <div class="col s12 m4">
             <div class="card padding-4 animate fadeLeft">
@@ -402,7 +399,6 @@ Fechamento do Comercial
                         $("#pago_labmovel").html("");
                         $("#pago_labmovel").css("display", "block");
                         $("#arr_pago_labmovel").hide();
-                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_labmovel").append(valor);
@@ -414,7 +410,7 @@ Fechamento do Comercial
                         $("#pago_shilohlab").html("");
                         $("#pago_shilohlab").css("display", "block");
                         $("#arr_pago_shilohlab").hide();
-                        console.log(dados)
+
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_shilohlab").append(valor);
@@ -427,7 +423,6 @@ Fechamento do Comercial
                         $("#apagar_labmovel").html("");
                         $("#apagar_labmovel").css("display", "block");
                         $("#arr_apagar_labmovel").hide();
-                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_labmovel").append(valor);
@@ -439,7 +434,7 @@ Fechamento do Comercial
                         $("#apagar_shilohlab").html("");
                         $("#apagar_shilohlab").css("display", "block");
                         $("#arr_apagar_shilohlab").hide();
-                        console.log(dados)
+
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_shilohlab").append(valor);
@@ -563,8 +558,7 @@ Fechamento do Comercial
     function viewFile(object) {
         var path = $(object).data("path");
         var filename = $(object).data("name");
-        console.log(path)
-        console.log(filename)
+
         var a = document.createElement("a");
         a.href = "/docs/" + path;
         a.download = filename;
@@ -579,7 +573,7 @@ Fechamento do Comercial
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "id_user": id_user ,
         };
-        console.log(id_user)
+
         $("#modal2").hide();
         $(object).prop("disabled", true);
         fetchRequest("{% url 'paymentDetails' %}", "POST", "JSON", formpost, function(re) { //FUNÇÃO FILTRAR MES

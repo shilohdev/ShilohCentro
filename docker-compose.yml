@@ -1,18 +1,43 @@
-version: '3.8'
+version: '2'
+
+#services:
+#  shilohprod:
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile.prod
+#    command: python manage.py runserver
+#    restart: always
+#    volumes:
+#      - ./:/prordir
+#    ports:
+#      - 8000:8000
+#    env_file:
+#      - ./.env.prod
+#  redis:
+#    image: redis:alpine
+#    restart: always
 
 services:
-  shilohprod:
-    build:
-      context: ./
-      dockerfile: Dockerfile.prod
-    command: python manage.py runserver
-    restart: always
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_management
+    
+    ports: 
+    - 25672:25672 # (erlang) communication between the nodes and CLI tool
+    - 15672:15672 # communication with the web management API 
+    
     volumes:
-      - ./:/prordir
-    ports:
-      - 8000:8000
-    env_file:
-      - ./.env.prod
-  redis:
-    image: redis:alpine
+    # data persistence
+    - /docker_conf/rabbitmq/data/:/var/lib/rabbitmq/
+    # data mapping -> host: container
+    # queues and messages data of the container will be stored on the host
+    environment:
+    - RABBITMQ_DEFAULT_USER=guest
+    - RABBITMQ_DEFAULT_PASS=guest
+
     restart: always
+
+volumes:
+    logs-folder:
+        name: ${log_rabbitmq_management}
+        driver: local

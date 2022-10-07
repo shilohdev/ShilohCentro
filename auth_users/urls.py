@@ -81,13 +81,13 @@ urlpatterns = [
     
     #LISTAR PARCEIROS
     path('listar/parceiros/', views.listPartnesViews, name='listPartnes'),
-  
     #API LISTAR PARCEIROS 
-    path('api/listar/parceiros/', views.ApiListPartnesViews, name='ApiListPartnes'),
     path('api/modal/parceiros/', views.ApiViewDataPartnersModal, name='ApiViewDataPartnersModal'),
+    path('api/historico/parceiros', views.ApiHistoryPartnersViews, name='ApiHistoryPartners'),
+    path('api/recontato/parceiros', views.Recontato_Partners, name='Recontato_Partners'),
     path('api/modal/parceiros/int', views.ApiViewDataPartnersModalint, name='ApiViewDataPartnersModalint'), #Meeus parceiros
 
-
+ 
  
     #LISTAR PACIENTES
     path('listar/pacientes/', views.listIndicationViews, name='listIndication'),
@@ -110,10 +110,11 @@ urlpatterns = [
     path('api/consultar/exames/modal/finances', views.SearchModalExamsFinances, name='SearchModalExamsFinances'),#API MODAL FINANCEIRO
     path('api/salvar/alteracoes/modal/finances', views.SaveEditionsFinances, name='SaveEditionsFinances'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
     path('api/finalizar/exames/modal/', views.ApiFinalizeProcess, name='ApiFinalizeProcess'),#SALVAR ALTERAÇÕES MODAL FINANCEIRO EXAME
-    path('financeiro/search/exames/solicitacoes/', views.SearchMonthExamsRefund, name='SearchMonthExamsRefund'),#EXAMES FINALIZADOS
+
     #PAGAMENTOS PAREIROS 
     path('financeiro/fechamento/parceiros/', views.ClosingPartnersViews, name='ClosingPartners'),#EXAMES FINALIZADOS
-    path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#EXAMES FINALIZADOS
+    path('financeiro/fechamento/parceiros/filter', views.SearchMonthClosingPartners, name='SearchMonthClosingPartners'),#FECHAMENTO PARCEIRO > MES
+    path('financeiro/fechamento/parceiros/filter/personalizado', views.FiltroPersonalizado_ClosingPartners_views, name='FiltroPersonalizado_ClosingPartners_views'),#FECHAMENTO PARCEIRO > FILTRO PERSONALIZADO
     path('financeiro/fechamento/parceiros/detalhes', views.paymentDetails, name='paymentDetails'),
     path('financeiro/fechamento/parceiros/pay', views.payPartnersV, name='payPartnersV'),
     path('financeiro/modal/parceiros/status', views.SearchInfoM, name='SearchInfoM'),

@@ -1,0 +1,24 @@
+<button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
+                              <i class="material-icons right">edit</i>
+                           </button>
+
+
+76c076da  verde 
+
+f5be4600   transparente
+
+
+
+
+
+<button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #fff;">
+                              <i class="material-icons right" style="color: #76c076da">remove_red_eye</i>
+                           </button>
+
+
+
+
+
+<button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #fff;">
+<i class="material-icons right" style="color: #76c076da">remove_red_eye</i>
+</button>

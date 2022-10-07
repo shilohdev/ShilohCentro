@@ -1,6 +1,6 @@
 from django.db import connections
 
-from auth_finances.functions.solicitacoes.models import Dash_Solicitacoes_Reemboslo_Total, Solicitacao_Reembolso_Pendente_Function, Solicitacao_Reembolso_Andamento_Function, Solicitacao_Reembolso_Glosa_Natingido_Function, Solicitacao_Reembolso_Finalizado_Function
+from auth_finances.functions.solicitacoes.models import SolicitacaoReembolso
 
 
 def json_without_success(data):
@@ -52,16 +52,41 @@ def User_Information(request, status): #Função para pehar a info do usuario e 
         if dados:
             for perfil, id_usuario, nome, unityY in dados:
                 if status == "Pendente":
-                    return Solicitacao_Reembolso_Pendente_Function(perfil, unityY)
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Pendente_Function(perfil, unityY)
+                    return r 
                 if status == "Analise":
-                    return Solicitacao_Reembolso_Andamento_Function(perfil, unityY)
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Andamento_Function(perfil, unityY)
+                    return r 
                 if status == "Glosa":
-                    return Solicitacao_Reembolso_Glosa_Natingido_Function(perfil, unityY)
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Glosa_Natingido_Function(perfil, unityY)
+                    return r
                 if status == "Finalizado":
-                    return Solicitacao_Reembolso_Finalizado_Function(perfil, unityY)
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Finalizado_Function(perfil, unityY)
+                    return r
+                if status == "Juridico":
+                    r = SolicitacaoReembolso.Solicitacao_Reembolso_Juridico_Function(perfil, unityY)
+                    return r
+                if status == "Dash_Pendente":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Pendente(perfil, unityY)
+                    return r
+                if status == "Dash_Pago":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Pago(perfil, unityY)
+                    return r
+                if status == "Dash_Andamento":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Andamento(perfil, unityY)
+                    return r
+                if status == "Dash_Analise":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Analise(perfil, unityY)
+                    return r
+                if status == "Dash_Glosa":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Glosa(perfil, unityY)
+                    return r
+                if status == "Dash_Nao_Atingido":
+                    r = SolicitacaoReembolso.Dash_Solicitacao_Reembolso_Nao_Atingido(perfil, unityY)
+                    return r
                 if status == "Dash_Total":
-                    return Dash_Solicitacoes_Reemboslo_Total(perfil, unityY)
-
+                    r = SolicitacaoReembolso.Qtd_Total_Solicitacoes_Reemboslo(perfil, unityY)
+                    return r
         else:
             return {
                 "response": "false",

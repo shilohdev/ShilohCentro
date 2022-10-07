@@ -13,10 +13,6 @@ MEU FINANCEIRO{% endblock %}
 {% block content %}
 
 <style type="text/css">
-   .corfont{
-   color: #641108;
-   font-weight: bold;
-   }
    @media only screen and (max-width: 800ypx){
     .tfoot {
         display: block;
@@ -25,7 +21,7 @@ MEU FINANCEIRO{% endblock %}
 </style>
 
 
-   <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+   <div class="breadcrumbs-dark pb-0" >
        <div class="container">
            <div class="card">
                <!-- Externo -->
@@ -48,28 +44,34 @@ MEU FINANCEIRO{% endblock %}
                                         <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Valor</th>
                                     </tr>
                                 </thead>
-                                <tbody id="pago">
-                                 {% for k in arr_SearchClosingUnit %}
-                                 <tr>
-                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.paciente }}</td>
-                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.dataColeta }}</td>
-                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.dataRepasse }}</td>
-                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exame }}</td>
-                                    <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.valor_uni }}</td>
-                                 </tr>
-                              {% endfor %}
-                                </tbody>
-                                <tfoot id="Count">
-                                    {% for k in arr_SearchClosingUnitResultPG %}
-                                    <tr id="">
-                                        <th rowspan="1" colspan="1"> TOTAL: {{ k.contagem }} </th>
-                                        <th rowspan="1" colspan="1"></th>
-                                        <th rowspan="1" colspan="1"></th>
-                                        <th rowspan="1" colspan="1"></th>
-                                        <th rowspan="1" colspan="1">{{ k.valor }}</th>
-                                    </tr>
-                                    {% endfor %}
-                                  </tfoot>
+                                {% if arr_SearchClosingUnit%}
+                                    <tbody id="pago">
+                                        {% for k in arr_SearchClosingUnit %}
+                                        <tr>
+                                            <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 190px;">{{ k.paciente }}</td>
+                                            <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 81px;">{{ k.dataColeta }}</td>
+                                            <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.dataRepasse }}</td>
+                                            <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.exame }}</td>
+                                            <td class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">{{ k.valor_uni }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot id="Count">
+                                        {% for k in arr_SearchClosingUnitResultPG %}
+                                        <tr id="">
+                                            <th rowspan="1" colspan="1"> TOTAL: {{ k.contagem }} </th>
+                                            <th rowspan="1" colspan="1"></th>
+                                            <th rowspan="1" colspan="1"></th>
+                                            <th rowspan="1" colspan="1"></th>
+                                            <th rowspan="1" colspan="1">{{ k.valor }}</th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tfoot>
+                                {% else %}
+                                  <tr>
+                                      <td colspan="5" style="text-align: center; background: #ededeb00">Nenhum Registro Encontrado</td>
+                                  </tr>
+                                {% endif %}
                             </table>
                         </div>   
 
@@ -90,6 +92,7 @@ MEU FINANCEIRO{% endblock %}
                                       <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Exame</th>
                                   </tr>
                               </thead>
+                            {% if arr_SearchClosingUnitAN %}
                               <tbody id="analise">
                                {% for k in arr_SearchClosingUnitAN %}
                                <tr>
@@ -100,6 +103,11 @@ MEU FINANCEIRO{% endblock %}
                             {% endfor %}
                               </tbody>
                               <tfoot id="Count"></tfoot>
+                            {% else %}
+                              <tr>
+                                  <td colspan="5" style="text-align: center; background: #ededeb00">Nenhum Registro Encontrado</td>
+                              </tr>
+                            {% endif %}
                           </table>
                         </div>   
 
@@ -121,6 +129,7 @@ MEU FINANCEIRO{% endblock %}
                                       <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 89px;">Status</th>
                                   </tr>
                               </thead>
+                              {% if arr_SearchClosingUnitGNA %}
                               <tbody id="glosa">
                                {% for k in arr_SearchClosingUnitGNA %}
                                <tr>
@@ -131,6 +140,11 @@ MEU FINANCEIRO{% endblock %}
                                </tr>
                             {% endfor %}
                               </tbody>
+                            {% else %}
+                              <tr>
+                                  <td colspan="5" style="text-align: center; background: #ededeb00">Nenhum Registro Encontrado</td>
+                              </tr>
+                            {% endif %}
                           </table>
                         </div>
                     </div>
