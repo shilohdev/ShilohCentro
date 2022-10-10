@@ -1,6 +1,6 @@
 from django.db import connections
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpResponse
 from django.template import RequestContext, Template
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django import forms
@@ -22,8 +22,6 @@ import base64
 import json
 import time
 from re import A
-from django.urls import resolve
-from urllib import request
 
 
 def csrf_failure(request, reason=""):

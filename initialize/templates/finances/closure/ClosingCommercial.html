@@ -11,6 +11,10 @@ Fechamento do Comercial
 {% block description-page %}FECHAMENTO DO COMERCIAL{% endblock %}
 {% block content %}
 <style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
    @media only screen and (max-width: 800ypx){
     .tfoot {
         display: block;
@@ -260,7 +264,7 @@ Fechamento do Comercial
                         </div>
                         <!-- COMEÇO DA TABLE -->
                         <div class="col s12 m12 scroll mb-3">
-                            <table id="page-length-option" class="bordered pagelengthoption" style="overflow-x: auto">
+                            <table id="page-length-option" class="bordered" style="overflow-x: auto">
                                 <thead style="background-color: #581848; color: white; font-size: 15px">
                                     <tr>
                                     <th data-field="id" style="text-align: center;">Nome</th>
@@ -270,7 +274,7 @@ Fechamento do Comercial
                                     <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tb_appendTable" href="../../../../static/app-assets/vendors/sweetalert/extra-components-sweetalert.min.js">
+                                <tbody id="tb_appendTable">
                                     {% for k in arr_SearchClosingCommercial %}
                                     <tr id="tr_{{ k.id }}">
                                     <td style="text-align: center;">{{ k.nome }} </td>
@@ -297,51 +301,41 @@ Fechamento do Comercial
     </div>
 </div>
 
-
 <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
 
-<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-
 <script type = "text/javascript" >
 
-var dataTablePagamentos = $(".pagelengthoption").DataTable({
- "ordering" : true,
- "scrollCollapse" : true,
- "searching" : true,
- "columnDefs" : [{orderable: true, targets: 0 }],
-});
-$(".dropdown-trigger").css("display", "none")
+    //FUNCTION BUSCAR
+    function searchPatients(object) {
+        var e = $(object).val().toUpperCase();
+        if (e == "") {
+            $('#tb_appendTable > tr').each(function() {
+                $(this).show();
+            });
+        } else {
+            $('#tb_appendTable > tr').each(function() {
+                var trs = $(this).find("td");
+                var tr1 = $(trs[0]).text().toUpperCase();
+                var check = (tr1.indexOf(e) != -1);
+                if (check == true) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    }
 
-
-$(document).ready(function(){ // <<<< execute a seguinte função
-
- function changeTable() {
-     $(".select-wrapper").find("select").hide();
-     $(".dataTables_length").css({
-         "width": "60px",
-         "position": "relative",
-     })
-
-     showLoadingPage("close");
- }
- setTimeout(showLoadingPage("show"), 500);
- setTimeout(showLoadingPage("show"), 1000);
- setTimeout(changeTable, 200);
-});
-
-
-    //CONFIG MODAL
-    $(document).ready(function() {
-        $('.modal').modal();
-        $('.modal').css({
-            "width": "80%",
+        //CONFIG MODAL
+        $(document).ready(function() {
+            $('.modal').modal();
+            $('.modal').css({
+                "width": "80%",
+            });
         });
-    });
 
     function searchMonth() {  
         //VALIDAÇÃO DE CAMPO
@@ -418,7 +412,7 @@ $(document).ready(function(){ // <<<< execute a seguinte função
                         $("#pago_labmovel").html("");
                         $("#pago_labmovel").css("display", "block");
                         $("#arr_pago_labmovel").hide();
-
+                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_labmovel").append(valor);
@@ -430,12 +424,12 @@ $(document).ready(function(){ // <<<< execute a seguinte função
                         $("#pago_shilohlab").html("");
                         $("#pago_shilohlab").css("display", "block");
                         $("#arr_pago_shilohlab").hide();
-
+                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#pago_shilohlab").append(valor);
 
-                        }); 
+                        });
 
                         // DASH A PAGAR
                         // Lab Movel
@@ -443,6 +437,7 @@ $(document).ready(function(){ // <<<< execute a seguinte função
                         $("#apagar_labmovel").html("");
                         $("#apagar_labmovel").css("display", "block");
                         $("#arr_apagar_labmovel").hide();
+                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_labmovel").append(valor);
@@ -454,6 +449,7 @@ $(document).ready(function(){ // <<<< execute a seguinte função
                         $("#apagar_shilohlab").html("");
                         $("#apagar_shilohlab").css("display", "block");
                         $("#arr_apagar_shilohlab").hide();
+                        console.log(dados)
                         $.map(dados, function (n, i) {
                         var valor = `<h5 class="mb-0">${n.valor}</h5>`
                         $("#apagar_shilohlab").append(valor);
@@ -578,6 +574,8 @@ $(document).ready(function(){ // <<<< execute a seguinte função
     function viewFile(object) {
         var path = $(object).data("path");
         var filename = $(object).data("name");
+        console.log(path)
+        console.log(filename)
         var a = document.createElement("a");
         a.href = "/docs/" + path;
         a.download = filename;
@@ -666,7 +664,8 @@ $(document).ready(function(){ // <<<< execute a seguinte função
                 `;
                 $("#pago").append(a);
             });
-        
+            console.log("pagos>>")
+            console.log(dados)
 
 
         
