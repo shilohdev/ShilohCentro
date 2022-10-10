@@ -37,3 +37,4 @@ def ApiListDocsPatientsFunction(request):
             "history": fetchHistoryPatient(id)
         }
     }
+

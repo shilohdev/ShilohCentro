@@ -11,10 +11,16 @@
 MINHAS INDICAÇÕES{% endblock %}
 {% block content %}
 
+   <style type="text/css">
+      .corfont{
+      color: #641108;
+      font-weight: bold;
+      }
 
+   </style>
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
-      <div class="breadcrumbs-dark pb-0" >        
+      <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">        
          <div class="container col s12">
             <div class="active" style="margin-top: 20px;">
                <div class="collapsible-header col s12" style=" justify-content: center; height: 50px; background-color: #581848; color: white;">
@@ -45,7 +51,7 @@ MINHAS INDICAÇÕES{% endblock %}
 </div>
 </div>
 <!--FIM DO MODAL 2-->
-<div class="breadcrumbs-dark pb-0" >
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <div class="container">
       <div class="card" ><!-- Externo -->         
          <div id="userint" class="row" >
@@ -122,6 +128,7 @@ $(document).ready(function() {
 
 function viewHistoricoModal(object){
    var id_lead = $(object).data("id_lead");
+   console.log(id_lead)
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_lead": id_lead ,
