@@ -1,0 +1,50 @@
+{% load static %}
+
+<!-- COMEÇO DA TABLE -->
+   <table id="page-length-option" class="bordered pagelengthoption" style="margin-top: 20px; overflow-x: auto;">
+      <thead style="background-color: #581848; color: white; font-size: 15px;" >
+         <tr>
+            <th data-field="id" >Nome do Parceiro</th>
+            <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
+            <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
+            <th data-field="id" style="text-align: center; width: 250px;">Unidade - [Relacional]</th>
+            <th data-field="id" style="text-align: center; width: 130px;">Status</th>
+            <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
+         </tr>
+      </thead>
+      <tbody id="" href="../../../../static/app-assets/vendors/sweetalert/extra-components-sweetalert.min.js">
+         {% for k in arr_SearchPartiners %}
+         <tr id="tr_{{ k.id }}">
+            <td>{{ k.nome }} [{{ k.rn }}]</td>
+            <td style="text-align: center;">{{ k.categoria }}</td>
+            <td style="text-align: center;">{{ k.resp_comercial }}</td>
+            <td style="text-align: center;">{{ k.unity }} - [{{k.company}}]</td>
+            <td style="text-align: center;">{{ k.status }}</td>
+            <td style="text-align: center;">
+              {% if k.permissao == True %}
+              <a id="btn_edit" href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                  <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                     <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                  </button> 
+               </a>
+               <a href="#modalhistorico" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoricoModal(this)">
+                  <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                     <i class="material-icons right" style="color: #66a366">remove_red_eye</i>
+                  </button> 
+               </a> 
+               {% else %}
+                  <a class="modal-trigger">
+                     <button disabled class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                        <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                     </button> 
+                  </a> 
+                  <a disabled class="btn" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
+                     <i class="material-icons right" style="color: #66a366">remove_red_eye</i>
+                  </a>
+               {% endif %}
+            </td>
+         </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+<!-- FIM DA TABLE -->
