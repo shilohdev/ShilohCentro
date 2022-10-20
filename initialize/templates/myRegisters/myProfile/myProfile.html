@@ -25,8 +25,24 @@ MEU PERFIL{% endblock %}
         text-transform: lowercase;
     }
    
-   
-   
+   .image_meuperfil {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 220px;
+        width: 220px;
+        background-size: 250px 250px;
+        position: relative;
+        border: 2px solid #ce93d8;
+        border-radius: 100%;
+    }
+    .image_meuperfil img {
+
+        position: absolute;
+        width: 100%;
+        height:100%;
+        border-radius: 100%;
+    }
     input[type="file"]{
         display:none;
     }
@@ -48,10 +64,15 @@ MEU PERFIL{% endblock %}
                 <!-- UPLOAD FOTO -->
                 <div class="col m4 s12"> 
                     <div class="input-field col m12 s12" style="margin-top: 22px;">
-                       <!-- show -->
+                        <div id="ft" class="image_meuperfil">
+                            {% for k in arr_ViewFoto %}  
+                            <img id="foto_atual" name="foto_perfil" src="{{ k.url }}" /> 
+                            {% endfor %}
+                        </div>
                     </div>
                     <div class="col m12 s12">
-                       
+                        <label id="btn_ft" for="btn_file" class="btn">Adicionar Foto</label>
+                        <input onchange="AnxFoto()" type="file" id="btn_file" required accept="image/jpeg"/>
                     </div>
                 </div>
                 <!--INICIO DO FORM-->
