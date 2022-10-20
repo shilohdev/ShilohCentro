@@ -18,10 +18,7 @@ MEUS PARCEIROS{% endblock %}
 
 
 <style type="text/css">
-   .corfont{
-   color: #641108;
-   font-weight: bold;
-   }
+
    
 .scrollbar-sidebar,
 .scrollbar-container {
@@ -87,206 +84,25 @@ MEUS PARCEIROS{% endblock %}
 </style>
 
 
-<!-- INICIO DO MODAL -->
-<div id="modal1" class="scroll-area-md modal modal-fixed-footer" style="width: 85%; height: 90%;">
-   <div class="modal-content scrollbar-container ps--active-y" id="modal2">
-      <!--CORPO DO MODAL-->
-      <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-         <div class="container">
-            <div class="card" >
-               <div class="card-content" style="margin-top: -25px; background-color: #581848;" >
-                  <h5 class="corfont" style="color:white">ATUALIZAR PARCEIRO</h5>
-               </div>
-            </div>
-         </div>
-         <div class="container">
-            <div class="card" >
-               <div class="row">
-                  <div class="container">
-                     <div class="col s12 m12 m-b10" style="padding-left: 10px;">
-                        <div class="active">
-                           <div class="collapsible-header col m6 s12 " style="height: 40px; margin-top: 10px; background-color: #581848; color: white;" tabindex="0">
-                              <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Selecione:</labe>
-                           </div>
-                        </div>
-                     </div>
-                     <div class=" col s3 m3 mb-5" style="margin-top: 30px;">
-                        <label>
-                        <input id="shiloh_lab" value="1" class="with-gap" type="radio" name="option"/>
-                        <span style="padding-left: 25px;" for="shiloh_lab">ShilohLab</span>
-                        </label>
-                     </div>
-                     <div class="container col s3 m3" style="margin-top: 30px;">
-                        <label>
-                        <input id="lab_movel" value="2" class="with-gap" type="radio" name="option"/>
-                        <span style="padding-left: 25px;" for="lab_movel">LabMovel</span>
-                        </label>
-                     </div>
-                  </div>
-               </div>
-               <!-- Externo -->
-               <div id="modalint" class="row" >
-                  <div class="col s12 m12"  style="margin-top: 10px;">
-                     <div class="input-field col m5 s12 ">
-                        <input id="name" type="text" data-required='true'>
-                        <label for="name" class="active">
-                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Completo</label>
-                     </div>
-                     <div class="input-field col s12 m3">
-                        <input id="rn" type="text" data-required='true'>
-                        <label for="rn">
-                        <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NR</label>
-                     </div>
-                     <div class="input-field col s12 m3" >
-                        <div class="select-wrapper">
-                           <select name="select" id="categoria" onchange="SelectShow()" class="error" data-required='true'>
-                              <option value="8">Categoria</option>
-                              {% for k in arr_SearchCategoria %}
-                              <option value="{{ k.id }}">{{ k.categoria }}</option>
-                              {% endfor %}
-                           </select>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col s12 m12">
-                     <div class="input-field col s12 m8">
-                        <input id="email" type="email" >
-                        <label for="email">
-                        <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="tel1" type="tel" data-required='true'>
-                        <label for="tel1">
-                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="tel2" type="tel" >
-                        <label for="tel2">
-                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
-                     </div>
-                  </div>
-                  <div class="col s12 m12">
-                     <div class="input-field col s12 m3">
-                        <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)" data-required='true'>
-                        <label for="zipcode">
-                        <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
-                     </div>
-                     <div class="input-field col 12 m7">
-                        <input id="addres" type="text" >
-                        <label for="addres">Logradouro </label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="number" type="text" >
-                        <label for="number">Número </label>
-                     </div>
-                  </div>
-                  <div class="col s12 m12">
-                     <div class="input-field col s12 m3">
-                        <input id="complement" type="text" >
-                        <label for="complement">Complemento</label>
-                     </div>
-                     <div class="input-field col m5 s12 ">
-                        <input id="district" type="text" >
-                        <label for="district">Bairro</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="city" type="text" >
-                        <label for="city">Cidade</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="uf" type="text" maxlength="2">
-                        <label for="uf">UF</label>
-                     </div>
-                  </div>
-                  <div class="input-field col s12 m12">
-                     <div class="input-field col s12 m12">
-                        <input id="obs" type="text" >
-                        <label for="obs">
-                        <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
-                     </div>
-                  </div>
-                  <!--FINANCEIRO-->
-                  <div class="col s12 m12">
-                     <div class="active">
-                        <div class="collapsible-header col s12 m4" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
-                           <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
-                        </div>
-                     </div>
-                  </div>
-                  <div id="financeiro">
-                     <div class="col s12 m12" >
-                        <div class="col m6 s12">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
-                              <span>Valor Padrão:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col m5 s12 ">
-                              <input readonly="readonly" type="text" id="val_p_fixo" class="checkgroup" style="color:black;">
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col s12 m12">
-                        <div class="col m6 s12">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_p_check" class="checkgroup2" onclick="porcentagem()">
-                              <span>Porcentagem:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col m5 s12 ">
-                              <input type="text" id="val_p" class="checkgroup2" onchange="porcentagem()">
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col s12 m12">
-                        <div class="col m6 s12">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_fixo_check" class="checkgroup3" onclick="fixo()" >
-                              <span>Valor Fixo:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col m5 s12 ">
-                              <input type="text" id="val_fixo" class="checkgroup3" onchange="fixo()">
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="modal-footer">
-      <!--BUTTON--> 
-      <div class="col s12 m12" id="modal3">
-         <a onclick="CancelPrePartners(this)" id="btn_cancel" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #c74d4d">Cancelar</a>
-         <a onclick="updatePartnersModal(this)" id="btn_atualizar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>
-         <a onclick="CadastrePartners(this)" id="btn_cadastrar" data-id_user="{{ k.id }}" class="waves-effect waves-light btn mb-1 mr-1" style="background-color: #76c076da;">Cadastrar</a>
-         <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
-      </div>
-   </div>
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   {% include '../lister/partails/_model_partners.html' %} 
 </div>
-<!--FIM DO MODAL-->
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+
+<div id="modalhistorico" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   {% include '../../manage/listers/partners/partials/_modal_historico.html' %} 
+</div>
+ 
+<div class="breadcrumbs-dark pb-0 container" >
    <div class="card" >
       <!-- Externo -->
       <div id="userint" class="row" >
-         <div class="col s12 m12"  style="margin-top: 30px; margin-bottom: 30px;">
-            <div class="input-field col s12 m4">
-               <input id="busc" type="text" onkeyup="searchPatients(this)">
-               <label for="busc">
-               <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
-            </div>
+         <div class="col s12 m12" style="padding: 40px;">
             <!-- COMEÇO DA TABLE -->
             <div class="col s12 m12 scroll">
-               <table class="bordered" style="margin-top: 30px; overflow-x: auto">
+               <table class="bordered pagelengthoption" style="margin-top: 30px; overflow-x: auto">
                   <thead style="background-color: #581848; color: white; font-size: 15px" >
                      <tr>
                         <th data-field="id">Nome</th>
-                        <!--     <th data-field="id" style="text-align: center; width: 250px;">Comercial</th> -->   
                         <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
                         <th data-field="id" style="text-align: center; width: 130px;">Data Cadastro</th>
                         <th data-field="id" style="text-align: center; width: 130px;">Status</th>
@@ -298,26 +114,22 @@ MEUS PARCEIROS{% endblock %}
                      {% for k in arr_SearchPartiners %}
                      <tr id="tr_{{ k.id }}">
                         <td>{{ k.nome }} [{{ k.rn }}]</td>
-                        <!-- <td style="text-align: center;">{{ k.resp_comercial }}</td> -->   
                         <td style="text-align: center;">{{ k.categoria }}</td>
                         <td style="text-align: center;">{{ k.data_cad }}</td>
                         <td style="text-align: center;">{{ k.status }}</td>
                         <td style="text-align: center;">{{ k.company }}</td>
                         <td style="text-align: center;">
                            <div class="col s12 m12">
-                              <div class="col m6 s12 m6">
-                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                    <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
-                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
-                                       <i class="material-icons right" style="color: #f5bd46da">edit</i>
-                                   </button>
-                                 </a>
-                              </div>
-                              <div class="col m6 s12 m6 m-0 p-0" style="display: none;">
-                                 <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: {{ k.btn_status }};">
-                                 <i class="material-icons right">check</i>
-                                 </button>
-                              </div>
+                              <a id="btn_edit" href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 30px;">
+                                    <i class="material-icons right" style="color: #f5bd46da">edit</i>
+                                 </button> 
+                              </a>
+                              <a href="#modalhistorico" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewHistoricoModal(this)">
+                                 <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 30px;">
+                                    <i class="material-icons right" style="color: #66a366">remove_red_eye</i>
+                                 </button> 
+                              </a> 
                            </div>
                         </td>
                      </tr>
@@ -332,9 +144,37 @@ MEUS PARCEIROS{% endblock %}
 </div>
 
 
-
-{%for k in arr_SearchPartiners %} 
+<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type = "text/javascript" >
+   
+   var datatableReembolso = $(".pagelengthoption").DataTable({
+   "ordering" : true,
+   "scrollCollapse" : true,
+   "searching" : true,
+   "columnDefs" : [{orderable: true, targets: 0 }],
+   });
+   $(".dropdown-trigger").css("display", "none")
+
+
+   $(document).ready(function(){ // <<<< execute a seguinte função
+
+   function changeTable() {
+      $(".select-wrapper").find("select").hide();
+      $(".dataTables_length").css({
+            "width": "60px",
+            "position": "relative",
+      })
+
+      showLoadingPage("close");
+   }
+   setTimeout(showLoadingPage("show"), 500);
+   setTimeout(showLoadingPage("show"), 1000);
+   setTimeout(changeTable, 200);
+   });
+
+
    function padrao() {
       var checkbox_padrao = $("#val_p_fixo").val(); // recebe o valor do input
       if ($("#val_p_fixo_check").is(":checked")) { // se o campo do checkbox estiver checado
@@ -630,7 +470,6 @@ function updatePartnersModal(object) {
          "fixo": fixo,
          "empresa": empresa
       };
-      console.log(formpost)
 
       $("#modalint input, #modalint select").each(function () { // PROCURA O QUE ESTÁ PREENCHIDO E SELECIONADO E ATRAVER DO FORMPOST PEGA O VALOR E MANDA PARA O BACK
          formpost[$(this).attr("id")] = $(this).val();
@@ -647,27 +486,6 @@ function updatePartnersModal(object) {
       });
    }
 }
-
-function searchPatients(object) {
-   var e = $(object).val().toUpperCase();
-   if (e == "") {
-      $('#tb_append > tr').each(function () {
-         $(this).show();
-      });
-   } else {
-      $('#tb_append > tr').each(function () {
-         var trs = $(this).find("td");
-         var tr1 = $(trs[0]).text().toUpperCase();
-         var check = (tr1.indexOf(e) != -1);
-         if (check == true) {
-            $(this).show();
-         } else {
-            $(this).hide();
-         }
-      });
-   }
-}
-
 
 function CadastrePartners(object) {
    var id_user = $(object).data("id_user");
@@ -696,7 +514,6 @@ function CadastrePartners(object) {
       var empresa = movel = $("#lab_movel").val()
    }
 
-
    if (shiloh && shiloh == false){
       alert("Insira a relação correspondente.")
       return false
@@ -714,8 +531,6 @@ function CadastrePartners(object) {
    } else {
 
       var id_user = $(object).data("id_user");
-  
-
       var val_p_fixo = $("#val_p_fixo").val();
       var checkbox_porcentagem = $("#val_p").val();
       var checkbox_fixo = $("#val_fixo").val();
@@ -779,6 +594,44 @@ function CancelPrePartners(object) {
 
 }
 
+
+function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
+   var id_partners = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_partners": id_partners //DICT COM O VALOR DO ID
+   }; 
+   $("#modalhistorico2").hide();
+   $(object).prop("disabled", true);
+
+   fetchRequest("{% url 'ApiHistoryPartners' %}", "POST", "JSON", formpost, function(re) {
+      $("#modalhistorico2").show();
+      if(re["response"] == true){
+         var dados = re["message"];
+         var historico_append = "";
+            $.map(dados, function(n, i){
+               historico_append += `
+               <li class="timeline-items timeline-icon-green active ">
+                  <div id="data_f" class="timeline-time">${n.data}</div>
+                  <h4 id="name_u" class="timeline-title">${n.acao}</h4>
+                  <p id="action_f" class="timeline-text">${n.descricao}</p>
+               </li>
+            `;
+         }); 
+            $("#historico_app").html(historico_append);
+      } else {         
+         $("#historico_app").html('');
+         var appende = ` 
+            <li class="timeline-items timeline-icon-red active ">
+               <div id="data_f" class="timeline-time"></div>
+               <h4 id="name_u" class="timeline-title">Nenhum registro encontrado.</h4>
+               <p id="action_f" class="timeline-text">Informação do sistema.</p>
+            </li>
+         `
+         $("#historico_app").append(appende);
+      }
+   });
+}
+
 </script>
-{% endfor %}
 {% endblock %}

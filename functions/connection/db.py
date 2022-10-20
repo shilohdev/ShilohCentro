@@ -10,7 +10,6 @@ class BancoDeDados(str, Enum):
     DBCUSTOMERREFER = 'customer_refer'
     DB_USER = 'auth_users'
 
-
 class DbManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()

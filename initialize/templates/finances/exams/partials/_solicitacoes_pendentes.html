@@ -2,7 +2,7 @@
 <div class="col s12" id="solicitacao_pendente" style="padding: 30px;">
     <table id="dt_one" class="bordered pagelengthoption" style="margin-bottom: 10px;"> 
         <thead style="background-color: #581848; color: white; font-size: 15px">
-            <tr>
+            <tr> 
                 <th data-field="id">Paciente</th>
                 <th data-field="id" style="text-align: center;">Data Coletado</th>
                 <th data-field="id" style="text-align: center; width: 130px;">Exame</th>
@@ -22,8 +22,7 @@
                 <td style="text-align: center;">{{ k.company }}</td>
                 <td style="text-align: center;">{{ k.status_p }}</td>
                 <td style="text-align: center;">
-                    <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                        <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO-->
+                    <a href="#ModalCardPrincipal" class="modal-trigger" data-id_user="{{ k.id }}" onclick="ModalPricipal(this)">
                         <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600; padding-left: 15px;">
                             <i class="material-icons right" style="color: #f5bd46da">edit</i>
                         </button> 

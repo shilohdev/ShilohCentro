@@ -24,10 +24,6 @@ MEU PERFIL{% endblock %}
     .lower{
         text-transform: lowercase;
     }
-    .corfont{
-        color: #641108;
-        font-weight: bold;
-    }
    
    .image_meuperfil {
         display: block;
@@ -61,29 +57,27 @@ MEU PERFIL{% endblock %}
 
 </style>
 
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0" >
     <div class="container">
         <div class="card" id="userint" >        
             <div class="row">              
                 <!-- UPLOAD FOTO -->
                 <div class="col m4 s12"> 
                     <div class="input-field col m12 s12" style="margin-top: 22px;">
-                        <!-- <div id="ft" class="image_meuperfil">
+                        <div id="ft" class="image_meuperfil">
                             {% for k in arr_ViewFoto %}  
                             <img id="foto_atual" name="foto_perfil" src="{{ k.url }}" /> 
                             {% endfor %}
-                        </div> -->
+                        </div>
                     </div>
                     <div class="col m12 s12">
-                        <p style="color: rgb(202, 0, 233); margin: 10px;">Olá {{ NameUserrLog.nome }} Sejá bem vindo ao seu perfil !!</p>
-                        <p  style="color: rgb(202, 0, 233);  margin: 10px;">Aqui você edita seus dados =)</p>
-                        <!-- <label id="btn_ft" for="btn_file" class="btn">Adicionar Foto</label> -->
-                        <!-- <input onchange="AnxFoto()" type="file" id="btn_file" required accept="image/jpeg"/> -->
+                        <label id="btn_ft" for="btn_file" class="btn">Adicionar Foto</label>
+                        <input onchange="AnxFoto()" type="file" id="btn_file" required accept="image/jpeg"/>
                     </div>
                 </div>
                 <!--INICIO DO FORM-->
                 {% for k in arr_SearchProfile %}  
-                <div class="col m8 s1">
+                <div class="col m8 s12">
                     <div class="col m12 s12" style="margin-top: 30px;">
                         <div class="input-field col m4 s12">
                             <input id="cpf" value="{{ k.cpf }}" type="text"  data-required="true">

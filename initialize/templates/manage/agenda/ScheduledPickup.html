@@ -11,17 +11,10 @@ Página inicial
 CONSULTAR AGENDAMENTOS{% endblock %}
 {% block content %}
 
-<style type="text/css">
-   .corfont{
-   color: #641108;
-   font-weight: bold;
-   }
-</style>
-
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
-      <div class="card-content" style="margin-top: 50px;">
+      <div class="" style="margin-top: 50px;">
          <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none;" id="company" type="text" >
          <input readonly="readonly" style="color: black; font-size: 30px; border-bottom: none; display: none;" id="statusM" type="text" >
          <!--
@@ -38,6 +31,11 @@ CONSULTAR AGENDAMENTOS{% endblock %}
                         <div class="input-field col m3 s12">
                            <input id="date_age" type="date" >
                            <label for="date_age">Data Agendamento</label>
+                        </div>
+                        <div class="input-field col s3">
+                           <input id="hr_age" type="text" placeholder="00:00">
+                           <label for="hr_age">
+                           <i class="material-icons" style="font-size: 15px">access_time</i>&nbsp;Horário</label>
                         </div>
                         <div class="input-field col m3 s12">
                            <input id="hr_age" type="text" placeholder="00:00">
@@ -68,8 +66,8 @@ CONSULTAR AGENDAMENTOS{% endblock %}
                               <label class="active">Enfermeiro</label>
                               <select name="select" id="nurse" class="error" required="true" data-show="search">
                                  <option value="">Enfermeiro</option>
-                                 {% for k in arr_SearchNurse%}
-                                 <option value="{{ k.id }}">{{ k.nome }}</option>
+                                 {% for nurse in arr_SearchNurse_Active %}
+                                 <option value="{{ nurse.id }}">{{ nurse.nome }}</option>
                                  {% endfor %}
                               </select>
                            </div>
@@ -162,7 +160,7 @@ CONSULTAR AGENDAMENTOS{% endblock %}
                         <div class="input-field col m12 s12">
                            <input id="obs" type="text">
                            <label for="obs">
-                           <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação</label>
+                           <i class="material-icons" style="font-size: 15px">create</i>&nbsp;Observação:</label>
                         </div>
                      </div>
                   </div>
@@ -205,78 +203,24 @@ CONSULTAR AGENDAMENTOS{% endblock %}
    </div>
 </div>
 <!--FIM DO MODAL-->
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0">
    <div class="container">
       <div class="card" id="search_agenda">
-         <div id="userint" class="row container" >
-            <div class="col s12"  style="margin-top: 30px">
-               <div class="input-field col m5 s12"> 
-                  <input id="search_nome" type="text" data-show="search" data-modal_config="search_name" onkeyup="searchColeta(this)">
-                  <label for="search_nome">
-                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Do Paciente</label>
-               </div>
-               <div class="input-field col m2 s12" >
-                  <div class="select-wrapper">
-                     <select name="select" id="search_nurse" class="error " required="" data-show="search" data-modal_config="search_nurse">
-                        <option value="">Enfermeiro</option>
-                        {% for k in arr_SearchNurse%}
-                        <option value="{{ k.id }}">{{ k.nome }}</option>
-                        {% endfor %}
-                     </select>
-                  </div>
-               </div>
-               <div class="input-field col m5 s12" style="margin-top: 0px">
-                  <div class="input-field col m6 s6">
-                     <input id="search_date_start" type="date" data-show="search_to" data-modal_config="search_dt_agendamento_first">
-                     <label for="date_start"><i class="material-icons" style="font-size: 15px"></i>&nbsp;Data Agendamento</label>
-                  </div>
-                  <div class="input-field col m6 s6">
-                     <input id="search_date_end" type="date" data-show="search_end" data-modal_config="search_dt_agendamento_end">
-                     <label for="date_end"><i class="material-icons" style="font-size: 15px"></i>&nbsp;Até</label>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div id="userint" class="row container " >
-            <div class="col s12"  style="margin-bottom: 30px; ">
-               <div class="input-field col m2 s12" >
-                  <div class="select-wrapper">
-                     <select name="select" id="search_status" class="error" required="" data-show="search" data-modal_config="search_status">
-                        <option value="">Status</option>
-                        {% for k in arr_SearchStatus%}
-                        <option value="{{ k.id }}">{{ k.status }}</option>
-                        {% endfor %}
-                     </select>
-                  </div>
-               </div>
-               <div class="input-field col s2" >
-                  <div class="select-wrapper"></div>
-               </div>
-               <div class="input-field col s2" >
-                  <div class="select-wrapper"></div>
-               </div>
-               <div class="col m4 s12" >&nbsp;
-                  <button id="pesq_agenda" class="waves-effect waves dark btn next-step" type="button" style="width: 100%;">
-                  <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Pesquisar</spanpx>
-                  </button>
-               </div>
-            </div>
-         </div>
          <div class="row">
             <div class="container">
                <div class=" container scroll" >
-                  <div class=" col s12" style="margin-bottom: 50px; overflow-x: auto">
-                     <table class=" bordered">
+                  <div class=" col s12 m12" style="overflow-x: auto; padding:40px">
+                     <table class=" bordered pagelengthoption">
                         <thead style="background-color: #581848; color: white; font-size: 15px" >
                            <tr>
                               <th data-field="namet">Paciente - [Telefone]</th>
-                              <th data-field="nurset">Enfermeiro</th>
+                              <th data-field="nurset">Enfermeira</th>
                               <th data-field="doctort">Horário</th>
                               <th data-field="telt">Exame</th>
                               <th data-field="schedulingt">Data</th>
                               <th data-field="examt">Unidade</th>
                               <th data-field="status">Status</th>
-                              <th data-field="actiont">Ação</th>
+                              <th data-field="actiont" style="text-align: center;">Ação</th> 
                            </tr>
                         </thead>
                         <tbody id="tb_append">
@@ -290,8 +234,8 @@ CONSULTAR AGENDAMENTOS{% endblock %}
                               <td>{{ k.unity}}</td>
                               <td>{{ k.status}}</td>
                               <td>
-                                 <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)" style="background-color: #f5be4600;">
-                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;">
+                              <a href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewAgenModal(this)">
+                                    <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px;width: 15px;padding: 1;padding-right: 8px;background-color: #f5be4600;padding-left: 12px;">
                                        <i class="material-icons right" style="color: #76c076da;">remove_red_eye</i>
                                     </button>
                                  </a>
@@ -313,9 +257,40 @@ CONSULTAR AGENDAMENTOS{% endblock %}
    </div>
 </div>
 
-<script type = "text/javascript" >
 
-	// CEP 
+
+<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type = "text/javascript" >
+   
+   var datatableColetas = $(".pagelengthoption").DataTable({
+         "ordering" : true,
+         "scrollCollapse" : true,
+         "searching" : true,
+         "columnDefs" : [{orderable: true, targets: 0 }],
+      });
+      $(".dropdown-trigger").css("display", "none")
+
+      $(document).ready(function(){ // <<<< execute a seguinte função
+         function changeTable() {
+            $(".select-wrapper").find("select").hide();
+            $(".dataTables_length").css({
+                  "width": "60px",
+                  "position": "relative",
+            })
+
+            showLoadingPage("close");
+         }
+         setTimeout(showLoadingPage("show"), 500);
+         setTimeout(showLoadingPage("show"), 1000);
+         setTimeout(changeTable, 200);
+      });
+
+   
+   
+   
+   // CEP 
 	function pesquisacep(valor) {
 		var cep = valor.replace(/\D/g, '');
 
@@ -360,90 +335,6 @@ function limocamp() {
 	var end_state = $("#uf").val("");
 }
 
-// Remove linha da table
-/*function remove(e) {
-   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user aqui
-   $("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
-
-   var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "id_user": id_user //DICT COM O VALOR DO ID
-   };
-         
-   fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
-      if(re["response"] == true){ 
-         alert("Agendamento Concluído!");// VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-      } 
-});
-}
-*/
-
-// Função de filtro
-function filterAgenda() {
-
-   
-   var searchFileds = {};
-
-   $("input[data-show='search'], input[data-show='search_to'], select[data-show='search'], select[data-show='search_to']").each(function(){
-      var typeSearch = $(this).data("show");
-      if($(this).attr("type") == "checkbox"){
-         if($(this).prop("checked") == true){
-               var valueSearch = 1;
-         } else {
-               if($(this).attr("class") == "switch switch--shadow"){
-                  var valueSearch = 0;
-               } else {
-                  var valueSearch = null;
-               }
-         }
-         if(valueSearch != null){
-               searchFileds[$(this).data("modal_config")] = valueSearch;
-         }
-      } else {
-         if(typeSearch == "search"){
-               if($(this).val() != ""){
-                  searchFileds[$(this).data("modal_config")] = $(this).val();
-               }
-         } else if(typeSearch == "search_to"){
-               var searchObject = $(this).data("modal_config").replace("_first", "")
-               var searchFirst = $(`input[data-modal_config="${searchObject}_first"]`).val();
-               var searchSecond = $(`input[data-modal_config="${searchObject}_end"]`).val();
-
-               var searchArray = [];
-               if(searchFirst != "" && searchFirst != undefined && searchFirst != null) searchArray.push(searchFirst);
-               if(searchSecond != "" && searchSecond != undefined && searchSecond != null) searchArray.push(searchSecond);
-               
-               if(searchArray.length > 0){
-                  searchFileds[searchObject] = JSON.stringify(searchArray);
-               }
-         }
-      }
-   });
-
-   var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "search": JSON.stringify(searchFileds)
-   };
-
-   fetchRequest("{% url 'ApiScheduledPickup' %}", "POST", "JSON", formpost, function(re) {
-      if (re["response"] == false) {
-         alert(re["message"]);
-      } else {
-         $("#tb_append").html("");
-         var dados = re["message"];
-         for(k in dados){
-               var key = dados[k];
-               var append = '<tr> <td>' + key["name"] + '</td> <td>' + key["enfermeiro"] + '</td> <td>' + key["hr_agendamento"] + '</td> <td>' + key["exame"] + '</td> <td>' + key["agendamento"] + '</td> <td>' + key["unity"] + '</td> <td>' + key["status"] + '</td> <td> <a href="#modal1" class="modal-trigger" data-id_user="'+key["id"]+'" onclick=\"viewAgenModal(this)\" style="background-color: #f5be4600"> <i class="material-icons" style="color: #76c076da">remove_red_eye</i> </a> </td> </tr>';
-               $("#tb_append").append(append);
-         }
-      }
-   });
-}// FIM FILTRO
-
-
-$("#pesq_agenda").click(function () {// Aqui inclui um evento para quando clicar no id: pesq_agenda, ele executar a função de filtro.
-	filterAgenda();
-});
 
 $(document).ready(function () {
 	$('.modal').modal();
@@ -469,7 +360,6 @@ function viewAgenModal(object) { //FUNCTION DO ONCLICK
    
 	var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
 	//$("#btn_atualizar").data("id_user", id_user); // att status
-   console.log(id_user)
 	var formpost = {
 		"csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
 		"id_user": id_user //DICT COM O VALOR DO ID
@@ -573,7 +463,7 @@ function StatusConc(e){
       var id = $(e).data("id");
       var convenio = $("tp_conv").val();
       var enfermeira = $("#nurse").val();
-      console.log(enfermeira)
+      
       var formpost = {
          "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
          "convenio": convenio,
@@ -581,7 +471,7 @@ function StatusConc(e){
          "enfermeira": enfermeira,
          "company": company,
       }
-      console.log(formpost)
+      
       fetchRequest("{% url 'ApiStatusAgendaConc' %}", "POST", "JSON", formpost, function(re){ // A URL É COMPOSTA PELO NAME DE UMA URL
          if(re["response"] == "true"){
             $("#btn_conc").attr("disabled", true);
@@ -750,27 +640,6 @@ function ReagendarAge(e){
       }
       });
    }
-}
-
-
-function searchColeta(object){
-   var e = $(object).val().toUpperCase();
-    if(e == ""){
-        $('#tb_append > tr').each(function() {
-            $(this).show();
-        });
-    } else {
-        $('#tb_append > tr').each(function() {
-           var trs = $(this).find("td");
-           var tr1 = $(trs[0]).text().toUpperCase();
-            var check = (tr1.indexOf(e) != -1);
-            if(check == true){
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
 }
 
 

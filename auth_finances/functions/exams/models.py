@@ -22,7 +22,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
-from datetime import datetime
+from datetime import date, datetime
 import base64
 import json
 import time
@@ -30,9 +30,9 @@ from re import A
 from django.contrib.auth.models import User
 from numpy import empty
 from pymysql import NULL
-from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing
+from auth_finances.models import DashPartners_Closing, DashCommerce_Closing, DashInterno_Closing, ClosingPartnersFilter, ClosingPartnersModal_Mes
 from functions.connection.models import Connection, Exams, RegisterActions
-from functions.general.decorator import convertDate, checkDayMonth, fetchAdministrator 
+from functions.general.decorator import convertDate, fetchAdministrator 
 from django.forms import model_to_dict
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -126,9 +126,6 @@ class FinancesExams:
         return array
 
 
-
-
-
 class FinancesExamsInt:
     def __init__(self) -> None:
         self.cursor = Connection('userdb', '', '', '', '').connection()
@@ -183,7 +180,7 @@ class FinancesExamsInt:
 
 #histórico financeiros
 def fetchHistoryModalFinances(id):
-    response = RegisterActions.objects.filter(id_agendamento=id)
+    response = RegisterActions.objects.order_by('-data_operacao').filter(id_agendamento=id)
     if list(response):
         r = [(model_to_dict(key)) for key in response]
         for j in r:
@@ -197,11 +194,11 @@ def fetchHistoryModalFinances(id):
 
 #MODAL SOLICITAÇÃO DE REEMBOLSO
 def FunctionModalFinances(request):
-    id = request.POST.get('id_user')
+    id= request.POST.get('id_user')
 
     files = fetchFileEditionsFinances(id)
     history = fetchHistoryModalFinances(id)
-    filesInt = fetchFileEditionsFinancesInt(id)
+    filesInt = fetchFileEditionsFinancesInt(id) #interno
 
     dict_response = {}
     with connections['auth_finances'].cursor() as cursor:
@@ -251,7 +248,7 @@ def FunctionModalFinances(request):
                         "val_work": ef_val_work_f,# valor worklab
                         "val_pago": ef_val_pag_f,# valor pago
                         "por_paga": ef_porcentagem_paga_f,# porcentagem paga
-                        "date_repass": ef_data_repasse,# nota fiscal
+                        "data_repasse": convertDate(ef_data_repasse),# nota fiscal
                         "nf": ef_nf_f,# nota fiscal
                         "date_end": convertDate(ef_data_final_f) ,# data final do processo
                         "data_regis": ef_data_registro_f,# data registro
@@ -275,7 +272,7 @@ def FunctionModalFinances(request):
                         "val_work": dados.val_work_f,# valor worklab
                         "val_pago": dados.val_pag_f,# valor pago
                         "por_paga": dados.porcentagem_paga_f,# porcentagem paga
-                        "date_repass": dados.data_repasse,# data do reembolso
+                        "data_repasse": dados.data_repasse,# data do reembolso
                         "nf": dados.nf_f,# nota fiscal
                         "date_end": dados.data_final_f,# data final do processo
                         "data_regis": dados.data_registro_f,# data registro
@@ -294,10 +291,10 @@ def FunctionModalFinances(request):
 
  
 #GET FILE >> ADICIONAR DIRETORIO
-def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
+def saveFileEditionsFinances(id_agendamento, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTOS
     with connections['auth_users'].cursor() as cursor:
         params = (
-            id,
+            id_agendamento,
         )
         query = "SELECT id, nome_p, identification FROM auth_agenda.collection_schedule WHERE id LIKE %s;"
         cursor.execute(query, params)
@@ -305,8 +302,8 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
         if dados:
             for idColeta, id_paciente, identificacao in dados:
                 if identificacao == "Externo":
-                    PATH = settings.BASE_DIR_DOCS + "/patients/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-                    PATH_USER = PATH.format(id_paciente) # ADICIONANDO ID NO {} DE CIMA /\
+                    PATH = settings.BASE_DIR_DOCS + "/patients/process/{}/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+                    PATH_USER = PATH.format(id_paciente, idColeta) # ADICIONANDO ID NO {} DE CIMA /\
                     PATH_TYPES = PATH_USER + "/" + etype + "/" # AQUI ESTÁ INDO PARA O DIRETORIO: docs/patients/process/ID/tipo_do_arquivo
                     arr_dir = []
                     for name, file in FILES.items():
@@ -316,8 +313,8 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
                             "path": PATH_TYPES + file.name
                         })
                 else: 
-                    PATH = settings.BASE_DIR_DOCS + "/user/process/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-                    PATH_USER = PATH.format(id_paciente) # ADICIONANDO ID NO {} DE CIMA /\
+                    PATH = settings.BASE_DIR_DOCS + "/user/process/{}/{}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+                    PATH_USER = PATH.format(id_paciente, idColeta) # ADICIONANDO ID NO {} DE CIMA /\
                     PATH_TYPES = PATH_USER + "/" + etype + "/" 
                     arr_dir = []
 
@@ -327,67 +324,74 @@ def saveFileEditionsFinances(id, etype, FILES): #CRIA O DIRETÓRIO DOS DOCUMENTO
                             "name": file.name,
                             "path": PATH_TYPES + file.name
                         })
-
         return True
 
 
-#GER FILE
-def fetchFileEditionsFinances(id):
+#GER FILE >> visualiza no modal
+def fetchFileEditionsFinances(id_agendamento): #esta vindo o id da coleta
+    with connections['auth_finances'].cursor() as cursor:
 
-    arr_files = []
+        query = "SELECT id, nome_p, identification FROM auth_agenda.collection_schedule WHERE id LIKE %s;"
+        cursor.execute(query, (id_agendamento,))
+        dados = cursor.fetchall()
+        if dados: 
+            for idColeta, id_paciente, identification in dados:
+                pass
 
-    ORIGIN_PATH = f"/patients/process/{id}"
-    PATH = settings.BASE_DIR_DOCS + f"/patients/process/{id}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
-    EXISTS = default_storage.exists(PATH)
-    if EXISTS:
-        FILES = default_storage.listdir(PATH)
-        FILES = list(FILES)[0]
-        for keys in FILES:
-            n = (str(((str(keys).replace("[", "")).replace("]", "")).replace("'", "")).replace(" ", "")).split(",")
-            for key in n:
-                key = ((str(key).replace("[", "")).replace("]", "")).replace("'", "")
-                PATH_TYPE = PATH + f"/{key}"
-                ORIGIN_PATH_TYPE = ORIGIN_PATH + f"/{key}"
-                for fkey in default_storage.listdir(PATH_TYPE):
-                    if type(fkey) != list:
-                        if fkey not in ["", None]:
-                            fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
-                            if len(fkey) > 1:
-                                PATH_FILE = PATH_TYPE + f"/{fkey}"
-                                ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
-                                arr_files.append({
-                                    "type": key,
-                                    "description_type": settings.LISTPATHTYPE.get(key, ""),
-                                    "file": {
-                                        "name": fkey,
-                                        "date_created": {
-                                            "en": str(default_storage.get_created_time(PATH_FILE).date()),
-                                            "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
-                                        },
-                                        "path": ORIGIN_PATH_FILE
-                                    }
-                                })
-                    else:
-                        for fkey in fkey:
-                            if fkey not in ["", None]:
-                                fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
-                                if len(fkey) > 1:
-                                    PATH_FILE = PATH_TYPE + f"/{fkey}"
-                                    ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
-                                    arr_files.append({
-                                        "type": key,
-                                        "description_type": settings.LISTPATHTYPE.get(key, ""),
-                                        "file": {
-                                            "name": fkey,
-                                            "date_created": {
-                                                "en": str(default_storage.get_created_time(PATH_FILE).date()),
-                                                "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
-                                            },
-                                            "path": ORIGIN_PATH_FILE
-                                        }
-                                    })
-    return arr_files
- 
+            arr_files = []
+            # path : id paciente/ id coleta / numero do file / file
+            ORIGIN_PATH = f"/patients/process/{id_paciente}/{idColeta}"
+            PATH = settings.BASE_DIR_DOCS + f"/patients/process/{id_paciente}/{idColeta}" # PATH ORIGINAL, {} SERVE PARA VOCÊ ADICIONAR O "ID" NO DIRETORIO
+            EXISTS = default_storage.exists(PATH)
+            if EXISTS:
+                FILES = default_storage.listdir(PATH)
+                FILES = list(FILES)[0]
+                for keys in FILES:
+                    n = (str(((str(keys).replace("[", "")).replace("]", "")).replace("'", "")).replace(" ", "")).split(",")
+                    for key in n:
+                        key = ((str(key).replace("[", "")).replace("]", "")).replace("'", "")
+                        PATH_TYPE = PATH + f"/{key}"
+                        ORIGIN_PATH_TYPE = ORIGIN_PATH + f"/{key}"
+                        for fkey in default_storage.listdir(PATH_TYPE):
+                            if type(fkey) != list:
+                                if fkey not in ["", None]:
+                                    fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
+                                    if len(fkey) > 1:
+                                        PATH_FILE = PATH_TYPE + f"/{fkey}"
+                                        ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
+                                        arr_files.append({
+                                            "type": key,
+                                            "description_type": settings.LISTPATHTYPE.get(key, ""),
+                                            "file": {
+                                                "name": fkey,
+                                                "date_created": {
+                                                    "en": str(default_storage.get_created_time(PATH_FILE).date()),
+                                                    "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
+                                                },
+                                                "path": ORIGIN_PATH_FILE
+                                            }
+                                        })
+                            else:
+                                for fkey in fkey:
+                                    if fkey not in ["", None]:
+                                        fkey = ((str(fkey).replace("[", "")).replace("]", "")).replace("'", "")
+                                        if len(fkey) > 1:
+                                            PATH_FILE = PATH_TYPE + f"/{fkey}"
+                                            ORIGIN_PATH_FILE = ORIGIN_PATH_TYPE + f"/{fkey}"
+                                            arr_files.append({
+                                                "type": key,
+                                                "description_type": settings.LISTPATHTYPE.get(key, ""),
+                                                "file": {
+                                                    "name": fkey,
+                                                    "date_created": {
+                                                        "en": str(default_storage.get_created_time(PATH_FILE).date()),
+                                                        "pt": str(default_storage.get_created_time(PATH_FILE).strftime("%d/%m/%Y"))
+                                                    },
+                                                    "path": ORIGIN_PATH_FILE
+                                                }
+                                            })
+            return arr_files
+    
 
 
 #GER FILE 
@@ -461,20 +465,18 @@ def SaveEditionsFinancesFunctions(request):
     val_pago = request.POST.get('val_pago')
     porcentagem = request.POST.get('porcentagem')
 
-
-
-    #saveFileEditionsFinances(id_user, type_doc, request.FILES)
     bodyData = json.loads(request.POST.get('data'))
     
     nomeStatus = bodyData.get('statusProgresso')
     obsF = bodyData.get('obsF')
     dataKeys = { #DICT PARA PEGAR TODOS OS VALORES DO AJAX
         "tp_perfil": "perfil", #key, value >> valor que vem do ajax, valor para onde vai (banco de dados)
-        "date_repass": "data_repasse",
+        "data_repasse": "data_repasse",
         "n_nf": "nf_f",
         "statusProgresso": "status_exame_f",
         "obsF": "obs_f",
     }
+
     with connections['auth_finances'].cursor() as cursor:
         searchID = "SELECT id, nome FROM auth_users.users WHERE login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -492,7 +494,7 @@ def SaveEditionsFinancesFunctions(request):
             
             if key in bodyData:#SE MEU VALOR DO INPUT DO AJAX EXISTIR DENTRO DO MEU POST, FAZ A QUERY
                     vData = bodyData.get(key)
-                    if key == "date_repass":
+                    if key == "data_repasse":
                         vData = vData if vData not in ["", None] else None
 
                     alvaro = float (cust_alv) if cust_alv not in ["", None] else None #serve para aceitar campo null quando double
@@ -565,7 +567,7 @@ def SaveEditionsFinancesFunctions(request):
 
 
 
-#FINALIZAR  PROCESSO REEMBOLSO
+#FINALIZAR  PROCESSO REEMBOLSO >> TO AQUI
 def FinalizeProcessFunction(request):
     date_create = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     id_agendamento = request.POST.get("id_user")
@@ -574,11 +576,11 @@ def FinalizeProcessFunction(request):
     doctor = request.POST.get("doctor")
     paciente = request.POST.get("paciente")
     comercial = request.POST.get("comercial")
-    repasse = request.POST.get("date_repass")
+    repasse = request.POST.get("data_repasse")
     date_age = request.POST.get("date_age")
     tp_exame = request.POST.get("tp_exame")
     companyParceiro = request.POST.get("company")
-    
+
     with connections['admins'].cursor() as cursor:        
         searchID = "SELECT a.id, a.nome, b.company FROM auth_users.users a INNER JOIN auth_users.company_lab b ON a.company = b.id WHERE a.login LIKE %s"
         cursor.execute(searchID, (request.user.username,))
@@ -592,102 +594,18 @@ def FinalizeProcessFunction(request):
                 "message": "Login expirado, faça login novamente para continuar."
             }
 
-        #atualização de status
-        param = ( repasse, statusProgresso, date_create, id_usuario, id_agendamento,)
-        query = "UPDATE `auth_finances`.`completed_exams` SET `data_repasse` = %s,  `status_exame_f` = %s, `data_final_f` = %s,  `resp_final_p_f` = %s, `regis` = '1' WHERE (`id_agendamento_f` = %s);"
-        cursor.execute(query, param)
-        #historico de atualização 
-        query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Finalizar Processo',  %s, 'Finalizou o processo de reembolso', %s);"
-        params2 = (
-            id_agendamento, nome, date_create, 
-        ) 
-        cursor.execute(query2, params2)
+        anexo = localizaAnexo(id_agendamento)
+        print(anexo)
+        if anexo == "prosseguir":
+            insere_na_tabela_os_valores = calculaFechamentoMes(doctor, id_agendamento, id, paciente, date_age, repasse, tp_exame, date_create, companyParceiro, company)
+            atualizaDados = atualizaDadosDeFinalizacao(repasse, statusProgresso, date_create, id_usuario, id_agendamento, nome)
+            return {"response": "true", "message": "Processo Financeiro Finalizado!"}
+        elif anexo == False: #pago sem anexo de comprovante
+            return {"response": "sem_anexo", "message": "Para finalizar, precisa inserir o comprovante de pagamento!"}
+        else: # finalização com outro status além de pago
+            atualizaDados = atualizaDadosDeFinalizacao(repasse, statusProgresso, date_create, id_usuario, id_agendamento, nome)
+            return {"response": "true", "message": "Processo Financeiro Finalizado!"}
 
-
-        queryVerif = "SELECT id, id_agendamento FROM auth_finances.closing_finance WHERE id_agendamento LIKE %s"
-        cursor.execute(queryVerif, (id_agendamento,))
-        dados = cursor.fetchall()
-        if dados: 
-            for id, id_agendamento in dados:
-                return {
-                "response": "true",
-                "message": "Processo de reembolso já finalizado."
-            }
-        else:
-            pass
-
-        if statusProgresso == '4':
-            Qnf = "SELECT id_agendamento_f, anx_f FROM auth_finances.completed_exams where id_agendamento_f like %s;"
-            cursor.execute(Qnf, (id_agendamento,))
-            dados = cursor.fetchall()
-            if dados: 
-                for id_agendamento_f, anx_f in dados:
-                    if anx_f == '1':
-
-                        queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
-                        paramsVal = (
-                            doctor,
-                        )
-                        cursor.execute(queryVal, paramsVal)
-                        dadosMEDICO = cursor.fetchall()
-
-                        for perfil, id, nome, val_padrao, val_porcentagem, val_fixo in dadosMEDICO:
-                            SelectIndicacao="SELECT b.nome_p, a.data_regis_l, a.medico_resp_l as medico, c.resp_comerce as comercial FROM customer_refer.leads a INNER JOIN customer_refer.patients b ON b.id_l_p = a.id_lead INNER JOIN auth_users.users c ON a.medico_resp_l = c.id WHERE a.medico_resp_l = %s"
-                            cursor.execute(SelectIndicacao, (id,))
-                            dados = cursor.fetchall()
-                            array2 = []
-
-                            val_padrao =  (val_padrao) if val_padrao not in ["", None] else None
-                            val_porcentagem = (val_porcentagem) if val_porcentagem not in ["", None] else None
-                            val_fixo =  (val_fixo) if val_fixo not in ["", None] else None
-
-                            for pacienteS, data_indicacaoS, medicoS, comercialS in dados:
-                                newinfoa = ({
-                                    "paciente": pacienteS,
-                                    "data_indicacao": data_indicacaoS,
-                                    "medico": medicoS,
-                                    "comercial": comercialS,
-                                    })
-                                array2.append(newinfoa)
-                            
-                            if perfil == '7':
-                                if val_porcentagem:
-                                
-                                    val_porcentagem = float(val_porcentagem)
-                                    ValorPago = float(ValorPago)
-                                    porcentagem = float(val_porcentagem / 100) * float(ValorPago)
-                                    porcentagem = f'{porcentagem:.2f}'
-
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
-                                    val_comercial = float(porcentagem) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create, companyParceiro, company,)
-                                    cursor.execute(queryFinance, paramsFinance)
-                            
-                                elif val_padrao:
-                                    val_padrao = float(val_padrao)
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
-                                    val_comercial = float(val_padrao) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create, companyParceiro, company,)
-                                    cursor.execute(queryFinance, paramsFinance)
-                                
-                                else:
-                                    val_fixo = float(val_fixo)
-                                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
-                                    val_comercial = float(val_fixo) * float(0.10)
-                                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create, companyParceiro, company,)
-                                    cursor.execute(queryFinance, paramsFinance)
-                            else:
-                                queryInterno ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `fatura`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, NULL, %s, %s);"
-                                paramsInterno = (id_agendamento, id, paciente, id, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create, companyParceiro, companyParceiro,)
-                                cursor.execute(queryInterno, paramsInterno)
-                    
-                    else:
-                        return {"message":"Insira Nota Fiscal."}
-
-        else:
-            return {"message":"Não foi possível encontrar este paciente."}
-
-    return {"response": "true", "message": "Processo Financeiro Finalizado!"}
 
 
 #SELECT TABELA HISTORICO
@@ -1028,11 +946,12 @@ def PagoShilohLabFunction(request):
 
     return ObjetoFunction
 
-#FILTRO TABELA FECHAMENTO PARCEIROS
+#FECHAMENTO DOS PARCEIROS - MES VIGENTE
 def FilterMonthClosingPartners(request):
-    mes = request.POST.get('month')
     ano = int(datetime.now().strftime("%Y"))
-
+    mes_atual = int(datetime.now().strftime("%m"))
+    mes = mes_atual -1 #Se refere a data repasse do mes passado para o pagamento até dia 10 subsequente
+    print(mes)
     ObjetoPath = DashPartners_Closing(mes=mes, ano=ano)
 
     Table = ObjetoPath.FiltroTable()
@@ -1050,6 +969,34 @@ def FilterMonthClosingPartners(request):
         "APagarLabMovel": APagarLabMovel,
         "APagarShilohLab": APagarShilohLab,
         "Total": Total,
+    }
+
+
+
+#FECHAMENTO DOS PARCEIROS - FILTRO PERSONALIZADO
+def FiltroPersonalizado_ClosingPartners(request):
+    data_inicio = request.POST.get('data_inicio')
+    data_fim = request.POST.get('data_fim')
+
+
+    ObjetoPath = ClosingPartnersFilter(data_inicio=data_inicio, data_fim=data_fim)
+
+    Table = ObjetoPath.FiltroTable()
+
+    ''' PagoLabMovel = ObjetoPath.PagosLabMovel()
+        PagoLabShilohLab = ObjetoPath.PagosShilohLab()
+        APagarLabMovel = ObjetoPath.APagarLabMovel()
+        APagarShilohLab = ObjetoPath.APagarShilohLab()
+        Total = ObjetoPath.Total()'''
+
+    ''' "PagoLabMovel": PagoLabMovel,
+        "PagoLabShilohLab": PagoLabShilohLab,
+        "APagarLabMovel": APagarLabMovel,
+        "APagarShilohLab": APagarShilohLab,
+        "Total": Total,'''
+    return {
+        "response": "true",
+        "table": Table,
     }
 
 #-----------------DOCS FINANCEIROS/ PARCEIROS------------------- 
@@ -1095,126 +1042,38 @@ def fetchFilePartners(id):
     return arr_files
 
 
+
+
+
 #TABELAS FECHAMENTO PARCEIROS - MODAL
 def searchClosingPartners(request):
+    mes_atual = int(datetime.now().strftime("%m"))
+    mes = mes_atual -1
     id_medico = request.POST.get('id_user')
-    monthCount = request.POST.get('month')
-    monthF = int(datetime.now().strftime("%m"))
+    personalizado = request.POST.get('personalizado')
+    print(personalizado, "<<<<")
 
     files = fetchFilePartners(id_medico) #CHAMA A FUNÇÃO, LOCALIZA MEU DIRETÓRIO.
-    with connections['auth_agenda'].cursor() as cursor:
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 6 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        arrayNot = []
-        for paciente, agendamento, exame in dados:
-            newinfoa = ({
-                "paciente": paciente,
-                "agendamento": convertDate(agendamento),
-                "exame": exame,
-                })
-            arrayNot.append(newinfoa)
-        
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 5 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        array = []
-        for pacienteG, agendamentoG, exameG in dados:
-            newinfoa = ({
-                "pacienteG": pacienteG,
-                "agendamentoG": convertDate(agendamentoG),
-                "exameG": exameG,
-                })
-            array.append(newinfoa)
 
+    ObjetoPath = ClosingPartnersModal_Mes(mes=mes, id_medico=id_medico)
 
-        query = "SELECT b.nome_p, a.data_agendamento, c.tipo_exame FROM auth_agenda.collection_schedule a INNER JOIN customer_refer.patients b ON a.nome_p = b.id_p INNER JOIN admins.exam_type c ON a.tp_exame = c.id INNER JOIN auth_finances.completed_exams d ON a.id = d.id_agendamento_f WHERE d.status_exame_f = 2 AND b.medico_resp_p = %s"
-        cursor.execute(query, (id_medico,))
-        dados = cursor.fetchall()
-        arrayAnalise = []
-        for pacienteA, agendamentoA, exameA in dados:
-            newinfoa = ({
-                "pacienteA": pacienteA,
-                "agendamentoA": convertDate(agendamentoA) ,
-                "exameA": exameA,
-                })
-            arrayAnalise.append(newinfoa)
+    pago = ObjetoPath.relacao_pagos()
+    soma_pagos = ObjetoPath.count_pagos()
+    repasse = ObjetoPath.Repasse()
+    analise = ObjetoPath.analise()
+    GlosaNaoAtingido = ObjetoPath.GlosaNaoAtingido()
+    Juridico = ObjetoPath.GlosaNaoAtingido()
 
-
-     
-        queryPago = "SELECT nome_medico, nome_paciente, data_coleta, data_repasse, exame, valor_uni_partners FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s"
-        if monthCount == "" or monthCount == None:
-            cursor.execute(queryPago, (monthF, id_medico,))
-
-        else:
-            cursor.execute(queryPago, (monthCount, id_medico,))
-
-        dados = cursor.fetchall()
-        arrayPago = []
-        
-
-        for iDmedico, pacienteP,  dataColetaP, dataRepasseP, exameP, valor_uniP in dados:
-            valor_uniP = f"R$ {valor_uniP:_.2f}"
-            valor_uniP = valor_uniP.replace(".", ",").replace("_", ".")
-
-            newinfoa = ({
-                "iDmedico": iDmedico,
-                "pacienteP": pacienteP,
-                "dataColetaP": convertDate(dataColetaP),
-                "dataRepasseP": convertDate(dataRepasseP),
-                "exameP": exameP,
-                "valor_uniP": valor_uniP,
-                })
-            arrayPago.append(newinfoa)
-
-
-        queryCount = "SELECT COUNT(*) AS contagem, SUM(valor_uni_partners) AS total FROM auth_finances.closing_finance WHERE MONTH(data_repasse) = %s AND nome_medico = %s "
-        if monthCount == "" or monthCount == None:
-            cursor.execute(queryCount, (monthF, id_medico,))
-        else:
-            cursor.execute(queryCount, (monthCount, id_medico,))
-        
-        dados = cursor.fetchall()
-        arrayPagoCount = []
-        for contagem, valor in dados:
-            if valor == None:
-                valor = 0
-            valor = float(valor) if valor not in ["", None] else None
-            valor = f"R$ {valor:_.2f}"
-            valorS = valor.replace(".", ",").replace("_", ".")
-
-            newinfoa = ({
-                "contagem": contagem,
-                "valor": valorS,
-                })
-            arrayPagoCount.append(newinfoa)
-
-
-        queryOutros = "SELECT id_lead, nome_lead, data_regis_l, status_l FROM customer_refer.leads WHERE medico_resp_l = %s AND status_l NOT LIKE 'Paciente'"
-        cursor.execute(queryOutros, (id_medico,))
-        dados = cursor.fetchall()
-        arrayOutros = []
-        for idlead, pacienteO,  indicacaoO, statusO in dados:
-
-            newinfoa = ({
-                "idlead": idlead,
-                "pacienteO": pacienteO,
-                "indicacaoO": convertDate(indicacaoO),
-                "statusO": statusO,
-                })
-            arrayOutros.append(newinfoa)
-
-        return {
-            "response": "true",
-            "message": array,
-            "message2": arrayNot,
-            "messageAnalise": arrayAnalise,
-            "messagePago": arrayPago,
-            "messageCount": arrayPagoCount,
-            "messageOutros": arrayOutros,
-            "files": json.dumps(files),
-
-        }
+    return {
+        "response": "true",
+        "messagePago": pago,
+        "messageCount": soma_pagos,
+        "messageRepasse": repasse,
+        "messageAnalise": analise,
+        "messageGlosaNaoAtingido": GlosaNaoAtingido,
+        "messageJuridico": Juridico,
+        "files": json.dumps(files),
+    }
 
 
 #BOTÃO CONCLUIR PAGAMENTO
@@ -1882,9 +1741,6 @@ def SearchFinanceIntGlosa(request):
 
     return array
 
-
-
-
  
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitAnalise(request):
@@ -1940,9 +1796,6 @@ def ClosingUnitAnalise(request):
                     })
                 array.append(newinfoa)
         return array
-
-
-
 
 #MEU FECHAMENTO FINANCEIRO
 def ClosingUnitResult(request):
@@ -2302,8 +2155,11 @@ def FunctionDashCardWorkLab(request):
         ArrCardWorkLab = []
         if dados:
             for qtd, val, mes in dados:
-                val = f"R$ {val:_.2f}"
-                val = val.replace(".", ",").replace("_", ".")
+                if val == None:
+                    val = "R$ 00.00"
+                else:
+                    val = f"R$ {val:_.2f}"
+                    val = val.replace(".", ",").replace("_", ".")
                 newinfoa = ({
                     "qtd": qtd,
                     "val": val,
@@ -2311,7 +2167,14 @@ def FunctionDashCardWorkLab(request):
                     })
                 ArrCardWorkLab.append(newinfoa)
 
-        return ArrCardWorkLab
+        else:
+            newinfoa = ({
+                "qtd": 0,
+                "val": "R$ 00,00",
+                "mes": monthCount,
+                })
+            ArrCardWorkLab.append(newinfoa)
+    return ArrCardWorkLab
 
 
 
@@ -2457,189 +2320,13 @@ def FunctionDashCardNFs(request):
                     "qtd_anx": qtd_anx,
                     })
                 array.append(newinfoa)
+        else:
+            newinfoa = ({
+                "mes": 0,
+                "qtd_anx": 0,
+                })
+            array.append(newinfoa)
         return array
-
-
-
-#----------------------------CONTATOR REEMBOLSOS------------------------------------------
-
-# DASH SOLICITAÇÕES TOTAL
-def CountAllFinanceFunction(request):
-    with connections['auth_finances'].cursor() as cursor:
-        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_usuario, perfil, unity in dados:
-                pass
-            
-            Q = fetchAdministrator("unit.unity", perfil, unity)
-            query = "SELECT COUNT(a.id_agendamento_f), a.regis FROM auth_finances.completed_exams a INNER JOIN auth_finances.status_progress st ON a.status_exame_f LIKE st.id INNER JOIN auth_agenda.collection_schedule unit ON unit.id = a.id_agendamento_f WHERE {} AND a.regis LIKE 0 AND a.identification LIKE 'Externo' AND a.status_exame_f NOT LIKE 6 AND a.status_exame_f NOT LIKE 5 AND a.status_exame_f NOT LIKE 9 GROUP BY a.regis".format(Q)
-            cursor.execute(query)
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for qtd, regis in dados:
-                    newinfoa = ({
-                        "qtd": qtd,
-                        "regis": regis,
-                        })
-                    array.append(newinfoa)
-            return array
-
-#DASH SOLICITAÇÕES - PENDENTES
-def CountPendingFinanceFunction(request):
-    with connections['auth_finances'].cursor() as cursor:
-        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_usuario, perfil, unity in dados:
-                pass
-            
-
-            Q = fetchAdministrator("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
-            cursor.execute(queryTotal)
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for qtd, regis in dados:
-                    pass
-
-            query = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND f.status_exame_f LIKE 8 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
-            cursor.execute(query)
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for qtdP, regis, status in dados:
-                    percentage = qtdP * 100 / qtd
-                    percentage = f"{percentage:_.2f} %"
-                    progress = f"{percentage:.2}%"
-                
-                    if qtdP == "":
-                        qtdP = 0
-                        percentage = 0
-                    else:
-                        qtdP = qtdP
-
-                    newinfoa = ({
-                        "qtd": qtdP,
-                        "regis": regis,
-                        "status": status,
-                        "percentage": percentage,
-                        "progress": progress,
-                        })
-                    array.append(newinfoa)
-                return array
-
-
-#DASH SOLICITAÇÕES - análise / em andamento
-def CountAnalityFinanceFunction(request):
-    with connections['auth_finances'].cursor() as cursor:
-        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_usuario, perfil, unity in dados:
-                pass
-            
-            Q = fetchAdministrator("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
-            cursor.execute(queryTotal)
-            dados = cursor.fetchall()
-            if dados:
-                for qtd, regis in dados:
-                    pass
-                
-            queryAnalise = "SELECT count(DISTINCT f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 1 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
-            cursor.execute(queryAnalise)
-            dados = cursor.fetchall()
-            if dados:
-                for qtdAnalise, regis, status in dados:
-                    pass
-            else:
-                qtdAnalise = 0
-
-            queryAndamento = "SELECT count(f.id_agendamento_f), f.regis, f.status_exame_f FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 2 AND status_exame_f NOT LIKE 9 GROUP BY f.regis, f.status_exame_f".format(Q)
-            cursor.execute(queryAndamento)
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for qtdAndamento, regis, status in dados:
-                    qtdTotal = qtdAnalise + qtdAndamento
-
-                    percentage = qtdTotal * 100 / qtd
-                    percentage = f"{percentage:_.2f} %"
-                    progress = f"{percentage:.2}%"
-                
-                    if qtdTotal == "":
-                        qtdTotal = 0
-                        percentage = 0
-                    else:
-                        qtdTotal = qtdTotal
-
-                    newinfoa = ({
-                        "qtd": qtdTotal,
-                        "regis": regis,
-                        "status": status,
-                        "percentage": percentage,
-                        "progress": progress,
-                        })
-                    array.append(newinfoa)
-                return array
-
-
-
-
-
-#DASH SOLICITAÇÕES - análise / em andamento
-def CountPayFinanceFunction(request):
-    with connections['auth_finances'].cursor() as cursor:
-        searchID = "SELECT id, perfil, unity FROM auth_users.users WHERE login LIKE %s"
-        cursor.execute(searchID, (request.user.username,))
-        dados = cursor.fetchall()
-        if dados:
-            for id_usuario, perfil, unity in dados:
-                pass
-            
-            Q = fetchAdministrator("unit.unity", perfil, unity)
-            queryTotal = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null AND status_exame_f NOT LIKE 9 AND status_exame_f NOT LIKE 5 AND status_exame_f NOT LIKE 6 GROUP BY f.regis".format(Q)
-            cursor.execute(queryTotal)
-            dados = cursor.fetchall()
-            if dados:
-                for qtd, regis in dados:
-                    pass
-
-            queryff = "SELECT count(DISTINCT f.id_agendamento_f), f.regis FROM auth_finances.completed_exams f INNER JOIN auth_agenda.collection_schedule unit ON unit.id = f.id_agendamento_f WHERE {} AND f.identification LIKE 'Externo' AND f.regis like 0 AND f.def_glosado_n_atingido is null  AND f.status_exame_f LIKE 4 AND status_exame_f NOT LIKE 9 GROUP BY f.regis".format(Q)
-            cursor.execute(queryff)
-            dados = cursor.fetchall()
-            array = []
-            if dados:
-                for qtdff, status in dados:
-
-                    percentage = qtdff * 100 / qtd
-                    percentage = f"{percentage:_.2f} %"
-                    progress = percentage.replace("%","").replace(" ","")
-                    progress = f"{progress}%"
-                    newinfoa = ({
-                        "qtd": qtdff,
-                        "status": status,
-                        "percentage": percentage,
-                        "progress": progress,
-                        })
-                    array.append(newinfoa)
-            else:
-                percentage = "0%"
-                progress = "0%"
-                qtdff = 0
-                newinfoa = ({
-                    "qtd": qtdff,
-                    "percentage": percentage,
-                    "progress": progress,
-                    })
-                array.append(newinfoa)
-        return array 
 
 
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2649,25 +2336,35 @@ def AnxDoc(request):
     id_agendamento = request.POST.get('id_user')
     type_doc = request.POST.get('type_doc')
     date_create = str(datetime.now().strftime("%Y-%m-%d"))
+
     saveFileEditionsFinances(id_agendamento, type_doc, request.FILES)
 
     with connections['auth_finances'].cursor() as cursor:
         Quers = "SELECT id, tipo_anexo FROM admins.tp_anx where id like %s;"
         cursor.execute(Quers, (type_doc,))
+        print(id_agendamento)
         dados = cursor.fetchall()
         if dados: 
             for id, tp_anexo in dados:
                 pass
 
-            if tp_anexo == "Nota Fiscal":
+            if tp_anexo == "Comprovante de Pagamento":
                 queryAtt = "UPDATE `auth_finances`.`completed_exams` SET `anx_f` = '1', `data_aquivo_f` = %s WHERE (`id_agendamento_f` = %s);"
                 cursor.execute(queryAtt, (date_create, id_agendamento,))
-
-            return {
-                "response": True,
-                "message": "Anexado!"
+                return {
+                    "response": True,
+                    "message": "Comprovante Anexado!"
+                }
+            else:
+                return {
+                    "response": True,
+                    "message": "Documento Anexado!"
+                }
+        else: 
+            {
+            "response": False,
+            "message": "Erro ao Anexar."
             }
-
 
 
 #GER FILE >> retornar HTML
@@ -2713,3 +2410,102 @@ def fetchFilePartners(id):
 
 
 
+#VERIFICA SE TEM ANEXO PARA FINALIZAR COLETA
+def localizaAnexo(id_coleta):
+    with connections['auth_finances'].cursor() as cursor:        
+        queryAnexo= "SELECT id_agendamento_f, status_exame_f, data_repasse, anx_f FROM auth_finances.completed_exams WHERE id_agendamento_f LIKE %s"
+        cursor.execute(queryAnexo, (id_coleta,))
+        dados = cursor.fetchall()
+        if not dados:
+            return {
+                "response": False,
+                "message": "Não foi possível localizar este paciente."
+            }
+        else:
+            for id_agendamento_f, status_exame_f, data_repasse, anx_f in dados:
+                if status_exame_f == "4" and anx_f == "1":
+                    return "prosseguir"
+                else:
+                    if status_exame_f == "4":
+                        return False
+                    else:
+                        return True
+
+#ATULIZA INFORMAÇÕES SOBRE A SOLICITAÇÃO DE REEMBOLSO
+def atualizaDadosDeFinalizacao(repasse, statusProgresso, date_create, id_usuario, id_agendamento, nome):
+    with connections['admins'].cursor() as cursor:        
+        #atualização de status
+        param = ( repasse, statusProgresso, date_create, id_usuario, id_agendamento,)
+        query = "UPDATE `auth_finances`.`completed_exams` SET `data_repasse` = %s,  `status_exame_f` = %s, `data_final_f` = %s,  `resp_final_p_f` = %s, `regis` = '1' WHERE (`id_agendamento_f` = %s);"
+        cursor.execute(query, param)
+
+        #historico de atualização 
+        query2 = "INSERT INTO `admins`.`register_actions` (`id_register`, `id_pagina`, `id_agendamento`, `tp_operacao`, `nome_user`, `descricao`, `data_operacao`) VALUES (NULL, '1', %s, 'Finalizar Processo',  %s, 'Finalizou o processo de reembolso', %s);"
+        params2 = (
+            id_agendamento, nome, date_create, 
+        ) 
+        cursor.execute(query2, params2)
+
+    return True
+
+
+#INSERÇÃO NA TABELA DE FECHAMENTO PARA SOMA
+def calculaFechamentoMes(doctor, id_agendamento, id, paciente, date_age, repasse, tp_exame, date_create, companyParceiro, company):
+    with connections['admins'].cursor() as cursor:        
+        queryVal = "SELECT perfil, id, nome, val_padrao, val_porcentagem, val_fixo FROM auth_users.users WHERE nome LIKE %s"            
+        cursor.execute(queryVal, (doctor,))
+        dadosMEDICO = cursor.fetchall()
+
+        for perfil, id, nome, val_padrao, val_porcentagem, val_fixo in dadosMEDICO:
+            SelectIndicacao="SELECT b.nome_p, a.data_regis_l, a.medico_resp_l as medico, c.resp_comerce as comercial FROM customer_refer.leads a INNER JOIN customer_refer.patients b ON b.id_l_p = a.id_lead INNER JOIN auth_users.users c ON a.medico_resp_l = c.id WHERE a.medico_resp_l = %s"
+            cursor.execute(SelectIndicacao, (id,))
+            dados = cursor.fetchall()
+            array2 = []
+
+            val_padrao =  (val_padrao) if val_padrao not in ["", None] else None
+            val_porcentagem = (val_porcentagem) if val_porcentagem not in ["", None] else None
+            val_fixo =  (val_fixo) if val_fixo not in ["", None] else None
+
+            for pacienteS, data_indicacaoS, medicoS, comercialS in dados:
+                newinfoa = ({
+                    "paciente": pacienteS,
+                    "data_indicacao": data_indicacaoS,
+                    "medico": medicoS,
+                    "comercial": comercialS,
+                    })
+                array2.append(newinfoa)
+            
+            if perfil == '7':
+                if val_porcentagem:
+                
+                    val_porcentagem = float(val_porcentagem)
+                    ValorPago = float(ValorPago)
+                    porcentagem = float(val_porcentagem / 100) * float(ValorPago)
+                    porcentagem = f'{porcentagem:.2f}'
+
+                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`,  `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
+                    #criar a regra de que se o valor do parceiro for até 400 o comercial recebe 10%, se não, recebe 40 reais
+ 
+                    val_comercial = float(porcentagem) * float(0.10)
+                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, porcentagem, val_comercial, date_create, companyParceiro, company,)
+                    cursor.execute(queryFinance, paramsFinance)
+            
+                elif val_padrao:
+                    val_padrao = float(val_padrao)
+                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
+                    val_comercial = float(val_padrao) * float(0.10)
+                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, val_comercial, date_create, companyParceiro, company,)
+                    cursor.execute(queryFinance, paramsFinance)
+                
+                else:
+                    val_fixo = float(val_fixo)
+                    queryFinance ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, %s, %s);"
+                    val_comercial = float(val_fixo) * float(0.10)
+                    paramsFinance = (id_agendamento, id, paciente, comercialS, date_age, repasse, data_indicacaoS, tp_exame, val_fixo, val_comercial, date_create, companyParceiro, company,)
+                    cursor.execute(queryFinance, paramsFinance)
+            else:
+                queryInterno ="INSERT INTO `auth_finances`.`closing_finance` (`id`, `id_agendamento`, `nome_medico`, `nome_paciente`, `nome_comercial`, `data_coleta`, `data_repasse`, `data_indicação`, `exame`, `valor_uni_partners`, `valor_comercial`, `status_partners`, `status_comercial`, `data_pag_partners`, `data_pag_comercial`, `resp_pag_partners`, `resp_pag_comercial`, `data_regis`, `fatura`, `relacao_partners`, `relacao_commerce`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, '0', 'Pendente', 'Pendente', '1969-12-31 00:00:00', '1969-12-31 00:00:00', '', '', %s, NULL, %s, %s);"
+                paramsInterno = (id_agendamento, id, paciente, id, date_age, repasse, data_indicacaoS, tp_exame, val_padrao, date_create, companyParceiro, companyParceiro,)
+                cursor.execute(queryInterno, paramsInterno)
+
+            return True

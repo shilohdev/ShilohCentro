@@ -1,0 +1,36 @@
+def searchUserViews(request):  //Nome Function
+    if request.POST.get('filterApply'): //se ele pegar um valor desse campo
+        searchDados = fetchSearchUser(request)
+        if request.POST.get('export') == "true":
+            if "response" in searchDados:
+                if searchDados["response"] == "true":
+                    searchDados = searchDados["message"]
+                    
+                    headeroTitle = [
+                        {"key": "login", "name": "Login"},
+                        {"key": "cpf_cnpj", "name": "CPF/CNPJ"},
+                        {"key": "nome", "name": "Nome"},
+                        {"key": "email", "name": "E-mail"},
+                        {"key": "tp_pix", "name": "Tipo do pix"},
+                        {"key": "pix", "name": "PIX"},
+                        {"key": "status", "name": "Situação"},
+                        {"key": "perfil", "name": "Perfil"},
+                        {"key": "data_contrato", "name": "Data inicio do contrato"},
+                        {"key": "dt_venc_contrato", "name": "Data fim do contrato"},
+                        {"key": "status_contrato", "name": "Situação do contrato"}
+                    ]
+                    dictFormat = [
+                        {"key": "data_contrato", "type": "date"},
+                        {"key": "dt_venc_contrato", "type": "date"}
+                    ]
+
+                    return exportExcelHttpResponse(request, None, searchDados, headeroTitle, dictFormat, "Usuário", "Relatório de usuários")
+
+            return exportExcelHttpResponse(request, None, [], "", "", "Usuário", "Relatório de usuários")
+        else:
+            return JsonResponse(searchDados, safe=False)
+    else:
+        searchDados = []
+
+    return render(request, 'pages/users/search.html', {"searchDados": searchDados}) 
+

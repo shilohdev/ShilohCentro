@@ -1,15 +1,15 @@
-   {% extends 'base.html' %}
-   {% load static %}
-   {% block title %}Shiloh | Listar Parceiros{% endblock %}
-   {% block icon-page %}
-   metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
-   {% endblock %}
-   {% block title-page %}
-   Página inicial
-   {% endblock %}
-   {% block description-page %}
-   CONSULTAR PARCEIROS   {% endblock %}
-   {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh | Listar Parceiros{% endblock %}
+{% block icon-page %}
+metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+Página inicial
+{% endblock %}
+{% block description-page %}
+CONSULTAR PARCEIROS   {% endblock %}
+{% block content %}
 
 <script src="https://demo.dashboardpack.com/architectui-html-pro/assets/scripts/main.d810cf0ae7f39f28f336.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -24,379 +24,166 @@
 
 <style type="text/css"> 
 
-.corfont{
-   color: #641108;
-   font-weight: bold;
-}
 .scrollbar-sidebar, .scrollbar-container {
-   position: relative;
-   height: 100% 
+position: relative;
+height: 100% 
 }
 .scroll-area {
-   overflow-x: hidden;
-   height: 400px 
+overflow-x: hidden;
+height: 400px 
 }
 .scroll-area-xs {
-   height: 150px;
-   overflow-x: hidden 
+height: 150px;
+overflow-x: hidden 
 }
 .scroll-area-sm {
-   height: 200px;
-   overflow-x: hidden 
+height: 200px;
+overflow-x: hidden 
 }
 .scroll-area-md {
-   height: 300px;
-   overflow-x: hidden 
+height: 300px;
+overflow-x: hidden 
 }
 .scroll-area-lg {
-   height: 400px;
-   overflow-x: hidden 
+height: 400px;
+overflow-x: hidden 
 }
 .scroll-area-x {
-   overflow-x: auto;
-   width: 100%;
-   max-width: 100% 
+overflow-x: auto;
+width: 100%;
+max-width: 100% 
 }
 .shadow-overflow {
-   position: relative 
+position: relative 
 }
 .shadow-overflow::after, .shadow-overflow::before {
-   width: 100%;
-   bottom: auto;
-   top: 0;
-   left: 0;
-   height: 1.5rem;
-   position: absolute;
-   z-index: 10;
-   content: '';
-   background: linear-gradient(to bottom, #fff 20%, rgba(255, 255, 255, 0) 100%);
-   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0) 
+width: 100%;
+bottom: auto;
+top: 0;
+left: 0;
+height: 1.5rem;
+position: absolute;
+z-index: 10;
+content: '';
+background: linear-gradient(to bottom, #fff 20%, rgba(255, 255, 255, 0) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0) 
 }
 .shadow-overflow::after {
-   bottom: 0;
-   top: auto;
-   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 80%);
-   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0) 
+bottom: 0;
+top: auto;
+background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 80%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0) 
 }
+
 </style> 
 
-<!-- INICIO DO MODAL -->
-<div id="modal1" class="scroll-area-md modal modal-fixed-footer" style="width: 85%; height: 90%;">
-   <div class="modal-content scrollbar-container ps--active-y" id="modal2">
-      <!--CORPO DO MODAL-->
-      <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
-         <div class="container">
-            <div class="card">
-               <div class="card-content" style="margin-top: -40px; background-color: #581848;" >
-                  <h5 class="corfont" style="color:white">ATUALIZAR PARCEIRO</h5>
-               </div>
-            </div>
-         </div>
-         <div class="container">
-            <div class="card" >
-               <!-- Externo -->
-               <div id="modalint" class="row" >
-                  <div class="col s12 m12"  style="margin-top: 30px;">
-                     <div class="input-field col s12 m3">
-                        <input style="color: black;"  readonly="readonly" id="company" type="text" >
-                        <label style="color: black;" for="company">Relação:</label>
-                     </div>
-                  </div>
-                  <div class="col s12 m12"  style="margin-top: 30px;">
-                     <div class="input-field col s5">
-                        <input id="name" type="text" placeholder="">
-                        <label for="name" class="active">
-                        <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Nome Completo</label>
-                     </div>
-                     <div class="input-field col s12 m3">
-                        <input id="rn" type="text" >
-                        <label for="rn">
-                        <i class="material-icons" style="font-size: 15px">featured_play_list</i>&nbsp;NR</label>
-                     </div>
-                     <div class="input-field col s12 m3" >
-                        <div class="select-wrapper">
-                           <select name="select" id="categoria" onchange="SelectShow()" class="error " required="">
-                              <option value="">Categoria</option>
-                              {% for k in arr_SearchCategoria %}
-                              <option value="{{ k.id }}">{{ k.categoria }}</option>
-                              {% endfor %}
-                           </select>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col s12 m12">
-                     <div class="input-field col s12 m8">
-                        <input id="email" type="email" >
-                        <label for="email">
-                        <i class="material-icons" style="font-size: 15px">email</i>&nbsp;E-mail</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="tel1" type="tel" >
-                        <label for="tel1">
-                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 1</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="tel2" type="tel" >
-                        <label for="tel2">
-                        <i class="material-icons" style="font-size: 15px">phone</i>&nbsp;Telefone 2</label>
-                     </div>
-                  </div>
-                  <div class="col s12">
-                     <div class="input-field col s12 m3">
-                        <input id="zipcode" type="text"  maxlength="9" onblur="pesquisacep(this.value)">
-                        <label for="zipcode">
-                        <i class="material-icons" style="font-size: 15px">place</i>&nbsp;CEP </label>
-                     </div>
-                     <div class="input-field col s12 m7">
-                        <input id="addres" type="text" >
-                        <label for="addres">Logradouro </label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="number" type="text" >
-                        <label for="number">Número </label>
-                     </div>
-                  </div>
-                  <div class="col s12">
-                     <div class="input-field col s12 m3">
-                        <input id="complement" type="text" >
-                        <label for="complement">Complemento</label>
-                     </div>
-                     <div class="input-field col s12 m5">
-                        <input id="district" type="text" >
-                        <label for="district">Bairro</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="city" type="text" >
-                        <label for="city">Cidade</label>
-                     </div>
-                     <div class="input-field col s12 m2">
-                        <input id="uf" type="text"  maxlength="2">
-                        <label for="uf">UF</label>
-                     </div>
-                  </div>
-                  <div class="input-field col s12 m12">
-                     <div class="input-field col s12">
-                        <input id="obs" type="text" >
-                        <label for="obs">
-                        <i class="material-icons" style="font-size: 15px">mode_edit</i>&nbsp;Observação</label>
-                     </div>
-                  </div>
-                  <!--FINANCEIRO-->
-                  <div class="col s12 m12">
-                     <div class="active">
-                        <div class="collapsible-header col s12 m4" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
-                           <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Financeiro</labe>
-                        </div>
-                     </div>
-                  </div>
-                  <div id="financeiro">
-                     <div class="col s12 m12" >
-                        <div class="col s12 m6">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_p_fixo_check" class="checkgroup" onclick="padrao()">
-                              <span>Valor Padrão:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col s12 m5">
-                              <input readonly="readonly" type="text" id="val_p_fixo" class="checkgroup" style="color:black;">
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col s12 m12">
-                        <div class="col s12 m6">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_p_check" class="checkgroup2" onclick="porcentagem()">
-                              <span>Porcentagem:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col s12 m5">
-                              <input type="text" id="val_p" class="checkgroup2" onchange="porcentagem()">
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col s12 m12">
-                        <div class="col s12 m6">
-                           <div class="input-field col s12 m3">
-                              <label>
-                              <input type="checkbox" id="val_fixo_check" class="checkgroup3" onclick="fixo()" >
-                              <span>Valor Fixo:</span>
-                              </label>
-                           </div>
-                           <div class="input-field col s12 m5">
-                              <input type="text" id="val_fixo" class="checkgroup3" onchange="fixo()">
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <!--Atualizar Comercial-->
-                  <div class="col m12 s12" style="margin-top: 50px;">
-                     <div class="active">
-                        <div class="collapsible-header col s12 m6" style="height: 40px; background-color: #581848; color: white;" tabindex="0">
-                           <labe style="margin-top: 0.2em; font-size: 20px; font-weight: bold;">Atualizar Comercial</labe>
-                        </div>
-                     </div>
-                  </div>
-                  <div id="commercial">
-                     <div class="col s12 m12">
-                        <div class="input-field col s12 m3" style="margin-top: -2px;">
-                           <label for="old_commerce" >Atual:</label>
-                           <div class="select-wrapper" style="margin-top: 38px;"> 
-                              <input readonly="readonly" style="color:black" id="old_commerce" type="text" >
-                           </div>
-                        </div>
-                        <div class="input-field col s12 m3" style="margin-top: 10px;">
-                           <span>Novo:</span><br><br>
-                           <select id="nome_commerce" class="select2 browser-default">
-                              <option value="">Selecione:</option>
-                              {% for k in arr_SearchComercial %}
-                              <option value="{{ k.id }}"> {{ k.nome }}</option>
-                              {% endfor %}
-                           </select>
-                        </div>
-                     </div>
-                  </div>
-                  <!--Fim Atualizar Comercial-->      
-               </div>
-            </div>
-         </div>
-         <!--FIM DO CORPO-->
-      </div>
-   </div>
-   <div class="modal-footer">
-      <!--BUTTON-->
-      <div class="col s12 ">
-         <div class="col s12 m12 m12">
-            <a onclick="updateModal(this)" id="btn_atualizar" class="waves-effect waves-light btn mb-1 mr-1">Atualizar</a>      
-            <a class="waves-effect waves-light btn mb-1 mr-1 modal-action modal-close waves-effect" style="background-color: #eee"><span style="color:#212529; font-size: 16px; font-weight: bold;">VOLTAR</span></a>
-         </div>
-      </div>
-   </div>
+   
+<div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   {% include '../partners/partials/_modal_partners.html' %} 
 </div>
-<!--FIM DO MODAL-->
+   
+<div id="modalhistorico" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
+   {% include '../partners/partials/_modal_historico.html' %} 
+</div>
 
 
-<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+<div class="breadcrumbs-dark pb-0">
    <div class="container">
       <div class="card" >
          <!-- Externo -->
          <div id="userint" class="row" >
-            <div class="col s12"  style="margin-top: 30px; margin-bottom: 30px;">
-               <div class="input-field col s12 m4">
-                  <input id="busc" type="text" onkeyup="searchPatients(this)">
-                  <label for="busc">
-                  <i class="material-icons" style="font-size: 15px">person</i>&nbsp;Buscar... </label>
+            <div class="col s12"  style="padding: 40px;">
+               {% if 'Permissao' %}
+                  <div id="acess_menu" class="col s12 m6 mb-2" style="margin-top: 20px; padding-left: 0px">
+                     <ul class="tabs" >
+                        <li class="tab col s4 p-0" ><a class="p-0 active" onclick="todosParceiros()" style="color: black; font-size: 20px; cursor: pointer;">TODOS</a></li>
+                        <li class="tab col s4 p-0"><a class="p-0" onclick="parceirosInativos()" style="color: black; font-size: 20px; cursor: pointer;">INATIVOS</a></li>
+                     </ul>
+                  </div>
+               {% else %}
+               {% endif %}
+               <div class="col s12 m12 scroll scroll-y" id="todos_parceiros">
+                  {% include '../partners/partials/_table_todos.html' %} 
                </div>
-               <!-- COMEÇO DA TABLE -->
-               <div class="col s12 m12 scroll scroll-y">
-                  <table id="page-length-option" class="bordered" style="margin-top: 20px; overflow-x: auto;">
-                     <thead style="background-color: #581848; color: white; font-size: 15px;" >
-                        <tr>
-                           <th data-field="id" >Nome do Parceiro</th>
-                           <th data-field="id" style="text-align: center; width: 130px;">Perfil</th>
-                           <th data-field="id" style="text-align: center; width: 250px;">Comercial</th>
-                           <th data-field="id" style="text-align: center; width: 250px;">Unidade - [Relacional]</th>
-                           <th data-field="id" style="text-align: center; width: 130px;">Status</th>
-                           <th data-field="name" style="text-align: center; width: 130px;">Ação</th>
-                        </tr>
-                     </thead>
-                     <tbody id="tb_append">
-                        {% for k in arr_SearchPartiners %} <!-- ARRAY COM AS INFORMAÇÕES DA TABELA    -->
-                        <tr id="tr_{{ k.id }}">
-                           <td>{{ k.nome }} [{{ k.rn }}]</td>
-                           <td style="text-align: center;">{{ k.categoria }}</td>
-                           <td style="text-align: center;">{{ k.resp_comercial }}</td>
-                           <td style="text-align: center;">{{ k.unity }} - [{{k.company}}]</td>
-                           <td style="text-align: center;">{{ k.status }}</td>
-                           <td style="text-align: center;">
-                              <div class="col s12 m12" style="padding-right: 0px; padding-left: 0px;">
-                                 <div class="col s6" style="padding-left: 0px;">
-                                    <a id="btn_edit" href="#modal1" class="modal-trigger" data-id_user="{{ k.id }}" onclick="viewUserModal(this)">
-                                       <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="width: 15px;padding: 1;padding-right: 8px; background-color: #f5bd46da;">
-                                          <i class="material-icons right">edit</i>
-                                       </button>
-                                    </a>
-                                 </div>
-                                 <div class="col s6" style="padding-left: 5px;">
-                                    <button id="btn_status_{{ k.id }}" onclick="changeStatusUser(this)" data-id_user="{{ k.id }}" class="btn mb-1 waves-effect " type="button" name="action" style=" width: 15px;padding: 1;padding-right: 8px; background-color: #76c076da;">
-                                       <i class="material-icons right">check</i>
-                                    </button>
-                                 </div>
-                              </div>
-                           </td>
-                        </tr>
-                        {% endfor %} <!-- FIM DO ARRAY -->
-                     </tbody>
-                  </table>
+               <div class="col s12 m12 scroll scroll-y" id="parceiros_inativos" style="display:none;">
+                  {% include '../partners/partials/_table_inativos.html' %} 
                </div>
-               <!-- FIM DA TABLE -->
             </div>
          </div>
       </div>
    </div>
 </div>
 
-  
-{% for k in arr_SearchPartiners %}
-<script type="text/javascript" >
-   $(document).ready(function () {
-      $('.modal').modal();
-      $('.modal').css({
-         "width": "80%",
-      });
+
+<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type = "text/javascript" >
+
+$(".select2").select2({
+    dropdownAutoWidth: true,
+    width: '100%'
+});
+
+var datatableReembolso = $(".pagelengthoption").DataTable({
+ "ordering" : true,
+ "scrollCollapse" : true,
+ "searching" : true,
+ "columnDefs" : [{orderable: true, targets: 0 }],
+});
+$(".dropdown-trigger").css("display", "none")
+
+
+$(document).ready(function(){ // <<<< execute a seguinte função
+
+ function changeTable() {
+     $(".select-wrapper").find("select").hide();
+     $(".dataTables_length").css({
+         "width": "60px",
+         "position": "relative",
+     })
+
+     showLoadingPage("close");
+ }
+ setTimeout(showLoadingPage("show"), 500);
+ setTimeout(showLoadingPage("show"), 1000);
+ setTimeout(changeTable, 200);
+});
+
+
+
+$(document).ready(function () {
+   $('.modal').modal();
+   $('.modal').css({
+      "width": "80%",
    });
-
-function PesquisarFilter() {
-   var tp_category = $("#tp_category").val();
-
-   var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "tp_category": tp_category,
-   };
-   fetchRequest("{% url 'ApiListPartnes' %}", "POST", "JSON", formpost, function (re) {
-      var dados = re["message"];
-      $("#tb_append").html("");
-      for (k in dados) {
-         var key = dados[k];
-         var append = '<tr> <td>' + key["nome"] + '</td> <td style="text-align: center;">' + key["categoria"] + '</td> <td style="text-align: center;">' + key["unity"] + '</td> <td style="text-align: center">' + key["status"] + '</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="' + key["id"] + '" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;"><i class="material-icons right" style="color: #f5bd46da">edit</i></button> </a> <button id="btn_status_' + key["id"] + '" onclick=\"changeStatusUser(this)\" data-id_user="' + key["id"] + '" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: ' + key["btn_status"] + ';"><i class="material-icons right">check</i> </button> </td> </tr>'
-
-         $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
-
-
-      }
-      if (dados == "") { // SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
-         var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
-         $("#tb_append").append(appende);
-      }
-   });
-}
-
+});
 
 function viewUserModal(object) { //FUNCTION DO ONCLICK
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-   $("#btn_atualizar").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
+   $("#btn_atualizar, #btn_recontato").data("id_user", id_user); // para ter o data, precisa conter os seguintes parametros: elemento, key, value
 
    var formpost = {
       "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
       "id_user": id_user //DICT COM O VALOR DO ID
    };
 
-   $("#modal2").hide();
+   $("#modal2, #modalfooter").hide();
    $(object).prop("disabled", true);
 
    fetchRequest("{% url 'ApiViewDataPartnersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
       if (re["response"] == false) {
 
          $("#modal1").hide();
-         alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         alert(re["message"]);
          location.reload();
 
-      } else { //SE FOR VERDADDEIRA, PROSSEGUE
-         $("#modal2").show();
+      } else {
+         $("#modal2, #modalfooter").show();
          $("#btn_edit").attr("href", "#modal1");
+         $("#btn_historico").attr("href", "#modalhistorico");
 
-         var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+         var key = re["message"];
          var dictKeys = {
             "company": key["personal"]["company"],
 
@@ -424,12 +211,11 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
             "val_fixo": key["finances"]["val_fixo"],
          }
 
-
-         $.map(dictKeys, function (n, i) { // map é usado para traduzir ou mapear os elementos de um array para outro conjunto de valores
+         $.map(dictKeys, function (n, i) {
             $(`#${i}`).val(n);
             var findLabel = $(`#${i}`).closest("div");
             $(findLabel).find("label").attr("class", "active");
-            if (i == "categoria") { // colocar o nome da categoria id 
+            if (i == "categoria"){
                var valueObject = $("#categoria option:selected").text();
                $("input[class='select-dropdown dropdown-trigger']").val(valueObject);
                $('li[class="selected"]').attr("class", "");
@@ -437,33 +223,59 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
                $(findObject).attr("class", "selected");
             }
          });
-         $("#btn_cadastrar").data("id_user", key["id"]); //ATRIBUI UM NOVO VALOR PARA O ID
-
+         $("#btn_cadastrar").data("id_user", key["id"]);
 
          var val_p_fixo = $("#val_p_fixo").val();
          var checkbox_porcentagem = $("#val_p").val();
          var checkbox_fixo = $("#val_fixo").val();
 
-
          if (val_p_fixo != "") {
 
-            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
-            $('input').filter('#val_p_fixo_check').prop('checked', true); // coloca o input checado
-            $("#val_p_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false);
+            $('input').filter('#val_p_fixo_check').prop('checked', true);
+            $("#val_p_check, #val_fixo_check").attr("disabled", true);
          } else if (checkbox_porcentagem != "") {
 
-            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
-            $('input').filter('#val_p_check').prop('checked', true); // coloca o input checado
-            $("#val_p_fixo_check, #val_fixo_check").attr("disabled", true) //desabilita o campo
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false);
+            $('input').filter('#val_p_check').prop('checked', true);
+            $("#val_p_fixo_check, #val_fixo_check").attr("disabled", true);
          } else if (checkbox_fixo != "") {
 
-            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
-            $('input').filter('#val_fixo_check').prop('checked', true); // coloca o input checado
-            $("#val_p_fixo_check, #val_p_check").attr("disabled", true) //desabilita o campo
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false);
+            $('input').filter('#val_fixo_check').prop('checked', true);
+            $("#val_p_fixo_check, #val_p_check").attr("disabled", true);
          } else {
-            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false); // tira o check
-            $("#val_p_fixo_check, #val_p_check, #val_fixo_check").attr("disabled", false) //desabilita o campo
+            $('input').filter('#val_p_fixo_check, #val_p_check, #val_fixo_check').prop('checked', false).attr("disabled", false);
+            $("#val_p_fixo_check, #val_p_check, #val_fixo_check").attr("disabled", false);
+         }
 
+      try {
+         var info_user = key["user"];
+         var permissao = info_user["permissao"];
+         
+         if (permissao == true) {
+            $("#card_atualizar_comercial").show();
+         }else{
+            $("#card_atualizar_comercial").hide();
+         }
+      } catch (e) {
+         $("#card_atualizar_comercial").hide();
+      }
+
+      try {
+         var status = key["obs"];
+         var status_btn = status["status"];
+
+         if (status_btn == "Inativo") {
+            $("#btn_recontato").show();
+            $("#btn_atualizar").hide();
+         }else{
+            $("#btn_recontato").hide();
+            $("#btn_atualizar").show();
+         }
+      }catch(e) {
+         $("#btn_recontato").hide();
+         $("#btn_atualizar").hide();
          }
       }
    });
@@ -471,37 +283,32 @@ function viewUserModal(object) { //FUNCTION DO ONCLICK
 
 
 function changeStatusUser(object) {
-   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-   var formpost = {
-      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-      "id_user": id_user //DICT COM O VALOR DO ID
-   };
+var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+var formpost = {
+   "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+   "id_user": id_user //DICT COM O VALOR DO ID
+};
 
-   fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-      if (re["response"] == false) {
-         alert(re["message"]);
-      } else { //SE FOR VERDADDEIRA, PROSSEGUE
-         var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
-         $(`#tr_${id_user} > td`).eq(4).text(key["status"]);
-         $(`#btn_status_${id_user}`).css("background-color", key["btn_status"])
+fetchRequest("{% url 'ApiChangeStatus' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+   if (re["response"] == false) {
+      alert(re["message"]);
+   } else { //SE FOR VERDADDEIRA, PROSSEGUE
+      var key = re["message"]; // NO DECORATOR, A MENSAGEM RETORNA O VALOR DO DICT, NESSE CASO É DECLARADO EM UM DICT: "id_campo" : key[valor-do-grupo][valor-do-key]
+      $(`#tr_${id_user} > td`).eq(4).text(key["status"]);
+      $(`#btn_status_${id_user}`).css("background-color", key["btn_status"])
       }
    });
-
 }
 
 
 function updateModal(object) {
-      email = $("#email").val()
-
-      //VALIDAÇÃO DE CAMPO EMAIL
-      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
-      if(!filter.test(email) && email != ""){
-         alert('Insira um email válido.');
-         $("#email").focus();
-         return false;
-      }
-
-   
+   email = $("#email").val()
+   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/; // filtro
+   if(!filter.test(email) && email != ""){
+      alert('Insira um email válido.');
+      $("#email").focus();
+      return false;
+   }
    $("#btn_atualizar").attr("disabled", true);
 
    var val_p_fixo = $("#val_p_fixo").val();
@@ -510,63 +317,58 @@ function updateModal(object) {
    var NewComerce = $("#nome_commerce").val();
    var oldCommerce = $("#old_commerce").val();
 
-
    if (NewComerce == "") {
       NewComerce = oldCommerce
    } else {
       NewComerce = NewComerce
    }
 
-
    if (val_p_fixo == "" && checkbox_porcentagem == "" && checkbox_fixo == "") {
       alert("Por favor, insira um valor válido ao Financeiro.")
       return false
    } else {
+   var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_user": id_user, //DICT COM O VALOR DO ID
+      "resp_commerce": NewComerce, //DICT COM O VALOR DO ID
+      "padrao": val_p_fixo, //DICT COM O VALOR DO ID
+      "porcentagem": checkbox_porcentagem, //DICT COM O VALOR DO ID
+      "fixo": checkbox_fixo, //DICT COM O VALOR DO ID
+   };
 
-      var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
-      var formpost = {
-         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-         "id_user": id_user, //DICT COM O VALOR DO ID
-         "resp_commerce": NewComerce, //DICT COM O VALOR DO ID
-         "padrao": val_p_fixo, //DICT COM O VALOR DO ID
-         "porcentagem": checkbox_porcentagem, //DICT COM O VALOR DO ID
-         "fixo": checkbox_fixo, //DICT COM O VALOR DO ID
-      };
+   $("#modalint input, #modalint select").each(function () {
+      formpost[$(this).attr("id")] = $(this).val();
+   });
+   fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
+      if (re["response"] == false) {
+         alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
+         $("#btn_atualizar").attr("disabled", false);
 
-      $("#modalint input, #modalint select").each(function () {
-         formpost[$(this).attr("id")] = $(this).val();
-      });
-      fetchRequest("{% url 'ApiChangeUsersModal' %}", "POST", "JSON", formpost, function (re) { // A URL É COMPOSTA PELO NAME DE UMA URL
-         if (re["response"] == false) {
-            alert(re["message"]); // VERIFICA SE A INFO É VÁLIDA, SE NÃO, MESSAGE
-            $("#btn_atualizar").attr("disabled", false);
-
-         } else { //SE FOR VERDADDEIRA, PROSSEGUE
-            $("#btn_atualizar").attr("disabled", true);
-            alert(re["message"]);
-            location.reload();
-
+      } else { //SE FOR VERDADDEIRA, PROSSEGUE
+         $("#btn_atualizar").attr("disabled", true);
+         alert(re["message"]);
+         location.reload();
          }
       });
    }
 }
 
-
 function searchPatients(object) {
-   var e = $(object).val().toUpperCase();
-   if (e == "") {
-      $('#tb_append > tr').each(function () {
+var e = $(object).val().toUpperCase();
+if (e == "") {
+   $('#tb_append > tr').each(function () {
+      $(this).show();
+   });
+} else {
+   $('#tb_append > tr').each(function () {
+      var trs = $(this).find("td");
+      var tr1 = $(trs[0]).text().toUpperCase();
+      var check = (tr1.indexOf(e) != -1);
+      if (check == true) {
          $(this).show();
-      });
-   } else {
-      $('#tb_append > tr').each(function () {
-         var trs = $(this).find("td");
-         var tr1 = $(trs[0]).text().toUpperCase();
-         var check = (tr1.indexOf(e) != -1);
-         if (check == true) {
-            $(this).show();
-         } else {
-            $(this).hide();
+      } else {
+         $(this).hide();
          }
       });
    }
@@ -583,17 +385,15 @@ function padrao() {
       $("#val_p, #val_fixo").attr("disabled", false)
       $("#val_p_check, #val_fixo_check").attr('disabled', false);
       $("#val_p, #val_fixo,  #val_p_fixo").val("");
+      }
    }
-}
 
 function porcentagem() {
    var checkbox_porcentagem = $("#val_p").val();
-
    if ($("#val_p_check").is(":checked")) {
       $("#val_fixo").attr("disabled", true)
       $("#val_p_fixo_check, #val_fixo_check").attr('disabled', true);
       $("#val_fixo,  #val_p_fixo").val("");
-
    } else {
       $("#val_fixo").attr("disabled", false)
       $("#val_p_fixo_check, #val_fixo_check").attr('disabled', false);
@@ -603,12 +403,10 @@ function porcentagem() {
 
 function fixo() {
    var checkbox_fixo = $("#val_fixo").val();
-
    if ($("#val_fixo_check").is(":checked")) {
       $("#val_p ").attr('disabled', true);
       $("#val_p_fixo_check, #val_p_check").attr("disabled", true)
       $("#val_p, #val_p_fixo").val("");
-
    } else {
       $("#val_p ").attr('disabled', false);
       $("#val_p_fixo_check, #val_p_check").attr("disabled", false)
@@ -618,16 +416,14 @@ function fixo() {
 
 
 $(".select2").select2({
-   dropdownParent: $('#modal1'),
-   dropdownAutoWidth: true,
-   width: '100%',
+dropdownParent: $('#modal1'),
+dropdownAutoWidth: true,
+width: '100%',
 });
-
 
 function SelectShow() {
    var show = document.getElementById("categoria").value;
    $("#btn_atualizar").attr("disabled", true);
-
    if (show == '') {
       alert("Por favor, preencha um tipo de Categoria")
       return false
@@ -639,18 +435,16 @@ function SelectShow() {
 $("#tel1").mask("(99) 99999-9999");
 $("#tel2").mask("(99) 99999-9999");
 $("#zipcode").mask("99999-999");
-
 $("#val_fixo").mask('#.##0,00', {
-   reverse: true
+reverse: true
 });
 $("#val_p").mask('99%', {
-   reverse: true
+reverse: true
 });
 
-// CEP 
+
 function pesquisacep(valor) {
    var cep = valor.replace(/\D/g, '');
-
    if (cep != "") {
       var validacep = /^[0-9]{8}$/;
       if (validacep.test(cep)) {
@@ -692,8 +486,84 @@ function limocamp() {
    var end_state = $("#uf").val("");
 }
 
+function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
+   var id_partners = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_partners": id_partners //DICT COM O VALOR DO ID
+   }; 
+   
+   $("#modalhistorico2").hide();
+   $(object).attr("display", 'none');
+
+   fetchRequest("{% url 'ApiHistoryPartners' %}", "POST", "JSON", formpost, function(re) {
+      $("#modalhistorico2").show();
+      if(re["response"] == true){
+         var dados = re["message"];
+         var historico_append = "";
+   
+            $.map(dados, function(n, i){
+               historico_append += `
+               <li class="timeline-items timeline-icon-green active ">
+                  <div id="data_f" class="timeline-time">${n.data}</div>
+                  <h4 id="name_u" class="timeline-title">${n.acao}</h4>
+                  <p id="action_f" class="timeline-text">${n.descricao}</p>
+               </li>
+            `;
+         }); 
+            $("#historico_app").html(historico_append);
+      } else {
+         var appende = "";
+         var appende = ` 
+            <li class="timeline-items timeline-icon-red active ">
+               <div id="data_f" class="timeline-time"></div>
+               <h4 id="name_u" class="timeline-title">Nenhum registro encontrado.</h4>
+               <p id="action_f" class="timeline-text">Informação do sistema.</p>
+            </li>
+         `
+         $("#historico_app").append(appende);
+      }
+   });
+}
+
+
+function todosParceiros(){
+   $("#todos_parceiros").show();
+   $("#parceiros_inativos").hide();
+}
+
+function parceirosInativos(){
+   $("#parceiros_inativos").show();
+   $("#todos_parceiros").hide();
+}
+
+
+
+function AtualizarComercial(object){
+   var id_parceiro = $(object).data("id_user")
+   var comercial = $("#comercial_recontatos").val();
+
+   if (comercial == ""){
+      alert("Prencha todos comerical responsável.")
+      return false
+   }
+
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "id_parceiro": id_parceiro,
+      "comercial": comercial,
+   };
+   console.log(formpost)
+   fetchRequest("{% url 'Recontato_Partners' %}", "POST", "JSON", formpost, function(re){
+      if(re["response"] == false){ 
+            alert("Não foi possível prosseguir.");
+      } else {
+            $(object).closest('tr').remove()
+      }
+   });
+     
+}
+
 
 </script>
-
-{% endfor %}
 {% endblock %}
