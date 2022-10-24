@@ -209,6 +209,11 @@ urlpatterns = [
 
     #ANEXAR ARQUIVO FINANCEIRO
     path('api/anx/docs/', views.ApiAnexarFiles, name='ApiAnexarFiles'), # ANEXAR FILES
+        
+    
+    #ANEXAR FOTO MEU PERFIL
+    path('api/anx/foto-perfil/', views.ApiPhotoProfile, name='ApiPhotoProfile'), #FINANCEIRO EXAMES
+    path('api/preview/file/foto-perfil/', views.FilePhotoView, name='FilePhotoView'), #FILE PACIENTE
 
 
     #teste
