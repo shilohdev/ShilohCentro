@@ -20,8 +20,14 @@ CADASTRAR PACIENTE{% endblock %}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+</style>
 
-<div class="breadcrumbs-dark pb-0" >
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <div class="container">
       <div class="card" >
          <div class="row">
@@ -169,11 +175,9 @@ CADASTRAR PACIENTE{% endblock %}
                      <i class="material-icons" style="font-size: 15px">lock_outline</i>&nbsp;Senha</label>
                   </div>
                </div>
-
-
                <!--BUTTON-->
-               <div class="col s12">
-                  <div class="col s12 mb-2 mt-5">
+               <div class="col s12 ">
+                  <div class="col s12 mb-2">
                      <button id="btn_cadastrar" class="waves-effect waves dark btn next-step" type="submit" style="width: 100%; margin-top: 10px" onclick="CadastrePatient()">
                      <span style="font-weight: bold; color: white; font-family:Verdana, Geneva, Tahoma, sans-serif">Cadastrar</spanpx>
                      </button>
@@ -424,7 +428,7 @@ function CadastrePatient() {
       $("#btn_cadastrar").attr("disabled", true);
 
       fetchRequest("{% url 'ApiCadastrePatient' %}", "POST", "JSON", btncadastrar, function (re) {
-         if (re["response"] == true){
+         if (re["response"] == "true"){
             alert(re["message"]);
             location.reload();
          } else {
@@ -616,9 +620,9 @@ function CadastrePartients_NewRegis(){
    }
 
    
-   if (cpf == "" && Calc >= 13 ){
+   if (cpf == "" && Calc >= 10 ){
       $("#cpf_new").attr("class", "data-required='true'");
-      alert("CPF obrigatório para crianças acima de 12 anos.")
+      alert("CPF obrigatório acima de 10 anos.")
       return false
    }
    else{

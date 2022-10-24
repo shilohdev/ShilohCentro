@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Shiloh | Cadastrar Convênio{% endblock %}
+{% block title %}Shiloh | Ajustar Rota{% endblock %}
 {% block icon-page %}
 metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
 {% endblock %}
 {% block title-page %}
-CADASTRAR CONVÊNIO{% endblock %}
+Cadastrar Convênio{% endblock %}
 {% block description-page %}Cadastrar Convênio{% endblock %}
 {% block content %}
 
 <style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
    .btn2 {
       margin-left: 5px;
       width: 15px;
@@ -27,7 +32,7 @@ CADASTRAR CONVÊNIO{% endblock %}
    }
 </style>
 
-<div class="breadcrumbs-dark pb-0" >
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
 <div class="container">
    <div class="card" >
          <!-- Externo -->

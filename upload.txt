@@ -10,7 +10,6 @@ cd /home/devs_shiloh/shiloh
 sudo unzip shiloh.zip
 cd
 cd /usr/local/shilohcentro
-sudo rm -rf shiloh
 sudo rm -rf auth_patients
 sudo rm -rf module_file_storage
 sudo rm -rf auth_dash

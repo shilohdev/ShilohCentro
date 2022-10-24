@@ -11,10 +11,18 @@ Página inicial
 CONSULTAR PACIENTES{% endblock %}
 {% block content %}
 
+<style type="text/css">
+   .corfont{
+   color: #641108;
+   font-weight: bold;
+   }
+
+</style>
+
 <!-- INICIO DO MODAL -->
 <div id="modal1" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal2">
-      <div class="breadcrumbs-dark pb-0" >
+      <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
          <div class="container">
             <div class="card">
                <div class="card-content" style="margin-top: -40px; background-color: #581848;">
@@ -157,7 +165,7 @@ CONSULTAR PACIENTES{% endblock %}
 <!-- INICIO DO MODAL 2 -->
 <div id="modalH" class="modal modal-fixed-footer" style="width: 85%; height: 90%;max-height: 85%">
    <div class="modal-content" id="modal3">
-      <div class="breadcrumbs-dark pb-0" >
+      <div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
          <div class="container" id="modalint">
             <div class="card">
                <div class="row">
@@ -234,7 +242,7 @@ CONSULTAR PACIENTES{% endblock %}
 </div>
 <!--FIM DO MODAL 2-->
 
-<div class="breadcrumbs-dark pb-0" >
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
    <div class="container"> 
       <div class="card" >
             <!-- Externo -->
@@ -324,6 +332,30 @@ $('.modal').css({
    "width":"80%",
 });
 });
+
+function PesquisarFilter() {
+   var tp_category = $("#tp_category").val();
+   var formpost = {
+      "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+      "tp_category": tp_category,   
+   };    
+   fetchRequest("{% url 'ApiListPartnes' %}", "POST", "JSON", formpost, function(re) {
+      var dados = re["message"];
+         $("#tb_append").html("");
+      for (k in dados) {
+         var key = dados[k];
+         var append = '<tr> <td>'+ key["nome"] +'</td> <td style="text-align: center;">'+ key["categoria"] +'</td> <td style="text-align: center">'+ key["status"] +'</td> <td style="text-align: center;"> <a href="#modal1" class="modal-trigger" data-id_user="'+ key["id"] +'" onclick=\"viewUserModal(this)\"> <!-- data-id_user="{{ k.id }}  É TRATADO COMO SE FOSSE UMA VAR DENTRO--> <button class="btn mb-1 waves-effect waves-light ativ" type="submit" name="action" style="margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: #f5be4600;"><i class="material-icons right" style="color: #f5bd46da">edit</i></button> </a> <button id="btn_status_'+key["id"]+'" onclick=\"changeStatusUser(this)\" data-id_user="'+ key["id"] +'" class="btn mb-1 waves-effect " type="button" name="action" style=" margin-left: 5px; width: 15px;padding: 1;padding-right: 8px; background-color: '+key["btn_status"]+';"><i class="material-icons right">check</i> </button> </td> </tr>'
+
+          $("#tb_append").append(append); //FAZ O APPEND DENTRO DA TABELA
+         
+
+      }
+      if (dados == ""){// SE O RETORNO DA PESQUISA ESTIVER VAZIO, RETORNA NENHUMA INFORMAÇÃO
+            var appende = '<td colspan="5" style="text-align: center; background: #ededeb">Nenhum Registro Encontrado</td>'
+            $("#tb_append").append(appende); 
+            }
+   });
+}
 
 
 class request {
@@ -430,6 +462,7 @@ function deleteFile(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
 
 function viewHistoricoModal(object){//FUNCTION DO ONCLICK PARA VER ARQUIVOS
    var id_user = $(object).data("id_user"); //objeto usuario que compoe um data-id_user
+   console.log(id_user)
 
    $("#btn_salvar").data("id_user", id_user); 
    $("#anx_file").data("id_user", id_user);
