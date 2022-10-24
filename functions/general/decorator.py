@@ -1,6 +1,6 @@
 from datetime import timedelta
 import json
-from dateutil.relativedelta import relativedelta
+# from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from functions.general.models import Struct
 
