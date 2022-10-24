@@ -1176,6 +1176,13 @@ def ApichangeUserProfile(request):
 
 #FOTO MEU PERFIL
 @login_required
+def ApiPhotoProfile(request):
+    array = PhotoProfileFunction(request)
+    return JsonResponse(array, safe=False, status=200)
+
+
+#FOTO MEU PERFIL
+@login_required
 def FilePhotoView(request):
     array = FilePhotoViewFunction(request)
     return JsonResponse(array, safe=False, status=200)
