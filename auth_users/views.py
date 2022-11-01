@@ -1192,16 +1192,34 @@ def FilePhotoView(request):
 #DASHBOARD COMERCIAL
 @login_required
 def DashCommercialViews(request): 
-    if allowPage(request, "_comercial") == False:
+    if allowPage(request, "ranking_comercial") == False:
         return error(request)
     ViewFoto = FilePhotoViewFunction(request)#foto perfil parte superior
 
     CountDashTotal = CountDashTotalFunction(request)
     DashCommerceMonth = DashCommerceMonthFunction(request)
     DashCommerceDay = DashCommerceDayFunction(request)
+    RankingCommerceDay = RankingCommerceDayFunction(request)
+    RankingCommerceMonth = RankingCommerceMonthFunction(request)
+    
+    PhotoRankingday = PhotoRankByArrayFunction(RankingCommerceDay)
+    PhotoRankingMonth = PhotoRankByArrayFunction(RankingCommerceMonth)
+
+    data_ranking_atendimento_dia = _treating_data(ranking=RankingCommerceDay, photo=PhotoRankingday)
+    data_ranking_atendimento_mes = _treating_data(ranking=RankingCommerceMonth, photo=PhotoRankingMonth)
 
 
 
+    return render(request, 'dashboards/ranking/DashCommercial.html', 
+    {
+        "arr_ViewFoto": ViewFoto,
+         "arr_SearchCountDashTotal": CountDashTotal,
+         "arr_DashCommerceMonth": DashCommerceMonth,
+         "arr_DashCommerceDay": DashCommerceDay,
+         "arr_RankingCommerceDay": RankingCommerceDay,
+         "arr_RankingCommerceMonth": RankingCommerceMonth,
+    } )
+ 
 
 #DASHBOARD ATENDIMENTO
 @login_required
@@ -1210,7 +1228,10 @@ def DashServiceViews(request):
         return error(request)
     ViewFoto = FilePhotoViewFunction(request)#foto perfil parte superior
     
-   
+    RankingDashAtenDay = RankingDashAtenDayFunction(request)
+    RankingDashAtenMonth = RankingDashAtenMonthFunction(request)
+    RankingEnfermagemDay = RankingEnfermagemDayFunction(request)
+    RankingEnfermagemMonth = RankingEnfermagemMonthFunction(request)
     DashCollectionPendenteDia = DashCollectionPendenteDiaFunction(request)
     DashCollectioAndamentoDia = DashCollectioAndamentoDiaFunction(request)
     DashCollectioConcluidoDia = DashCollectionConcluidoDiaFunction(request)
@@ -1221,8 +1242,24 @@ def DashServiceViews(request):
     DashCollectioAndamentoMes = DashCollectioAndamentoMesFunction(request)
     DashCollectioConcluidoMes = DashCollectionConcluidoMesFunction(request)
 
+    PhotoRankingAtendimento_dia = PhotoRankByArrayFunction(RankingDashAtenDay)
+    PhotoRankingAtendimento_mes = PhotoRankByArrayFunction(RankingDashAtenMonth)
+    PhotoRankingEnfermeira_dia = PhotoRankByArrayFunction(RankingEnfermagemDay)
+    PhotoRankingEnfermeira_mes = PhotoRankByArrayFunction(RankingEnfermagemMonth)
+
+
+    data_ranking_atendimento_dia = _treating_data(ranking=RankingDashAtenDay, photo=PhotoRankingAtendimento_dia)
+    data_ranking_atendimento_mes = _treating_data(ranking=RankingDashAtenMonth, photo=PhotoRankingAtendimento_mes)
+    data_ranking_enfermeira_mes = _treating_data(ranking=RankingEnfermagemDay, photo=PhotoRankingEnfermeira_dia)
+    data_ranking_enfermeira_mes = _treating_data(ranking=RankingEnfermagemMonth, photo=PhotoRankingEnfermeira_mes)
+
     return render(request, 'dashboards/ranking/DashService.html',
     {
+        "arr_ViewFoto": ViewFoto,
+        "arr_SearchRankingDashAtenDay": RankingDashAtenDay,
+        "arr_SearchRankingDashAtenMonth": RankingDashAtenMonth, 
+        "arr_SearchRankingEnfermagemDay": RankingEnfermagemDay, 
+        "arr_SearchRankingEnfermagemMonth": RankingEnfermagemMonth, 
         "arr_DashCollectionPendenteDia": DashCollectionPendenteDia, 
         "arr_DashCollectioAndamentoDia": DashCollectioAndamentoDia, 
         "arr_DashCollectioConcluidoDia": DashCollectioConcluidoDia, 

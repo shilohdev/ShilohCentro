@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Shiloh |  Dashboard Atendimento{% endblock %}
+{% block icon-page %}
+    metismenu-icon lnr-apartment icon-gradient bg-sunny-morning
+{% endblock %}
+{% block title-page %}
+    Página inicial
+{% endblock %}
+{% block description-page %}Dashboard Atendimento/ Enfermagem{% endblock %}
+{% block content %}
+
+
+<style type="text/css">
+
+.tabs .indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: #581848;
+    will-change: left,right;
+}
+    
+.corfont{
+    color: #641108;
+    font-weight: bold;
+}
+.imagerank{
+    height: 80px;
+    width: 80px;    
+    position: relative;
+    border: 2px solid #ce93d8;
+    border-radius: 100%;
+}
+.imagerank img {
+
+    position: absolute;
+    width: 100%;
+    height:100%;
+    border-radius: 100%;
+}
+</style>
+    </div>
+    <div class="row container m-0">
+        
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Produtividade (dia)</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #00bcd4!important; width: 49%;"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Follow Up</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">0</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6 m8 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Coleta Agendada</p>
+                            </div>
+                            <div class="col s6 m4 right-align">
+                                {% for k in arr_DashProdutividadeAgendamento %}
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">Paciente Cadastrado</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                {% for k in arr_DashProdutividadePaciente %}
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Coletas do Dia</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #4caf50 !important"></div>
+                        </div>
+                        <div class="row">
+                            {% for k in arr_DashCollectionPendenteDia %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            {% for k in arr_DashCollectioAndamentoDia %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            {% for k in arr_DashCollectioConcluidoDia %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card padding-4 animate fadeLeft">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h5 class="mb-0">Coletas do Mês</h5>
+                        <p class="no-margin">&nbsp;</p>
+                        <div class="progress" style="background-color: #ffebee;">
+                            <div class="indeterminate" style="background-color: #794c8a !important"></div>
+                        </div>
+                        <div class="row">
+                            {% for k in arr_DashCollectionPendenteMes %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row">   
+                            {% for k in arr_DashCollectioAndamentoMes %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0" style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row">
+                            {% for k in arr_DashCollectioConcluidoMes %}
+                            <div class="col s6 m6 left-align">
+                                <p class="mb-0 " style="font-size: 16px;">{{k.status}}</p>
+                            </div>
+                            <div class="col s6 m6 right-align">
+                                <h5 class="mb-0">{{k.qtd}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="breadcrumbs-dark pb-0" id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col m6 s12 l12" >
+                    <div class="col m6 s12 l12" style="height: 60px; margin-top:10px;  padding: 10px; text-align: center; background-color: #581848; color: white;" tabindex="0">
+                        <labe style="margin-top: 0.5em; font-size: 30px; font-weight: bold;">RANKING</labe>
+                    </div>
+                </div>
+                <!--RANKING ATENDIMENTO-->
+                <div class="col m6 s12 l6" >
+                   <div class="row">
+                        <div class="col s12 m6 l6" style="margin-top: 20px;">
+                            <ul class="tabs">
+                                <li class="tab col s4 p-0"><a class="p-0" onclick="AtendimentoDia()" style="color: black; font-size: 20px;">DIA</a></li>
+                                <li class="tab col s4 p-0"><a class="p-0"  onclick="AtendimentoMes()" style="color: black; font-size: 20px;">MÊS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col m6 s12 l12" style="margin-top: 30px; margin-bottom: 15px;" >
+                    <!-- CAMPO PARA FOTO DO RANKING -->
+                        <div id="atendimento_dia" style="display:block ;">
+                        {% for k in arr_SearchRankingDashAtenDay %}
+                            <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                                <div class="col m4 s4">
+                                    <div class="imagerank">
+                                        <img id="preview_image" src="{{ k.photo }}" /> 
+                                    </div>
+                                </div>
+                                <div class="col m4 s4" style="margin-top: 40px;">
+                                    <h6 class="mb-0">{{ k.nome }}</h6>
+                                </div>
+                                <div class="col m2 s4 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                    <h5 class="mb-0">{{ k.qtd_day }}</h5>
+                                </div>
+                                <div class="col m4 s12">
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                        <div id="atendimento_mes" style="display:none ;">
+                        {% for k in arr_SearchRankingDashAtenMonth %}
+                        <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                            <div class="col m4 s4">
+                                <div class="imagerank">
+                                    <img id="preview_image" src="{{ k.photo }}" /> 
+                                </div>
+                            </div>
+                            <div class="col m4 s4" style="margin-top: 40px;">
+                                <h6 class="mb-0">{{ k.nome }}</h6>
+                            </div>
+                            <div class="col m2 s4 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                <h5 class="mb-0">{{ k.qtd_month }}</h5>
+                            </div>
+                            <div class="col m4 s12">
+                            </div>
+                        </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!--RANKING ENFERMAGEM-->
+                <div class="col m6 s12 l6" >
+                    <div class="row">
+                         <div class="col s12 m6 l6" style="margin-top: 20px;">
+                             <ul class="tabs">
+                                 <li class="tab col s4 p-0"><a class="p-0" onclick="EnfermagemDia()" style="color: black; font-size: 20px;">DIA</a></li>
+                                 <li class="tab col s4 p-0"><a class="p-0"  onclick="EnfermagemMes()" style="color: black; font-size: 20px;">MÊS</a></li>
+                             </ul>
+                         </div>
+                     </div>
+                     <div class="col m6 s12 l12" style="margin-top: 30px; margin-bottom: 15px;" >
+                         <div id="enfermagem_dia" style="display:block ;">
+                         {% for k in arr_SearchRankingEnfermagemDay %}
+                             <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                                 <div class="col m4 s4">
+                                     <div class="imagerank">
+                                         <img id="preview_image" src="{{ k.photo }}" /> 
+                                     </div>
+                                 </div>
+                                 <div class="col m4 s4" style="margin-top: 40px;">
+                                     <h6 class="mb-0">{{ k.nome }}</h6>
+                                 </div>
+                                 <div class="col m2 s4 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                     <h5 class="mb-0">{{ k.qtd_day }}</h5>
+                                 </div>
+                                 <div class="col m4 s12">
+                                 </div>
+                             </div>
+                         {% endfor %}
+                         </div>
+
+                         <div id="enfermagem_mes" style="display:none;">
+                         {% for k in arr_SearchRankingEnfermagemMonth %}
+                         <div class="col m6 s12 l12" style="margin-top: 20px;" >                    
+                             <div class="col m4 s4">
+                                 <div class="imagerank">
+                                     <img id="preview_image" src="{{ k.photo }}" /> 
+                                 </div>
+                             </div>
+                             <div class="col m4 s4" style="margin-top: 40px;">
+                                 <h6 class="mb-0">{{ k.nome }}</h6>
+                             </div>
+                             <div class="col m2 s4 right-align" style="padding:5px 45px; margin-top: 24px;">
+                                 <h5 class="mb-0">{{ k.qtd_month }}</h5>
+                             </div>
+                         </div>
+                         {% endfor %}
+                         </div>
+                     </div>
+                 </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="/app-assets/js/jquery.mask.js"></script>
+<script type = "text/javascript" >
+
+
+function AtendimentoDia(){
+    $("#atendimento_dia").show()
+    $("#atendimento_mes").hide()
+}
+function AtendimentoMes(){
+    $("#atendimento_mes").show()
+    $("#atendimento_dia").hide()
+}
+
+function EnfermagemDia(){
+    $("#enfermagem_dia").show()
+    $("#enfermagem_mes").hide()
+}
+function EnfermagemMes(){
+    $("#enfermagem_mes").show()
+    $("#enfermagem_dia").hide()
+}
+
+</script>
+{% endblock %}

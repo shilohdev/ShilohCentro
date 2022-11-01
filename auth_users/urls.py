@@ -203,9 +203,10 @@ urlpatterns = [
 
     #DASBOARDS
     path('dashboards/financeiro/reembolsos/', views.DashboardsRefunds, name='DashboardsRefunds'), #FINANCEIRO EXAMES
+    #path('dashboard/ranking/coletas/', views.DashCollectionsViews, name='DashCollections'),# TELA DE COLETAS
+    path('dashboard/ranking/comercial/', views.DashCommercialViews, name='DashCommercial'),#RANKING COMERCIAL
+    path('dashboard/ranking/atendimento/', views.DashServiceViews, name='DashService'),#RANKING ATENDIMENTO
 
-    
-    
     #ANEXAR ARQUIVO FINANCEIRO
     path('api/anx/docs/', views.ApiAnexarFiles, name='ApiAnexarFiles'), # ANEXAR FILES
         
