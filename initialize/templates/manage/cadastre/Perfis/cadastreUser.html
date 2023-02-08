@@ -38,8 +38,8 @@ CADASTRAR USUÁRIOS{% endblock %}
                </div>
                <div class="container col s3 m2 " style="margin-top: 30px;">
                   <label>
-                     <input id="golshen_lab" value="3" class="with-gap" type="radio" name="option" />
-                     <span style="padding-left: 25px;">Golshen Lab</span>
+                     <input id="goshen_lab" value="3" class="with-gap" type="radio" name="option" />
+                     <span style="padding-left: 25px;">Goshen Lab</span>
                   </label> 
                </div>
             </div>
@@ -182,11 +182,11 @@ CADASTRAR USUÁRIOS{% endblock %}
       var unit = $("#unit").val();
       var shiloh = $('#shiloh_lab').val();
       var movel = $('#lab_movel').val(); 
-      var golshen = $('#golshen_lab').val(); 
+      var goshen = $('#goshen_lab').val(); 
       
       var shiloh = $("#shiloh_lab").prop("checked")
       var movel = $("#lab_movel").prop("checked")
-      var golshen = $("#golshen_lab").prop("checked")
+      var goshen = $("#goshen_lab").prop("checked")
 
        //VALIDAÇÃO DO EMAIL
        var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,})+$/;
@@ -213,14 +213,14 @@ CADASTRAR USUÁRIOS{% endblock %}
 
       shiloh = $("#shiloh_lab").prop("checked")
       movel = $("#lab_movel").prop("checked")
-      golshen = $("#golshen_lab").prop("checked")
+      goshen = $("#goshen_lab").prop("checked")
 
       if (shiloh){
          empresa = $("#shiloh_lab").val()
       }else if (movel){
          empresa = $("#lab_movel").val()
       }else{
-         empresa = $("#golshen_lab").val()
+         empresa = $("#goshen_lab").val()
       }
 
       var btncadastrar = {
