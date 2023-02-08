@@ -4255,7 +4255,7 @@ body.keyboard-focused .dropdown-content li:focus{
 .collapsible-header i{
 	font-size:1.6rem;
 	display:inline-block;
-	/*width:2rem;*/
+	width:2rem;
 	margin-right:1rem;
 	text-align:center
 }
