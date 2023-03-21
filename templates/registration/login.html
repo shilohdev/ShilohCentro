@@ -54,7 +54,7 @@
                   <img class="somecel" src="{% static 'app-assets/ico/logo1.png' %}" alt="Logo" width="640" style="margin-left: 2px;" >
                   <div class="col s12 m6 l4 z-depth-4 card-panel border-radius-6 login-card bg-opacity-8"  style="width: 50rem; height: 25rem;	background-color: rgba(250, 250, 250, 0.589)">
                      <form id="form_submit" class="login-form" method="POST">
-                        
+                        {% csrf_token %}
                         <div class="row">
 
                            <div class="input-field col s12">
